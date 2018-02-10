@@ -12,7 +12,6 @@ public class Block implements Evaluable{
 		this.operator = operator;
 	}
 	
-	@Override
 	public boolean evaluate() {
 		switch (operator) {
 		case "==":
@@ -33,6 +32,10 @@ public class Block implements Evaluable{
 	
 	public String toString() {
 		return variable.toString() + " " + operator + " " + value;
+	}
+	
+	public EnvironmentVariable getVariable() {
+		return variable;
 	}
 
 }

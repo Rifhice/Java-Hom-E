@@ -1,6 +1,7 @@
 package ExpressionInterpreter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Expression implements Evaluable{
 	
@@ -42,8 +43,21 @@ public class Expression implements Evaluable{
 		return res + ")";
 	}
 
+	public ArrayList<EnvironmentVariable> getVariables(){
+		ArrayList<EnvironmentVariable> result = new ArrayList<EnvironmentVariable>();
+		for (int i = 0; i < evaluable.size(); i++) {
+			if(evaluable.get(i) instanceof Expression) {
+				result.addAll(((Expression) (evaluable.get(i))).getVariables());
+			}
+			else if(evaluable.get(i) instanceof Block) {
+				result.add(((Block) evaluable.get(i)).getVariable());
+			}
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
-		ContinuousEnvironmentVariable time = new ContinuousEnvironmentVariable("Le temps", "C'est le super temps", "minutes", 0, 60, 1, 55);
+		ContinuousEnvironmentVariable time = new ContinuousEnvironmentVariable("Le temps", "C'est le super temps", "minutes", 0, 60, 1, 20);
 		DiscreteEnvironmentVariable temperature = new DiscreteEnvironmentVariable("La temperature", "Savoir si il fait chaud ou pas", "", new ArrayList<String>(Arrays.asList("Froid","Normal","Chaud")), "Chaud");
 		
 		Block b1 = new Block(time,30,"==");
@@ -72,6 +86,17 @@ public class Expression implements Evaluable{
 		Expression expression2 = new Expression(evaluable2,operators2);
 		System.out.println(expression2 + " => " + expression2.evaluate());
 		
+		Behaviour behaviour = new Behaviour(expression2, null);
+		
+		while(true) {
+		    Scanner in = new Scanner(System.in);
+		    System.out.print("New value for the time (current : " + time.getCurrentValue() + "): ");
+		    double timeValue = in.nextDouble();
+		    time.setCurrentValue(timeValue);
+		    System.out.print("New value for the temperature (current : " + temperature.getCurrentValue() + ") : ");
+		    String tempValue = in.next();
+		    temperature.setCurrentValue(tempValue);
+		}
 	}
 	
 }

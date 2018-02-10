@@ -63,7 +63,13 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
 	public void setCurrentValue(Object value) {
 		if(value instanceof Number) {
 			currentValue =  ((Number) value).doubleValue();
+			setChanged();
+			notifyObservers();
 		}
+	}
+	
+	public Object getCurrentValue() {
+		return currentValue;
 	}
 
 }

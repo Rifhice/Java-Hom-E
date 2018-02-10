@@ -1,6 +1,8 @@
 package ExpressionInterpreter;
 
-public abstract class EnvironmentVariable {
+import java.util.Observable;
+
+public abstract class EnvironmentVariable extends Observable{
 	
 	private String name;
 	private String unity;
@@ -19,6 +21,7 @@ public abstract class EnvironmentVariable {
 	public abstract boolean isSuperiorOrEqual(Object value);
 	public abstract boolean isInferiorOrEqual(Object value);
 	public abstract void setCurrentValue(Object value);
+	public abstract Object getCurrentValue();
 	
 	public String toString() {
 		return name;

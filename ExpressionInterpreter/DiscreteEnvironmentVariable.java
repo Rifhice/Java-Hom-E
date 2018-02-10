@@ -50,7 +50,13 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
 	public void setCurrentValue(Object value) {
 		if(value instanceof String) {
 			currentValue = (String) value;
+			setChanged();
+			notifyObservers();
 		}
+	}
+
+	public Object getCurrentValue() {
+		return currentValue;
 	}
 
 }

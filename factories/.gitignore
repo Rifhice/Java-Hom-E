@@ -1,0 +1,4 @@
+/AbstractDAOFactory.class
+/PostGreDAOFactory.class
+/MySQLDAOFactory.class
+/OracleDAOFactory.class

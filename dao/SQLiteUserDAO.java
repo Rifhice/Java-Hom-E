@@ -57,7 +57,8 @@ public class SQLiteUserDAO extends DAO<User> {
 			
 			if(result.first()) {
 				user = new User(
-					result.getString("pseudo")
+					result.getString("pseudo"),
+					result.getString("password")
 				);         
 			}
 		} catch (SQLException e) {

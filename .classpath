@@ -2,5 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path=""/>
+	<classpathentry kind="lib" path="/home/clement/Bureau/projets_informatique/Hom-E/assets/sqlite-jdbc-3.21.0.jar"/>
+	<classpathentry kind="lib" path="/home/clement/Bureau/projets_informatique/Hom-E/assets/postgresql-jdbc-42.2.1.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

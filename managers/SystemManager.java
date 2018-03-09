@@ -1,3 +1,4 @@
+package managers;
 
 
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class SystemManager {
 				"    type: 'discrete',\r\n" + 
 				"    name: \"La temperature\",\r\n" + 
 				"    description: \"Savoir si il fait chaud ou pas\",\r\n" + 
-				"    unity: \"°\",\r\n" + 
+				"    unity: \"ï¿½\",\r\n" + 
 				"    values: [\"Froid\", \"Normal\", \"Chaud\"],\r\n" + 
 				"    currentvalue: \"Froid\"\r\n" + 
 				"  }]\r\n" + 

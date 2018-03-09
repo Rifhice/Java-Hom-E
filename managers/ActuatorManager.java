@@ -1,8 +1,11 @@
+package managers;
 
 
 import java.util.ArrayList;
 
 import org.json.JSONObject;
+
+import models.Actuator;
 
 public class ActuatorManager {
 	

@@ -1,8 +1,12 @@
+package managers;
 
 
 import java.util.ArrayList;
 
 import org.json.JSONObject;
+
+import models.EnvironmentVariable;
+import models.Sensor;
 
 public class SensorManager {
 	

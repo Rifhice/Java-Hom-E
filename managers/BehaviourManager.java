@@ -1,8 +1,11 @@
+package managers;
 
 
 import java.util.ArrayList;
 
 import org.json.JSONObject;
+
+import models.Behaviour;
 
 public class BehaviourManager {
 

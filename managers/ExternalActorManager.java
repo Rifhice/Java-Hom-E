@@ -1,8 +1,14 @@
+package managers;
 
 
 import java.util.ArrayList;
 
 import org.json.JSONObject;
+
+import models.Actuator;
+import models.EnvironmentVariable;
+import models.ExternalActor;
+import models.Sensor;
 
 public class ExternalActorManager {
 	

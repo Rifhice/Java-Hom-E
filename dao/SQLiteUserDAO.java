@@ -1,5 +1,7 @@
 package dao;
 
+import java.sql.*;
+
 import models.User;
 
 public class SQLiteUserDAO extends DAO<User> {
@@ -12,8 +14,24 @@ public class SQLiteUserDAO extends DAO<User> {
 
 	@Override
 	public User getById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = new User();
+		
+		try {
+			PreparedStatement prepStat = this.connect.prepareStatement(
+				"SELECT * FROM Users WHERE id = ?"
+			);
+			prepStat.setString(0, id);
+			ResultSet result = prepStat.executeQuery();
+			
+			if(result.first()) {
+				user = new User(
+					result.getString("pseudo")
+				);         
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	@Override

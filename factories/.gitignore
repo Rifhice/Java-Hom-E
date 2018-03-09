@@ -2,3 +2,4 @@
 /PostGreDAOFactory.class
 /MySQLDAOFactory.class
 /OracleDAOFactory.class
+/MySQLiteDAOFactory.class

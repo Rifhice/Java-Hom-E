@@ -2,3 +2,4 @@
 /PostGreUserDAO.class
 /OracleUserDAO.class
 /MySQLUserDAO.class
+/MySQLiteUserDAO.class

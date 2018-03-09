@@ -7,3 +7,4 @@
 /ConnectionDriver.class
 /SQLiteUserDAO.class
 /UserDAO.class
+/DAOException.class

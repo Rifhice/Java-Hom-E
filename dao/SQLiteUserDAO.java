@@ -4,7 +4,7 @@ import java.sql.*;
 
 import models.User;
 
-public class SQLiteUserDAO extends DAO<User> {
+public class SQLiteUserDAO extends DAO<User> implements UserDAO {
 
 	@Override
 	public boolean create(User obj) {
@@ -45,9 +45,10 @@ public class SQLiteUserDAO extends DAO<User> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
+	@Override
 	public User getByPseudo(String pseudo) {
-	User user = new User();
+		User user = new User();
 		try {
 			PreparedStatement prepStat = this.connect.prepareStatement(
 				"SELECT * FROM Users WHERE pseudo = ?"
@@ -66,6 +67,4 @@ public class SQLiteUserDAO extends DAO<User> {
 		}
 		return user;
 	}
-
-
 }

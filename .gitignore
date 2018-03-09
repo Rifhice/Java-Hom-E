@@ -16,3 +16,7 @@
 /Sensor.class
 /SensorManager.class
 /SystemManager.class
+/ClientConsole.class
+/EchoServer.class
+/ChatClient.class
+/ChatIF.class

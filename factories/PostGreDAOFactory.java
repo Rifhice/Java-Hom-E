@@ -1,5 +1,5 @@
 package factories;
 
-public class PostGreDAOFactory {
+public class PostGreDAOFactory extends AbstractDAOFactory {
 
 }

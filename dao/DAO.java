@@ -2,6 +2,8 @@ package dao;
 
 public abstract class DAO <T> {
 	
+	protected ConnectionDriver connect = null; 
+	
 	/**
 	 * Create a new object.
 	 * @param obj

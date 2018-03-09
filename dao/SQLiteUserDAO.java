@@ -4,7 +4,7 @@ import java.sql.*;
 
 import models.User;
 
-public class SQLiteUserDAO extends DAO<User> implements UserDAO {
+public class SQLiteUserDAO extends UserDAO {
 
 	@Override
 	public boolean create(User obj) {

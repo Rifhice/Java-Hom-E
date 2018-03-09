@@ -16,7 +16,7 @@ public abstract class AbstractDAOFactory {
 	
 		switch(type) { 
 			case(0):
-				return new MySQLiteDAOFactory();
+				return new SQLiteDAOFactory();
 			case(1):
 				return new PostGreDAOFactory();
 			default:

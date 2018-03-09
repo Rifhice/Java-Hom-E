@@ -3,3 +3,4 @@
 /MySQLDAOFactory.class
 /OracleDAOFactory.class
 /MySQLiteDAOFactory.class
+/SQLiteDAOFactory.class

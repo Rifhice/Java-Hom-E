@@ -1,8 +1,10 @@
 package dao;
 
+import java.sql.Connection;
+
 public abstract class DAO <T> {
 	
-	protected ConnectionDriver connect = null; 
+	protected Connection connect = null; 
 	
 	/**
 	 * Create a new object.

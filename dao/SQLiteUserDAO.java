@@ -11,7 +11,7 @@ public class SQLiteUserDAO extends UserDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	//Get by id
 	@Override
 	public User getById(String id) {
 		User user = new User();

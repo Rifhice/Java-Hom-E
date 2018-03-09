@@ -45,5 +45,26 @@ public class SQLiteUserDAO extends DAO<User> {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public User getByPseudo(String pseudo) {
+	User user = new User();
+		try {
+			PreparedStatement prepStat = this.connect.prepareStatement(
+				"SELECT * FROM Users WHERE pseudo = ?"
+			);
+			prepStat.setString(0, pseudo);
+			ResultSet result = prepStat.executeQuery();
+			
+			if(result.first()) {
+				user = new User(
+					result.getString("pseudo")
+				);         
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
+
 
 }

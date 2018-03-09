@@ -7,20 +7,22 @@ import org.json.JSONObject;
 
 import dao.DAO;
 import dao.DAOException;
+import dao.SQLiteUserDAO;
+import dao.UserDAO;
 import models.EnvironmentVariable;
 import models.Sensor;
 import models.User;
 
 public class UserManager {
 	
-	ArrayList<Sensor> sensors;
+	ArrayList<User> users;
 	
-	DAO<User> userDAO = SystemManager.getManager().getDAOFactory().getUserDAO();
+	UserDAO userDAO = new SQLiteUserDAO();
 	
 	private static UserManager manager = null;
 	
 	private UserManager() {
-		sensors = new ArrayList<Sensor>();
+		users = new ArrayList<User>();
 	}
 	
 	public static UserManager getManager() {
@@ -30,9 +32,9 @@ public class UserManager {
 	}
 	
 	public User login(String pseudo, String password) {
-		User user;
+		User user = null;
 		try {
-			user = userDAO.getUserByPseudo(pseudo);
+			user = userDAO.getByPseudo(pseudo);
 		} catch(DAOException exception) {
 			
 		}
@@ -40,8 +42,9 @@ public class UserManager {
 			String hashPassword = password;
 			String storedPassword = user.getPassword();
 			if(hashPassword.equals(storedPassword)) {
-				return user;
+				users.add(user);
 			}
 		}
+		return user;
 	}
 }

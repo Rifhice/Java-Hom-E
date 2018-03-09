@@ -14,12 +14,14 @@ public class ExternalActorManager {
 	
 	private SensorManager sensorManager;
 	private ActuatorManager actuatorManager;
+	private UserManager userManager;
 	
 	private static ExternalActorManager manager = null;
 	
 	private ExternalActorManager() {
 		sensorManager = SensorManager.getManager();
 		actuatorManager = ActuatorManager.getManager();
+		userManager = UserManager.getManager();
 	}
 	
 	public static ExternalActorManager getManager() {
@@ -40,30 +42,7 @@ public class ExternalActorManager {
 		String type = json.getString("type");
 		String action = json.getString("action");
 		
-		boolean wasGeneral = false;
-		switch (action) {
-		case "setDescription":
-			setDescription(json);
-			wasGeneral = true;
-			break;
-		case "setName":
-			setName(json);
-			wasGeneral = true;
-			break;
-		case "disable":
-			disableActor(json);
-			wasGeneral = true;
-			break;
-		case "enable":
-			enableActor(json);
-			wasGeneral = true;
-			break;
-		default:
-			break;
-		}
-		
-		 if(!wasGeneral) {
-			switch (type) {
+		switch (type) {
 			case "actuator":
 				switch (action) {
 				case "register":
@@ -85,10 +64,18 @@ public class ExternalActorManager {
 					break;
 				}
 				break;
+			case "user":
+				switch(action) {
+					case "login":
+						String pseudo = json.getString("pseudo");
+						String password = json.getString("password");
+						userManager.login(pseudo, password);
+						break;
+				}
+				break;
 			default:
 				break;
-			}
-		 }
+		}
 	}
 	
 	public ArrayList<EnvironmentVariable> getEnvironmentVariables(){

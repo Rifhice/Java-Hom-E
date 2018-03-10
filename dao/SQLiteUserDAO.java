@@ -24,7 +24,6 @@ public class SQLiteUserDAO extends UserDAO {
 
             if (!rs.next()) {
                 //No user found.  
-                // TODO
             }
             else {
                 user.setId(rs.getString("id"));
@@ -51,30 +50,31 @@ public class SQLiteUserDAO extends UserDAO {
 
     @Override
     public User getByPseudo(String pseudo) throws DAOException {
-        User user = null;
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(
-                    "SELECT * FROM Users WHERE pseudo = ?"
-                    );
-            prepStat.setString(0, pseudo);
-            ResultSet result = prepStat.executeQuery();
+        User user = new User();
+        String sql = "SELECT * FROM Users WHERE pseudo = ?";
 
-            if(result.first()) {
-                user = new User(
-                        result.getString("pseudo"),
-                        result.getString("password")
-                        );         
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setString(1, pseudo);
+            ResultSet rs = prepStat.executeQuery();
+
+            if (!rs.next()) {
+                // No user found.  
+            }
+            else {
+                user.setId(rs.getString("id"));
+                user.setPseudo(rs.getString("pseudo"));
+                user.setPassword(rs.getString("password"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DAOException(e.getMessage());
         }
-        System.out.println(user.getPseudo());
         return user;
     }
 
+    // ==== MAIN ==== //
     public static void main(String args[]) {
-        SQLiteUserDAO test = new SQLiteUserDAO();
-        System.out.println(test.getById("1").getPseudo());
+        SQLiteUserDAO uDAO = new SQLiteUserDAO();
+        System.out.println(uDAO.getByPseudo("owner").getPassword());
     }
 }

@@ -59,7 +59,7 @@ public class EchoServer extends AbstractServer
   {
 	  JSONObject jmsg = new JSONObject(msg.toString());
 	  System.out.println(jmsg);
-	  SystemManager.getManager().handleMessage(jmsg);
+	  manager.handleMessage(jmsg);
   }
     
   /**

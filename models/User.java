@@ -2,7 +2,8 @@ package models;
 
 public class User {
 
-	private String pseudo; 
+    private String id;
+    private String pseudo; 
 	private String password;
 	private USERTYPE type;
 	
@@ -15,6 +16,14 @@ public class User {
 		this.pseudo = pseudo;
 		this.password = password;
 	}
+	
+	public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 	
 	public String getPseudo() {
 		return this.pseudo;

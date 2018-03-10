@@ -14,19 +14,22 @@ public class SQLiteUserDAO extends UserDAO {
     //Get by id
     @Override
     public User getById(String id) {
-        User user = null;
+        User user = new User();
         String sql = "SELECT * FROM Users WHERE id = ?";
 
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setString(1, id);
-            ResultSet result = prepStat.executeQuery();
+            ResultSet rs = prepStat.executeQuery();
 
-            if (result.next()) {
-                System.out.println(
-                        result.getString("pseudo") +
-                        result.getString("password")
-                );
+            if (!rs.next()) {
+                //No user found.  
+                // TODO
+            }
+            else {
+                user.setId(rs.getString("id"));
+                user.setPseudo(rs.getString("pseudo"));
+                user.setPassword(rs.getString("password"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,6 +75,6 @@ public class SQLiteUserDAO extends UserDAO {
 
     public static void main(String args[]) {
         SQLiteUserDAO test = new SQLiteUserDAO();
-        test.getById("1");
+        System.out.println(test.getById("1").getPseudo());
     }
 }

@@ -33,7 +33,7 @@ public class UserManager extends Manager{
 		try {
 			user = userDAO.getByPseudo(pseudo);
 		} catch(DAOException exception) {
-			System.out.println("error");
+			System.out.println("Error login.");
 		}
 		if(user != null) {
 			String hashPassword = password;
@@ -42,7 +42,6 @@ public class UserManager extends Manager{
 				users.add(user);
 			}
 		}
-		
 		return user;
 	}
 

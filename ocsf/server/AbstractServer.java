@@ -365,7 +365,7 @@ public abstract class AbstractServer implements Runnable
    * accepted. The default implementation does nothing.
    * @param client the connection connected to the client.
    */
-  protected void clientConnected(ConnectionToClient client) {}
+  protected void clientConnected(ConnectionToClient client) {System.out.println("New client !");}
 
   /**
    * Hook method called each time a client disconnects.

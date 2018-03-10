@@ -10,7 +10,7 @@ import models.EnvironmentVariable;
 import models.ExternalActor;
 import models.Sensor;
 
-public class ExternalActorManager {
+public class ExternalActorManager extends Manager{
 	
 	private SensorManager sensorManager;
 	private ActuatorManager actuatorManager;

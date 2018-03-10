@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import models.Actuator;
 
-public class ActuatorManager {
+public class ActuatorManager extends Manager {
 	
 	ArrayList<Actuator> actuators;
 	
@@ -39,5 +39,11 @@ public class ActuatorManager {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void handleMessage(JSONObject json) {
+		// TODO Auto-generated method stub
+		
 	}
 }

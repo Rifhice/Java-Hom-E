@@ -15,9 +15,9 @@ public abstract class AbstractDAOFactory {
 	public static AbstractDAOFactory getFactory(int type){
 	
 		switch(type) { 
-			case(0):
+			case(SQLITE_DAO_FACTORY):
 				return new SQLiteDAOFactory();
-			case(1):
+			case(POSTGRES_DAO_FACTORY):
 				return new PostGreDAOFactory();
 			default:
 				return null;

@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import models.Behaviour;
 
-public class BehaviourManager {
+public class BehaviourManager extends Manager{
 
 	private static BehaviourManager manager = null;
 	private ArrayList<Behaviour> behaviours;
@@ -41,5 +41,11 @@ public class BehaviourManager {
 	
 	public void deactivateBehaviour(Behaviour behaviour) {
 		behaviour.deactivate();
+	}
+
+	@Override
+	public void handleMessage(JSONObject json) {
+		// TODO Auto-generated method stub
+		
 	}
 }

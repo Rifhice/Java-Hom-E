@@ -23,7 +23,7 @@ public class LoginGUIFX extends Application implements ChatIF {
 	 * Title of the frame. 
 	 */
 	final public static String TITLE = "Log in";
-	
+	  
 	/**
 	 * Default port the client can connect to. 
 	 */
@@ -52,7 +52,9 @@ public class LoginGUIFX extends Application implements ChatIF {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
 		client = new ChatClient(DEFAULT_HOST,DEFAULT_PORT,this);
+		
 		primaryStage.setTitle(TITLE);
 		Group root = new Group();
 		this.width = (int)(screenSize.getWidth()* widthRatio);

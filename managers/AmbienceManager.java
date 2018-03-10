@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import models.Ambience;
 
-public class AmbienceManager {
+public class AmbienceManager extends Manager{
 
 	private static AmbienceManager manager = null;
 	private ArrayList<Ambience> ambiences;
@@ -41,5 +41,11 @@ public class AmbienceManager {
 	
 	public void deactivateAmbience(JSONObject json) {
 
+	}
+
+	@Override
+	public void handleMessage(JSONObject json) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import models.EnvironmentVariable;
 import models.Sensor;
 
-public class SensorManager {
+public class SensorManager extends Manager{
 	
 	ArrayList<Sensor> sensors;
 	
@@ -52,5 +52,11 @@ public class SensorManager {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void handleMessage(JSONObject json) {
+		// TODO Auto-generated method stub
+		
 	}
 }

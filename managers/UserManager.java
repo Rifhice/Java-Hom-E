@@ -13,7 +13,7 @@ import models.EnvironmentVariable;
 import models.Sensor;
 import models.User;
 
-public class UserManager {
+public class UserManager extends Manager{
 	
 	ArrayList<User> users;
 	
@@ -46,5 +46,11 @@ public class UserManager {
 			}
 		}
 		return user;
+	}
+
+	@Override
+	public void handleMessage(JSONObject json) {
+		// TODO Auto-generated method stub
+		
 	}
 }

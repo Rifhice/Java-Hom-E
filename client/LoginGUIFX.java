@@ -1,9 +1,12 @@
 package client;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.Optional;
 import componentJavaFX.*;
 import javax.swing.*;
+
+import org.json.JSONObject;
 
 import common.ChatIF;
 import javafx.application.Application;
@@ -47,7 +50,7 @@ public class LoginGUIFX extends Application implements ChatIF {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		//client = new ChatClient(DEFAULT_HOST,DEFAULT_PORT,this);
+		client = new ChatClient(DEFAULT_HOST,DEFAULT_PORT,this);
 		primaryStage.setTitle(TITLE);
 		Group root = new Group();
 		this.width = (int)(screenSize.getWidth()* widthRatio);
@@ -72,9 +75,20 @@ public class LoginGUIFX extends Application implements ChatIF {
 				else {
 					if(passwordTextField.getText().equals("") || passwordTextField.isInitialMessage()) {
 						//Login as guest with pseudo
+						JSONObject json = new JSONObject();
+						json.append("recipient", "user");
+						json.append("action", "loginAsGuest");
+						json.append("pseudo", pseudoTextField.getText());
+						client.handleMessageFromClientUI(json.toString());
 					}
 					else {
 						//Login as a user (Family member or Owner)
+						JSONObject json = new JSONObject();
+						json.append("recipient", "user");
+						json.append("action", "login");
+						json.append("pseudo", pseudoTextField.getText());
+						json.append("password", passwordTextField.getText());
+						client.handleMessageFromClientUI(json.toString());
 					}
 				}
 			}
@@ -85,9 +99,18 @@ public class LoginGUIFX extends Application implements ChatIF {
 			public void handle(ActionEvent event) {
 				if(!pseudoTextField.getText().equals("") && !pseudoTextField.isInitialMessage() && passwordTextField.getText().equals("") || passwordTextField.isInitialMessage()) {
 					//Login as guest with pseudo
+					JSONObject json = new JSONObject();
+					json.append("recipient", "user");
+					json.append("action", "loginAsGuest");
+					json.append("pseudo", pseudoTextField.getText());
+					client.handleMessageFromClientUI(json.toString());
 				}
 				else {
 					//Login as guest without pseudo
+					JSONObject json = new JSONObject();
+					json.append("recipient", "user");
+					json.append("action", "loginAsGuest");
+					client.handleMessageFromClientUI(json.toString());
 				}
 			}
 		}));

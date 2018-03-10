@@ -13,11 +13,13 @@ public class SystemManager {
 	private AmbienceManager ambienceManager;
 	private BehaviourManager behaviourManager;
 	private ExternalActorManager externalActorManager;
+	private UserManager userManager;
 		
 	private SystemManager() {
 		ambienceManager = AmbienceManager.getManager();
 		behaviourManager = BehaviourManager.getManager();
 		externalActorManager = ExternalActorManager.getManager();
+		userManager = UserManager.getManager();
 	}
 	
 	public static SystemManager getManager() {
@@ -38,9 +40,23 @@ public class SystemManager {
 		case "externalActor":
 			externalActorMessage(json);
 			break;
+		case "user":
+			userMessage(json);
+			break;
 		default:
 			break;
 		}
+	}
+	
+	private void userMessage(JSONObject json) {
+		String action = json.getString("action");
+		switch(action) {
+			case "login":
+				String pseudo = json.getString("pseudo");
+				String password = json.getString("password");
+				userManager.login(pseudo, password);
+				break;
+			}
 	}
 	
 	private void ambienceMessage(JSONObject json) {

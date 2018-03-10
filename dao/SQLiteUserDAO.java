@@ -14,13 +14,13 @@ public class SQLiteUserDAO extends UserDAO {
 	//Get by id
 	@Override
 	public User getById(String id) {
-		User user = new User();
+		User user = null;
 		
 		try {
 			PreparedStatement prepStat = this.connect.prepareStatement(
 				"SELECT * FROM Users WHERE id = ?"
 			);
-			prepStat.setString(0, id);
+			prepStat.setString(1, id);
 			ResultSet result = prepStat.executeQuery();
 			
 			if(result.first()) {
@@ -47,15 +47,15 @@ public class SQLiteUserDAO extends UserDAO {
 	}
 
 	@Override
-	public User getByPseudo(String pseudo) {
-		User user = new User();
+	public User getByPseudo(String pseudo) throws DAOException {
+		User user = null;
 		try {
 			PreparedStatement prepStat = this.connect.prepareStatement(
 				"SELECT * FROM Users WHERE pseudo = ?"
 			);
 			prepStat.setString(0, pseudo);
 			ResultSet result = prepStat.executeQuery();
-			
+
 			if(result.first()) {
 				user = new User(
 					result.getString("pseudo"),
@@ -64,7 +64,9 @@ public class SQLiteUserDAO extends UserDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new DAOException(e.getMessage());
 		}
+		System.out.println(user.getPseudo());
 		return user;
 	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
+import factories.AbstractDAOFactory;
 import models.User;
 
 import server.EchoServer;
@@ -25,6 +26,8 @@ public class SystemManager extends Manager{
 	private EchoServer userServer;
 	private EchoServer sensorServer;
 	private EchoServer actuatorServer;
+	
+	public static final int db = AbstractDAOFactory.SQLITE_DAO_FACTORY;
 	
 	private SystemManager() {
 		ambienceManager = AmbienceManager.getManager();

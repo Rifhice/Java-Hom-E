@@ -2,15 +2,15 @@ package factories;
 
 import java.sql.Connection;
 
-import dao.DAO;
 import dao.DriverConnection;
 import dao.SQLiteUserDAO;
+import dao.UserDAO;
 
 public class SQLiteDAOFactory extends AbstractDAOFactory{
 	
 	protected static final Connection conn = DriverConnection.getInstance(); 
 	
-	public DAO getUserDAO() {
+	public UserDAO getUserDAO() {
 		return new SQLiteUserDAO();
 	}
 	

@@ -1,5 +1,7 @@
 package factories;
 
+import dao.UserDAO;
+
 public abstract class AbstractDAOFactory {
 	
 	public static final int SQLITE_DAO_FACTORY = 0;
@@ -23,4 +25,6 @@ public abstract class AbstractDAOFactory {
 				return null;
 		}
 	}
+	
+	public abstract UserDAO getUserDAO();
 }

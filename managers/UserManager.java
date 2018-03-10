@@ -5,19 +5,16 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import dao.DAO;
 import dao.DAOException;
-import dao.SQLiteUserDAO;
 import dao.UserDAO;
-import models.EnvironmentVariable;
-import models.Sensor;
+import factories.AbstractDAOFactory;
 import models.User;
 
 public class UserManager extends Manager{
 	
 	ArrayList<User> users;
 	
-	UserDAO userDAO = new SQLiteUserDAO();
+	UserDAO userDAO = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO();
 	
 	private static UserManager manager = null;
 	
@@ -36,7 +33,7 @@ public class UserManager extends Manager{
 		try {
 			user = userDAO.getByPseudo(pseudo);
 		} catch(DAOException exception) {
-			
+			System.out.println("error");
 		}
 		if(user != null) {
 			String hashPassword = password;
@@ -45,6 +42,7 @@ public class UserManager extends Manager{
 				users.add(user);
 			}
 		}
+		
 		return user;
 	}
 

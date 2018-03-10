@@ -10,6 +10,7 @@ import Tools.Security;
 import dao.DAOException;
 import dao.UserDAO;
 import factories.AbstractDAOFactory;
+import javafx.util.Pair;
 import models.User;
 import ocsf.server.ConnectionToClient;
 
@@ -31,7 +32,8 @@ public class UserManager extends Manager{
 		return manager;
 	}
 	
-	public User login(String pseudo, String password) {
+	//Return a pair with the user and a code defining success or failure : 0 = success, -1 = wrong password, -2 = wrong pseudo
+	public Pair<User,Integer> login(String pseudo, String password) {
 		User user = null;
 		try {
 			user = userDAO.getByPseudo(pseudo);
@@ -43,9 +45,13 @@ public class UserManager extends Manager{
 			String storedPassword = user.getPassword();
 			if(hashPassword.equals(storedPassword)) {
 				users.add(user);
+				return new Pair<User,Integer>(user,0);
+			}
+			else {
+				return new Pair<User,Integer>(null,-1);
 			}
 		}
-		return user;
+		return new Pair<User,Integer>(null,-2);
 	}
 
 	@Override
@@ -55,11 +61,13 @@ public class UserManager extends Manager{
 			case "login":
 				String pseudo = json.getString("pseudo");
 				String password = json.getString("password");
-				User user = login(pseudo, password);
-				if(user != null) {
+				Pair<User,Integer> user = login(pseudo, password);
+				if(user.getKey() != null) {
 					JSONObject token = new JSONObject();
-					token.put("id", user.getId());
+					token.put("id", user.getKey().getId());
+					
 					JSONObject result = new JSONObject();
+					result.put("result","success");
 					result.put("token", Security.encrypt(token.toString()));
 					try {
 						client.sendToClient(result.toString());
@@ -68,7 +76,20 @@ public class UserManager extends Manager{
 					}
 				}
 				else {
-					//User not in database
+					JSONObject result = new JSONObject();
+					System.out.println(user.getValue());
+					if(user.getValue() == -1) {
+						result.put("result","wrong_password");
+					}
+					else {
+						result.put("result","wrong_pseudo");
+					}
+					
+					try {
+						client.sendToClient(result.toString());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 				break;
 			}

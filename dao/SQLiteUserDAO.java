@@ -50,7 +50,7 @@ public class SQLiteUserDAO extends UserDAO {
 
     @Override
     public User getByPseudo(String pseudo) throws DAOException {
-        User user = new User();
+        User user = null;
         String sql = "SELECT * FROM Users WHERE pseudo = ?";
 
         try {
@@ -59,9 +59,10 @@ public class SQLiteUserDAO extends UserDAO {
             ResultSet rs = prepStat.executeQuery();
 
             if (!rs.next()) {
-                // No user found.  
+                //User not found
             }
             else {
+            	user = new User();
                 user.setId(rs.getString("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));

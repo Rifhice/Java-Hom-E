@@ -125,8 +125,8 @@ public class LoginGUIFX extends Application implements ChatIF {
 				else {
 					//Login as guest without pseudo
 					JSONObject json = new JSONObject();
-					json.append("recipient", "user");
-					json.append("action", "loginAsGuest");
+					json.put("recipient", "user");
+					json.put("action", "loginAsGuest");
 					client.handleMessageFromClientUI(json.toString());
 				}
 			}

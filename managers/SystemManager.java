@@ -1,6 +1,8 @@
 package managers;
 
 
+import java.io.IOException;
+
 import org.json.JSONObject;
 
 import models.User;
@@ -31,7 +33,13 @@ public class SystemManager extends Manager{
 		actuatorManager = ActuatorManager.getManager();
 		userManager = UserManager.getManager();
 		
-		userServer = new EchoServer(USER_SERVER_PORT);
+		userServer = new EchoServer(USER_SERVER_PORT,userManager);
+		try {
+			userServer.listen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//sensorServer = new EchoServer(SENSOR_SERVER_PORT,sensorManager);
 		//actuatorServer = new EchoServer(ACTUATOR_SERVER_PORT,actuatorManager);
 	}

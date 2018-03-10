@@ -11,7 +11,9 @@ import org.json.JSONObject;
 import common.ChatIF;
 import javafx.application.Application;
 import javafx.event.*;
+import javafx.event.Event;
 import javafx.scene.*;
+import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 
@@ -46,7 +48,7 @@ public class LoginGUIFX extends Application implements ChatIF {
 	private Rectangle2D.Float passwordBounds = new Rectangle2D.Float(0.43f, 0.37f, 0.28f, 0.06f);
 
 	private MyTextFieldFX pseudoTextField;
-	private MyTextFieldFX passwordTextField;
+	private PasswordField passwordTextField = new PasswordField();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -58,12 +60,20 @@ public class LoginGUIFX extends Application implements ChatIF {
         Scene scene = new Scene(root, this.width, this.height, Color.LIGHTGREEN);
         
         System.out.println(this.width + " " + this.height);
-        
+                
         pseudoTextField = new MyTextFieldFX("Pseudo", pseudoBounds, width, height);
 		root.getChildren().add(pseudoTextField);		
 		
-		passwordTextField = new MyTextFieldFX("Password", passwordBounds, width, height);
-		root.getChildren().add(passwordTextField);
+		passwordTextField.setLayoutX(passwordBounds.getX() * width);passwordTextField.setLayoutY(passwordBounds.getY() * height);passwordTextField.setMaxSize(passwordBounds.getWidth()* width, passwordBounds.getHeight()* height);
+        root.getChildren().addAll(passwordTextField);
+        passwordTextField.setPromptText("Password");
+        passwordTextField.setOnMouseClicked(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				passwordTextField.setStyle("-fx-background-color: white;");
+			}
+		});
         
         
         root.getChildren().add(new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
@@ -73,7 +83,7 @@ public class LoginGUIFX extends Application implements ChatIF {
 					pseudoTextField.setStyle("-fx-background-color: red;");
 				}
 				else {
-					if(passwordTextField.getText().equals("") || passwordTextField.isInitialMessage()) {
+					if(passwordTextField.getText().equals("") ) {
 						//Login as guest with pseudo
 						JSONObject json = new JSONObject();
 						json.append("recipient", "user");
@@ -97,13 +107,18 @@ public class LoginGUIFX extends Application implements ChatIF {
         root.getChildren().add(new MyButtonFX("Log in as guest", loginAsGuestBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if(!pseudoTextField.getText().equals("") && !pseudoTextField.isInitialMessage() && passwordTextField.getText().equals("") || passwordTextField.isInitialMessage()) {
-					//Login as guest with pseudo
-					JSONObject json = new JSONObject();
-					json.append("recipient", "user");
-					json.append("action", "loginAsGuest");
-					json.append("pseudo", pseudoTextField.getText());
-					client.handleMessageFromClientUI(json.toString());
+				if(!pseudoTextField.getText().equals("") && !pseudoTextField.isInitialMessage()) {
+					if(passwordTextField.getText().equals("")) {
+						//Login as guest with pseudo
+						JSONObject json = new JSONObject();
+						json.append("recipient", "user");
+						json.append("action", "loginAsGuest");
+						json.append("pseudo", pseudoTextField.getText());
+						client.handleMessageFromClientUI(json.toString());
+					}
+					else {
+						passwordTextField.setStyle("-fx-background-color: red;");
+					}
 				}
 				else {
 					//Login as guest without pseudo

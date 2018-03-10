@@ -20,3 +20,4 @@
 /EchoServer.class
 /ChatClient.class
 /ChatIF.class
+/SQLiteDatabaseManager.class

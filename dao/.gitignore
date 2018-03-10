@@ -8,3 +8,5 @@
 /SQLiteUserDAO.class
 /UserDAO.class
 /DAOException.class
+/SQLiteDriverConnection.class
+/DriverConnection.class

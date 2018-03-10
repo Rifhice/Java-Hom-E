@@ -24,6 +24,7 @@ public class MyTextFieldFX extends TextField{
 			public void handle(Event event) {
 				setText("");
 				initial = false;
+				setStyle("-fx-background-color: white;");
 			}
 		});
 	

@@ -4,24 +4,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-public class ConnectionDriver {
+public class SQLiteDriverConnection {
 	  
 	// URL de connexion
-	private String url = "jdbc:postgresql://localhost:5432";
-	
-	// Nom du user
-	private String user = "user";
-	
-	// Mot de passe de l'utilisateur
-	private String passwd = "pass";
+	private String url = "jdbc:sqlite:sqlite/db/hom-e.db";
 	
 	// Objet Connection
 	private static Connection connect;
 
 	// Private constructor (singleton pattern)
-	private ConnectionDriver(){
+	private SQLiteDriverConnection(){
 		try {
-			connect = DriverManager.getConnection(url, user, passwd);
+			connect = DriverManager.getConnection(url);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -30,7 +24,7 @@ public class ConnectionDriver {
 
 	public static Connection getInstance(){
 		if(connect == null){
-			new ConnectionDriver();
+			new SQLiteDriverConnection();
 		}
 		return connect;   
 	}   

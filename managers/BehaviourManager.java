@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import models.Behaviour;
+import ocsf.server.ConnectionToClient;
 
 public class BehaviourManager extends Manager{
 
@@ -44,7 +45,7 @@ public class BehaviourManager extends Manager{
 	}
 
 	@Override
-	public void handleMessage(JSONObject json) {
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		// TODO Auto-generated method stub
 		
 	}

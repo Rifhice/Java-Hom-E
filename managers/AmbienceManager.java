@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import models.Ambience;
+import ocsf.server.ConnectionToClient;
 
 public class AmbienceManager extends Manager{
 
@@ -44,7 +45,7 @@ public class AmbienceManager extends Manager{
 	}
 
 	@Override
-	public void handleMessage(JSONObject json) {
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		// TODO Auto-generated method stub
 		
 	}

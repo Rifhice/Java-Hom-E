@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import models.Actuator;
+import ocsf.server.ConnectionToClient;
 
 public class ActuatorManager extends Manager {
 	
@@ -42,7 +43,7 @@ public class ActuatorManager extends Manager {
 	}
 
 	@Override
-	public void handleMessage(JSONObject json) {
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		// TODO Auto-generated method stub
 		
 	}

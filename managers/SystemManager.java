@@ -1,13 +1,13 @@
 package managers;
 
-
 import java.io.IOException;
 
 import org.json.JSONObject;
 
 import factories.AbstractDAOFactory;
 import models.User;
-
+import ocsf.server.ConnectionToClient;
+import Tools.Security;
 import server.EchoServer;
 
 public class SystemManager extends Manager{
@@ -37,13 +37,15 @@ public class SystemManager extends Manager{
 		userManager = UserManager.getManager();
 		
 		userServer = new EchoServer(USER_SERVER_PORT,this);
+		sensorServer = new EchoServer(SENSOR_SERVER_PORT,sensorManager);
+		actuatorServer = new EchoServer(ACTUATOR_SERVER_PORT,actuatorManager);
 		try {
 			userServer.listen();
+			sensorServer.listen();
+			actuatorServer.listen();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//sensorServer = new EchoServer(SENSOR_SERVER_PORT,sensorManager);
-		//actuatorServer = new EchoServer(ACTUATOR_SERVER_PORT,actuatorManager);
 	}
 	
 	public static SystemManager getManager() {
@@ -52,69 +54,48 @@ public class SystemManager extends Manager{
 		return manager;
 	}
 	
-	public void handleMessage(JSONObject json) {
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		System.out.println(json);
 		String recipient = json.getString("recipient");
 		switch (recipient) {
 		case "ambience":
-			ambienceMessage(json);
+			ambienceMessage(json,client);
 			break;
 		case "behaviour":
-			behaviourMessage(json);
+			behaviourMessage(json,client);
 			break;
 		case "sensor":
-			sensorMessage(json);
+			sensorMessage(json,client);
 			break;
 		case "actuator":
-			actuatorMessage(json);
+			actuatorMessage(json,client);
 			break;
 		case "user":
-			userMessage(json);
+			userMessage(json,client);
 			break;
 		default:
 			break;
 		}
 	}
 	
-	private void userMessage(JSONObject json) {
-		String action = json.getString("action");
-		switch(action) {
-			case "login":
-				String pseudo = json.getString("pseudo");
-				String password = json.getString("password");
-				User user = userManager.login(pseudo, password);
-				break;
-			}
+	private void userMessage(JSONObject json, ConnectionToClient client) {
+		userManager.handleMessage(json,client);
 	}
 	
-	private void ambienceMessage(JSONObject json) {
-		String action = json.getString("action");
-		switch (action) {
-		case "create":
-			ambienceManager.createAmbience(json);
-			break;
-		default:
-			break;
-		}
+	private void ambienceMessage(JSONObject json, ConnectionToClient client) {
+		ambienceManager.handleMessage(json, client);
 	}
 	
-	private void behaviourMessage(JSONObject json) {
-		String action = json.getString("action");
-		switch (action) {
-		case "create":
-			behaviourManager.createBehaviour(json);
-			break;
-		default:
-			break;
-		}
+	private void behaviourMessage(JSONObject json, ConnectionToClient client) {
+		behaviourManager.handleMessage(json, client);
 	}
 	
-	private void sensorMessage(JSONObject json) {
-		sensorManager.handleMessage(json);
+	private void sensorMessage(JSONObject json, ConnectionToClient client) {
+		sensorManager.handleMessage(json,client);
 	}
 	
-	private void actuatorMessage(JSONObject json) {
-		actuatorManager.handleMessage(json);
+	private void actuatorMessage(JSONObject json, ConnectionToClient client) {
+		actuatorManager.handleMessage(json,client);
 	}
 	
 	public static void main(String[] args) {

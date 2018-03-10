@@ -1,14 +1,17 @@
 package managers;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import Tools.Security;
 import dao.DAOException;
 import dao.UserDAO;
 import factories.AbstractDAOFactory;
 import models.User;
+import ocsf.server.ConnectionToClient;
 
 public class UserManager extends Manager{
 	
@@ -46,8 +49,28 @@ public class UserManager extends Manager{
 	}
 
 	@Override
-	public void handleMessage(JSONObject json) {
-		// TODO Auto-generated method stub
-		
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
+		String action = json.getString("action");
+		switch(action) {
+			case "login":
+				String pseudo = json.getString("pseudo");
+				String password = json.getString("password");
+				User user = login(pseudo, password);
+				if(user != null) {
+					JSONObject token = new JSONObject();
+					token.put("id", user.getId());
+					JSONObject result = new JSONObject();
+					result.put("token", Security.encrypt(token.toString()));
+					try {
+						client.sendToClient(result.toString());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				else {
+					//User not in database
+				}
+				break;
+			}
 	}
 }

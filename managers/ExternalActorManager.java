@@ -9,6 +9,7 @@ import models.Actuator;
 import models.EnvironmentVariable;
 import models.ExternalActor;
 import models.Sensor;
+import ocsf.server.ConnectionToClient;
 
 public class ExternalActorManager extends Manager{
 	
@@ -36,7 +37,7 @@ public class ExternalActorManager extends Manager{
 		return sensorManager.getSensors();
 	}
 	
-	public void handleMessage(JSONObject json) {
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String type = json.getString("type");
 		String action = json.getString("action");
 		

@@ -61,7 +61,7 @@ public class LoginGUIFX extends Application implements ChatIF {
 		this.height = (int)(screenSize.getHeight()* heightRatio);
         Scene scene = new Scene(root, this.width, this.height, Color.LIGHTGREEN);
         
-        System.out.println(this.width + " " + this.height);
+        System.out.println("Width : " + this.width + " Height : " + this.height);
                 
         pseudoTextField = new MyTextFieldFX("Pseudo", pseudoBounds, width, height);
 		root.getChildren().add(pseudoTextField);		

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import models.EnvironmentVariable;
 import models.Sensor;
+import ocsf.server.ConnectionToClient;
 
 public class SensorManager extends Manager{
 	
@@ -55,7 +56,7 @@ public class SensorManager extends Manager{
 	}
 
 	@Override
-	public void handleMessage(JSONObject json) {
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		// TODO Auto-generated method stub
 		
 	}

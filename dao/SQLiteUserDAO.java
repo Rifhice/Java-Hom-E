@@ -6,67 +6,72 @@ import models.User;
 
 public class SQLiteUserDAO extends UserDAO {
 
-	@Override
-	public boolean create(User obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	//Get by id
-	@Override
-	public User getById(String id) {
-		User user = null;
-		
-		try {
-			PreparedStatement prepStat = this.connect.prepareStatement(
-				"SELECT * FROM Users WHERE id = ?"
-			);
-			prepStat.setString(1, id);
-			ResultSet result = prepStat.executeQuery();
-			
-			if(result.first()) {
-				user = new User(
-					result.getString("pseudo")
-				);         
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return user;
-	}
+    @Override
+    public boolean create(User obj) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    //Get by id
+    @Override
+    public User getById(String id) {
+        User user = null;
+        String sql = "SELECT * FROM Users WHERE id = ?";
 
-	@Override
-	public boolean update(User obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setString(1, id);
+            ResultSet result = prepStat.executeQuery();
 
-	@Override
-	public boolean delete(User obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+            if (result.next()) {
+                System.out.println(
+                        result.getString("pseudo") +
+                        result.getString("password")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 
-	@Override
-	public User getByPseudo(String pseudo) throws DAOException {
-		User user = null;
-		try {
-			PreparedStatement prepStat = this.connect.prepareStatement(
-				"SELECT * FROM Users WHERE pseudo = ?"
-			);
-			prepStat.setString(0, pseudo);
-			ResultSet result = prepStat.executeQuery();
+    @Override
+    public boolean update(User obj) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-			if(result.first()) {
-				user = new User(
-					result.getString("pseudo"),
-					result.getString("password")
-				);         
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DAOException(e.getMessage());
-		}
-		System.out.println(user.getPseudo());
-		return user;
-	}
+    @Override
+    public boolean delete(User obj) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public User getByPseudo(String pseudo) throws DAOException {
+        User user = null;
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(
+                    "SELECT * FROM Users WHERE pseudo = ?"
+                    );
+            prepStat.setString(0, pseudo);
+            ResultSet result = prepStat.executeQuery();
+
+            if(result.first()) {
+                user = new User(
+                        result.getString("pseudo"),
+                        result.getString("password")
+                        );         
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DAOException(e.getMessage());
+        }
+        System.out.println(user.getPseudo());
+        return user;
+    }
+
+    public static void main(String args[]) {
+        SQLiteUserDAO test = new SQLiteUserDAO();
+        test.getById("1");
+    }
 }

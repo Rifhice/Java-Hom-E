@@ -96,10 +96,10 @@ public class LoginGUIFX extends Application implements ChatIF {
 					else {
 						//Login as a user (Family member or Owner)
 						JSONObject json = new JSONObject();
-						json.append("recipient", "user");
-						json.append("action", "login");
-						json.append("pseudo", pseudoTextField.getText());
-						json.append("password", passwordTextField.getText());
+						json.put("recipient", "user");
+						json.put("action", "login");
+						json.put("pseudo", pseudoTextField.getText());
+						json.put("password", passwordTextField.getText());
 						client.handleMessageFromClientUI(json.toString());
 					}
 				}
@@ -113,9 +113,9 @@ public class LoginGUIFX extends Application implements ChatIF {
 					if(passwordTextField.getText().equals("")) {
 						//Login as guest with pseudo
 						JSONObject json = new JSONObject();
-						json.append("recipient", "user");
-						json.append("action", "loginAsGuest");
-						json.append("pseudo", pseudoTextField.getText());
+						json.put("recipient", "user");
+						json.put("action", "loginAsGuest");
+						json.put("pseudo", pseudoTextField.getText());
 						client.handleMessageFromClientUI(json.toString());
 					}
 					else {

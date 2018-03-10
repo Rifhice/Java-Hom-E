@@ -1,11 +1,9 @@
 package managers;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import org.json.JSONObject;
 
-import org.json.*;
+import models.User;
 
 import server.EchoServer;
 
@@ -33,7 +31,7 @@ public class SystemManager extends Manager{
 		actuatorManager = ActuatorManager.getManager();
 		userManager = UserManager.getManager();
 		
-		userServer = new EchoServer(USER_SERVER_PORT,this);
+		userServer = new EchoServer(USER_SERVER_PORT);
 		//sensorServer = new EchoServer(SENSOR_SERVER_PORT,sensorManager);
 		//actuatorServer = new EchoServer(ACTUATOR_SERVER_PORT,actuatorManager);
 	}
@@ -74,7 +72,7 @@ public class SystemManager extends Manager{
 			case "login":
 				String pseudo = json.getString("pseudo");
 				String password = json.getString("password");
-				userManager.login(pseudo, password);
+				User user = userManager.login(pseudo, password);
 				break;
 			}
 	}

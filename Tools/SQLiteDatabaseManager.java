@@ -69,13 +69,17 @@ public class SQLiteDatabaseManager {
         String createTableActuators = "CREATE TABLE IF NOT EXISTS actuators (\n" 
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
-                + " description text \n"
+                + " description text, \n"
+                + " fk_actuatorCategorie_id integer,\n"
+                + " FOREIGN KEY (fk_actuatorCategorie_id) REFERENCES actuatorCategories(id) \n"
                 + ");";
         
         String createTableSensors = "CREATE TABLE IF NOT EXISTS sensors (\n" 
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
-                + " description text \n"
+                + " description text, \n"
+                + " fk_sensorCategorie_id integer,\n"
+                + " FOREIGN KEY (fk_sensorCategorie_id) REFERENCES sensorCategories(id) \n"
                 + ");";
         
         String createTableActuatorCategories = "CREATE TABLE IF NOT EXISTS actuatorCategories (\n" 
@@ -178,9 +182,27 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertSensors() {
-        String insertSensor1 = "INSERT INTO sensors ('name', 'description') VALUES ('Presensor','Sense the presence of something (10m range)');";
+        String insertSensor1 = "INSERT INTO sensors ('name', 'description') VALUES ('Presensor3000','Sense the presence of something (10m range)');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensor1);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Sensors : " + e.getMessage());
+        }
+    }
+    
+    private static void insertActuatorCategories() {
+        String insertActuatorCat1 = "INSERT INTO actuatorCategories ('name', 'description') VALUES ('Bulb','Provide light.');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertActuatorCat1);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
+        }
+    }
+    
+    private static void insertSensorCategories() {
+        String insertSensorCat1 = "INSERT INTO sensorCategories ('name', 'description') VALUES ('Movement detector','Detect movement.');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertSensorCat1);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Sensors : " + e.getMessage());
         }
@@ -192,16 +214,24 @@ public class SQLiteDatabaseManager {
     
     public static void main(String args[]) {
         conn = DriverConnection.getInstance();
-        SQLiteDatabaseManager.createDatabase();
+        
+        // Creation
+        System.out.print("Init DB... ");
+        createDatabase();
+        System.out.println("DB created.");
         
         // Seeders
-        SQLiteDatabaseManager.insertRoles();
-        SQLiteDatabaseManager.insertUsers();
-        SQLiteDatabaseManager.insertHistories();
-        SQLiteDatabaseManager.insertRights();
-        SQLiteDatabaseManager.insertActuators();
-        SQLiteDatabaseManager.insertSensors();
+        System.out.print("Inserting data... ");
+        insertRoles();
+        insertUsers();
+        insertHistories();
+        insertRights();
+        insertActuators();
+        insertSensors();
+        insertActuatorCategories();
+        insertSensorCategories();
+        System.out.println("Data inserted.");
         
-        System.out.println("DB : instructions executed.");
+        System.out.println("**** Process complete ! ****");
     }
 }

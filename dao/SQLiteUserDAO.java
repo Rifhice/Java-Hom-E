@@ -41,7 +41,7 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    public boolean delete(User obj) {
+    public boolean delete(String id) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -12,25 +12,35 @@ public class SQLiteDatabaseManager {
 	
 	public static void main(String args[]) {
 		conn = DriverConnection.getInstance();
-		SQLiteDatabaseManager.fillDatabase();
+		SQLiteDatabaseManager.createDatabase();
 	}
 	
-	private static void fillDatabase() {
-		String sql1 = "CREATE TABLE IF NOT EXISTS users (\n"
+	private static void createDatabase() {
+		String sqlUsers = "CREATE TABLE IF NOT EXISTS Users (\n"
                 + "	id integer PRIMARY KEY,\n"
                 + "	pseudo text NOT NULL,\n"
                 + "	password text NOT NULL\n"
-                + ");";
-        String sql2 = "INSERT INTO users ('pseudo', 'password') VALUES ('owner', 'password');";
-        
+                + ");";        
         try (Statement stmt = conn.createStatement()) {
-            // create a new table
-            stmt.execute(sql1);
-            stmt.execute(sql2);
+            stmt.execute(sqlUsers);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         
-        		
+        String sqlRoles = "CREATE TABLE IF NOT EXISTS Roles (\n"
+                + " id integer PRIMARY KEY,\n"
+                + " name text NOT NULL\n"
+                + ");";        
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(sqlRoles);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
 	}
+	
+	private static void insertUsers() {
+	    String sqlOwner = "INSERT INTO users ('pseudo', 'password') VALUES ('owner', 'password');";
+	    String sqlFamilyMember = "";
+	}
+
 }

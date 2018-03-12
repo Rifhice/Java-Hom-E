@@ -14,7 +14,7 @@ public abstract class DAO <T> {
 	public abstract boolean create(T obj);
 	
 	/**
-	 * Get an existing object by his id
+	 * Get an existing object by his id.
 	 * @param id
 	 * @return T
 	 */

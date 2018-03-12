@@ -15,7 +15,7 @@ public class SQLiteDatabaseManager {
 		SQLiteDatabaseManager.createDatabase();
 	}
 	
-	private static void fillDatabase() {
+	private static void createDatabase() {
 		String createTableUsers = "CREATE TABLE IF NOT EXISTS users (\n"
                 + "	id integer PRIMARY KEY,\n"
                 + "	pseudo text NOT NULL UNIQUE,\n"

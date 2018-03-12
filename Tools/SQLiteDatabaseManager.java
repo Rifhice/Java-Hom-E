@@ -16,17 +16,29 @@ public class SQLiteDatabaseManager {
 	}
 	
 	private static void fillDatabase() {
-		String sql1 = "CREATE TABLE IF NOT EXISTS users (\n"
+		String createTableUsers = "CREATE TABLE IF NOT EXISTS users (\n"
                 + "	id integer PRIMARY KEY,\n"
-                + "	pseudo text NOT NULL,\n"
+                + "	pseudo text NOT NULL UNIQUE,\n"
                 + "	password text NOT NULL\n"
                 + ");";
-        String sql2 = "INSERT INTO users ('pseudo', 'password') VALUES ('owner', 'password');";
+        String insertUsers = "INSERT INTO users ('pseudo', 'password') VALUES ('owner', 'password');";
+        
+        String createTableHistory = "CREATE TABLE IF NOT EXISTS history (\n"
+                + "	id integer PRIMARY KEY,\n"
+                + "	date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                + " user text NOT NULL, \n"
+                + "	type text NOT NULL, \n"
+                + " action text NOT NULL"
+                + ");";
+        String insertHistory = "INSERT INTO history ('user', 'type', 'action') VALUES ('owner', 'command', 'Switch light on');";
+        
         
         try (Statement stmt = conn.createStatement()) {
             // create a new table
-            stmt.execute(sql1);
-            stmt.execute(sql2);
+            stmt.execute(createTableUsers);
+            stmt.execute(insertUsers);
+            stmt.execute(createTableHistory);
+            stmt.execute(insertHistory);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

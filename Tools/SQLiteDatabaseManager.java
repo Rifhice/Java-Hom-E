@@ -8,7 +8,7 @@ import dao.DriverConnection;
 
 public class SQLiteDatabaseManager {
 
-    private static Connection conn;
+    private static Connection conn = DriverConnection.getInstance(DriverConnection.SQLITE_DRIVER);
 
     // ================ //
     // ==== CREATE ==== //
@@ -211,9 +211,7 @@ public class SQLiteDatabaseManager {
     // ============== //
     // ==== MAIN ==== //
     // ============== //
-    
     public static void main(String args[]) {
-        conn = DriverConnection.getInstance();
         
         // Creation
         System.out.print("Init DB... ");

@@ -14,10 +14,37 @@ public class SQLiteDatabaseManager {
     // ==== CREATE ==== //
     // ================ //
     private static void createDatabase() {
+        
+        // ==== DROP TABLES SQL
+        String dropActuators = "DROP TABLE IF EXISTS actuators;";
+        String dropActuatorCategories = "DROP TABLE IF EXISTS actuatorsCategories;";
+        String dropHistories = "DROP TABLE IF EXISTS histories;";
+        String dropRights = "DROP TABLE IF EXISTS rights;";
+        String dropRoles = "DROP TABLE IF EXISTS roles;";
+        String dropSensors = "DROP TABLE IF EXISTS sensors;";
+        String dropSensorCategories = "DROP TABLE IF EXISTS sensors;";
+        String dropUsers = "DROP TABLE IF EXISTS users;";
+
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(dropActuators);
+            stmt.execute(dropActuatorCategories);
+            stmt.execute(dropHistories);
+            stmt.execute(dropRights);
+            stmt.execute(dropRoles);
+            stmt.execute(dropSensors);
+            stmt.execute(dropSensorCategories);
+            stmt.execute(dropUsers);
+        } catch (SQLException e) {
+            System.out.println("ERROR dropping tables : " + e.getMessage());
+        }
+        
+        // ==== CREATE TABLES SQL
         String createTableUsers = "CREATE TABLE IF NOT EXISTS users (\n" 
                 + "	id integer PRIMARY KEY,\n"
                 + "	pseudo text NOT NULL UNIQUE,\n" 
-                + "	password text NOT NULL\n" 
+                + "	password text NOT NULL,\n"
+                + " fk_role_id integer NOT NULL,\n"
+                + " FOREIGN KEY (fk_role_id) REFERENCES Roles(id) \n"
                 + ");";
 
         String createTableHistories = "CREATE TABLE IF NOT EXISTS histories (\n" 
@@ -29,40 +56,40 @@ public class SQLiteDatabaseManager {
                 + ");";
         
         String createTableRoles = "CREATE TABLE IF NOT EXISTS roles (\n" 
-                + "    id integer PRIMARY KEY,\n"
+                + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL \n"
                 + ");";
         
         String createTableRights = "CREATE TABLE IF NOT EXISTS rights (\n" 
-                + "    id integer PRIMARY KEY,\n"
+                + " id integer PRIMARY KEY,\n"
                 + " denomination text NOT NULL, \n"
                 + " description text \n"
                 + ");";
         
         String createTableActuators = "CREATE TABLE IF NOT EXISTS actuators (\n" 
-                + "    id integer PRIMARY KEY,\n"
+                + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
                 + " description text \n"
                 + ");";
         
         String createTableSensors = "CREATE TABLE IF NOT EXISTS sensors (\n" 
-                + "    id integer PRIMARY KEY,\n"
+                + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
                 + " description text \n"
                 + ");";
         
         String createTableActuatorCategories = "CREATE TABLE IF NOT EXISTS actuatorCategories (\n" 
-                + "    id integer PRIMARY KEY,\n"
+                + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
                 + " description text \n"
                 + ");";
         
         String createTableSensorCategories = "CREATE TABLE IF NOT EXISTS sensorCategories (\n" 
-                + "    id integer PRIMARY KEY,\n"
+                + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
                 + " description text \n"
                 + ");";
-
+        
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createTableUsers);
             stmt.execute(createTableHistories);
@@ -73,15 +100,49 @@ public class SQLiteDatabaseManager {
             stmt.execute(createTableActuatorCategories);
             stmt.execute(createTableSensorCategories);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR creating tables : " + e.getMessage());
         }
+        
+     // ==== CREATE RELATIONSHIP TABLES SQL
+        String createOwns = "CREATE TABLE IF NOT EXISTS owns (\n" 
+                + " fk_right_id integer, \n"
+                + " fk_user_id integer, \n"
+                + " FOREIGN KEY (fk_right_id) REFERENCES Rights(id), \n"
+                + " FOREIGN KEY (fk_user_id) REFERENCES Users(id) \n"
+                + ");";
+        
+        String createOwnsByDefault = "CREATE TABLE IF NOT EXISTS ownsbydefault (\n" 
+                + " fk_right_id integer, \n"
+                + " fk_role_id integer, \n"
+                + " FOREIGN KEY (fk_right_id) REFERENCES Rights(id), \n"
+                + " FOREIGN KEY (fk_role_id) REFERENCES Roles(id) \n"
+                + ");";
+        
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(createOwns);
+            stmt.execute(createOwnsByDefault);
+        } catch (SQLException e) {
+            System.out.println("ERROR creating relationship tables : " + e.getMessage());
+        }
+      
     }
     
     // ================= //
     // ==== SEEDERS ==== //
     // ================= //
+    private static void insertRoles() {
+        String insertRoleOwner = "INSERT INTO roles ('id','name') VALUES (1,'owner');";
+        String insertRoleFamilyMember = "INSERT INTO roles ('id', 'name') VALUES (2,'family member');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertRoleOwner);
+            stmt.execute(insertRoleFamilyMember);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Roles : " + e.getMessage());
+        }
+    }
+    
     private static void insertUsers() {
-        String insertUsers = "INSERT INTO users ('pseudo', 'password') VALUES ('owner', 'password');";
+        String insertUsers = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('owner', 'password', 1);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertUsers);
         } catch (SQLException e) {
@@ -95,17 +156,6 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertHistory);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Histories : " + e.getMessage());
-        }
-    }
-    
-    private static void insertRoles() {
-        String insertRoleOwner = "INSERT INTO roles ('name') VALUES ('owner');";
-        String insertRoleFamilyMember = "INSERT INTO roles ('name') VALUES ('family member');";
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(insertRoleOwner);
-            stmt.execute(insertRoleFamilyMember);
-        } catch (SQLException e) {
-            System.out.println("ERROR inserting Roles : " + e.getMessage());
         }
     }
     
@@ -145,13 +195,13 @@ public class SQLiteDatabaseManager {
         SQLiteDatabaseManager.createDatabase();
         
         // Seeders
+        SQLiteDatabaseManager.insertRoles();
         SQLiteDatabaseManager.insertUsers();
         SQLiteDatabaseManager.insertHistories();
-        SQLiteDatabaseManager.insertRoles();
         SQLiteDatabaseManager.insertRights();
         SQLiteDatabaseManager.insertActuators();
         SQLiteDatabaseManager.insertSensors();
         
-        System.out.println("Terminating.");
+        System.out.println("DB : instructions executed.");
     }
 }

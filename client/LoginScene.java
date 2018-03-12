@@ -17,7 +17,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 
 public class LoginScene extends MyScene{
-
+    
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private static String TITLE = "Log in";
 	
 	private Rectangle2D.Float loginBounds = new Rectangle2D.Float(0.5f, 0.47f, 0.16f, 0.07f);
@@ -28,8 +31,12 @@ public class LoginScene extends MyScene{
 	private MyTextFieldFX pseudoTextField;
 	private PasswordField passwordTextField = new PasswordField();
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public LoginScene(Group root,double width, double height) {
 		super(root, width,height, ClientFX.BACKGROUND_COLOR);
+        root.requestFocus();
         
         System.out.println("Width : " + this.width + " Height : " + this.height);
                 
@@ -39,6 +46,10 @@ public class LoginScene extends MyScene{
 		passwordTextField.setLayoutX(passwordBounds.getX() * width);passwordTextField.setLayoutY(passwordBounds.getY() * height);passwordTextField.setMaxSize(passwordBounds.getWidth()* width, passwordBounds.getHeight()* height);
         root.getChildren().add(passwordTextField);
         passwordTextField.setPromptText("Password");
+        
+        /**
+         * Click on password field handler.
+         */
         passwordTextField.setOnMouseClicked(new EventHandler<Event>() {
 			@Override
 			public void handle(Event event) {
@@ -46,11 +57,10 @@ public class LoginScene extends MyScene{
 			}
 		});
         
-        
         root.getChildren().add(new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if(pseudoTextField.getText().equals("") || pseudoTextField.isInitialMessage()) {
+				if(pseudoTextField.getText().equals("")) {
 					pseudoTextField.setStyle("-fx-background-color: red;");
 				}
 				else {
@@ -75,10 +85,15 @@ public class LoginScene extends MyScene{
 			}
 		}));
         
+        /**
+         * "Log in as guest" button handler. 
+         * No password required. 
+         * Pseudo is optionnal.        
+         */
         root.getChildren().add(new MyButtonFX("Log in as guest", loginAsGuestBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if(!pseudoTextField.getText().equals("") && !pseudoTextField.isInitialMessage()) {
+				if(!pseudoTextField.getText().equals("")){
 					if(passwordTextField.getText().equals("")) {
 						//Login as guest with pseudo
 						JSONObject json = new JSONObject();
@@ -100,8 +115,12 @@ public class LoginScene extends MyScene{
 				}
 			}
 		}));
+        
 	}
-
+	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public void display(String message) {
 		System.out.println(message);
 	}

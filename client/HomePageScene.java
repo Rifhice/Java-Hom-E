@@ -9,6 +9,9 @@ import javafx.scene.paint.Paint;
 
 public class HomePageScene extends MyScene{
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public HomePageScene(Group root, double width, double height, Paint fill) {
 		super(root, width, height, fill);
 		this.title = "Hom-E";
@@ -17,6 +20,9 @@ public class HomePageScene extends MyScene{
 		System.out.println(ClientFX.token);
 	}
 
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	@Override
 	public void handleMessage(Object msg) {
 		

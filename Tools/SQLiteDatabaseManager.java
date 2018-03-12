@@ -12,7 +12,7 @@ public class SQLiteDatabaseManager {
 	
 	public static void main(String args[]) {
 		conn = DriverConnection.getInstance();
-		SQLiteDatabaseManager.fillDatabase();
+		SQLiteDatabaseManager.createDatabase();
 	}
 	
 	private static void fillDatabase() {

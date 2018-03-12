@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import Tools.Security;
 import dao.DAOException;
 import dao.UserDAO;
 import factories.AbstractDAOFactory;
 import javafx.util.Pair;
 import models.User;
 import ocsf.server.ConnectionToClient;
+import tools.Security;
 
 public class UserManager extends Manager{
 

@@ -1,4 +1,4 @@
-package Tools;
+package tools;
 import java.security.Key;
 
 import javax.crypto.*;

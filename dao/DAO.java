@@ -30,7 +30,7 @@ public abstract class DAO <T> {
 	/**
 	 * Delete the object with id equals to the given one.
 	 * @param id, String
-	 * @return boolean
+	 * @return int, the number of rows deleted
 	 */
-	public abstract boolean delete(String id);	
+	public abstract int delete(String id);	
 }

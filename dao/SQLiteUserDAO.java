@@ -41,9 +41,17 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    public boolean delete(String id) {
-        // TODO Auto-generated method stub
-        return false;
+    public int delete(String id) {
+         String sql = "DELETE FROM Users WHERE id = ?";
+         int deleted = 0;
+         try {
+             PreparedStatement prepStat = this.connect.prepareStatement(sql);
+             prepStat.setString(1, id);
+             deleted = prepStat.executeUpdate();
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+         return deleted;
     }
     
     // ======================== //

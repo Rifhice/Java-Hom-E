@@ -4,6 +4,8 @@ package managers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import org.json.JSONObject;
 
 import Tools.Security;
@@ -68,13 +70,15 @@ public class UserManager extends Manager{
     	if(pseudo.equals("")) {
     		//Donner un pseudo
     	}
-    	users.add(new User(pseudo,User.USERTYPE.GUEST));
-    	return null;
+    	User user = new User(pseudo,User.USERTYPE.GUEST);
+    	users.add(user);
+    	return user;
     }
 
     @Override
     public void handleMessage(JSONObject json, ConnectionToClient client) {
         String action = json.getString("action");
+        System.out.println(action);
         String pseudo;
         String password;
         switch(action) {
@@ -116,13 +120,14 @@ public class UserManager extends Manager{
 	        case "loginAsGuest":
 	        	User tmp = null;
 	        	try {
-		        	pseudo = json.getString("pseudo");
-		        	tmp = loginAsGuest(pseudo);
+		        	tmp = loginAsGuest(json.getString("pseudo"));
 				} catch (Exception e) {
 					tmp = loginAsGuest("");
 				}
+	        	System.out.println(tmp);
                 JSONObject token = new JSONObject();
                 token.put("type", tmp.getType());
+                token.put("pseudo", tmp.getPseudo());
                 
                 JSONObject result = new JSONObject();
                 result.put("result","success");

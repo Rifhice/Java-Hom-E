@@ -67,9 +67,9 @@ public class LoginScene extends MyScene{
 					if(passwordTextField.getText().equals("") ) {
 						//Login as guest with pseudo
 						JSONObject json = new JSONObject();
-						json.append("recipient", "user");
-						json.append("action", "loginAsGuest");
-						json.append("pseudo", pseudoTextField.getText());
+						json.put("recipient", "user");
+						json.put("action", "loginAsGuest");
+						json.put("pseudo", pseudoTextField.getText());
 						ClientFX.client.handleMessageFromClientUI(json.toString());
 					}
 					else {

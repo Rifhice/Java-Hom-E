@@ -28,9 +28,9 @@ public abstract class DAO <T> {
 	public abstract boolean update(T obj);
 	
 	/**
-	 * Delete a object.
-	 * @param obj
+	 * Delete the object with id equals to the given one.
+	 * @param id, String
 	 * @return boolean
 	 */
-	public abstract boolean delete(T obj);	
+	public abstract boolean delete(String id);	
 }

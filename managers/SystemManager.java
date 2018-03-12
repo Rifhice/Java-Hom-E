@@ -11,6 +11,8 @@ import Tools.Security;
 import server.EchoServer;
 
 public class SystemManager extends Manager{
+    
+    // ==== ATTRIBUTES ====//
 	private final int USER_SERVER_PORT = 6543;
 	private final int SENSOR_SERVER_PORT = 5432;
 	private final int ACTUATOR_SERVER_PORT = 4321;
@@ -29,6 +31,10 @@ public class SystemManager extends Manager{
 	
 	public static final int db = AbstractDAOFactory.SQLITE_DAO_FACTORY;
 	
+	// ==== CONSTRUCTORS ====//
+	/**
+	 * Private constructor (singleton pattern)
+	 */
 	private SystemManager() {
 		ambienceManager = AmbienceManager.getManager();
 		behaviourManager = BehaviourManager.getManager();
@@ -48,6 +54,12 @@ public class SystemManager extends Manager{
 		}
 	}
 	
+	// ==== METHODS ====//
+	
+	/**
+	 * Return the SystemManager (singleton pattern)
+	 * @return SystemManager
+	 */
 	public static SystemManager getManager() {
 		if(manager == null) 
 			manager = new SystemManager();
@@ -98,6 +110,9 @@ public class SystemManager extends Manager{
 		actuatorManager.handleMessage(json,client);
 	}
 	
+	// ============== //
+	// ==== MAIN ==== //
+	// ============== //
 	public static void main(String[] args) {
 		SystemManager systemManager = new SystemManager();
 	}

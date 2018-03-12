@@ -78,6 +78,7 @@ public class UserManager extends Manager{
 
                 JSONObject result = new JSONObject();
                 result.put("result","success");
+                result.put("type", user.getKey().getType());
                 result.put("token", Security.encrypt(token.toString()));
                 try {
                     client.sendToClient(result.toString());

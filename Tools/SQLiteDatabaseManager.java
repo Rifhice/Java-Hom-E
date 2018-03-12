@@ -109,6 +109,33 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertRights() {
+        String insertRightLRLights = "INSERT INTO rights ('denomination, description') VALUES ('Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertRightLRLights);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    private static void insertActuators() {
+        String insertActuator1 = "INSERT INTO actuators ('name, description') VALUES ('Philips 70W Bulb','Powerfull yellow bulb');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertActuator1);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    private static void insertSensors() {
+        String insertSensor1 = "INSERT INTO sensors ('name, description') VALUES ('Presensor','Sense the presence of something (10m range)');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertSensor1);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     // ============== //
     // ==== MAIN ==== //
     // ============== //
@@ -120,5 +147,8 @@ public class SQLiteDatabaseManager {
         SQLiteDatabaseManager.insertUsers();
         SQLiteDatabaseManager.insertHistories();
         SQLiteDatabaseManager.insertRoles();
+        SQLiteDatabaseManager.insertRights();
+        SQLiteDatabaseManager.insertActuators();
+        SQLiteDatabaseManager.insertSensors();
     }
 }

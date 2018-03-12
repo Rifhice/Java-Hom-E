@@ -9,6 +9,7 @@ import dao.UserDAO;
 public class SQLiteDAOFactory extends AbstractDAOFactory{
     protected Connection connect = DriverConnection.getInstance(DriverConnection.SQLITE_DRIVER); 
 
+    @Override
 	public UserDAO getUserDAO() {
 		return new SQLiteUserDAO(connect);
 	}

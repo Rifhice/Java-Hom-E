@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.*;
 
 public class ClientFX extends Application{
-	final public static int DEFAULT_PORT = 6543;
+	final public static int DEFAULT_PORT = 1111;
 	final public static String DEFAULT_HOST = "localhost";
 	
 	public static String token;

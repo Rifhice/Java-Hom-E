@@ -85,7 +85,7 @@ public class SQLiteDatabaseManager {
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertUsers);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR inserting Users : " + e.getMessage());
         }
     }
 
@@ -94,7 +94,7 @@ public class SQLiteDatabaseManager {
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertHistory);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR inserting Histories : " + e.getMessage());
         }
     }
     
@@ -105,34 +105,34 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertRoleOwner);
             stmt.execute(insertRoleFamilyMember);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR inserting Roles : " + e.getMessage());
         }
     }
     
     private static void insertRights() {
-        String insertRightLRLights = "INSERT INTO rights ('denomination, description') VALUES ('Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
+        String insertRightLRLights = "INSERT INTO rights ('denomination', 'description') VALUES ('Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertRightLRLights);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR inserting Rights : " + e.getMessage());
         }
     }
     
     private static void insertActuators() {
-        String insertActuator1 = "INSERT INTO actuators ('name, description') VALUES ('Philips 70W Bulb','Powerfull yellow bulb');";
+        String insertActuator1 = "INSERT INTO actuators ('name', 'description') VALUES ('Philips 70W Bulb','Powerfull yellow bulb');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertActuator1);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR inserting Actuators : " + e.getMessage());
         }
     }
     
     private static void insertSensors() {
-        String insertSensor1 = "INSERT INTO sensors ('name, description') VALUES ('Presensor','Sense the presence of something (10m range)');";
+        String insertSensor1 = "INSERT INTO sensors ('name', 'description') VALUES ('Presensor','Sense the presence of something (10m range)');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensor1);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR inserting Sensors : " + e.getMessage());
         }
     }
     
@@ -150,5 +150,7 @@ public class SQLiteDatabaseManager {
         SQLiteDatabaseManager.insertRights();
         SQLiteDatabaseManager.insertActuators();
         SQLiteDatabaseManager.insertSensors();
+        
+        System.out.println("Terminating.");
     }
 }

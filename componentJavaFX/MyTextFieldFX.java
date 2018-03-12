@@ -8,8 +8,6 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 
 public class MyTextFieldFX extends TextField{
-
-	boolean initial = true;
 	
 	public MyTextFieldFX(String label,Rectangle2D.Float bounds, int widht, int height) {
 		new TextField();

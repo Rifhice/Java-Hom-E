@@ -32,11 +32,46 @@ public class SQLiteDatabaseManager {
                 + "    id integer PRIMARY KEY,\n"
                 + " name text NOT NULL \n"
                 + ");";
+        
+        String createTableRights = "CREATE TABLE IF NOT EXISTS rights (\n" 
+                + "    id integer PRIMARY KEY,\n"
+                + " denomination text NOT NULL, \n"
+                + " description text \n"
+                + ");";
+        
+        String createTableActuators = "CREATE TABLE IF NOT EXISTS actuators (\n" 
+                + "    id integer PRIMARY KEY,\n"
+                + " name text NOT NULL, \n"
+                + " description text \n"
+                + ");";
+        
+        String createTableSensors = "CREATE TABLE IF NOT EXISTS sensors (\n" 
+                + "    id integer PRIMARY KEY,\n"
+                + " name text NOT NULL, \n"
+                + " description text \n"
+                + ");";
+        
+        String createTableActuatorCategories = "CREATE TABLE IF NOT EXISTS actuatorCategories (\n" 
+                + "    id integer PRIMARY KEY,\n"
+                + " name text NOT NULL, \n"
+                + " description text \n"
+                + ");";
+        
+        String createTableSensorCategories = "CREATE TABLE IF NOT EXISTS sensorCategories (\n" 
+                + "    id integer PRIMARY KEY,\n"
+                + " name text NOT NULL, \n"
+                + " description text \n"
+                + ");";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createTableUsers);
             stmt.execute(createTableHistories);
             stmt.execute(createTableRoles);
+            stmt.execute(createTableRights);
+            stmt.execute(createTableActuators);
+            stmt.execute(createTableSensors);
+            stmt.execute(createTableActuatorCategories);
+            stmt.execute(createTableSensorCategories);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

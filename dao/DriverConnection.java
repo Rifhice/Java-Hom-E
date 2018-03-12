@@ -4,14 +4,26 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DriverConnection {
+    
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
+    public static final int SQLITE_DRIVER = 1;
+    public static final int POSTGRESQL_DRIVER = 2;
+    public static final int ORACLE_DRIVER = 3;
 	  
-	private String url = "jdbc:sqlite:hom-e.db";
+	private static String SQLiteUrl = "jdbc:sqlite:hom-e.db";
+	private static String PostGreSQLUrl = "";
+	private static String OracleUrl = "";
+	
 	private static Connection connect;
+	
+	// ==================== //
 
 	/**
 	 * Private constructor (singleton pattern)
 	 */
-	private DriverConnection(){
+	private DriverConnection(String url){
 		try {
 			connect = DriverManager.getConnection(url);
 		} catch (SQLException e) {
@@ -20,12 +32,25 @@ public class DriverConnection {
 	}
 
 	/**
-	 * Return the DriverConnection singleton.
+	 * Return the DriverConnection singleton according to the type given.
+	 * Destroy the old DriverConnection. 
 	 * @return DriverConnection
 	 */
-	public static Connection getInstance(){
+	public static Connection getInstance(int type){
 		if(connect == null){
-			new DriverConnection();
+		    switch(type){
+		        case(SQLITE_DRIVER):
+		            new DriverConnection(SQLiteUrl);
+		        break;
+		        
+		        case(POSTGRESQL_DRIVER):
+                    new DriverConnection(PostGreSQLUrl);
+                break;
+                
+		        case(ORACLE_DRIVER):
+                    new DriverConnection(OracleUrl);
+                break;
+		    }
 		}
 		return connect;   
 	}   

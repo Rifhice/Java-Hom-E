@@ -5,7 +5,17 @@ import java.sql.*;
 import models.User;
 
 public class SQLiteUserDAO extends UserDAO {
-
+    
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    public SQLiteUserDAO(Connection connectionDriver) {
+        super(connectionDriver);
+    }
+    
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //
     @Override
     public boolean create(User obj) {
         // TODO Auto-generated method stub
@@ -79,13 +89,5 @@ public class SQLiteUserDAO extends UserDAO {
             e.printStackTrace();
         }
         return user;
-    }
-
-    // ============== //
-    // ==== MAIN ==== //
-    // ============== //
-    public static void main(String args[]) {
-        SQLiteUserDAO uDAO = new SQLiteUserDAO();
-        System.out.println(uDAO.getByPseudo("owner").getPassword());
     }
 }

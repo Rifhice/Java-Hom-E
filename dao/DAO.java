@@ -3,9 +3,22 @@ package dao;
 import java.sql.Connection;
 
 public abstract class DAO <T> {
-	
-	protected Connection connect = DriverConnection.getInstance(); 
-	
+    
+    // ====================== //
+    // ==== ATTRIBUTES ==== //
+    // ====================== //
+    protected Connection connect;
+    
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    public DAO(Connection connect) {
+        this.connect = connect;
+    }
+    
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	/**
 	 * Create a new object.
 	 * @param obj

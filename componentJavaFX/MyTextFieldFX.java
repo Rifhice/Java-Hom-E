@@ -13,25 +13,21 @@ public class MyTextFieldFX extends TextField{
 	
 	public MyTextFieldFX(String label,Rectangle2D.Float bounds, int widht, int height) {
 		new TextField();
-		setText(label);
 		setLayoutX((int)(bounds.getX() * widht));
 		setLayoutY((int)(bounds.getY() * height));
 		setWidth((int)(bounds.getWidth() * widht));
 		setHeight((int)(bounds.getHeight() * height));
+		this.setPromptText(label);
 		setOnMouseClicked(new EventHandler<Event>() {
 
 			@Override
 			public void handle(Event event) {
 				setText("");
-				initial = false;
 				setStyle("-fx-background-color: white;");
 			}
 		});
 	
 	}
-	
-	public boolean isInitialMessage() {
-		return initial;
-	}
+
 	
 }

@@ -50,7 +50,7 @@ public class LoginScene extends MyScene{
         root.getChildren().add(new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if(pseudoTextField.getText().equals("") || pseudoTextField.isInitialMessage()) {
+				if(pseudoTextField.getText().equals("")) {
 					pseudoTextField.setStyle("-fx-background-color: red;");
 				}
 				else {
@@ -78,7 +78,7 @@ public class LoginScene extends MyScene{
         root.getChildren().add(new MyButtonFX("Log in as guest", loginAsGuestBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if(!pseudoTextField.getText().equals("") && !pseudoTextField.isInitialMessage()) {
+				if(!pseudoTextField.getText().equals("")){
 					if(passwordTextField.getText().equals("")) {
 						//Login as guest with pseudo
 						JSONObject json = new JSONObject();

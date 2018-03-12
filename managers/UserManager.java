@@ -75,10 +75,10 @@ public class UserManager extends Manager{
             if(user.getKey() != null) {
                 JSONObject token = new JSONObject();
                 token.put("id", user.getKey().getId());
-
+                token.put("type", user.getKey().getType());
+                
                 JSONObject result = new JSONObject();
                 result.put("result","success");
-                result.put("type", user.getKey().getType());
                 result.put("token", Security.encrypt(token.toString()));
                 try {
                     client.sendToClient(result.toString());

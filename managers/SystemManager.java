@@ -13,9 +13,9 @@ import server.EchoServer;
 public class SystemManager extends Manager{
     
     // ==== ATTRIBUTES ====//
-	private final int USER_SERVER_PORT = 6543;
-	private final int SENSOR_SERVER_PORT = 5432;
-	private final int ACTUATOR_SERVER_PORT = 4321;
+	private final int USER_SERVER_PORT = 1111;
+	private final int SENSOR_SERVER_PORT = 1112;
+	private final int ACTUATOR_SERVER_PORT = 1113;
 	
 	private static SystemManager manager = null;
 	

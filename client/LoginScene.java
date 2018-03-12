@@ -37,6 +37,7 @@ public class LoginScene extends MyScene{
 	public LoginScene(Group root,double width, double height) {
 		super(root, width,height, ClientFX.BACKGROUND_COLOR);
         root.requestFocus();
+        
         System.out.println("Width : " + this.width + " Height : " + this.height);
                 
         pseudoTextField = new MyTextFieldFX("Pseudo", pseudoBounds, this.width, this.height);

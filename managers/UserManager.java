@@ -4,8 +4,6 @@ package managers;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 import org.json.JSONObject;
 
 import Tools.Security;

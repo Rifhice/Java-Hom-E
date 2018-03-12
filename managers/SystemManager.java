@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.json.JSONObject;
 
 import factories.AbstractDAOFactory;
-import models.User;
 import ocsf.server.ConnectionToClient;
 import Tools.Security;
 import server.EchoServer;

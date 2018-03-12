@@ -29,12 +29,23 @@ public class ClientFX extends Application{
 	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public static Color BACKGROUND_COLOR = Color.LIGHTGREEN;
 	
+	// ==================== //
+	// ==== ATTRIBUTES ==== //
+	// ==================== //
 	private float widthRatio = 0.5f;
 	private float heightRatio = 0.5f;
 	
 	private int width;
 	private int height;
-
+	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
+	
+	/**
+	 * Launch the client UI. It tries to connect to the server. 
+	 * The first scene is Login.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -51,6 +62,10 @@ public class ClientFX extends Application{
 		}
 	}
 	
+	/**
+	 * Change the scene of the client UI.
+	 * @param scene
+	 */
 	public static void setScene(MyScene scene) {
 		Platform.runLater(new Runnable() {
 		    @Override
@@ -63,6 +78,9 @@ public class ClientFX extends Application{
 		});
 	}
 	
+	// ============== //
+    // ==== MAIN ==== //
+    // ============== //
 	public static void main(String[] args) {
 		Application.launch(ClientFX.class, args);
 	}

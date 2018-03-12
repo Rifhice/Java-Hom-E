@@ -139,6 +139,7 @@ public class SQLiteDatabaseManager {
     // ============== //
     // ==== MAIN ==== //
     // ============== //
+    
     public static void main(String args[]) {
         conn = DriverConnection.getInstance();
         SQLiteDatabaseManager.createDatabase();

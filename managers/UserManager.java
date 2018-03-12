@@ -63,19 +63,66 @@ public class UserManager extends Manager{
         }
         return new Pair<User,Integer>(null,-2);
     }
+    
+    public User loginAsGuest(String pseudo) {
+    	if(pseudo.equals("")) {
+    		//Donner un pseudo
+    	}
+    	users.add(new User(pseudo,User.USERTYPE.GUEST));
+    	return null;
+    }
 
     @Override
     public void handleMessage(JSONObject json, ConnectionToClient client) {
         String action = json.getString("action");
+        String pseudo;
+        String password;
         switch(action) {
-        case "login":
-            String pseudo = json.getString("pseudo");
-            String password = json.getString("password");
-            Pair<User,Integer> user = login(pseudo, password);
-            if(user.getKey() != null) {
+	        case "login":
+	            pseudo = json.getString("pseudo");
+	            password = json.getString("password");
+	            Pair<User,Integer> user = login(pseudo, password);
+	            if(user.getKey() != null) {
+	                JSONObject token = new JSONObject();
+	                token.put("id", user.getKey().getId());
+	                token.put("type", user.getKey().getType());
+	                
+	                JSONObject result = new JSONObject();
+	                result.put("result","success");
+	                result.put("token", Security.encrypt(token.toString()));
+	                try {
+	                    client.sendToClient(result.toString());
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	            else {
+	                JSONObject result = new JSONObject();
+	                System.out.println(user.getValue());
+	                if(user.getValue() == -1) {
+	                    result.put("result","wrong_password");
+	                }
+	                else {
+	                    result.put("result","wrong_pseudo");
+	                }
+	
+	                try {
+	                    client.sendToClient(result.toString());
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	            break;
+	        case "loginAsGuest":
+	        	User tmp = null;
+	        	try {
+		        	pseudo = json.getString("pseudo");
+		        	tmp = loginAsGuest(pseudo);
+				} catch (Exception e) {
+					tmp = loginAsGuest("");
+				}
                 JSONObject token = new JSONObject();
-                token.put("id", user.getKey().getId());
-                token.put("type", user.getKey().getType());
+                token.put("type", tmp.getType());
                 
                 JSONObject result = new JSONObject();
                 result.put("result","success");
@@ -85,24 +132,7 @@ public class UserManager extends Manager{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            else {
-                JSONObject result = new JSONObject();
-                System.out.println(user.getValue());
-                if(user.getValue() == -1) {
-                    result.put("result","wrong_password");
-                }
-                else {
-                    result.put("result","wrong_pseudo");
-                }
-
-                try {
-                    client.sendToClient(result.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            break;
+	        	break;
         }
     }
 }

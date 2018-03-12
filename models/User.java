@@ -8,9 +8,10 @@ public class User {
     private String password;
     private USERTYPE type;
 
-    public enum USERTYPE {
+    public static enum USERTYPE {
         FAMILY,
-        OWNER
+        OWNER,
+        GUEST
     }
 
     // ==== CONSTRUCTORS ==== //
@@ -24,10 +25,16 @@ public class User {
         this.pseudo = pseudo;
         this.password = password;
     }
+    
+    public User(String pseudo, USERTYPE type) {
+        this.pseudo = pseudo;
+        this.type = type;
+    }
 
     public User(String pseudo, String password, USERTYPE type) {
         this.pseudo = pseudo;
         this.password = password;
+        this.type = type;
     }
 
     // ==== METHODS ==== //

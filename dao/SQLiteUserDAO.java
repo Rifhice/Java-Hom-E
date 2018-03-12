@@ -11,10 +11,10 @@ public class SQLiteUserDAO extends UserDAO {
         // TODO Auto-generated method stub
         return false;
     }
-    //Get by id
+
     @Override
     public User getById(String id) {
-        User user = new User();
+        User user = null;
         String sql = "SELECT * FROM Users WHERE id = ?";
 
         try {
@@ -22,10 +22,8 @@ public class SQLiteUserDAO extends UserDAO {
             prepStat.setString(1, id);
             ResultSet rs = prepStat.executeQuery();
 
-            if (!rs.next()) {
-                //No user found.  
-            }
-            else {
+            if (rs.next()) {
+                user = new User();
                 user.setId(rs.getString("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
@@ -47,6 +45,10 @@ public class SQLiteUserDAO extends UserDAO {
         // TODO Auto-generated method stub
         return false;
     }
+    
+    // ======================== //
+    // ==== Custom methods ==== //
+    // ======================== //
 
     @Override
     public User getByPseudo(String pseudo) throws DAOException {
@@ -58,10 +60,8 @@ public class SQLiteUserDAO extends UserDAO {
             prepStat.setString(1, pseudo);
             ResultSet rs = prepStat.executeQuery();
 
-            if (!rs.next()) {
-                //User not found
-            }
-            else {
+            // If no user found, we do nothing and return null.
+            if (rs.next()) {
             	user = new User();
                 user.setId(rs.getString("id"));
                 user.setPseudo(rs.getString("pseudo"));
@@ -73,7 +73,9 @@ public class SQLiteUserDAO extends UserDAO {
         return user;
     }
 
+    // ============== //
     // ==== MAIN ==== //
+    // ============== //
     public static void main(String args[]) {
         SQLiteUserDAO uDAO = new SQLiteUserDAO();
         System.out.println(uDAO.getByPseudo("owner").getPassword());

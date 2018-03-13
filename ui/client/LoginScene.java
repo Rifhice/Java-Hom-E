@@ -14,6 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 public class LoginScene extends MyScene{
@@ -30,6 +31,8 @@ public class LoginScene extends MyScene{
 
 	private MyTextFieldFX pseudoTextField;
 	private PasswordField passwordTextField = new PasswordField();
+	private MyButtonFX loginButton;
+	private MyButtonFX loginAsGuestButton;
 	
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -57,7 +60,7 @@ public class LoginScene extends MyScene{
 			}
 		});
         
-        root.getChildren().add(new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
+        loginButton = new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if(pseudoTextField.getText().equals("")) {
@@ -83,14 +86,16 @@ public class LoginScene extends MyScene{
 					}
 				}
 			}
-		}));
+		});
+        
+        root.getChildren().add(loginButton);
         
         /**
          * "Log in as guest" button handler. 
          * No password required. 
          * Pseudo is optionnal.        
          */
-        root.getChildren().add(new MyButtonFX("Log in as guest", loginAsGuestBounds, this.width, this.height, new EventHandler<ActionEvent>() {
+        loginAsGuestButton = new MyButtonFX("Log in as guest", loginAsGuestBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if(!pseudoTextField.getText().equals("")){
@@ -114,8 +119,24 @@ public class LoginScene extends MyScene{
 					ClientFX.client.handleMessageFromClientUI(json.toString());
 				}
 			}
-		}));
-        
+		});
+        root.getChildren().add(loginAsGuestButton);
+        passwordTextField.setOnKeyTyped(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCharacter().equals("\r")) {
+					loginButton.fire();
+				}
+			}
+		});
+        pseudoTextField.setOnKeyTyped(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCharacter().equals("\r")) {
+					loginAsGuestButton.fire();
+				}
+			}
+		});
 	}
 	
 	// ================= //

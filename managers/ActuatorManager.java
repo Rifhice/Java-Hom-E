@@ -35,7 +35,7 @@ public class ActuatorManager extends Manager {
 	
 	public Actuator getActuatorById(String id) {
 		for (int i = 0; i < actuators.size(); i++) {
-			if(actuators.get(i).getId().equals(id)) {
+			if(Integer.toString(actuators.get(i).getId()).equals(id)) {
 				return actuators.get(i);
 			}
 		}

@@ -7,19 +7,18 @@ import java.util.ArrayList;
 public class ExternalActor {
 	private static int EXTERNAL_ACTORS_COUNT = 0;
 	
-	protected String id;
-	
+	protected int id;
 	protected String name;
 	protected String description;
 	
 	public ExternalActor(String name, String description) {
 		this.name = name;
 		this.description = description;
-		id = EXTERNAL_ACTORS_COUNT + "";
+		id = EXTERNAL_ACTORS_COUNT;
 		EXTERNAL_ACTORS_COUNT++;
 	}
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	

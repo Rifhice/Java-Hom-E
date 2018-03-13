@@ -37,7 +37,7 @@ public class SQLiteUserDAO extends UserDAO {
 
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getString("id"));
+                user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
             }
@@ -86,7 +86,7 @@ public class SQLiteUserDAO extends UserDAO {
             // If no user found, we do nothing and return null.
             if (rs.next()) {
             	user = new User();
-                user.setId(rs.getString("id"));
+                user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
             }

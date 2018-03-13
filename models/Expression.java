@@ -91,7 +91,7 @@ public class Expression implements Evaluable{
 	    String operator = null;
 		ArrayList<EnvironmentVariable> variables = ExternalActorManager.getManager().getEnvironmentVariables();
 		for (int j = 0; j < variables.size(); j++) {
-			if(variables.get(j).getId().equals(json.getString("variable"))) {
+			if(Integer.toString(variables.get(j).getId()).equals(json.getString("variable"))) {
 				variable = variables.get(j);
 			}
 		}

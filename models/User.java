@@ -106,8 +106,12 @@ public class User {
 
     
     public String toString() {
-        String user = "";
-        
+        String user = "USER n°"+ id +"\n";
+        user += pseudo;
+        user += "\n" + password;
+        user += "\n" + type;
+        user += "\n" + roleId;
+        user += "\n" + roleName;
         return user;
     }
 

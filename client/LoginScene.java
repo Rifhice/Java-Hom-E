@@ -14,6 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 public class LoginScene extends MyScene{
@@ -30,6 +31,7 @@ public class LoginScene extends MyScene{
 
 	private MyTextFieldFX pseudoTextField;
 	private PasswordField passwordTextField = new PasswordField();
+	private MyButtonFX loginButton;
 	
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -57,7 +59,7 @@ public class LoginScene extends MyScene{
 			}
 		});
         
-        root.getChildren().add(new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
+        loginButton = new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if(pseudoTextField.getText().equals("")) {
@@ -83,7 +85,9 @@ public class LoginScene extends MyScene{
 					}
 				}
 			}
-		}));
+		})
+        
+        root.getChildren().add(loginButton);
         
         /**
          * "Log in as guest" button handler. 
@@ -115,7 +119,15 @@ public class LoginScene extends MyScene{
 				}
 			}
 		}));
-        
+        setOnKeyTyped(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCharacter().equals("\r")) {
+					loginButton.fire();
+					System.out.println("hey");
+				}
+			}
+		});
 	}
 	
 	// ================= //

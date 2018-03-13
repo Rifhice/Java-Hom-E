@@ -1,4 +1,4 @@
-package client;
+package ui.client;
 
 import javafx.scene.Group;
 import javafx.scene.Parent;

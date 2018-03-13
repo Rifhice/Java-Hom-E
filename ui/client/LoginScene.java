@@ -1,4 +1,4 @@
-package client;
+package ui.client;
 
 import java.awt.geom.Rectangle2D;
 
@@ -133,7 +133,7 @@ public class LoginScene extends MyScene{
 				String result = json.getString("result");
 				if(result.equals("success")) {
 					ClientFX.token = json.getString("token");
-					ClientFX.setScene(new HomePageScene(new Group(),width,height,ClientFX.BACKGROUND_COLOR));
+					ClientFX.setScene(new ContentScene(new Group(),width,height,ClientFX.BACKGROUND_COLOR));
 				}else if(result.equals("wrong_pseudo")){
 					pseudoTextField.setText("");
 					pseudoTextField.setStyle("-fx-background-color: red;");

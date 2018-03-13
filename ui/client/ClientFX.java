@@ -1,4 +1,4 @@
-package client;
+package ui.client;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -35,8 +35,8 @@ public class ClientFX extends Application{
 	private float widthRatio = 0.5f;
 	private float heightRatio = 0.5f;
 	
-	private int width;
-	private int height;
+	public static int width;
+	public static int height;
 	
 	// ================= //
     // ==== METHODS ==== //
@@ -48,10 +48,10 @@ public class ClientFX extends Application{
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		this.primaryStage = primaryStage;
+		ClientFX.primaryStage = primaryStage;
 		
-		this.width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
-		this.height = (int)(ClientFX.screenSize.getHeight()* heightRatio);
+		width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
+		height = (int)(ClientFX.screenSize.getHeight()* heightRatio);
 		LoginScene firstScene = new LoginScene(new Group(),this.width,this.height);
 		
 		try {

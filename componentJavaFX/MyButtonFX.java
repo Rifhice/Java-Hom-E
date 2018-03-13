@@ -19,5 +19,4 @@ public class MyButtonFX extends Button{
 		setHeight((int)(bounds.getHeight() * height));
 		setOnAction(event);
 	}
-	
 }

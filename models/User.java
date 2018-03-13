@@ -2,7 +2,9 @@ package models;
 
 public class User {
 
+    // ==================== //
     // ==== ATTRIBUTES ==== //
+    // ==================== //
     private String id;
     private String pseudo; 
     private String password;
@@ -13,8 +15,10 @@ public class User {
         OWNER,
         GUEST
     }
-
+    
+    // ====================== //
     // ==== CONSTRUCTORS ==== //
+    // ====================== //
     public User() {}
 
     public User(String pseudo) {
@@ -37,7 +41,9 @@ public class User {
         this.type = type;
     }
 
+    // ================= //
     // ==== METHODS ==== //
+    // ================= //
     public String getId() {
         return this.id;
     }

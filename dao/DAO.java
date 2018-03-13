@@ -28,10 +28,10 @@ public abstract class DAO <T> {
 	
 	/**
 	 * Get an existing object by his id.
-	 * @param id
+	 * @param id; int
 	 * @return T
 	 */
-	public abstract T getById(String id) throws DAOException;
+	public abstract T getById(int id) throws DAOException;
 	
 	/**
 	 * Modify an existing object.
@@ -42,8 +42,8 @@ public abstract class DAO <T> {
 	
 	/**
 	 * Delete the object with id equals to the given one.
-	 * @param id, String
+	 * @param id, int
 	 * @return int, the number of rows deleted
 	 */
-	public abstract int delete(String id) throws DAOException;
+	public abstract int delete(int id) throws DAOException;
 }

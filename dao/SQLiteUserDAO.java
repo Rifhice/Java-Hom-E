@@ -24,7 +24,7 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    public User getById(String id) throws DAOException {
+    public User getById(int id) throws DAOException {
         User user = null;
         String sql = "SELECT * FROM Users AS U "
                 + "JOIN Roles AS R ON R.id = U.fk_role_id "
@@ -32,7 +32,7 @@ public class SQLiteUserDAO extends UserDAO {
 
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setString(1, id);
+            prepStat.setInt(1, id);
             ResultSet rs = prepStat.executeQuery();
 
             if (rs.next()) {
@@ -54,12 +54,12 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    public int delete(String id) throws DAOException {
+    public int delete(int id) throws DAOException {
          String sql = "DELETE FROM Users WHERE id = ?";
          int deleted = 0;
          try {
              PreparedStatement prepStat = this.connect.prepareStatement(sql);
-             prepStat.setString(1, id);
+             prepStat.setInt(1, id);
              deleted = prepStat.executeUpdate();
          } catch (SQLException e) {
              throw new DAOException("DAOException : UserDAO delete(" + id + ") :" + e.getMessage(), e);
@@ -101,6 +101,6 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        User u = test.getByPseudo("owner");
+        User u = test.getById(1);
     }
 }

@@ -17,7 +17,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ==== METHODS ==== //
     // ================= //
     @Override
-    public boolean create(User obj) {
+    public boolean create(User obj) throws DAOException {
         // TODO Auto-generated method stub
         return false;
     }
@@ -45,13 +45,13 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    public boolean update(User obj) {
+    public boolean update(User obj) throws DAOException {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public int delete(String id) {
+    public int delete(String id) throws DAOException {
          String sql = "DELETE FROM Users WHERE id = ?";
          int deleted = 0;
          try {

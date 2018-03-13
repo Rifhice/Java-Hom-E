@@ -126,7 +126,6 @@ public class LoginScene extends MyScene{
 			public void handle(KeyEvent event) {
 				if(event.getCharacter().equals("\r")) {
 					loginButton.fire();
-					System.out.println("hey");
 				}
 			}
 		});
@@ -135,7 +134,6 @@ public class LoginScene extends MyScene{
 			public void handle(KeyEvent event) {
 				if(event.getCharacter().equals("\r")) {
 					loginAsGuestButton.fire();
-					System.out.println("hey");
 				}
 			}
 		});

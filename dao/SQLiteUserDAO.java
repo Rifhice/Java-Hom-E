@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.*;
 
+import factories.AbstractDAOFactory;
 import models.User;
 
 public class SQLiteUserDAO extends UserDAO {
@@ -25,7 +26,9 @@ public class SQLiteUserDAO extends UserDAO {
     @Override
     public User getById(String id) throws DAOException {
         User user = null;
-        String sql = "SELECT * FROM Users WHERE id = ?";
+        String sql = "SELECT * FROM Users AS U "
+                + "JOIN Roles AS R ON R.id = U.fk_role_id "
+                + "WHERE U.id = ?";
 
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
@@ -89,5 +92,13 @@ public class SQLiteUserDAO extends UserDAO {
             throw new DAOException("DAOException : UserDAO getByPseudo(" + pseudo + ") :" + e.getMessage(), e);
         }
         return user;
+    }
+    
+    // ============== //
+    // ==== MAIN ==== //
+    // ============== // 
+    public static void main (String args[]) {
+        UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
+        User u = test.getById("1");
     }
 }

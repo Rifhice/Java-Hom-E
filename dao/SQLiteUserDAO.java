@@ -74,7 +74,9 @@ public class SQLiteUserDAO extends UserDAO {
     @Override
     public User getByPseudo(String pseudo) throws DAOException {
         User user = null;
-        String sql = "SELECT * FROM Users WHERE pseudo = ?";
+        String sql = "SELECT * FROM Users AS U "
+                + "JOIN Roles AS R ON R.id = U.fk_role_id "
+                + "WHERE pseudo = ? ";
 
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
@@ -99,6 +101,6 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        User u = test.getById("1");
+        User u = test.getByPseudo("owner");
     }
 }

@@ -23,7 +23,7 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    public User getById(String id) {
+    public User getById(String id) throws DAOException {
         User user = null;
         String sql = "SELECT * FROM Users WHERE id = ?";
 
@@ -39,7 +39,7 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setPassword(rs.getString("password"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("DAOException : UserDAO getById(" + id+ ") :" + e.getMessage(), e);
         }
         return user;
     }
@@ -59,7 +59,7 @@ public class SQLiteUserDAO extends UserDAO {
              prepStat.setString(1, id);
              deleted = prepStat.executeUpdate();
          } catch (SQLException e) {
-             e.printStackTrace();
+             throw new DAOException("DAOException : UserDAO delete(" + id+ ") :" + e.getMessage(), e);
          }
          return deleted;
     }
@@ -86,7 +86,7 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setPassword(rs.getString("password"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("DAOException : UserDAO getByPseudo(" + pseudo + ") :" + e.getMessage(), e);
         }
         return user;
     }

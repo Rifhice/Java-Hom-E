@@ -26,7 +26,8 @@ public class SQLiteUserDAO extends UserDAO {
     @Override
     public User getById(int id) throws DAOException {
         User user = null;
-        String sql = "SELECT * FROM Users AS U "
+        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, R.id AS Rid, R.name AS Rname "
+                + "FROM Users AS U "
                 + "JOIN Roles AS R ON R.id = U.fk_role_id "
                 + "WHERE U.id = ?";
 
@@ -40,6 +41,8 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
+                user.setRoleId(rs.getInt("Rid"));
+                user.setRoleName(rs.getString("Rname"));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
@@ -74,7 +77,8 @@ public class SQLiteUserDAO extends UserDAO {
     @Override
     public User getByPseudo(String pseudo) throws DAOException {
         User user = null;
-        String sql = "SELECT * FROM Users AS U "
+        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, R.id AS Rid, R.name AS Rname "
+                + "FROM Users AS U "
                 + "JOIN Roles AS R ON R.id = U.fk_role_id "
                 + "WHERE pseudo = ? ";
 
@@ -89,6 +93,8 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
+                user.setRoleId(rs.getInt("Rid"));
+                user.setRoleName(rs.getString("Rname"));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getByPseudo(" + pseudo + ") :" + e.getMessage(), e);
@@ -101,6 +107,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        User u = test.getById(1);
+        User u = test.getByPseudo("owner");
+        System.out.println(u.getRoleId());
     }
 }

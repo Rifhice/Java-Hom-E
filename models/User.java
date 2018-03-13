@@ -9,12 +9,16 @@ public class User {
     private String pseudo; 
     private String password;
     private USERTYPE type;
-
+    
     public static enum USERTYPE {
         FAMILY,
         OWNER,
         GUEST
     }
+    
+    // Attributes from others tables
+    private int roleId;
+    private String roleName;    
     
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -39,6 +43,14 @@ public class User {
         this.pseudo = pseudo;
         this.password = password;
         this.type = type;
+    }
+    
+    public User(String pseudo, String password, USERTYPE type, int roleId, String roleName) {
+        this.pseudo = pseudo;
+        this.password = password;
+        this.type = type;
+        this.roleId = roleId;
+        this.roleName = roleName;
     }
 
     // ================= //
@@ -75,6 +87,23 @@ public class User {
     public void setType(USERTYPE type) {
         this.type = type;
     }
+    
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     
     public String toString() {
         String user = "";

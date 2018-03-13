@@ -85,7 +85,7 @@ public class LoginScene extends MyScene{
 					}
 				}
 			}
-		})
+		});
         
         root.getChildren().add(loginButton);
         

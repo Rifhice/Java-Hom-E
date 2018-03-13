@@ -42,7 +42,7 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setPassword(rs.getString("password"));
             }
         } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO getById(" + id+ ") :" + e.getMessage(), e);
+            throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
         }
         return user;
     }
@@ -62,7 +62,7 @@ public class SQLiteUserDAO extends UserDAO {
              prepStat.setString(1, id);
              deleted = prepStat.executeUpdate();
          } catch (SQLException e) {
-             throw new DAOException("DAOException : UserDAO delete(" + id+ ") :" + e.getMessage(), e);
+             throw new DAOException("DAOException : UserDAO delete(" + id + ") :" + e.getMessage(), e);
          }
          return deleted;
     }

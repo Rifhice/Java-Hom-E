@@ -66,7 +66,6 @@ public class SystemManager extends Manager{
 	}
 	
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		System.out.println(json);
 		String recipient = json.getString("recipient");
 		switch (recipient) {
 		case "ambience":

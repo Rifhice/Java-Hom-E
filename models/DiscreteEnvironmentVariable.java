@@ -3,18 +3,27 @@ package models;
 import java.util.ArrayList;
 
 public class DiscreteEnvironmentVariable extends EnvironmentVariable {
-
+    
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private String name;
 	private String unity;
 	private ArrayList<String> values;
 	private String currentValue;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public DiscreteEnvironmentVariable(String name, String description, String unity, ArrayList<String> values, String currentValue) {
 		super(name,description,unity);
 		this.values = values;
 		this.currentValue = currentValue;
 	}
 	
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //	
 	public boolean isEqual(Object value) {
 		if(value instanceof String) {
 			return ((String)value).equals(currentValue);

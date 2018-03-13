@@ -48,7 +48,7 @@ public class SensorManager extends Manager{
 	
 	public Sensor getSensorById(String id) {
 		for (int i = 0; i < sensors.size(); i++) {
-			if(sensors.get(i).getId().equals(id)) {
+			if(Integer.toString(sensors.get(i).getId()).equals(id)) {
 				return sensors.get(i);
 			}
 		}

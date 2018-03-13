@@ -1,19 +1,28 @@
 package models;
 
 
-
 import java.util.ArrayList;
 
 import org.json.*;
 
 public class Sensor extends ExternalActor{
+    
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private ArrayList<EnvironmentVariable> environmentVariable;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
 		super(name, description);
 		this.environmentVariable = environmentVariable;
 	}
 
+	// ====================== //
+    // ==== METHODS ==== //
+    // ====================== //
 	public ArrayList<EnvironmentVariable> getEnvironmentVariable() {
 		return environmentVariable;
 	}

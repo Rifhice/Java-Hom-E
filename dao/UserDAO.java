@@ -21,5 +21,5 @@ public abstract class UserDAO extends DAO<User> {
      * @param pseudo, String
      * @return User
      */
-	public abstract User getByPseudo(String pseudo);
+	public abstract User getByPseudo(String pseudo) throws DAOException;
 }

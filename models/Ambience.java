@@ -5,14 +5,23 @@ import java.util.ArrayList;
 
 public class Ambience {
 
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private ArrayList<Behaviour> behaviours;
 	private String name;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public Ambience(String name, ArrayList<Behaviour> behaviours) {
 		this.name = name;
 		this.behaviours = behaviours;
 	}
 	
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //	
 	public void activateAmbience() {
 		for (int i = 0; i < behaviours.size(); i++) {
 			behaviours.get(i).activate();

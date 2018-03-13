@@ -1,9 +1,6 @@
 package componentJavaFX;
-import java.awt.event.ActionListener;
+
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.JButton;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;

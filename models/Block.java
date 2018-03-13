@@ -1,17 +1,25 @@
 package models;
 
 public class Block implements Evaluable{
-
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private EnvironmentVariable variable;
 	private Object value;
 	private String operator;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public Block(EnvironmentVariable variable, Object value, String operator) {
 		this.variable = variable;
 		this.value = value;
 		this.operator = operator;
 	}
 	
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public boolean evaluate() {
 		switch (operator) {
 		case "==":

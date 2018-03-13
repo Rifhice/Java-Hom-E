@@ -2,19 +2,27 @@ package models;
 
 public class User {
 
+    // ==================== //
     // ==== ATTRIBUTES ==== //
-    private String id;
+    // ==================== //
+    private int id;
     private String pseudo; 
     private String password;
     private USERTYPE type;
-
+    
     public static enum USERTYPE {
         FAMILY,
         OWNER,
         GUEST
     }
-
+    
+    // Attributes from others tables
+    private int roleId;
+    private String roleName;    
+    
+    // ====================== //
     // ==== CONSTRUCTORS ==== //
+    // ====================== //
     public User() {}
 
     public User(String pseudo) {
@@ -36,13 +44,23 @@ public class User {
         this.password = password;
         this.type = type;
     }
+    
+    public User(String pseudo, String password, USERTYPE type, int roleId, String roleName) {
+        this.pseudo = pseudo;
+        this.password = password;
+        this.type = type;
+        this.roleId = roleId;
+        this.roleName = roleName;
+    }
 
+    // ================= //
     // ==== METHODS ==== //
-    public String getId() {
+    // ================= //
+    public int getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -68,6 +86,33 @@ public class User {
 
     public void setType(USERTYPE type) {
         this.type = type;
+    }
+    
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    
+    public String toString() {
+        String user = "USER n°"+ id +"\n";
+        user += pseudo;
+        user += "\n" + password;
+        user += "\n" + type;
+        user += "\n" + roleId;
+        user += "\n" + roleName;
+        return user;
     }
 
 }

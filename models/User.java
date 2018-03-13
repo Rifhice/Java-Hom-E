@@ -5,7 +5,7 @@ public class User {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private String id;
+    private int id;
     private String pseudo; 
     private String password;
     private USERTYPE type;
@@ -44,11 +44,11 @@ public class User {
     // ================= //
     // ==== METHODS ==== //
     // ================= //
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -74,6 +74,12 @@ public class User {
 
     public void setType(USERTYPE type) {
         this.type = type;
+    }
+    
+    public String toString() {
+        String user = "";
+        
+        return user;
     }
 
 }

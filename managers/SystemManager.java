@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import factories.AbstractDAOFactory;
 import ocsf.server.ConnectionToClient;
 import server.EchoServer;
-import tools.Security;
 
 public class SystemManager extends Manager{
     
@@ -112,7 +111,7 @@ public class SystemManager extends Manager{
 	// ==== MAIN ==== //
 	// ============== //
 	public static void main(String[] args) {
-		SystemManager systemManager = new SystemManager();
+		new SystemManager();
 	}
 }
 

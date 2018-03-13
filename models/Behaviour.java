@@ -8,12 +8,17 @@ import java.util.Observer;
 import org.json.JSONObject;
 
 public class Behaviour implements Observer{
-
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private Expression expression;
 	private Command command;
 	private ArrayList<EnvironmentVariable> variables;
 	private boolean isActivated = true;
-	
+
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public Behaviour(Expression expression, Command command) {
 		this.expression = expression;
 		this.command = command;
@@ -24,7 +29,9 @@ public class Behaviour implements Observer{
 		update(null,null);
 	}
 
-
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public void update(Observable arg0, Object arg1) {
 		if(isActivated && expression.evaluate()) {
 			System.out.println("It works !");

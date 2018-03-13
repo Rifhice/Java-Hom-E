@@ -1,16 +1,20 @@
 package models;
 
 
-
-import java.util.ArrayList;
-
 public class ExternalActor {
+    
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private static int EXTERNAL_ACTORS_COUNT = 0;
 	
 	protected int id;
 	protected String name;
 	protected String description;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public ExternalActor(String name, String description) {
 		this.name = name;
 		this.description = description;
@@ -18,6 +22,9 @@ public class ExternalActor {
 		EXTERNAL_ACTORS_COUNT++;
 	}
 	
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //	
 	public int getId() {
 		return id;
 	}

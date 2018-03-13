@@ -1,11 +1,7 @@
 package models;
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,15 +9,24 @@ import org.json.JSONObject;
 import managers.ExternalActorManager;
 
 public class Expression implements Evaluable{
-	
+    
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private ArrayList<Evaluable> evaluable;
 	private ArrayList<String> operators;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public Expression(ArrayList<Evaluable> evaluable, ArrayList<String> operators) {
 		this.evaluable = evaluable;
 		this.operators = operators;
 	}
 	
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public boolean evaluate() {
 		int operatorCpt = 0;
 		boolean leftValue = evaluable.get(0).evaluate();

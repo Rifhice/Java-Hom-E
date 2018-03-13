@@ -3,11 +3,17 @@ package models;
 import java.util.ArrayList;
 
 public class ContinuousEnvironmentVariable extends EnvironmentVariable{
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private double valueMin;
 	private double valueMax;
 	private double currentValue;
 	private double precision;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public ContinuousEnvironmentVariable(String name, String description, String unity, double valueMin,double valueMax, double precision, double currentValue) {
 		super(name, description, unity);
 		this.valueMax = valueMax;
@@ -15,6 +21,9 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
 		this.currentValue = currentValue;
 	}
 
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public boolean isEqual(Object value) {
 		if (value instanceof Number) {
 		    return ((Number) value).doubleValue() == currentValue;

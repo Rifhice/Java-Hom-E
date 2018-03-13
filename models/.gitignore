@@ -12,3 +12,5 @@
 /EnvironmentVariable.class
 /User.class
 /User$USERTYPE.class
+/Right$USERTYPE.class
+/Right.class

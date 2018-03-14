@@ -7,6 +7,10 @@ import java.util.Observer;
 
 import org.json.JSONObject;
 
+/**
+ * A behaviour is a comportment of an actuator depending on environment variables.
+ * @author Clm-Roig
+ */
 public class Behaviour implements Observer{
     // ==================== //
     // ==== ATTRIBUTES ==== //

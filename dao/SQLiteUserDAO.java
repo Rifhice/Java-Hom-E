@@ -50,15 +50,12 @@ public class SQLiteUserDAO extends UserDAO {
         return user;
     }
 
-    //update by id?
     @Override
     public boolean update(User obj) throws DAOException {
-        // TODO Auto-generated method stub
     	String sql = "UPDATE Users AS U"
                 + " SET U.pseudo = ?, U.password = ? "
                 + "WHERE U.id = ?";
     	int updated = 0;
-    	boolean update = false;
     	  try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getPseudo());
@@ -69,10 +66,7 @@ public class SQLiteUserDAO extends UserDAO {
           } catch (SQLException e) {
         	  throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
           }
-    	  if(updated>0) {
-    		  update=true;
-    	  }
-        return update;
+        return updated > 0;
     }
 
     @Override

@@ -10,3 +10,5 @@
 /DAOException.class
 /SQLiteDriverConnection.class
 /DriverConnection.class
+/ActuatorDAO.class
+/SQLiteActuatorDAO.class

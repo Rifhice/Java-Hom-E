@@ -17,6 +17,10 @@ public class Actuator extends ExternalActor{
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+	public Actuator() {
+	    
+	}
+	
 	public Actuator(String name, String description,ArrayList<Command> commands) {
 		super(name,description);
 		this.commands = commands;

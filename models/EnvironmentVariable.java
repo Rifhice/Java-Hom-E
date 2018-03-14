@@ -22,6 +22,8 @@ public abstract class EnvironmentVariable extends Observable{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    public EnvironmentVariable() {}
+    
 	public EnvironmentVariable(String name, String description, String unity) {
 		this.name = name;
 		this.unity = unity;

@@ -15,6 +15,8 @@ public class ExternalActor {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+	public ExternalActor() {}
+	
 	public ExternalActor(String name, String description) {
 		this.name = name;
 		this.description = description;

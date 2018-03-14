@@ -3,6 +3,11 @@ package models;
 
 import java.util.Observable;
 
+/**
+ * An environment variable is an interesting value  for the server, related to the environment. 
+ * It allows the server to send the right command to the actuators.
+ * @author Clm-Roig
+ */
 public abstract class EnvironmentVariable extends Observable{
     
     // ==================== //
@@ -17,6 +22,8 @@ public abstract class EnvironmentVariable extends Observable{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    public EnvironmentVariable() {}
+    
 	public EnvironmentVariable(String name, String description, String unity) {
 		this.name = name;
 		this.unity = unity;

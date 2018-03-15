@@ -47,6 +47,8 @@ public class ExternalActor {
 		this.description = description;
 	}
 	
+	// ==================================
+	
 	public void enable() {
 		
 	}

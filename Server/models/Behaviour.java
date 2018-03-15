@@ -15,6 +15,7 @@ public class Behaviour implements Observer{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
+    private int id;
 	private Expression expression;
 	private Command command;
 	private ArrayList<EnvironmentVariable> variables;
@@ -36,14 +37,52 @@ public class Behaviour implements Observer{
     // ================= //
     // ==== METHODS ==== //
     // ================= //
-	public void update(Observable arg0, Object arg1) {
-		if(isActivated && expression.evaluate()) {
-			System.out.println("It works !");
-			//command.launch();
-		}
-	}
-	
-	public void activate() {
+	public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public void setExpression(Expression expression) {
+        this.expression = expression;
+    }
+
+    public Command getCommand() {
+        return command;
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public ArrayList<EnvironmentVariable> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(ArrayList<EnvironmentVariable> variables) {
+        this.variables = variables;
+    }
+
+    public void setActivated(boolean isActivated) {
+        this.isActivated = isActivated;
+    }
+    
+    // ==================================
+    
+    public void update(Observable arg0, Object arg1) {
+        if(isActivated && expression.evaluate()) {
+            System.out.println("It works !");
+            //command.launch();
+        }
+    }
+
+    public void activate() {
 		isActivated = true;
 	}
 	

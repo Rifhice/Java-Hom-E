@@ -45,6 +45,8 @@ public class Right {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+ // ==================================
 
     public String toString() {
         String right = "ID: "+ id +"\nDenomination: "+ denomination + "\nDescription: "+ description;          

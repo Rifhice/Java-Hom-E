@@ -86,6 +86,8 @@ public class Actuator extends ExternalActor{
     public void setActuator_category_description(String actuator_category_description) {
         this.actuator_category_description = actuator_category_description;
     }
+    
+    // ==================================
 
     public static Actuator registerToTheSystem(Object jsonToParse) {
         return null;

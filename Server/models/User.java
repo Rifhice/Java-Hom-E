@@ -104,6 +104,7 @@ public class User {
         this.roleName = roleName;
     }
 
+    // ==================================
     
     public String toString() {
         String user = "USER n°"+ id +"\n";

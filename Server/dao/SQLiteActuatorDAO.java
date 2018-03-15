@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import factories.AbstractDAOFactory;
 import models.Actuator;
 import models.User;
 
@@ -22,8 +23,20 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ================= //
     @Override
     public boolean create(Actuator obj) throws DAOException {
-        // TODO Auto-generated method stub
-        return false;
+        String sql = "INSERT INTO Actuators "
+                + "(name, description, fk_actuatorCategory_id) VALUES "
+                + "(?, ?, ?)";
+        int created = 0;
+          try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, obj.getName());
+              prepStat.setString(2, obj.getDescription());
+              prepStat.setInt(3, obj.getCategory_actuator_id());
+              created = prepStat.executeUpdate();
+          } catch (SQLException e) {
+              throw new DAOException("DAOException : ActuatorDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
+          }
+        return created > 0;
     }
 
     @Override
@@ -77,5 +90,12 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ==== Custom methods ==== //
     // ======================== //
     
+    // ============== //
+    // ==== MAIN ==== //
+    // ============== // 
+    public static void main (String args[]) {
+        ActuatorDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
+        System.out.println(test.create(new Actuator("test","qsd")));
+    }
     
 }

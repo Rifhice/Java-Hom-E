@@ -10,3 +10,7 @@
 /DAOException.class
 /SQLiteDriverConnection.class
 /DriverConnection.class
+/SQLiteHistoryDAO.class
+/HistoryDAO.class
+/SQLiteAmbienceDAO.class
+/AmbienceDAO.class

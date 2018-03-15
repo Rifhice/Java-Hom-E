@@ -1,12 +1,15 @@
 package ui.client;
 
-import java.awt.event.ActionEvent;
-
-import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import ui.delegate.MenuDelegate;
 
@@ -14,26 +17,36 @@ public class ContentScene extends MyScene implements MenuDelegate {
 	
 	private Menu menu;
 	private Content content;
-	private FlowPane mainPane;
+	private Pane infoBar;
+	private BorderPane scenePane;
 
-	public static double menuWidthRatio = 0.2;
-	public static double menuHeightRatio = 1;
-	public static double contentWidthRatio = 0.8;
-	public static double contentHeightRatio = 1;
+	public final static double menuWidthRatio = 0.2;
+	public final static double menuHeightRatio = 0.9;
+	public final static double contentWidthRatio = 0.8;
+	public final static double contentHeightRatio = 0.9;
 	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
 	public ContentScene(Group root, double width, double height, Paint fill) {
 		super(root, width, height, fill);
-		mainPane = new FlowPane();
+		scenePane = new BorderPane();
+		scenePane.setMinSize(ClientFX.width, ClientFX.height);
+		this.infoBar = new Pane();
+		this.infoBar.setPrefHeight(ClientFX.height * 0.1);
+		this.infoBar.setMinWidth(ClientFX.width);
+		this.infoBar.getChildren().add(new Button("Lol"));
+		this.infoBar.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		this.infoBar.setMaxWidth(ClientFX.width);
+		this.infoBar.setMaxWidth(ClientFX.height * (1 - ContentScene.contentHeightRatio));
 		this.menu = new Menu(this);
+		this.menu.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
 		this.content = HomeContent.getInstance();
-		mainPane.setMaxWidth(ClientFX.screenSize.getWidth());
-		mainPane.setMaxHeight(ClientFX.screenSize.getWidth());
-		mainPane.getChildren().add(this.menu);
-		mainPane.getChildren().add(this.content);
-		root.getChildren().add(mainPane);
+		this.content.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+		scenePane.setLeft(this.menu);
+		scenePane.setCenter(this.content);
+		scenePane.setTop(infoBar);
+		root.getChildren().add(scenePane);
 		this.title = "Hom-E";
 		System.out.println(ClientFX.token);
 	}
@@ -67,9 +80,8 @@ public class ContentScene extends MyScene implements MenuDelegate {
 	}
 	
 	private void changeContent(Content content) {
-		mainPane.getChildren().remove(this.content);
 		this.content = content;
-		mainPane.getChildren().add(this.content);
+		scenePane.setCenter(this.content);
 	}
 	
 }

@@ -94,6 +94,18 @@ public class SQLiteDatabaseManager {
                 + " description text \n"
                 + ");";
         
+        String createTableBehaviors = "CREATE TABLE IF NOT EXISTS sensorCategories (\n" 
+                + " id integer PRIMARY KEY,\n"
+                + " name text NOT NULL, \n"
+                + " description text \n"
+                + ");";
+        
+        String createTableAmbiences = "CREATE TABLE IF NOT EXISTS sensorCategories (\n" 
+                + " id integer PRIMARY KEY,\n"
+                + " name text NOT NULL, \n"
+                + " description text \n"
+                + ");";
+        
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createTableUsers);
             stmt.execute(createTableHistories);

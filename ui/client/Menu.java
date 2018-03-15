@@ -13,8 +13,8 @@ public class Menu extends GridPane {
 	
 	
 	public Menu(MenuDelegate menuDelegate) {
-		this.setWidth(ContentScene.menuWidthRatio * ClientFX.screenSize.width);
-		this.setHeight(ContentScene.menuHeightRatio * ClientFX.screenSize.height);
+		this.setPrefWidth(ContentScene.menuWidthRatio * ClientFX.width);
+		this.setPrefHeight(ContentScene.menuHeightRatio * ClientFX.height);
 		this.menuDelegate = menuDelegate;
 		Button home = new Button("Home");
 		home.setOnAction(new EventHandler<ActionEvent>() {

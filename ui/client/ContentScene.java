@@ -20,8 +20,12 @@ public class ContentScene extends MyScene implements MenuDelegate {
 	private Pane infoBar;
 	private BorderPane scenePane;
 
+	public final static double infoBarWidthRatio = 1;
+	public final static double infoBarHeightRatio = 0.1;
+	
 	public final static double menuWidthRatio = 0.2;
 	public final static double menuHeightRatio = 0.9;
+	
 	public final static double contentWidthRatio = 0.8;
 	public final static double contentHeightRatio = 0.9;
 	
@@ -32,17 +36,15 @@ public class ContentScene extends MyScene implements MenuDelegate {
 		super(root, width, height, fill);
 		scenePane = new BorderPane();
 		scenePane.setMinSize(ClientFX.width, ClientFX.height);
-		this.infoBar = new Pane();
-		this.infoBar.setPrefHeight(ClientFX.height * 0.1);
-		this.infoBar.setMinWidth(ClientFX.width);
-		this.infoBar.getChildren().add(new Button("Lol"));
+		
+		this.infoBar = new InfoBar();
 		this.infoBar.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-		this.infoBar.setMaxWidth(ClientFX.width);
-		this.infoBar.setMaxWidth(ClientFX.height * (1 - ContentScene.contentHeightRatio));
+		
 		this.menu = new Menu(this);
 		this.menu.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
+		
 		this.content = HomeContent.getInstance();
-		this.content.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+		
 		scenePane.setLeft(this.menu);
 		scenePane.setCenter(this.content);
 		scenePane.setTop(infoBar);
@@ -71,8 +73,26 @@ public class ContentScene extends MyScene implements MenuDelegate {
 			case HOME:
 				this.changeContent(HomeContent.getInstance());
 				break;
-			case BEHAVIOURS:
-				this.changeContent(BehavioursContent.getInstance());
+			case CONTROLS:
+				this.changeContent(ControlContent.getInstance());
+				break;
+			case SENSORS:
+				this.changeContent(SensorContent.getInstance());
+				break;
+			case ACTUATORS:
+				this.changeContent(ActuatorContent.getInstance());
+				break;
+			case BEHAVIOURS_COMMANDS:
+				this.changeContent(BehavioursCommandsContent.getInstance());
+				break;
+			case AMBIENCES:
+				this.changeContent(AmbiencesContent.getInstance());
+				break;
+			case CATEGORIES:
+				this.changeContent(CategoriesContent.getInstance());
+				break;
+			case ACCOUNTS:
+				this.changeContent(AccountContent.getInstance());
 				break;
 			default:
 				break;

@@ -2,18 +2,18 @@ package ui.client;
 
 import javafx.scene.control.Label;
 
-public class BehavioursContent extends Content {
+public class BehavioursCommandsContent extends Content {
 
-	private static BehavioursContent content = null;
+	private static BehavioursCommandsContent content = null;
 
-	private BehavioursContent() {
+	private BehavioursCommandsContent() {
 		this.getChildren().add(new Label("Behaviours"));
 	}
 
 	public static Content getInstance() {
 		// TODO Auto-generated method stub
 		if(content == null) {
-			content = new BehavioursContent();
+			content = new BehavioursCommandsContent();
 		}
 		return content;
 	}

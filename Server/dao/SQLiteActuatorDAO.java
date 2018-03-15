@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import factories.AbstractDAOFactory;
 import models.Actuator;
-import models.User;
 
 public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ====================== //
@@ -31,7 +30,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getName());
               prepStat.setString(2, obj.getDescription());
-              prepStat.setInt(3, obj.getCategory_actuator_id());
+              prepStat.setInt(3, obj.getActuator_category_id());
               created = prepStat.executeUpdate();
           } catch (SQLException e) {
               throw new DAOException("DAOException : ActuatorDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
@@ -39,14 +38,15 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         return created > 0;
     }
 
+    // TODO : return ArrayList<Command>
     @Override
     public Actuator getById(int id) throws DAOException {
         Actuator actuator = null;
         // TODO
-        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, R.id AS Rid, R.name AS Rname "
-                + "FROM Users AS U "
-                + "JOIN Roles AS R ON R.id = U.fk_role_id "
-                + "WHERE U.id = ?";
+        String sql = "SELECT A.id AS id, A.name AS name, A.description AS description, AC.id AS ACid, AC.name AS ACname, AC.description AS ACdescription "
+                + "FROM Actuators AS A "
+                + "JOIN actuatorCategories AS AC ON AC.id = A.actuator_category_id "
+                + "WHERE A.id = ?";
 
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
@@ -55,15 +55,17 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
 
             if (rs.next()) {
                 actuator = new Actuator();
-                // TODO
-                /*
                 actuator.setId(rs.getInt("id"));
-                actuator.setName(rs.getString("pseudo"));
-                actuator.setDescription(rs.getString("password"));
-                */
+                actuator.setName(rs.getString("name"));
+                actuator.setDescription(rs.getString("description"));
+                actuator.setActuator_category_id(rs.getInt("ACid"));
+                actuator.setActuator_category_name(rs.getString("ACname"));
+                actuator.setActuator_category_description(rs.getString("ACdescription"));
+                // TODO list of commands
+                
             }
         } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
+            throw new DAOException("DAOException : ActuatorDAO getById(" + id + ") :" + e.getMessage(), e);
         }
         return actuator;
     }

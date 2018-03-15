@@ -52,8 +52,23 @@ public class SQLiteUserDAO extends UserDAO {
 
     @Override
     public boolean update(User obj) throws DAOException {
-        // TODO Auto-generated method stub
-        return false;
+
+    	String sql = "UPDATE Users "
+                + "SET pseudo = ?, password = ?, fk_role_id = ? "
+                + "WHERE id = ?";
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, obj.getPseudo());
+              prepStat.setString(2, obj.getPassword());
+              prepStat.setInt(3, obj.getRoleId());
+              prepStat.setInt(4, obj.getId());
+              updated= prepStat.executeUpdate();
+
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+          }
+        return updated > 0;
     }
 
     @Override
@@ -107,7 +122,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        User u = test.getByPseudo("owner");
-        System.out.println(u.getRoleId());
+        boolean u = test.update(new User());
+        System.out.println(u);
     }
 }

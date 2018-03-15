@@ -8,45 +8,55 @@ import java.util.ArrayList;
  * @author Clm-Roig
  */
 public class Actuator extends ExternalActor{
-    
+
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	private ArrayList<Command> commands;
-	
-	// Attributes from others tables
-	private int category_actuator_id;
-	private String category_actuator_name;
+    private int id;
+
+    private ArrayList<Command> commands;
+
+    // Attributes from others tables
+    private int category_actuator_id;
+    private String category_actuator_name;
     private String category_actuator_description;
-	
-	// ====================== //
+
+    // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-	public Actuator() {
-	    
-	}
-	
-	public Actuator(String name, String description) {
+    public Actuator() {
+
+    }
+
+    public Actuator(String name, String description) {
         super(name,description);
     }
-	
-	public Actuator(String name, String description,ArrayList<Command> commands) {
-		super(name,description);
-		this.commands = commands;
-	}
-	
-	public Actuator(String name, String description,ArrayList<Command> commands, int category_actuator_id, String category_actuator_name, String category_actuator_description) {
+
+    public Actuator(String name, String description,ArrayList<Command> commands) {
+        super(name,description);
+        this.commands = commands;
+    }
+
+    public Actuator(String name, String description,ArrayList<Command> commands, int category_actuator_id, String category_actuator_name, String category_actuator_description) {
         super(name,description);
         this.commands = commands;
         this.category_actuator_id = category_actuator_id;
         this.category_actuator_name = category_actuator_name;
         this.category_actuator_description = category_actuator_description;
     }
-	
-	// ================= //
+
+    // ================= //
     // ==== METHODS ==== //
     // ================= //
-	public ArrayList<Command> getCommands() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ArrayList<Command> getCommands() {
         return commands;
     }
 
@@ -77,9 +87,9 @@ public class Actuator extends ExternalActor{
     public void setCategory_actuator_description(String category_actuator_description) {
         this.category_actuator_description = category_actuator_description;
     }
-    
-	public static Actuator registerToTheSystem(Object jsonToParse) {
-		return null;
-	}
-	
+
+    public static Actuator registerToTheSystem(Object jsonToParse) {
+        return null;
+    }
+
 }

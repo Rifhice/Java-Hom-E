@@ -10,11 +10,16 @@ import models.Sensor;
 import ocsf.serverConnection.ConnectionToClient;
 
 public class SensorManager extends Manager{
-	
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	ArrayList<Sensor> sensors;
 	
 	private static SensorManager manager = null;
 	
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	private SensorManager() {
 		sensors = new ArrayList<Sensor>();
 	}
@@ -25,6 +30,9 @@ public class SensorManager extends Manager{
 		return manager;
 	}
 	
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= // 
 	public void registerSensorToTheSystem(JSONObject json) {
 		sensors.add(Sensor.registerToTheSystem(json));
 		System.out.println(sensors.get(sensors.size()-1) + "\nAdded to the system !");
@@ -46,6 +54,11 @@ public class SensorManager extends Manager{
 		
 	}
 	
+	/**
+	 * 
+	 * @param id, the id of sensors searched
+	 * @return Sensor, the sensor corresponding the id given or null if there is none.
+	 */
 	public Sensor getSensorById(String id) {
 		for (int i = 0; i < sensors.size(); i++) {
 			if(Integer.toString(sensors.get(i).getId()).equals(id)) {

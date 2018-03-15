@@ -15,13 +15,16 @@ import ocsf.serverConnection.ConnectionToClient;
 import tools.Security;
 
 public class UserManager extends Manager{
-
+    // ==================== //
     // ==== ATTRIBUTES ==== //
+    // ==================== //
     ArrayList<User> users;
     UserDAO userDAO = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO();
     private static UserManager manager = null;
 
+    // ====================== //
     // ==== CONSTRUCTORS ==== //
+    // ====================== //
     private UserManager() {
         users = new ArrayList<User>();
     }
@@ -32,7 +35,9 @@ public class UserManager extends Manager{
         return manager;
     }
 
+    // ================= //
     // ==== METHODS ==== //
+    // ================= // 
 
     /**
      * Return a pair with the user and a code defining success or failure : 

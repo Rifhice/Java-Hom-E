@@ -9,8 +9,9 @@ import ocsf.serverConnection.ConnectionToClient;
 import server.EchoServer;
 
 public class SystemManager extends Manager{
-    
-    // ==== ATTRIBUTES ====//
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private final int USER_SERVER_PORT = 1111;
 	private final int SENSOR_SERVER_PORT = 1112;
 	private final int ACTUATOR_SERVER_PORT = 1113;
@@ -27,9 +28,12 @@ public class SystemManager extends Manager{
 	private EchoServer sensorServer;
 	private EchoServer actuatorServer;
 	
+	// Currently used DB = SQLite
 	public static final int db = AbstractDAOFactory.SQLITE_DAO_FACTORY;
 	
-	// ==== CONSTRUCTORS ====//
+	// ====================== //
+	// ==== CONSTRUCTORS ==== //
+	// ====================== //
 	/**
 	 * Private constructor (singleton pattern)
 	 */
@@ -52,8 +56,9 @@ public class SystemManager extends Manager{
 		}
 	}
 	
-	// ==== METHODS ====//
-	
+	// ================= //
+	// ==== METHODS ==== //
+	// ================= //	
 	/**
 	 * Return the SystemManager (singleton pattern)
 	 * @return SystemManager

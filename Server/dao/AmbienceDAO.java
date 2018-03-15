@@ -16,9 +16,9 @@ public abstract class AmbienceDAO extends DAO<Ambience> {
         super(connectionDriver);
     }
     
-    // ================= //
-    // ==== METHODS ==== //
-    // ================= //
+    // ======================== //
+    // ==== CUSTOM METHODS ==== //
+    // ======================== //
     /**
      * 
      * @return A list of the different behaviours used by the ambience

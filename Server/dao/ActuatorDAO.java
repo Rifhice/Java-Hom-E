@@ -13,7 +13,7 @@ public abstract class ActuatorDAO extends DAO<Actuator>{
         super(connectionDriver);
     }
     
-    // ================= //
-    // ==== METHODS ==== //
-    // ================= //
+    // ======================== //
+    // ==== CUSTOM METHODS ==== //
+    // ======================== //
 }

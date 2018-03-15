@@ -47,6 +47,22 @@ public class Actuator extends ExternalActor{
     // ================= //
     // ==== METHODS ==== //
     // ================= //
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public ArrayList<Command> getCommands() {
+        return commands;
+    }
+
+    public void setCommands(ArrayList<Command> commands) {
+        this.commands = commands;
+    }
+
     public int getActuator_category_id() {
         return actuator_category_id;
     }

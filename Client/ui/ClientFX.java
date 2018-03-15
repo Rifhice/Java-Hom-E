@@ -16,6 +16,7 @@ import javafx.scene.*;
 import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
+import tools.GraphicalCharter;
 
 public class ClientFX extends Application{
 	final public static int DEFAULT_PORT = 1111;
@@ -27,7 +28,7 @@ public class ClientFX extends Application{
 	private static Stage primaryStage;
 	
 	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public static Color BACKGROUND_COLOR = Color.LIGHTGREEN;
+	public static Color BACKGROUND_COLOR = GraphicalCharter.LIGHT_GREEN;
 	
 	// ==================== //
 	// ==== ATTRIBUTES ==== //

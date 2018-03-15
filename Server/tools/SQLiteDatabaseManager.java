@@ -70,16 +70,16 @@ public class SQLiteDatabaseManager {
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
                 + " description text, \n"
-                + " fk_actuatorCategorie_id integer,\n"
-                + " FOREIGN KEY (fk_actuatorCategorie_id) REFERENCES actuatorCategories(id) \n"
+                + " fk_actuatorCategory_id integer,\n"
+                + " FOREIGN KEY (fk_actuatorCategory_id) REFERENCES actuatorCategories(id) \n"
                 + ");";
         
         String createTableSensors = "CREATE TABLE IF NOT EXISTS sensors (\n" 
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
                 + " description text, \n"
-                + " fk_sensorCategorie_id integer,\n"
-                + " FOREIGN KEY (fk_sensorCategorie_id) REFERENCES sensorCategories(id) \n"
+                + " fk_sensorCategory_id integer,\n"
+                + " FOREIGN KEY (fk_sensorCategory_id) REFERENCES sensorCategories(id) \n"
                 + ");";
         
         String createTableActuatorCategories = "CREATE TABLE IF NOT EXISTS actuatorCategories (\n" 

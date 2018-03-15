@@ -1,5 +1,6 @@
 package factories;
 
+import dao.ActuatorDAO;
 import dao.UserDAO;
 
 public abstract class AbstractDAOFactory {
@@ -35,7 +36,8 @@ public abstract class AbstractDAOFactory {
 		}
 	}
 	
-	// ==== DAO ==== //
+	// ==== DAOs ==== //
 	public abstract UserDAO getUserDAO();
+	public abstract ActuatorDAO getActuatorDAO();
 	
 }

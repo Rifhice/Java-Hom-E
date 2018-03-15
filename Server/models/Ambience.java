@@ -8,6 +8,7 @@ public class Ambience {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
+    private int id;
     private String name;
 
     // Attributes from other tables
@@ -30,6 +31,14 @@ public class Ambience {
     // ================= //
     // ==== METHODS ==== //
     // ================= //		
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }

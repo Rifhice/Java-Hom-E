@@ -8,13 +8,19 @@ public class Ambience {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private ArrayList<Behaviour> behaviours;
     private String name;
+
+    // Attributes from other tables
+    private ArrayList<Behaviour> behaviours;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Ambience() {}
+    
+    public Ambience(String name) {
+        this.name = name;
+    }
 
     public Ambience(String name, ArrayList<Behaviour> behaviours) {
         this.name = name;

@@ -19,8 +19,20 @@ public class SQLiteUserDAO extends UserDAO {
     // ================= //
     @Override
     public boolean create(User obj) throws DAOException {
-        // TODO Auto-generated method stub
-        return false;
+        String sql = "INSERT INTO Users "
+                + "(pseudo, password, fk_role_id) VALUES "
+                + "(?, ?, ?)";
+        int created = 0;
+          try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, obj.getPseudo());
+              prepStat.setString(2, obj.getPassword());
+              prepStat.setInt(3, obj.getRoleId());
+              created = prepStat.executeUpdate();
+          } catch (SQLException e) {
+              throw new DAOException("DAOException : UserDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
+          }
+        return created > 0;
     }
 
     @Override
@@ -122,7 +134,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        boolean u = test.update(new User());
+        boolean u = test.create(new User("test","mdp"));
         System.out.println(u);
     }
 }

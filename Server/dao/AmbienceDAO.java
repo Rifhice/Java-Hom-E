@@ -1,11 +1,10 @@
 package dao;
 
 import java.sql.Connection;
-import java.util.List;
+import java.util.ArrayList;
 
 import models.Ambience;
 import models.Behaviour;
-import models.Ambience;
 
 public abstract class AmbienceDAO extends DAO<Ambience> {
     
@@ -24,6 +23,6 @@ public abstract class AmbienceDAO extends DAO<Ambience> {
      * @return A list of the different behaviours used by the ambience
      * @throws DAOException
      */
-	public abstract List<Behaviour> getBehaviours() throws DAOException;
+	public abstract ArrayList<Behaviour> getBehaviours() throws DAOException;
 	
 }

@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 public abstract class DAO <T> {
     
@@ -28,7 +29,7 @@ public abstract class DAO <T> {
 	
 	/**
 	 * Get an existing object by his id.
-	 * @param id; int
+	 * @param id, int
 	 * @return T
 	 */
 	public abstract T getById(int id) throws DAOException;
@@ -43,7 +44,13 @@ public abstract class DAO <T> {
 	/**
 	 * Delete the object with id equals to the given one.
 	 * @param id, int
-	 * @return int, the number of rows deleted
+	 * @return int, the number of rows deleted.
 	 */
 	public abstract int delete(int id) throws DAOException;
+	
+	/**
+     * Get all the existing objects.
+     * @return ArrayList<T>, an ArrayList of all the objects.
+     */
+	public abstract ArrayList<T> getAll() throws DAOException;
 }

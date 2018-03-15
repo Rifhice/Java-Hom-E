@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import models.Actuator;
 import models.User;
@@ -64,6 +65,12 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     public int delete(int id) throws DAOException {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public ArrayList<Actuator> getAll() throws DAOException {
+        // TODO Auto-generated method stub
+        return null;
     }
     
     // ======================== //

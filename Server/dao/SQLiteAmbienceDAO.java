@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import factories.AbstractDAOFactory;
@@ -52,11 +53,20 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
          return deleted;
     }
     
+    @Override
+    public ArrayList<Ambience> getAll() throws DAOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
     // ======================== //
     // ==== Custom methods ==== //
     // ======================== //
-
-    
+    @Override
+    public List<Behaviour> getBehaviours() throws DAOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
     // ============== //
     // ==== MAIN ==== //
@@ -67,9 +77,7 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
         System.out.println(u.getRoleId());
     }
 
-	@Override
-	public List<Behaviour> getBehaviours() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
+
+	
 }

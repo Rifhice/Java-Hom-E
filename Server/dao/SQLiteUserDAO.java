@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import factories.AbstractDAOFactory;
 import models.User;
@@ -97,6 +98,32 @@ public class SQLiteUserDAO extends UserDAO {
          return deleted;
     }
     
+    @Override
+    public ArrayList<User> getAll() throws DAOException {
+        ArrayList<User> users = new ArrayList<User>();
+        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, R.id AS Rid, R.name AS Rname "
+                + "FROM Users AS U "
+                + "JOIN Roles AS R ON R.id = U.fk_role_id;";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            ResultSet rs = prepStat.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setPseudo(rs.getString("pseudo"));
+                user.setPassword(rs.getString("password"));
+                user.setRoleId(rs.getInt("Rid"));
+                user.setRoleName(rs.getString("Rname"));
+                users.add(user);
+            }
+                
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : UserDAO getAll() :" + e.getMessage(), e);
+        }
+        return users;
+    }
+    
     // ======================== //
     // ==== Custom methods ==== //
     // ======================== //
@@ -134,7 +161,8 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        boolean u = test.create(new User("test","mdp"));
-        System.out.println(u);
+        System.out.println(test.getAll());
     }
+
+    
 }

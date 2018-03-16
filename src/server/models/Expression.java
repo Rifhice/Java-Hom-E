@@ -8,17 +8,24 @@ import org.json.JSONObject;
 
 import server.managers.ExternalActorManager;
 
+/**
+ * An expression is composed by others expressions and / or blocks (i.e. evaluables).  
+ * @author Clm-Roig
+ */
 public class Expression implements Evaluable{
     
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
+    private int id;
 	private ArrayList<Evaluable> evaluables;
 	private ArrayList<String> operators;
 	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+	public Expression() {}
+	
 	public Expression(ArrayList<Evaluable> evaluables, ArrayList<String> operators) {
 		this.evaluables = evaluables;
 		this.operators = operators;
@@ -27,6 +34,14 @@ public class Expression implements Evaluable{
     // ================= //
     // ==== METHODS ==== //
     // ================= //
+	public int getId() {
+	    return id;
+	}
+	
+	public void setId(int id) {
+	    this.id = id;
+	}
+	
 	public ArrayList<Evaluable> getEvaluables() {
         return evaluables;
     }

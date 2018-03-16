@@ -56,7 +56,7 @@ public class Expression implements Evaluable{
 		}
 		return res + ")";
 	}
-
+	
 	public ArrayList<EnvironmentVariable> getVariables(){
 		ArrayList<EnvironmentVariable> result = new ArrayList<EnvironmentVariable>();
 		for (int i = 0; i < evaluable.size(); i++) {
@@ -70,6 +70,7 @@ public class Expression implements Evaluable{
 		return result;
 	}
 	
+	// TODO : To move in a Manager
 	public static Expression createExpressionFromJson(JSONObject json) {
 		ArrayList<Evaluable> evaluable = new ArrayList<Evaluable>();
 		ArrayList<String> operators = new ArrayList<String>();
@@ -90,6 +91,7 @@ public class Expression implements Evaluable{
 		return new Expression(evaluable, operators);
 	}
 	
+   // TODO : To move in a Manager
 	private static Block createBlockFromJson(JSONObject json) {
 	    EnvironmentVariable variable = null;
 	    Object value = null;

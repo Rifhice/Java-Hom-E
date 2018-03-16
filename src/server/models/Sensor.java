@@ -12,21 +12,67 @@ public class Sensor extends ExternalActor{
     // ==================== //
 	private ArrayList<EnvironmentVariable> environmentVariable;
 	
+	// Attributes from others tables
+    private int sensorCategoryId;
+    private String sensorCategoryName;
+    private String sensorCategoryDescription;
+	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    public Sensor() {}
+    
 	public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
 		super(name, description);
 		this.environmentVariable = environmentVariable;
 	}
+	
+	public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariables, 
+	        int sensorCategoryId, String sensorCategoryName, String sensorCategoryDescription) {
+        super(name, description);
+        this.environmentVariable = environmentVariables;
+        this.sensorCategoryId = sensorCategoryId;
+        this.sensorCategoryName = sensorCategoryName;
+        this.sensorCategoryDescription = sensorCategoryDescription;
+    }
 
-	// ====================== //
+	// ================= //
     // ==== METHODS ==== //
-    // ====================== //
+    // ================= //
 	public ArrayList<EnvironmentVariable> getEnvironmentVariable() {
-		return environmentVariable;
-	}
+        return environmentVariable;
+    }
 
+    public void setEnvironmentVariable(ArrayList<EnvironmentVariable> environmentVariable) {
+        this.environmentVariable = environmentVariable;
+    }
+
+    public int getSensorCategoryId() {
+        return sensorCategoryId;
+    }
+
+    public void setSensorCategoryId(int sensorCategoryId) {
+        this.sensorCategoryId = sensorCategoryId;
+    }
+
+    public String getSensorCategoryName() {
+        return sensorCategoryName;
+    }
+
+    public void setSensorCategoryName(String sensorCategoryName) {
+        this.sensorCategoryName = sensorCategoryName;
+    }
+
+    public String getSensorCategoryDescription() {
+        return sensorCategoryDescription;
+    }
+
+    public void setSensorCategoryDescription(String sensorCategoryDescription) {
+        this.sensorCategoryDescription = sensorCategoryDescription;
+    }
+    
+    // ===================================================$
+    
 	public String toString() {
 		String res = "ID : " + id + "\nName : " + this.name + "\n" + "Description : " + this.description + "\n\nVariables : \n";
 		for (int i = 0; i < environmentVariable.size(); i++) {
@@ -34,7 +80,8 @@ public class Sensor extends ExternalActor{
 		}
 		return res;
 	}
-	
+
+    // TODO : to move in a Manager
 	public static Sensor registerToTheSystem(JSONObject jsonToParse) {
 		String name = jsonToParse.getString("name");
 		String description = jsonToParse.getString("description");

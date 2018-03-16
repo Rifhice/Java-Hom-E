@@ -15,7 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
+import tools.GraphicalCharter;
 
 public class LoginScene extends MyScene{
     
@@ -64,7 +64,7 @@ public class LoginScene extends MyScene{
 			@Override
 			public void handle(ActionEvent event) {
 				if(pseudoTextField.getText().equals("")) {
-					pseudoTextField.setStyle("-fx-background-color: red;");
+					pseudoTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");
 				}
 				else {
 					if(passwordTextField.getText().equals("") ) {
@@ -108,7 +108,7 @@ public class LoginScene extends MyScene{
 						ClientFX.client.handleMessageFromClientUI(json.toString());
 					}
 					else {
-						passwordTextField.setStyle("-fx-background-color: red;");
+						passwordTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");
 					}
 				}
 				else {
@@ -157,13 +157,13 @@ public class LoginScene extends MyScene{
 					ClientFX.setScene(new ContentScene(new Group(),width,height,ClientFX.BACKGROUND_COLOR));
 				}else if(result.equals("wrong_pseudo")){
 					pseudoTextField.setText("");
-					pseudoTextField.setStyle("-fx-background-color: red;");
+					pseudoTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");
 					passwordTextField.setText("");
-					passwordTextField.setStyle("-fx-background-color: red;");
+					passwordTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");
 				}
 				else if (result.equals("wrong_password")){
 					passwordTextField.setText("");
-					passwordTextField.setStyle("-fx-background-color: red;");
+					passwordTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

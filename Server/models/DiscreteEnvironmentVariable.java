@@ -12,9 +12,6 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private int id;
-    private String name;
-    private String unity;
     private ArrayList<String> possibleValues;
     private String currentValue;
 
@@ -29,31 +26,7 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
 
     // ================= //
     // ==== METHODS ==== //
-    // ================= //	
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUnity() {
-        return unity;
-    }
-
-    public void setUnity(String unity) {
-        this.unity = unity;
-    }
-    
+    // ================= //	    
     public ArrayList<String> getPossibleValues() {
         return possibleValues;
     }

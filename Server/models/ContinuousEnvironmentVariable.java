@@ -8,7 +8,6 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private int id;
     private double valueMin;
     private double valueMax;
     private double currentValue;
@@ -27,15 +26,6 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
     // ================= //
     // ==== METHODS ==== //
     // ================= //
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public double getValueMin() {
         return valueMin;
     }

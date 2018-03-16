@@ -15,7 +15,7 @@ public abstract class EnvironmentVariable extends Observable{
     // ==================== //
     private int id;
 	private String name;
-	private String unity;
+	private String unit;
 	private String description;
 	private static int ID_COUNT = 0;    
 
@@ -24,9 +24,9 @@ public abstract class EnvironmentVariable extends Observable{
     // ====================== //
     public EnvironmentVariable() {}
     
-	public EnvironmentVariable(String name, String description, String unity) {
+	public EnvironmentVariable(String name, String description, String unit) {
 		this.name = name;
-		this.unity = unity;
+		this.unit = unit;
 		this.description = description;
 		id = ID_COUNT;
 		ID_COUNT++;

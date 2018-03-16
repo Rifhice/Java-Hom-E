@@ -4,7 +4,6 @@ package ui;
 import ui.componentJavaFX.MyButtonFX;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import ui.delegate.MenuDelegate;
 import ui.delegate.MenuDelegate.CONTENT;

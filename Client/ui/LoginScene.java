@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import ui.componentJavaFX.MyButtonFX;
 import ui.componentJavaFX.MyTextFieldFX;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;

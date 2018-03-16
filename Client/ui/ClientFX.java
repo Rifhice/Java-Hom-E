@@ -1,19 +1,9 @@
 package ui;
+
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.util.Optional;
-import ui.componentJavaFX.*;
-import javax.swing.*;
-
-import org.json.JSONObject;
-
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.*;
-import javafx.event.Event;
 import javafx.scene.*;
-import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import tools.GraphicalCharter;

@@ -8,12 +8,12 @@ import javafx.scene.paint.Color;
 public class GraphicalCharter {
     /**
      * Hom-E Colors
-     */
-    public static Color RED = Color.web("#71F481");
-    public static Color LIGHT_GREEN = Color.web("#71F481");
-    public static Color DARK_GREEN = Color.web("#2FA83E");
-    public static Color LIGHT_BLUE = Color.web("#5EADF6");
-    public static Color DEEP_BLUE = Color.web("#0F204F");
-    public static Color LIGHT_GRAY = Color.web("#C6CDE0");
+     */    
+    public static String RED = "#F44532";
+    public static String LIGHT_GREEN = "#71F481";
+    public static String DARK_GREEN = "#2FA83E";
+    public static String LIGHT_BLUE = "#5EADF6";
+    public static String DEEP_BLUE = "#0F204F";
+    public static String LIGHT_GRAY = "#C6CDE0";
     
 }

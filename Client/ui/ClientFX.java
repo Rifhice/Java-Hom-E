@@ -28,7 +28,7 @@ public class ClientFX extends Application{
 	private static Stage primaryStage;
 	
 	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public static Color BACKGROUND_COLOR = GraphicalCharter.LIGHT_GREEN;
+	public static Color BACKGROUND_COLOR = Color.web(GraphicalCharter.LIGHT_GREEN);
 	
 	// ==================== //
 	// ==== ATTRIBUTES ==== //

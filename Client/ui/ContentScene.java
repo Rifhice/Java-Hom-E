@@ -11,6 +11,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import tools.GraphicalCharter;
 import ui.delegate.MenuDelegate;
 
 public class ContentScene extends MyScene implements MenuDelegate {
@@ -38,7 +39,7 @@ public class ContentScene extends MyScene implements MenuDelegate {
 		scenePane.setMinSize(ClientFX.width, ClientFX.height);
 		
 		this.infoBar = new InfoBar();
-		this.infoBar.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		this.infoBar.setBackground(new Background(new BackgroundFill(Color.web(GraphicalCharter.LIGHT_BLUE), CornerRadii.EMPTY, Insets.EMPTY)));
 		
 		this.menu = new Menu(this);
 		this.menu.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));

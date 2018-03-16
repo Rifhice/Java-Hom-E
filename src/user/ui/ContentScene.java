@@ -9,7 +9,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import ui.InfoBar;
 import user.tools.GraphicalCharter;
 import user.ui.delegate.MenuDelegate;
 

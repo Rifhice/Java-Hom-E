@@ -1,9 +1,16 @@
 package user.ui;
 
 import javafx.geometry.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -37,6 +44,20 @@ public class InfoBar extends GridPane{
 		
 		setMinWidth(width);
 		setPrefHeight(ClientFX.height * ContentScene.infoBarHeightRatio);
+		
+        final ImageView imv = new ImageView();
+        File initialFile = new File("asset/images/logo.png");
+        InputStream stream;
+		try {
+			stream = new FileInputStream(initialFile);
+	        final Image image2 = new Image(stream);
+	        imv.setImage(image2);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		imv.setFitWidth(width * 0.05);
+		imv.setFitHeight(height * 0.95);
+		add(imv,0,0,1,2);
 		
 		
 		String date = new SimpleDateFormat("dd-MM-yyyy : hh:mm").format(new Date());

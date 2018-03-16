@@ -46,12 +46,11 @@ public class InfoBar extends GridPane{
 		setPrefHeight(ClientFX.height * ContentScene.infoBarHeightRatio);
 		
         final ImageView imv = new ImageView();
-        File initialFile = new File("asset/images/logo.png");
-        InputStream stream;
 		try {
-			stream = new FileInputStream(initialFile);
-	        final Image image2 = new Image(stream);
-	        imv.setImage(image2);
+	        imv.setImage(
+	        		new Image(
+	        				new FileInputStream(
+	        						new File("asset/images/logo.png"))));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

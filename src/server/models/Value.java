@@ -14,8 +14,7 @@ public abstract class Value {
 	// ==== ATTRIBUTES ==== //
 	// ==================== //
 	private int id;
-	private String name;
-	private static int ID_COUNT = 0;    
+	private String name;   
 
 	// ====================== //
 	// ==== CONSTRUCTORS ==== //
@@ -24,8 +23,6 @@ public abstract class Value {
 	    
 	public Value(String name) {
 		this.name = name;
-		id = ID_COUNT;
-		ID_COUNT++;
 	}
 		
 

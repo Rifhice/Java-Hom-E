@@ -3,9 +3,9 @@ package server.models;
 import java.util.ArrayList;
 
 /**
- * A discrete environment variable is a variable which the current value is a String 
- * among possible values.
- * @author Clm-Roig
+ * A discrete environment is a string which is an information the actuator needs 
+ * to perform an action or modify its state
+ * @author Jade Hennebert
  */
 public class DiscreteEnvironmentVariable extends EnvironmentVariable {
 

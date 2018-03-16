@@ -3,7 +3,7 @@ package server.models;
 import java.util.ArrayList;
 
 /**
- * A discrete environment variable is a variable which the current value is a String 
+ * A discrete value is a variable which the current value is a String 
  * among possible values.
  * @author Clm-Roig
  */

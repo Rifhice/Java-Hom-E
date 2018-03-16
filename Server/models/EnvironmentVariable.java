@@ -13,11 +13,11 @@ public abstract class EnvironmentVariable extends Observable{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
+    private int id;
 	private String name;
 	private String unity;
 	private String description;
-	private static int ID_COUNT = 0;
-    private int id;
+	private static int ID_COUNT = 0;    
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //

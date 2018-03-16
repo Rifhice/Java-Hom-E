@@ -1,5 +1,9 @@
 package models;
 
+/**
+ * A continous environment variable is a variable which current value is a decimal number.
+ * @author Clm-Roig
+ */
 public class ContinuousEnvironmentVariable extends EnvironmentVariable{
     // ==================== //
     // ==== ATTRIBUTES ==== //

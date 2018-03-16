@@ -49,6 +49,6 @@ public abstract class EnvironmentVariable extends Observable{
 	public abstract boolean isInferior(Object value);
 	public abstract boolean isSuperiorOrEqual(Object value);
 	public abstract boolean isInferiorOrEqual(Object value);
-	public abstract void setCurrentValue(Object value);
-	public abstract Object getCurrentValue();	
+	public abstract void setCurrentValue(String value);
+	public abstract String getCurrentValue();	
 }

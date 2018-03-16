@@ -57,17 +57,12 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
         this.values = values;
     }
     
-    // TODO : Object ? 
-    public Object getCurrentValue() {
+    public String getCurrentValue() {
         return currentValue;
     }
     
-    public void setCurrentValue(Object value) {
-        if(value instanceof String) {
-            currentValue = (String) value;
-            setChanged();
-            notifyObservers();
-        }
+    public void setCurrentValue(String value) {
+        currentValue = value;
     }
     
     // ==================================
@@ -103,8 +98,6 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     }
     public boolean isInferiorOrEqual(Object value) {
         return false;
-    }
-
-   
+    }  
 
 }

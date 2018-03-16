@@ -73,43 +73,23 @@ public class SystemManager extends Manager{
 		String recipient = json.getString("recipient");
 		switch (recipient) {
 		case "ambience":
-			ambienceMessage(json,client);
+			ambienceManager.handleMessage(json,client);
 			break;
 		case "behaviour":
-			behaviourMessage(json,client);
+			behaviourManager.handleMessage(json,client);
 			break;
 		case "sensor":
-			sensorMessage(json,client);
+			sensorManager.handleMessage(json,client);
 			break;
 		case "actuator":
-			actuatorMessage(json,client);
+			actuatorManager.handleMessage(json,client);
 			break;
 		case "user":
-			userMessage(json,client);
+			userManager.handleMessage(json,client);
 			break;
 		default:
 			break;
 		}
-	}
-	
-	private void userMessage(JSONObject json, ConnectionToClient client) {
-		userManager.handleMessage(json,client);
-	}
-	
-	private void ambienceMessage(JSONObject json, ConnectionToClient client) {
-		ambienceManager.handleMessage(json, client);
-	}
-	
-	private void behaviourMessage(JSONObject json, ConnectionToClient client) {
-		behaviourManager.handleMessage(json, client);
-	}
-	
-	private void sensorMessage(JSONObject json, ConnectionToClient client) {
-		sensorManager.handleMessage(json,client);
-	}
-	
-	private void actuatorMessage(JSONObject json, ConnectionToClient client) {
-		actuatorManager.handleMessage(json,client);
 	}
 	
 	// ============== //

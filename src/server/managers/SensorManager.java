@@ -13,7 +13,7 @@ public class SensorManager extends Manager{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	ArrayList<Sensor> sensors;
+	private ArrayList<Sensor> sensors;
 	
 	private static SensorManager manager = null;
 	

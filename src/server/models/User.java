@@ -8,13 +8,6 @@ public class User {
     private int id;
     private String pseudo; 
     private String password;
-    private USERTYPE type;
-    
-    public static enum USERTYPE {
-        FAMILY,
-        OWNER,
-        GUEST
-    }
     
     // Attributes from others tables
     private int roleId;
@@ -34,21 +27,9 @@ public class User {
         this.password = password;
     }
     
-    public User(String pseudo, USERTYPE type) {
-        this.pseudo = pseudo;
-        this.type = type;
-    }
-
-    public User(String pseudo, String password, USERTYPE type) {
+    public User(String pseudo, String password, int roleId, String roleName) {
         this.pseudo = pseudo;
         this.password = password;
-        this.type = type;
-    }
-    
-    public User(String pseudo, String password, USERTYPE type, int roleId, String roleName) {
-        this.pseudo = pseudo;
-        this.password = password;
-        this.type = type;
         this.roleId = roleId;
         this.roleName = roleName;
     }
@@ -79,14 +60,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public USERTYPE getType() {
-        return this.type;
-    }
-
-    public void setType(USERTYPE type) {
-        this.type = type;
-    }
     
     public int getRoleId() {
         return roleId;
@@ -110,9 +83,7 @@ public class User {
         String user = "USER n°"+ id +"\n";
         user += pseudo;
         user += "\n" + password;
-        user += "\n" + type;
-        user += "\n" + roleId;
-        user += "\n" + roleName;
+        user += "\nRole n°" + roleId + ": "+roleName;
         return user;
     }
 

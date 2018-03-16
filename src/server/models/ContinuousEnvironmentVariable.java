@@ -1,10 +1,13 @@
 package server.models;
 
+/**
+ * A continous environment variable is a variable which current value is a decimal number.
+ * @author Clm-Roig
+ */
 public class ContinuousEnvironmentVariable extends EnvironmentVariable{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private int id;
     private double valueMin;
     private double valueMax;
     private double currentValue;
@@ -23,15 +26,6 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
     // ================= //
     // ==== METHODS ==== //
     // ================= //
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public double getValueMin() {
         return valueMin;
     }
@@ -58,6 +52,8 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
 
     public void setCurrentValue(double currentValue) {
         this.currentValue = currentValue;
+        setChanged();
+        notifyObservers();
     }
 
 
@@ -108,17 +104,4 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
         }
         return false;
     }
-
-    public void setCurrentValue(Object value) {
-        if(value instanceof Number) {
-            currentValue =  ((Number) value).doubleValue();
-            setChanged();
-            notifyObservers();
-        }
-    }
-
-    public Object getCurrentValue() {
-        return currentValue;
-    }
-
 }

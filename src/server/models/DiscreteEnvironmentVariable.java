@@ -2,15 +2,17 @@ package server.models;
 
 import java.util.ArrayList;
 
+/**
+ * A discrete environment variable is a variable which the current value is a String 
+ * among possible values.
+ * @author Clm-Roig
+ */
 public class DiscreteEnvironmentVariable extends EnvironmentVariable {
 
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private int id;
-    private String name;
-    private String unity;
-    private ArrayList<String> values;
+    private ArrayList<String> possibleValues;
     private String currentValue;
 
     // ====================== //
@@ -18,56 +20,29 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     // ====================== //
     public DiscreteEnvironmentVariable(String name, String description, String unity, ArrayList<String> values, String currentValue) {
         super(name,description,unity);
-        this.values = values;
+        this.possibleValues = values;
         this.currentValue = currentValue;
     }
 
     // ================= //
     // ==== METHODS ==== //
-    // ================= //	
-    public int getId() {
-        return id;
+    // ================= //	    
+    public ArrayList<String> getPossibleValues() {
+        return possibleValues;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUnity() {
-        return unity;
-    }
-
-    public void setUnity(String unity) {
-        this.unity = unity;
+    public void setPossibleValues(ArrayList<String> values) {
+        this.possibleValues = values;
     }
     
-    public ArrayList<String> getValues() {
-        return values;
-    }
-
-    public void setValues(ArrayList<String> values) {
-        this.values = values;
-    }
-    
-    // TODO : Object ? 
-    public Object getCurrentValue() {
+    public String getCurrentValue() {
         return currentValue;
     }
     
-    public void setCurrentValue(Object value) {
-        if(value instanceof String) {
-            currentValue = (String) value;
-            setChanged();
-            notifyObservers();
-        }
+    public void setCurrentValue(String value) {
+        currentValue = value;
+        setChanged();
+        notifyObservers();
     }
     
     // ==================================
@@ -103,8 +78,6 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     }
     public boolean isInferiorOrEqual(Object value) {
         return false;
-    }
-
-   
+    }  
 
 }

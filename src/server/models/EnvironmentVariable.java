@@ -13,20 +13,20 @@ public abstract class EnvironmentVariable extends Observable{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	private String name;
-	private String unity;
-	private String description;
-	private static int ID_COUNT = 0;
     private int id;
+	private String name;
+	private String unit;
+	private String description;
+	private static int ID_COUNT = 0;    
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public EnvironmentVariable() {}
     
-	public EnvironmentVariable(String name, String description, String unity) {
+	public EnvironmentVariable(String name, String description, String unit) {
 		this.name = name;
-		this.unity = unity;
+		this.unit = unit;
 		this.description = description;
 		id = ID_COUNT;
 		ID_COUNT++;
@@ -49,6 +49,4 @@ public abstract class EnvironmentVariable extends Observable{
 	public abstract boolean isInferior(Object value);
 	public abstract boolean isSuperiorOrEqual(Object value);
 	public abstract boolean isInferiorOrEqual(Object value);
-	public abstract void setCurrentValue(Object value);
-	public abstract Object getCurrentValue();	
 }

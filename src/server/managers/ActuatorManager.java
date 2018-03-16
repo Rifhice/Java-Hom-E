@@ -10,7 +10,7 @@ import ocsf.server.ConnectionToClient;
 
 public class ActuatorManager extends Manager {
 	
-	ArrayList<Actuator> actuators;
+	private ArrayList<Actuator> actuators;
 	
 	private static ActuatorManager manager = null;
 	

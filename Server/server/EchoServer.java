@@ -8,7 +8,6 @@ import ocsf.serverConnection.*;
 import org.json.*;
 
 import managers.Manager;
-import managers.SystemManager;
 
 /**
  * This class overrides some of the methods in the abstract 

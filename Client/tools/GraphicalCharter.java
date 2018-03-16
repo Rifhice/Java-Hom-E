@@ -1,6 +1,5 @@
 package tools;
 
-import javafx.scene.paint.Color;
 /**
  * Contains all the colors / elements of the graphical charter of Hom-E
  * @author Clm-Roig

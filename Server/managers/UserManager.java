@@ -18,8 +18,8 @@ public class UserManager extends Manager{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    ArrayList<User> users;
-    UserDAO userDAO = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO();
+    private ArrayList<User> users;
+    private UserDAO userDAO = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO();
     private static UserManager manager = null;
 
     // ====================== //

@@ -1,6 +1,5 @@
 package server.models;
 
-
 import java.util.ArrayList;
 
 /**
@@ -16,16 +15,14 @@ public class Actuator extends ExternalActor{
     private ArrayList<Command> commands;
 
     // Attributes from others tables
-    private int actuator_category_id;
-    private String actuator_category_name;
-    private String actuator_category_description;
+    private int actuatorCategoryId;
+    private String actuatorCategoryName;
+    private String actuatorCategoryDescription;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public Actuator() {
-
-    }
+    public Actuator() {}
 
     public Actuator(String name, String description) {
         super(name,description);
@@ -39,9 +36,9 @@ public class Actuator extends ExternalActor{
     public Actuator(String name, String description,ArrayList<Command> commands, int actuator_category_id, String actuator_category_name, String actuator_category_description) {
         super(name,description);
         this.commands = commands;
-        this.actuator_category_id = actuator_category_id;
-        this.actuator_category_name = actuator_category_name;
-        this.actuator_category_description = actuator_category_description;
+        this.actuatorCategoryId = actuator_category_id;
+        this.actuatorCategoryName = actuator_category_name;
+        this.actuatorCategoryDescription = actuator_category_description;
     }
 
     // ================= //
@@ -63,28 +60,28 @@ public class Actuator extends ExternalActor{
         this.commands = commands;
     }
 
-    public int getActuator_category_id() {
-        return actuator_category_id;
+    public int getActuatorCategoryId() {
+        return actuatorCategoryId;
     }
 
-    public void setActuator_category_id(int actuator_category_id) {
-        this.actuator_category_id = actuator_category_id;
+    public void setActuatorCategoryId(int actuatorCategoryId) {
+        this.actuatorCategoryId = actuatorCategoryId;
     }
 
-    public String getActuator_category_name() {
-        return actuator_category_name;
+    public String getActuatorCategoryName() {
+        return actuatorCategoryName;
     }
 
-    public void setActuator_category_name(String actuator_category_name) {
-        this.actuator_category_name = actuator_category_name;
+    public void setActuatorCategoryName(String actuatorCategoryName) {
+        this.actuatorCategoryName = actuatorCategoryName;
     }
 
-    public String getActuator_category_description() {
-        return actuator_category_description;
+    public String getActuatorCategoryDescription() {
+        return actuatorCategoryDescription;
     }
 
-    public void setActuator_category_description(String actuator_category_description) {
-        this.actuator_category_description = actuator_category_description;
+    public void setActuatorCategoryDescription(String actuatorCategoryDescription) {
+        this.actuatorCategoryDescription = actuatorCategoryDescription;
     }
     
     // ==================================

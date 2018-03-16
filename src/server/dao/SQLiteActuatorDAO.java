@@ -30,7 +30,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getName());
               prepStat.setString(2, obj.getDescription());
-              prepStat.setInt(3, obj.getActuator_category_id());
+              prepStat.setInt(3, obj.getActuatorCategoryId());
               created = prepStat.executeUpdate();
           } catch (SQLException e) {
               throw new DAOException("DAOException : ActuatorDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
@@ -58,9 +58,9 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 actuator.setId(rs.getInt("id"));
                 actuator.setName(rs.getString("name"));
                 actuator.setDescription(rs.getString("description"));
-                actuator.setActuator_category_id(rs.getInt("ACid"));
-                actuator.setActuator_category_name(rs.getString("ACname"));
-                actuator.setActuator_category_description(rs.getString("ACdescription"));
+                actuator.setActuatorCategoryId(rs.getInt("ACid"));
+                actuator.setActuatorCategoryName(rs.getString("ACname"));
+                actuator.setActuatorCategoryDescription(rs.getString("ACdescription"));
                 // TODO list of commands
                 
             }

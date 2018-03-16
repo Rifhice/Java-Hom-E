@@ -70,7 +70,6 @@ public class SensorManager extends Manager{
 
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		// TODO Auto-generated method stub
 		
 	}
 }

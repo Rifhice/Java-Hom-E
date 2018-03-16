@@ -10,7 +10,7 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     private int id;
     private String name;
     private String unity;
-    private ArrayList<String> values;
+    private ArrayList<String> possibleValues;
     private String currentValue;
 
     // ====================== //
@@ -18,7 +18,7 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     // ====================== //
     public DiscreteEnvironmentVariable(String name, String description, String unity, ArrayList<String> values, String currentValue) {
         super(name,description,unity);
-        this.values = values;
+        this.possibleValues = values;
         this.currentValue = currentValue;
     }
 
@@ -49,12 +49,12 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
         this.unity = unity;
     }
     
-    public ArrayList<String> getValues() {
-        return values;
+    public ArrayList<String> getPossibleValues() {
+        return possibleValues;
     }
 
-    public void setValues(ArrayList<String> values) {
-        this.values = values;
+    public void setPossibleValues(ArrayList<String> values) {
+        this.possibleValues = values;
     }
     
     public String getCurrentValue() {
@@ -63,6 +63,8 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     
     public void setCurrentValue(String value) {
         currentValue = value;
+        setChanged();
+        notifyObservers();
     }
     
     // ==================================

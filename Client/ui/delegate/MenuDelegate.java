@@ -23,7 +23,7 @@ public interface MenuDelegate {
 		      case AMBIENCES: return "Ambiences";
 		      case CATEGORIES: return "Categories";
 		      case ACCOUNTS: return "Accounts";
-		      default: throw new IllegalArgumentException();
+		      default: return this.name();
 		    }
 		  }
 	}

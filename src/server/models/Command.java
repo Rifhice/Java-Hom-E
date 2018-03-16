@@ -1,7 +1,7 @@
 package server.models;
 
 /**
- * A command is a message sent by the server to the actuators which needs to react according to it.
+ * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
  * @author Clm-Roig
  */
 public abstract class Command {

@@ -5,7 +5,7 @@ import java.util.Observable;
 
 /**
  * An environment variable is an interesting value  for the server, related to the environment. 
- * It allows the server to send the right command to the actuators.
+ * It allows the server to send the right action to the actuators.
  * @author Clm-Roig
  */
 public abstract class EnvironmentVariable extends Observable{

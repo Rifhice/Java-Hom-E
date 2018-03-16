@@ -11,27 +11,33 @@ import org.json.JSONObject;
  * A behaviour is a comportment of an actuator depending on environment variables.
  * @author Clm-Roig
  */
-public class Behaviour implements Observer{
+public class Behaviour implements Observer {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
     private int id;
 	private Expression expression;
-	private Command command;
-	private ArrayList<EnvironmentVariable> variables;
-	private boolean isActivated = true;
-
+	private boolean isActivated;
+	
+	// Attributes from other tables
+	// TODO : code Actions model 
+	/*
+	private ArrayList<AtomicAction> atomicActions;
+	private ArrayList<ComplexAction> complexActions;
+    */
+	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-	public Behaviour(Expression expression, Command command) {
+	public Behaviour() {}
+	
+	public Behaviour(Expression expression) {
+	    this.expression = expression;
+	}
+	
+	public Behaviour(Expression expression, boolean isActivated) {
 		this.expression = expression;
-		this.command = command;
-		this.variables = expression.getVariables();
-		for (int i = 0; i < variables.size(); i++) {
-			variables.get(i).addObserver(this);
-		}
-		update(null,null);
+		this.isActivated = isActivated;
 	}
 
     // ================= //
@@ -53,22 +59,6 @@ public class Behaviour implements Observer{
         this.expression = expression;
     }
 
-    public Command getCommand() {
-        return command;
-    }
-
-    public void setCommand(Command command) {
-        this.command = command;
-    }
-
-    public ArrayList<EnvironmentVariable> getVariables() {
-        return variables;
-    }
-
-    public void setVariables(ArrayList<EnvironmentVariable> variables) {
-        this.variables = variables;
-    }
-
     public void setActivated(boolean isActivated) {
         this.isActivated = isActivated;
     }
@@ -78,7 +68,8 @@ public class Behaviour implements Observer{
     public void update(Observable arg0, Object arg1) {
         if(isActivated && expression.evaluate()) {
             System.out.println("It works !");
-            //command.launch();
+            
+            // TODO : execute actions
         }
     }
 
@@ -98,10 +89,10 @@ public class Behaviour implements Observer{
 		return expression.toString() + " => " ;//+ command.toString();
 	}
 	
+	// TODO : to move in a Manager
 	public static Behaviour createBehaviour(JSONObject json) {
-	    Command command = null;
 	    Expression expression = Expression.createExpressionFromJson(json.getJSONObject("expression"));
-		return new Behaviour(expression, command);
+		return new Behaviour(expression);
 	}
 	
 }

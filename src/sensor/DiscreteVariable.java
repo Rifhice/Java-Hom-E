@@ -39,7 +39,7 @@ public class DiscreteVariable extends Variable {
 		for (int i = 0; i < possibleValues.size(); i++) {
 			result.append("values", possibleValues.get(i));
 		}
-		result.put("currentValue", currentValue);
+		result.put("currentvalue", currentValue);
 		return result;
 	}
 	

@@ -34,8 +34,10 @@ public class SensorManager extends Manager{
     // ==== METHODS ==== //
     // ================= // 
 	public void registerSensorToTheSystem(JSONObject json) {
-		sensors.add(Sensor.registerToTheSystem(json));
-		System.out.println(sensors.get(sensors.size()-1) + "\nAdded to the system !");
+		Sensor sensor = Sensor.getSensorFromJson(json); //Create the new Sensor object
+		// TODO add to database
+		sensors.add(sensor);
+		System.out.println(sensor + "\nAdded to the system !");
 	}
 	
 	public ArrayList<Sensor> getSensors(){
@@ -70,6 +72,14 @@ public class SensorManager extends Manager{
 
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		
+		System.out.println("Hey" + json);
+		String verb = json.getString("verb");
+		switch (verb) {
+		case "post":
+			registerSensorToTheSystem(json);
+			break;
+		default:
+			break;
+		}
 	}
 }

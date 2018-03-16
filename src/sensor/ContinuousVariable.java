@@ -34,10 +34,10 @@ public class ContinuousVariable extends Variable{
 		result.put("name", name);
 		result.put("description", description);
 		result.put("unity", unit);
-		result.put("valueMin", valueMin);
-		result.put("valueMax", valueMax);
+		result.put("valuemin", valueMin);
+		result.put("valuemax", valueMax);
 		result.put("precision", precision);
-		result.put("currentValue",currentValue);
+		result.put("currentvalue",currentValue);
 		return result;
 	}
     

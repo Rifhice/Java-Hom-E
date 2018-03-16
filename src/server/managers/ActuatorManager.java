@@ -25,8 +25,7 @@ public class ActuatorManager extends Manager {
 	}
 	
 	public void registerActuatorToTheSystem(JSONObject json) {
-		actuators.add(Actuator.registerToTheSystem(json));
-		System.out.println(actuators.get(actuators.size()-1) + "\nAdded to the system !");
+		// TODO
 	}
 	
 	public ArrayList<Actuator> getActuators(){
@@ -44,7 +43,6 @@ public class ActuatorManager extends Manager {
 
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		// TODO Auto-generated method stub
-		
+		// TODO
 	}
 }

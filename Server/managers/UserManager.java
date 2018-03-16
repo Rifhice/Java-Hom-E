@@ -73,7 +73,10 @@ public class UserManager extends Manager{
     	if(pseudo.equals("")) {
     		//Donner un pseudo
     	}
-    	User user = new User(pseudo,User.USERTYPE.GUEST);
+    	
+    	// TODO : Use a RoleDAO() to get the id of the role "guest"
+    	// User user = new User(pseudo,User.USERTYPE.GUEST);
+    	User user = new User(pseudo);
     	users.add(user);
     	return user;
     }
@@ -92,7 +95,7 @@ public class UserManager extends Manager{
 	            if(user.getKey() != null) {
 	                JSONObject token = new JSONObject();
 	                token.put("id", user.getKey().getId());
-	                token.put("type", user.getKey().getType());
+	                token.put("type", user.getKey().getRoleId());
 	                
 	                JSONObject result = new JSONObject();
 	                result.put("result","success");
@@ -129,7 +132,7 @@ public class UserManager extends Manager{
 				}
 	        	System.out.println(tmp);
                 JSONObject token = new JSONObject();
-                token.put("type", tmp.getType());
+                token.put("type", tmp.getRoleId());
                 token.put("pseudo", tmp.getPseudo());
                 
                 JSONObject result = new JSONObject();

@@ -1,19 +1,25 @@
 package server.models;
 
+/**
+ * A block is something evaluable composed by an environment variable compares thanks
+ * to an operator to a environment value.
+ * Example : Temperature > 3, Presence == True
+ * @author Clm-Roig
+ */
 public class Block implements Evaluable{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
 	private EnvironmentVariable variable;
-	private Object value;
+	private Object environmentValue;
 	private String operator;
 	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-	public Block(EnvironmentVariable variable, Object value, String operator) {
+	public Block(EnvironmentVariable variable, Object environmentValue, String operator) {
 		this.variable = variable;
-		this.value = value;
+		this.environmentValue = environmentValue;
 		this.operator = operator;
 	}
 	
@@ -23,23 +29,23 @@ public class Block implements Evaluable{
 	public boolean evaluate() {
 		switch (operator) {
 		case "==":
-			return variable.isEqual(value);
+			return variable.isEqual(environmentValue);
 		case "!=":
-			return variable.isNotEqual(value);
+			return variable.isNotEqual(environmentValue);
 		case "<=":
-			return variable.isInferiorOrEqual(value);
+			return variable.isInferiorOrEqual(environmentValue);
 		case ">=":
-			return variable.isSuperiorOrEqual(value);
+			return variable.isSuperiorOrEqual(environmentValue);
 		case "<":
-			return variable.isSuperior(value);
+			return variable.isSuperior(environmentValue);
 		case ">":
-			return variable.isInferior(value);
+			return variable.isInferior(environmentValue);
 		}
 		return false;
 	}
 	
 	public String toString() {
-		return variable.toString() + " " + operator + " " + value;
+		return variable.toString() + " " + operator + " " + environmentValue;
 	}
 	
 	public EnvironmentVariable getVariable() {

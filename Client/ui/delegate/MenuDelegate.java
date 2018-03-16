@@ -11,7 +11,7 @@ public interface MenuDelegate {
 			AMBIENCES,
 			CATEGORIES,
 			ACCOUNTS;
-		
+		  
 		  @Override
 		  public String toString() {
 		    switch(this) {

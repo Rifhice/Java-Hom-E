@@ -50,6 +50,12 @@ public class AtomicAction {
     public void setExecutable(String executable) {
         this.executable = executable;
     }
+    
+    // ================================
+    
+    public void execute() {
+        // TODO
+    }
 
     
 

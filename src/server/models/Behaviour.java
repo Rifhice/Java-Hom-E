@@ -1,6 +1,7 @@
 package server.models;
 
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,11 +20,8 @@ public class Behaviour implements Observer {
 	private boolean isActivated;
 	
 	// Attributes from other tables
-	// TODO : code Actions model 
-	/*
 	private ArrayList<AtomicAction> atomicActions;
-	private ArrayList<ComplexAction> complexActions;
-    */
+    private ArrayList<ComplexAction> complexActions;
 	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -57,33 +55,46 @@ public class Behaviour implements Observer {
     public void setExpression(Expression expression) {
         this.expression = expression;
     }
-
+    
+    public boolean getActivated() {
+        return this.isActivated;
+    }
+    
     public void setActivated(boolean isActivated) {
         this.isActivated = isActivated;
     }
     
+    public ArrayList<AtomicAction> getAtomicActions() {
+        return atomicActions;
+    }
+
+    public void setAtomicActions(ArrayList<AtomicAction> atomicActions) {
+        this.atomicActions = atomicActions;
+    }
+
+    public ArrayList<ComplexAction> getComplexActions() {
+        return complexActions;
+    }
+
+    public void setComplexActions(ArrayList<ComplexAction> complexActions) {
+        this.complexActions = complexActions;
+    }
+
     // ==================================
     
     public void update(Observable arg0, Object arg1) {
         if(isActivated && expression.evaluate()) {
             System.out.println("It works !");
             
-            // TODO : execute actions
+            for (AtomicAction atomicAction : atomicActions) {
+                atomicAction.execute();
+            }
+            for (ComplexAction complexAction : complexActions) {
+                complexAction.execute();
+            }
         }
     }
-
-    public void activate() {
-		isActivated = true;
-	}
 	
-	public void deactivate() {
-		isActivated = false;
-	}
-	
-	public boolean isActivated() {
-		return isActivated;
-	}
-
 	public String toString() {
 		return expression.toString() + " => " ;//+ command.toString();
 	}

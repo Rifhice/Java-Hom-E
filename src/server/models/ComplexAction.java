@@ -55,6 +55,12 @@ public class ComplexAction {
 
     public void setAtomicActions(ArrayList<AtomicAction> atomicActions) {
         this.atomicActions = atomicActions;
-    }   
+    }
+    
+    // ================================
+    
+    public void execute() {
+        // TODO
+    }
 
 }

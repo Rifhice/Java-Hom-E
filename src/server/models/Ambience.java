@@ -67,13 +67,13 @@ public class Ambience {
 
     public void activateAmbience() {
         for (int i = 0; i < behaviours.size(); i++) {
-            behaviours.get(i).activate();
+            behaviours.get(i).setActivated(true);
         }
     }
 
     public void deactivateAmbience() {
         for (int i = 0; i < behaviours.size(); i++) {
-            behaviours.get(i).deactivate();
+            behaviours.get(i).setActivated(false);
         }
     }
 }

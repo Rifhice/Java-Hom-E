@@ -37,11 +37,11 @@ public class BehaviourManager extends Manager{
 	}
 	
 	public void activateBehaviour(Behaviour behaviour) {
-		behaviour.activate();
+		behaviour.setActivated(true);
 	}
 	
 	public void deactivateBehaviour(Behaviour behaviour) {
-		behaviour.deactivate();
+		behaviour.setActivated(false);
 	}
 
 	@Override

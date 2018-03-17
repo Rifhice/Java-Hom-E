@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
 import user.ui.delegate.MenuDelegate;
 import user.ui.delegate.MenuDelegate.CONTENT;
+import user.ui.scene.ContentScene;
 
 public class Menu extends GridPane {
 	

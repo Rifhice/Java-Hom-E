@@ -1,4 +1,4 @@
-package user.ui;
+package user.ui.content;
 
 import javafx.scene.control.Label;
 

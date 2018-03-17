@@ -1,4 +1,4 @@
-package user.ui;
+package user.ui.scene;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;

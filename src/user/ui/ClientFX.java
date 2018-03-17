@@ -6,7 +6,10 @@ import javafx.application.Platform;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
+import user.communication.UserClient;
 import user.tools.GraphicalCharter;
+import user.ui.scene.LoginScene;
+import user.ui.scene.MyScene;
 
 public class ClientFX extends Application{
 	final public static int DEFAULT_PORT = 1111;

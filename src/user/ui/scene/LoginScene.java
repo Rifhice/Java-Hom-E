@@ -1,9 +1,10 @@
-package user.ui;
+package user.ui.scene;
 
 import java.awt.geom.Rectangle2D;
 
 import org.json.JSONObject;
 
+import user.ui.ClientFX;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyTextFieldFX;
 import javafx.event.ActionEvent;

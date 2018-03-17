@@ -1,4 +1,4 @@
-package user.ui;
+package user.ui.scene;
 
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -10,6 +10,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import user.tools.GraphicalCharter;
+import user.ui.ClientFX;
+import user.ui.InfoBar;
+import user.ui.Menu;
+import user.ui.content.AccountContent;
+import user.ui.content.ActuatorContent;
+import user.ui.content.AmbiencesContent;
+import user.ui.content.BehavioursCommandsContent;
+import user.ui.content.CategoriesContent;
+import user.ui.content.Content;
+import user.ui.content.ControlContent;
+import user.ui.content.HomeContent;
+import user.ui.content.SensorContent;
 import user.ui.delegate.MenuDelegate;
 
 public class ContentScene extends MyScene implements MenuDelegate {

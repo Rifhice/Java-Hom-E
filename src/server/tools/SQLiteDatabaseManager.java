@@ -21,6 +21,8 @@ public class SQLiteDatabaseManager {
         String dropAmbiences = "DROP TABLE IF EXISTS ambiences;";
         String dropBehaviours = "DROP TABLE IF EXISTS behaviours;";
         String dropBlocks = "DROP TABLE IF EXISTS blocks;";
+        String dropDiscreteValues = "DROP TABLE IF EXISTS discreteValues;";
+        String dropEnvironmentValues = "DROP TABLE IF EXISTS environmentValues;";
         String dropExpressions = "DROP TABLE IF EXISTS expressions;";
         String dropHistories = "DROP TABLE IF EXISTS histories;";
         String dropRights = "DROP TABLE IF EXISTS rights;";
@@ -35,6 +37,8 @@ public class SQLiteDatabaseManager {
             stmt.execute(dropAmbiences);
             stmt.execute(dropBehaviours);
             stmt.execute(dropBlocks);
+            stmt.execute(dropDiscreteValues);
+            stmt.execute(dropEnvironmentValues);
             stmt.execute(dropExpressions);
             stmt.execute(dropHistories);
             stmt.execute(dropRights);
@@ -82,6 +86,17 @@ public class SQLiteDatabaseManager {
                 + " fk_value_id integer, \n"
                 + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id), \n"
                 + " FOREIGN KEY (fk_value_id) REFERENCES environmentValues(id) \n"
+                + ");";
+        
+        String createTableDiscreteValues ="CREATE TABLE IF NOT EXISTS discreteValues (\n"
+                + " fk_environment_value_id integer PRIMARY KEY, \n"
+                + " possible_values text, \n" 
+                + " FOREIGN KEY (fk_environment_value_id) REFERENCES environmentValues(id) \n"
+                + ");";
+        
+        String createTableEnvironmentValues ="CREATE TABLE IF NOT EXISTS environmentValues (\n"
+                + " id integer PRIMARY KEY, \n"
+                + " name text \n" 
                 + ");";
 
         String createTableExpressions = "CREATE TABLE IF NOT EXISTS expressions (\n" 
@@ -131,18 +146,15 @@ public class SQLiteDatabaseManager {
                 + " fk_role_id integer NOT NULL,\n"
                 + " FOREIGN KEY (fk_role_id) REFERENCES Roles(id) \n"
                 + ");";
-        
-        // TODO
-        String createTableEnvironmentValues ="CREATE TABLE IF NOT EXISTS environmentValues (\n"
-                + " id integer PRIMARY KEY, \n"
-                + " name text \n" 
-                + ");";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createTableActuators);
             stmt.execute(createTableActuatorCategories);
             stmt.execute(createTableAmbiences);
             stmt.execute(createTableBehaviours);
+            stmt.execute(createTableBlocks);
+            stmt.execute(createTableDiscreteValues);
+            stmt.execute(createTableEnvironmentValues);
             stmt.execute(createTableExpressions);
             stmt.execute(createTableHistories);
             stmt.execute(createTableRights);
@@ -150,9 +162,6 @@ public class SQLiteDatabaseManager {
             stmt.execute(createTableSensors);
             stmt.execute(createTableSensorCategories);
             stmt.execute(createTableUsers);
-            stmt.execute(createTableEnvironmentValues);
-            stmt.execute(createTableBlocks);
-
         } catch (SQLException e) {
             System.out.println("ERROR creating tables : " + e.getMessage());
         }
@@ -161,20 +170,31 @@ public class SQLiteDatabaseManager {
         String createOwns = "CREATE TABLE IF NOT EXISTS owns (\n" 
                 + " fk_right_id integer, \n"
                 + " fk_user_id integer, \n"
-                + " FOREIGN KEY (fk_right_id) REFERENCES Rights(id), \n"
-                + " FOREIGN KEY (fk_user_id) REFERENCES Users(id) \n"
+                + " PRIMARY KEY (fk_right_id, fk_user_id), \n"
+                + " FOREIGN KEY (fk_right_id) REFERENCES rights(id), \n"
+                + " FOREIGN KEY (fk_user_id) REFERENCES users(id) \n"
                 + ");";
 
         String createOwnsByDefault = "CREATE TABLE IF NOT EXISTS ownsbydefault (\n" 
                 + " fk_right_id integer, \n"
                 + " fk_role_id integer, \n"
-                + " FOREIGN KEY (fk_right_id) REFERENCES Rights(id), \n"
-                + " FOREIGN KEY (fk_role_id) REFERENCES Roles(id) \n"
+                + " PRIMARY KEY (fk_right_id, fk_role_id), \n"
+                + " FOREIGN KEY (fk_right_id) REFERENCES rights(id), \n"
+                + " FOREIGN KEY (fk_role_id) REFERENCES roles(id) \n"
+                + ");";
+        
+        String createIsPartOf = "CREATE TABLE IF NOT EXISTS ispartof (\n" 
+                + " fk_expression_id integer, \n"
+                + " fk_block_id integer, \n"
+                + " PRIMARY KEY (fk_expression_id, fk_block_id), \n"
+                + " FOREIGN KEY (fk_expression_id) REFERENCES expressions(id), \n"
+                + " FOREIGN KEY (fk_block_id) REFERENCES blocks(id) \n"
                 + ");";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createOwns);
             stmt.execute(createOwnsByDefault);
+            stmt.execute(createIsPartOf);
         } catch (SQLException e) {
             System.out.println("ERROR creating relationship tables : " + e.getMessage());
         }

@@ -11,25 +11,27 @@ public class Block implements Evaluable {
     // ==== ATTRIBUTES ==== //
     // ==================== //
     private int id;
-    private EnvironmentVariable variable;
-    private Object environmentValue;
     private String operator;
+    
+    // Attributes from other table
+    private Value value; 
+    private EnvironmentVariable environmentVariable;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Block() {}
 
-    public Block(EnvironmentVariable variable, Object environmentValue, String operator) {
-        this.variable = variable;
-        this.environmentValue = environmentValue;
+    public Block(EnvironmentVariable environmentVariable, Value value, String operator) {
+        this.environmentVariable = environmentVariable;
+        this.value = value;
         this.operator = operator;
     }
 
-    public Block(int id, EnvironmentVariable variable, Object environmentValue, String operator) {
+    public Block(int id, EnvironmentVariable environmentVariable, Value value, String operator) {
         this.id = id;
-        this.variable = variable;
-        this.environmentValue = environmentValue;
+        this.value = value;
+        this.environmentVariable = environmentVariable;
         this.operator = operator;
     }
     
@@ -44,14 +46,6 @@ public class Block implements Evaluable {
         this.id = id;
     }
 
-    public Object getEnvironmentValue() {
-        return environmentValue;
-    }
-
-    public void setEnvironmentValue(Object environmentValue) {
-        this.environmentValue = environmentValue;
-    }
-
     public String getOperator() {
         return operator;
     }
@@ -59,9 +53,21 @@ public class Block implements Evaluable {
     public void setOperator(String operator) {
         this.operator = operator;
     }
+    
+    public Object getValue() {
+        return value;
+    }
 
-    public void setVariable(EnvironmentVariable variable) {
-        this.variable = variable;
+    public void setValue(Value value) {
+        this.value = value;
+    }
+
+    public EnvironmentVariable getEnvironmentVariable() {
+        return environmentVariable;
+    }
+    
+    public void setEnvironmentVariable(EnvironmentVariable environmentVariable) {
+        this.environmentVariable = environmentVariable;
     }
 
     // =========================================================
@@ -69,27 +75,23 @@ public class Block implements Evaluable {
     public boolean evaluate() {
         switch (operator) {
         case "==":
-            return variable.isEqual(environmentValue);
+            return environmentVariable.isEqual(value);
         case "!=":
-            return variable.isNotEqual(environmentValue);
+            return environmentVariable.isNotEqual(value);
         case "<=":
-            return variable.isInferiorOrEqual(environmentValue);
+            return environmentVariable.isInferiorOrEqual(value);
         case ">=":
-            return variable.isSuperiorOrEqual(environmentValue);
+            return environmentVariable.isSuperiorOrEqual(value);
         case "<":
-            return variable.isSuperior(environmentValue);
+            return environmentVariable.isSuperior(value);
         case ">":
-            return variable.isInferior(environmentValue);
+            return environmentVariable.isInferior(value);
         }
         return false;
     }
 
     public String toString() {
-        return variable.toString() + " " + operator + " " + environmentValue;
-    }
-
-    public EnvironmentVariable getVariable() {
-        return variable;
+        return environmentVariable.toString() + " " + operator + " " + value;
     }
 
 }

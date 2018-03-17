@@ -22,9 +22,12 @@ public class SQLiteDatabaseManager {
         String dropBehaviours = "DROP TABLE IF EXISTS behaviours;";
         String dropBlocks = "DROP TABLE IF EXISTS blocks;";
         String dropCommands = "DROP TABLE IF EXISTS commands;";
+        String dropContinuousEnvironmentVariables = "DROP TABLE IF EXISTS continuousEnvironmentVariables;";
         String dropContinuousValues = "DROP TABLE IF EXISTS continuousValues;";
+        String dropDiscreteEnvironmentVariables = "DROP TABLE IF EXISTS discreteEnvironmentVariables;";
         String dropDiscreteValues = "DROP TABLE IF EXISTS discreteValues;";
         String dropEnvironmentValues = "DROP TABLE IF EXISTS environmentValues;";
+        String dropEnvironmentVariables = "DROP TABLE IF EXISTS environmentVariables;";
         String dropExpressions = "DROP TABLE IF EXISTS expressions;";
         String dropHistories = "DROP TABLE IF EXISTS histories;";
         String dropRights = "DROP TABLE IF EXISTS rights;";
@@ -40,9 +43,12 @@ public class SQLiteDatabaseManager {
             stmt.execute(dropBehaviours);
             stmt.execute(dropBlocks);
             stmt.execute(dropCommands);
+            stmt.execute(dropContinuousEnvironmentVariables);
             stmt.execute(dropContinuousValues);
+            stmt.execute(dropDiscreteEnvironmentVariables);
             stmt.execute(dropDiscreteValues);
             stmt.execute(dropEnvironmentValues);
+            stmt.execute(dropEnvironmentVariables);
             stmt.execute(dropExpressions);
             stmt.execute(dropHistories);
             stmt.execute(dropRights);
@@ -99,12 +105,28 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
                 + ");";
         
+        String createTableContinuousEnvironmentVariables ="CREATE TABLE IF NOT EXISTS continuousEnvironmentVariables (\n"
+                + " fk_environment_variable_id integer PRIMARY KEY, \n"
+                + " value_min real, \n"
+                + " value_max real, \n"
+                + " current_value real, \n"
+                + " precision real, \n"
+                + " FOREIGN KEY (fk_environment_variable_id) REFERENCES environmentVariables(id) \n"
+                + ");";
+        
         String createTableContinuousValues ="CREATE TABLE IF NOT EXISTS continuousValues (\n"
                 + " fk_environment_value_id integer PRIMARY KEY, \n"
                 + " min real, \n"
                 + " max real, \n"
                 + " precision real, \n"
                 + " FOREIGN KEY (fk_environment_value_id) REFERENCES environmentValues(id) \n"
+                + ");";
+        
+        String createTableDiscreteEnvironmentVariables ="CREATE TABLE IF NOT EXISTS discreteEnvironmentVariables (\n"
+                + " fk_environment_variable_id integer PRIMARY KEY, \n"
+                + " current_value text, \n"
+                + " possible_values text, \n" 
+                + " FOREIGN KEY (fk_environment_variable_id) REFERENCES environmentVariables(id) \n"
                 + ");";
         
         String createTableDiscreteValues ="CREATE TABLE IF NOT EXISTS discreteValues (\n"
@@ -116,6 +138,15 @@ public class SQLiteDatabaseManager {
         String createTableEnvironmentValues ="CREATE TABLE IF NOT EXISTS environmentValues (\n"
                 + " id integer PRIMARY KEY, \n"
                 + " name text \n" 
+                + ");";
+        
+        String createTableEnvironmentVariables ="CREATE TABLE IF NOT EXISTS environmentVariables (\n"
+                + " id integer PRIMARY KEY, \n"
+                + " name text, \n" 
+                + " description text, \n"
+                + " unit text, \n"
+                + " fk_sensor_id integer, \n"
+                + " FOREIGN KEY (fk_sensor_id) REFERENCES sensors(id) \n"
                 + ");";
 
         String createTableExpressions = "CREATE TABLE IF NOT EXISTS expressions (\n" 
@@ -174,8 +205,11 @@ public class SQLiteDatabaseManager {
             stmt.execute(createTableBlocks);
             stmt.execute(createTableCommands);
             stmt.execute(createTableContinuousValues);
+            stmt.execute(createTableDiscreteEnvironmentVariables);
             stmt.execute(createTableDiscreteValues);
+            stmt.execute(createTableContinuousEnvironmentVariables);            
             stmt.execute(createTableEnvironmentValues);
+            stmt.execute(createTableEnvironmentVariables);            
             stmt.execute(createTableExpressions);
             stmt.execute(createTableHistories);
             stmt.execute(createTableRights);

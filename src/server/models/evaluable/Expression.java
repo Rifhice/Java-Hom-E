@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import server.managers.ExternalActorManager;
 import server.models.environmentVariable.EnvironmentVariable;
 
 /**

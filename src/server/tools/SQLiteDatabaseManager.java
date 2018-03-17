@@ -19,9 +19,11 @@ public class SQLiteDatabaseManager {
         String dropActuators = "DROP TABLE IF EXISTS actuators;";
         String dropActuatorCategories = "DROP TABLE IF EXISTS actuatorsCategories;";
         String dropAmbiences = "DROP TABLE IF EXISTS ambiences;";
+        String dropAtomicActions = "DROP TABLE IF EXISTS atomicActions;";
         String dropBehaviours = "DROP TABLE IF EXISTS behaviours;";
         String dropBlocks = "DROP TABLE IF EXISTS blocks;";
         String dropCommands = "DROP TABLE IF EXISTS commands;";
+        String dropComplexActions = "DROP TABLE IF EXISTS complexActions;";
         String dropContinuousEnvironmentVariables = "DROP TABLE IF EXISTS continuousEnvironmentVariables;";
         String dropContinuousValues = "DROP TABLE IF EXISTS continuousValues;";
         String dropDiscreteEnvironmentVariables = "DROP TABLE IF EXISTS discreteEnvironmentVariables;";
@@ -40,9 +42,11 @@ public class SQLiteDatabaseManager {
             stmt.execute(dropActuators);
             stmt.execute(dropActuatorCategories);
             stmt.execute(dropAmbiences);
+            stmt.execute(dropAtomicActions);
             stmt.execute(dropBehaviours);
             stmt.execute(dropBlocks);
             stmt.execute(dropCommands);
+            stmt.execute(dropComplexActions);
             stmt.execute(dropContinuousEnvironmentVariables);
             stmt.execute(dropContinuousValues);
             stmt.execute(dropDiscreteEnvironmentVariables);
@@ -80,6 +84,14 @@ public class SQLiteDatabaseManager {
                 + " name text NOT NULL, \n"
                 + " description text \n"
                 + ");";
+        
+        String createTableAtomicActions = "CREATE TABLE IF NOT EXISTS atomicActions (\n" 
+                + " id integer PRIMARY KEY,\n"
+                + " name text NOT NULL, \n"
+                + " executable text NOT NULL, \n"
+                + " fk_actuator_id integer, \n"
+                + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
+                + ");";
 
         String createTableBehaviours = "CREATE TABLE IF NOT EXISTS behaviours (\n" 
                 + " id integer PRIMARY KEY,\n"
@@ -103,6 +115,11 @@ public class SQLiteDatabaseManager {
                 + " name text NOT NULL, \n"
                 + " fk_actuator_id integer, \n"
                 + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
+                + ");";
+        
+        String createTableComplexActions = "CREATE TABLE IF NOT EXISTS complexActions (\n" 
+                + " id integer PRIMARY KEY, \n"
+                + " name text NOT NULL \n"
                 + ");";
         
         String createTableContinuousEnvironmentVariables ="CREATE TABLE IF NOT EXISTS continuousEnvironmentVariables (\n"
@@ -201,9 +218,11 @@ public class SQLiteDatabaseManager {
             stmt.execute(createTableActuators);
             stmt.execute(createTableActuatorCategories);
             stmt.execute(createTableAmbiences);
+            stmt.execute(createTableAtomicActions);
             stmt.execute(createTableBehaviours);
             stmt.execute(createTableBlocks);
             stmt.execute(createTableCommands);
+            stmt.execute(createTableComplexActions);
             stmt.execute(createTableContinuousValues);
             stmt.execute(createTableDiscreteEnvironmentVariables);
             stmt.execute(createTableDiscreteValues);

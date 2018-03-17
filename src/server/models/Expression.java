@@ -10,6 +10,15 @@ import server.managers.ExternalActorManager;
 
 /**
  * An expression is composed by others expressions and / or blocks (i.e. evaluables).  
+ * When an expression is evaluated, we construct as this : 
+ * evaluables[0] operators[0] evaluables[1] operators[1] evaluables[2] and so on... 
+ * 
+ * Ex : evaluables = [3,5,6]
+ *      operators  = [>, !=]
+ * -->  3 > 5 != 6
+ * 
+ * There is always one more evaluable than operators.
+ * 
  * @author Clm-Roig
  */
 public class Expression implements Evaluable{

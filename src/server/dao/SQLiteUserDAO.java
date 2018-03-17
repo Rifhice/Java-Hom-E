@@ -19,10 +19,14 @@ public class SQLiteUserDAO extends UserDAO {
     // ==== METHODS ==== //
     // ================= //
     @Override
-    public boolean create(User obj) throws DAOException {
+    public User create(User obj) throws DAOException {
+        User user = obj;
+        
         String sql = "INSERT INTO Users "
                 + "(pseudo, password, fk_role_id) VALUES "
                 + "(?, ?, ?)";
+        
+        // Insert the object
         int created = 0;
           try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
@@ -30,10 +34,21 @@ public class SQLiteUserDAO extends UserDAO {
               prepStat.setString(2, obj.getPassword());
               prepStat.setInt(3, obj.getRoleId());
               created = prepStat.executeUpdate();
+              
+              // Get the id generated for this object
+              if(created > 0) {
+                  String sqlGetLastId = "SELECT last_insert_rowid()";
+                  PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
+                  int id = prepStatLastId.executeQuery().getInt(1);
+                  user.setId(id);
+              }
+              else {
+                  user = null;
+              }
           } catch (SQLException e) {
               throw new DAOException("DAOException : UserDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
           }
-        return created > 0;
+        return user;
     }
 
     @Override

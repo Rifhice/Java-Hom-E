@@ -20,9 +20,9 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
     // ==== METHODS ==== //
     // ================= //
     @Override
-    public boolean create(Ambience obj) throws DAOException {
+    public Ambience create(Ambience obj) throws DAOException {
         // TODO Auto-generated method stub
-        return false;
+        return obj;
     }
 
     @Override

@@ -21,11 +21,11 @@ public abstract class DAO <T> {
     // ==== METHODS ==== //
     // ================= //
 	/**
-	 * Create a new object.
+	 * Create a new object and return it. 
 	 * @param obj
-	 * @return boolean
+	 * @return T, the obj created or null if an error occurred.
 	 */
-	public abstract boolean create(T obj) throws DAOException;
+	public abstract T create(T obj) throws DAOException;
 	
 	/**
 	 * Get an existing object by his id.

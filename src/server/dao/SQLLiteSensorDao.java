@@ -23,10 +23,14 @@ public class SQLLiteSensorDao extends SensorDAO{
     // ==== METHODS ==== //
     // ================= //
     @Override
-    public boolean create(Sensor obj) throws DAOException {
+    public Sensor create(Sensor obj) throws DAOException {
+        Sensor sensor = obj;
+        
         String sql = "INSERT INTO Sensors "
                 + "(name, description, fk_sensorCategory_id) VALUES "
                 + "(?, ?, ?)";
+        
+        // Insert the object
         int created = 0;
           try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
@@ -34,10 +38,21 @@ public class SQLLiteSensorDao extends SensorDAO{
               prepStat.setString(2, obj.getDescription());
               prepStat.setInt(3, obj.getSensorCategoryId());
               created = prepStat.executeUpdate();
+              
+              // Get the id generated for this object
+              if(created > 0) {
+                  String sqlGetLastId = "SELECT last_insert_rowid()";
+                  PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
+                  int id = prepStatLastId.executeQuery().getInt(1);
+                  sensor.setId(id);
+              }
+              else {
+                  sensor = null;
+              }
           } catch (SQLException e) {
               throw new DAOException("DAOException : SensorDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
           }
-        return created > 0;
+        return sensor;
     }
 
     // TODO : return ArrayList<Command>

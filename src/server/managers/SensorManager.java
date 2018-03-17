@@ -37,9 +37,9 @@ public class SensorManager extends Manager{
     // ================= // 
 	public void registerSensorToTheSystem(JSONObject json,ConnectionToClient client) {
 		Sensor sensor = Sensor.getSensorFromJson(json); //Create the new Sensor object
-		boolean create = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
+		Sensor sensorCreated = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
 		JSONObject result = new JSONObject();
-		if(create) {
+		if(sensorCreated != null) {
 			sensors.add(sensor);
 			json.put("result", "success");
 			json.put("id", sensor.getId());

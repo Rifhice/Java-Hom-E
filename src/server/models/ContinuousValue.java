@@ -5,7 +5,7 @@ package server.models;
  * to perform an action or modify its state
  * @author Jade Hennebert
  */
-public class ContinuousValue extends Value{
+public class ContinuousValue extends EnvironmentValue{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //

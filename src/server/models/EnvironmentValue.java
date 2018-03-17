@@ -6,7 +6,7 @@ package server.models;
  * It allows the server to send the right action to the actuators.
  * @author Jade
  */
-public abstract class Value {
+public abstract class EnvironmentValue {
 	    
 	// ==================== //
 	// ==== ATTRIBUTES ==== //
@@ -17,13 +17,13 @@ public abstract class Value {
 	// ====================== //
 	// ==== CONSTRUCTORS ==== //
 	// ====================== //
-	public Value() {}
+	public EnvironmentValue() {}
 	    
-	public Value(String name) {
+	public EnvironmentValue(String name) {
 		this.name = name;
 	}
 	
-	public Value(int id, String name) {
+	public EnvironmentValue(int id, String name) {
 	    this.id = id;
         this.name = name;
     }

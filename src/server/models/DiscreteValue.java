@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * among possible values.
  * @author Clm-Roig
  */
-public class DiscreteValue extends Value {
+public class DiscreteValue extends EnvironmentValue {
 
     // ==================== //
     // ==== ATTRIBUTES ==== //

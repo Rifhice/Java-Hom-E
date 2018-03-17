@@ -14,7 +14,7 @@ public class Block implements Evaluable {
     private String operator;
     
     // Attributes from other table
-    private Value value; 
+    private EnvironmentValue environmentValue; 
     private EnvironmentVariable environmentVariable;
 
     // ====================== //
@@ -22,15 +22,15 @@ public class Block implements Evaluable {
     // ====================== //
     public Block() {}
 
-    public Block(EnvironmentVariable environmentVariable, Value value, String operator) {
+    public Block(EnvironmentVariable environmentVariable, EnvironmentValue environmentValue, String operator) {
         this.environmentVariable = environmentVariable;
-        this.value = value;
+        this.environmentValue = environmentValue;
         this.operator = operator;
     }
 
-    public Block(int id, EnvironmentVariable environmentVariable, Value value, String operator) {
+    public Block(int id, EnvironmentVariable environmentVariable, EnvironmentValue environmentValue, String operator) {
         this.id = id;
-        this.value = value;
+        this.environmentValue = environmentValue;
         this.environmentVariable = environmentVariable;
         this.operator = operator;
     }
@@ -54,12 +54,12 @@ public class Block implements Evaluable {
         this.operator = operator;
     }
     
-    public Object getValue() {
-        return value;
+    public Object getEnvironmentValue() {
+        return environmentValue;
     }
 
-    public void setValue(Value value) {
-        this.value = value;
+    public void setEnvironmentValue(EnvironmentValue environmentValue) {
+        this.environmentValue = environmentValue;
     }
 
     public EnvironmentVariable getEnvironmentVariable() {
@@ -75,23 +75,23 @@ public class Block implements Evaluable {
     public boolean evaluate() {
         switch (operator) {
         case "==":
-            return environmentVariable.isEqual(value);
+            return environmentVariable.isEqual(environmentValue);
         case "!=":
-            return environmentVariable.isNotEqual(value);
+            return environmentVariable.isNotEqual(environmentValue);
         case "<=":
-            return environmentVariable.isInferiorOrEqual(value);
+            return environmentVariable.isInferiorOrEqual(environmentValue);
         case ">=":
-            return environmentVariable.isSuperiorOrEqual(value);
+            return environmentVariable.isSuperiorOrEqual(environmentValue);
         case "<":
-            return environmentVariable.isSuperior(value);
+            return environmentVariable.isSuperior(environmentValue);
         case ">":
-            return environmentVariable.isInferior(value);
+            return environmentVariable.isInferior(environmentValue);
         }
         return false;
     }
 
     public String toString() {
-        return environmentVariable.toString() + " " + operator + " " + value;
+        return environmentVariable.toString() + " " + operator + " " + environmentValue;
     }
 
 }

@@ -18,6 +18,8 @@ public class Actuator extends ExternalActor{
     private int actuatorCategoryId;
     private String actuatorCategoryName;
     private String actuatorCategoryDescription;
+    
+    private ArrayList<AtomicAction> atomicActions;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -33,12 +35,28 @@ public class Actuator extends ExternalActor{
         this.commands = commands;
     }
 
-    public Actuator(String name, String description,ArrayList<Command> commands, int actuator_category_id, String actuator_category_name, String actuator_category_description) {
+    public Actuator(
+        String name, String description, ArrayList<Command> commands, 
+        int actuatorCategoryId, String actuatorCategoryName, String actuatorCategoryDescription
+    ) {
         super(name,description);
         this.commands = commands;
-        this.actuatorCategoryId = actuator_category_id;
-        this.actuatorCategoryName = actuator_category_name;
-        this.actuatorCategoryDescription = actuator_category_description;
+        this.actuatorCategoryId = actuatorCategoryId;
+        this.actuatorCategoryName = actuatorCategoryName;
+        this.actuatorCategoryDescription = actuatorCategoryDescription;
+    }
+    
+    public Actuator(
+        String name, String description,ArrayList<Command> commands, 
+        int actuatorCategoryId, String actuatorCategoryName, String actuatorCategoryDescription, 
+        ArrayList<AtomicAction> atomicActions
+    ) {
+        super(name,description);
+        this.commands = commands;
+        this.actuatorCategoryId = actuatorCategoryId;
+        this.actuatorCategoryName = actuatorCategoryName;
+        this.actuatorCategoryDescription = actuatorCategoryDescription;
+        this.atomicActions = atomicActions;
     }
 
     // ================= //
@@ -82,6 +100,14 @@ public class Actuator extends ExternalActor{
 
     public void setActuatorCategoryDescription(String actuatorCategoryDescription) {
         this.actuatorCategoryDescription = actuatorCategoryDescription;
+    }
+
+    public ArrayList<AtomicAction> getAtomicActions() {
+        return atomicActions;
+    }
+
+    public void setAtomicActions(ArrayList<AtomicAction> atomicActions) {
+        this.atomicActions = atomicActions;
     }
     
     // ==================================

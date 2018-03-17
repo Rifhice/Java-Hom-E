@@ -25,21 +25,25 @@ public class Actuator extends ExternalActor{
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Actuator() {}
-
+    
     public Actuator(String name, String description) {
         super(name,description);
     }
 
-    public Actuator(String name, String description,ArrayList<Command> commands) {
-        super(name,description);
+    public Actuator(int id, String name, String description) {
+        super(id,name,description);
+    }
+
+    public Actuator(int id, String name, String description,ArrayList<Command> commands) {
+        super(id,name,description);
         this.commands = commands;
     }
 
     public Actuator(
-        String name, String description, ArrayList<Command> commands, 
+        int id, String name, String description, ArrayList<Command> commands, 
         int actuatorCategoryId, String actuatorCategoryName, String actuatorCategoryDescription
     ) {
-        super(name,description);
+        super(id,name,description);
         this.commands = commands;
         this.actuatorCategoryId = actuatorCategoryId;
         this.actuatorCategoryName = actuatorCategoryName;
@@ -47,11 +51,11 @@ public class Actuator extends ExternalActor{
     }
     
     public Actuator(
-        String name, String description,ArrayList<Command> commands, 
+        int id, String name, String description,ArrayList<Command> commands, 
         int actuatorCategoryId, String actuatorCategoryName, String actuatorCategoryDescription, 
         ArrayList<AtomicAction> atomicActions
     ) {
-        super(name,description);
+        super(id,name,description);
         this.commands = commands;
         this.actuatorCategoryId = actuatorCategoryId;
         this.actuatorCategoryName = actuatorCategoryName;

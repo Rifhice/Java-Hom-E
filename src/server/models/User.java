@@ -27,7 +27,21 @@ public class User {
         this.password = password;
     }
     
+    public User(int id, String pseudo, String password) {
+        this.id = id;
+        this.pseudo = pseudo;
+        this.password = password;
+    }
+    
     public User(String pseudo, String password, int roleId, String roleName) {
+        this.pseudo = pseudo;
+        this.password = password;
+        this.roleId = roleId;
+        this.roleName = roleName;
+    }
+    
+    public User(int id, String pseudo, String password, int roleId, String roleName) {
+        this.id = id;
         this.pseudo = pseudo;
         this.password = password;
         this.roleId = roleId;

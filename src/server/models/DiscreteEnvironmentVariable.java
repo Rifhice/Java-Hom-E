@@ -23,6 +23,12 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
         this.possibleValues = values;
         this.currentValue = currentValue;
     }
+    
+    public DiscreteEnvironmentVariable(int id, String name, String description, String unity, ArrayList<String> values, String currentValue) {
+        super(id, name,description,unity);
+        this.possibleValues = values;
+        this.currentValue = currentValue;
+    }
 
     // ================= //
     // ==== METHODS ==== //

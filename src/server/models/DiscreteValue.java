@@ -24,6 +24,11 @@ public class DiscreteValue extends Value {
         super(name);
         this.possibleValues = values;   
     }
+    
+    public DiscreteValue(int id, String name, ArrayList<String> values) {
+        super(id, name);
+        this.possibleValues = values;   
+    }
 
     // ================= //
     // ==== METHODS ==== //

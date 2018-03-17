@@ -16,6 +16,12 @@ public class ExternalActor {
 	public ExternalActor() {}
 	
 	public ExternalActor(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+	
+	public ExternalActor(int id, String name, String description) {
+	    this.id = id;
 		this.name = name;
 		this.description = description;
 	}

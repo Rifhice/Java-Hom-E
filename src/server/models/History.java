@@ -29,6 +29,14 @@ public abstract class History {
 		this.user = user;
 	}
 	
+	public History(int id, Date date, String type, String action, String user) {
+	    this.id = id;
+        this.date = date;
+        this.type = type;
+        this.action = action;
+        this.user = user;
+    }
+	
 	// ================= //
     // ==== METHODS ==== //
     // ================= //

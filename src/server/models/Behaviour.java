@@ -29,13 +29,27 @@ public class Behaviour implements Observer {
 	public Behaviour() {}
 	
 	public Behaviour(Expression expression) {
+        this.expression = expression;
+    }
+	
+	public Behaviour(int id, Expression expression) {
+	    this.id = id;
 	    this.expression = expression;
 	}
 	
-	public Behaviour(Expression expression, boolean isActivated) {
+	public Behaviour(int id, Expression expression, boolean isActivated) {
+	    this.id = id;
 		this.expression = expression;
 		this.isActivated = isActivated;
 	}
+	
+	public Behaviour(int id, Expression expression, boolean isActivated, ArrayList<AtomicAction> atomicActions, ArrayList<ComplexAction> complexActions) {
+        this.id = id;
+        this.expression = expression;
+        this.isActivated = isActivated;
+        this.atomicActions = atomicActions;
+        this.complexActions = complexActions;
+    }
 
     // ================= //
     // ==== METHODS ==== //

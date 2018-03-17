@@ -19,7 +19,8 @@ public class AtomicAction {
     // ====================== //
     public AtomicAction() {}
 
-    public AtomicAction(String name, String executable) {
+    public AtomicAction(int id, String name, String executable) {
+        this.id = id;
         this.name = name;
         this.executable = executable;
     }

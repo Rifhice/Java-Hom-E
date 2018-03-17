@@ -18,6 +18,12 @@ public class Right {
         this.denomination = denomination;
         this.description = description;
     }
+    
+    public Right(int id, String denomination, String description) {
+        this.id = id;
+        this.denomination = denomination;
+        this.description = description;
+    }
 
     // ================= //
     // ==== METHODS ==== //

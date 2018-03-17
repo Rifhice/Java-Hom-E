@@ -29,6 +29,13 @@ public abstract class EnvironmentVariable extends Observable{
 		this.description = description;
 	}
 	
+	public EnvironmentVariable(int id, String name, String description, String unit) {
+	    this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.description = description;
+    }
+	
     // ================= //
     // ==== METHODS ==== //
     // ================= //	

@@ -24,7 +24,13 @@ public class Command {
         this.name = name;
     }
     
-    public Command(String name, int actuatorId) {
+    public Command(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    public Command(int id, String name, int actuatorId) {
+        this.id = id;
         this.name = name;
         this.actuatorId = actuatorId;
     }

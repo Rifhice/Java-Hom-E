@@ -27,14 +27,19 @@ public class Sensor extends ExternalActor{
     // ====================== //
     public Sensor() {}
     
-	public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
-		super(name, description);
+    public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
+        super(name, description);
+        this.environmentVariable = environmentVariable;
+    }
+    
+	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
+		super(id, name, description);
 		this.environmentVariable = environmentVariable;
 	}
 	
-	public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariables, 
+	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariables, 
 	        int sensorCategoryId, String sensorCategoryName, String sensorCategoryDescription) {
-        super(name, description);
+        super(id, name, description);
         this.environmentVariable = environmentVariables;
         this.sensorCategoryId = sensorCategoryId;
         this.sensorCategoryName = sensorCategoryName;

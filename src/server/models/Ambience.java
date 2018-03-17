@@ -19,11 +19,13 @@ public class Ambience {
     // ====================== //
     public Ambience() {}
     
-    public Ambience(String name) {
+    public Ambience(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public Ambience(String name, ArrayList<Behaviour> behaviours) {
+    public Ambience(int id, String name, ArrayList<Behaviour> behaviours) {
+        this.id = id;
         this.name = name;
         this.behaviours = behaviours;
     }

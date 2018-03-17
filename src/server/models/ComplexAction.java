@@ -25,7 +25,18 @@ public class ComplexAction {
         this.name = name;
     }
     
+    public ComplexAction(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
     public ComplexAction(String name, ArrayList<AtomicAction> atomicActions) {
+        this.name = name;
+        this.atomicActions = atomicActions;
+    }
+    
+    public ComplexAction(int id, String name, ArrayList<AtomicAction> atomicActions) {
+        this.id = id;
         this.name = name;
         this.atomicActions = atomicActions;
     }

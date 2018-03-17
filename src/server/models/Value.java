@@ -23,6 +23,11 @@ public abstract class Value {
 		this.name = name;
 	}
 	
+	public Value(int id, String name) {
+	    this.id = id;
+        this.name = name;
+    }
+	
 	// ================= //
     // ==== METHODS ==== //
     // ================= //

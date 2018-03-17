@@ -22,6 +22,13 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
         this.valueMin = valueMin;
         this.currentValue = currentValue;
     }
+    
+    public ContinuousEnvironmentVariable(int id, String name, String description, String unity, double valueMin,double valueMax, double precision, double currentValue) {
+        super(id, name, description, unity);
+        this.valueMax = valueMax;
+        this.valueMin = valueMin;
+        this.currentValue = currentValue;
+    }
 
     // ================= //
     // ==== METHODS ==== //

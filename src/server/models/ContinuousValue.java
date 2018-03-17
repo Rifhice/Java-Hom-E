@@ -21,6 +21,12 @@ public class ContinuousValue extends Value{
         this.valueMax = valueMax;
         this.valueMin = valueMin;
     }
+    
+    public ContinuousValue(int id, String name, double valueMin,double valueMax, double precision) {
+        super(id, name);
+        this.valueMax = valueMax;
+        this.valueMin = valueMin;
+    }
 
     // ================= //
     // ==== METHODS ==== //

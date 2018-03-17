@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 import org.json.*;
 
+/**
+ * A sensor is a connected object in charge of sending useful changes about environment variables to the server.
+ * @author Clm-Roig
+ *
+ */
 public class Sensor extends ExternalActor{
     
     // ==================== //

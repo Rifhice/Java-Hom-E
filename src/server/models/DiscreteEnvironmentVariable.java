@@ -18,14 +18,14 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public DiscreteEnvironmentVariable(String name, String description, String unity, ArrayList<String> values, String currentValue) {
-        super(name,description,unity);
+    public DiscreteEnvironmentVariable(String name, String description, String unit, ArrayList<String> values, String currentValue) {
+        super(name,description,unit);
         this.possibleValues = values;
         this.currentValue = currentValue;
     }
     
-    public DiscreteEnvironmentVariable(int id, String name, String description, String unity, ArrayList<String> values, String currentValue) {
-        super(id, name,description,unity);
+    public DiscreteEnvironmentVariable(int id, String name, String description, String unit, ArrayList<String> values, String currentValue) {
+        super(id, name,description,unit);
         this.possibleValues = values;
         this.currentValue = currentValue;
     }

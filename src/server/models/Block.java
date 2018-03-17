@@ -6,7 +6,7 @@ package server.models;
  * Example : Temperature > 3, Presence == True
  * @author Clm-Roig
  */
-public class Block implements Evaluable{
+public class Block implements Evaluable {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //

@@ -21,7 +21,7 @@ import server.managers.ExternalActorManager;
  * 
  * @author Clm-Roig
  */
-public class Expression implements Evaluable{
+public class Expression implements Evaluable {
     
     // ==================== //
     // ==== ATTRIBUTES ==== //

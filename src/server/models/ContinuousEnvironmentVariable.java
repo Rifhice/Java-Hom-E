@@ -16,15 +16,15 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public ContinuousEnvironmentVariable(String name, String description, String unity, double valueMin,double valueMax, double precision, double currentValue) {
-        super(name, description, unity);
+    public ContinuousEnvironmentVariable(String name, String description, String unit, double valueMin,double valueMax, double precision, double currentValue) {
+        super(name, description, unit);
         this.valueMax = valueMax;
         this.valueMin = valueMin;
         this.currentValue = currentValue;
     }
     
-    public ContinuousEnvironmentVariable(int id, String name, String description, String unity, double valueMin,double valueMax, double precision, double currentValue) {
-        super(id, name, description, unity);
+    public ContinuousEnvironmentVariable(int id, String name, String description, String unit, double valueMin,double valueMax, double precision, double currentValue) {
+        super(id, name, description, unit);
         this.valueMax = valueMax;
         this.valueMin = valueMin;
         this.currentValue = currentValue;

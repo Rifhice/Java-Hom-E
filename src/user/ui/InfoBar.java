@@ -23,6 +23,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import user.ClientFX;
 import user.ui.scene.ContentScene;
 
 public class InfoBar extends GridPane{

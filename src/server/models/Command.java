@@ -2,6 +2,8 @@ package server.models;
 
 import java.util.ArrayList;
 
+import server.models.argument.Argument;
+
 /**
  * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
  * @author Clm-Roig

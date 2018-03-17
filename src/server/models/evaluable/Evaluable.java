@@ -1,4 +1,4 @@
-package server.models;
+package server.models.evaluable;
 
 
 public interface Evaluable {

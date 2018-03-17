@@ -1,4 +1,4 @@
-package server.models;
+package server.models.environmentValue;
 
 /**
  * A continous value is a float which is an information the actuator needs 

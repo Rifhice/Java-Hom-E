@@ -1,7 +1,7 @@
 package user.ui.content;
 
 import javafx.scene.layout.Pane;
-import user.ui.ClientFX;
+import user.ClientFX;
 import user.ui.scene.ContentScene;
 
 public abstract class Content extends Pane {

@@ -1,4 +1,4 @@
-package server.models;
+package server.models.evaluable;
 
 
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.managers.ExternalActorManager;
+import server.models.environmentVariable.EnvironmentVariable;
 
 /**
  * An expression is composed by others expressions and / or blocks (i.e. evaluables).  

@@ -1,4 +1,7 @@
-package server.models;
+package server.models.evaluable;
+
+import server.models.environmentValue.EnvironmentValue;
+import server.models.environmentVariable.EnvironmentVariable;
 
 /**
  * A block is something evaluable composed by an environment variable compares thanks

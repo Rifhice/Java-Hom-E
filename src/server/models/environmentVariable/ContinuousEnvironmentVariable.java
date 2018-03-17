@@ -1,4 +1,4 @@
-package server.models;
+package server.models.environmentVariable;
 
 /**
  * A continous environment variable is a variable which current value is a decimal number.

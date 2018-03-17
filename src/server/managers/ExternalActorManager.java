@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import server.models.Actuator;
-import server.models.EnvironmentVariable;
 import server.models.ExternalActor;
 import server.models.Sensor;
+import server.models.environmentVariable.EnvironmentVariable;
 import ocsf.server.ConnectionToClient;
 
 public class ExternalActorManager extends Manager{

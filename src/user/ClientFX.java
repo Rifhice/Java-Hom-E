@@ -1,4 +1,4 @@
-package user.ui;
+package user;
 
 import java.awt.*;
 import javafx.application.Application;

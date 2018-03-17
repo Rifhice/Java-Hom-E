@@ -8,10 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.factories.AbstractDAOFactory;
-import server.models.ContinuousEnvironmentVariable;
-import server.models.DiscreteEnvironmentVariable;
-import server.models.EnvironmentVariable;
 import server.models.Sensor;
+import server.models.environmentVariable.ContinuousEnvironmentVariable;
+import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.EnvironmentVariable;
 import ocsf.server.ConnectionToClient;
 
 public class SensorManager extends Manager{

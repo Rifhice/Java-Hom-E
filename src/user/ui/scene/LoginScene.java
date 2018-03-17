@@ -4,7 +4,6 @@ import java.awt.geom.Rectangle2D;
 
 import org.json.JSONObject;
 
-import user.ui.ClientFX;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyTextFieldFX;
 import javafx.event.ActionEvent;
@@ -13,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyEvent;
+import user.ClientFX;
 import user.tools.GraphicalCharter;
 
 public class LoginScene extends MyScene{

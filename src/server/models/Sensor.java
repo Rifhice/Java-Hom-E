@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import org.json.*;
 
+import server.models.environmentVariable.EnvironmentVariable;
+
 /**
  * A sensor is a connected object in charge of sending useful changes about environment variables to the server.
  * @author Clm-Roig

@@ -7,6 +7,8 @@ import java.util.Observer;
 
 import org.json.JSONObject;
 
+import server.models.evaluable.Expression;
+
 /**
  * A behaviour is a comportment of an actuator depending on environment variables.
  * @author Clm-Roig

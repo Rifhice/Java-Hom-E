@@ -37,6 +37,17 @@ public class SQLiteDatabaseManager {
         String dropSensors = "DROP TABLE IF EXISTS sensors;";
         String dropSensorCategories = "DROP TABLE IF EXISTS sensors;";
         String dropUsers = "DROP TABLE IF EXISTS users;";
+        
+        String dropOwns = "DROP TABLE IF EXISTS owns;";
+        String dropOwnsByDefault = "DROP TABLE IF EXISTS ownsByDefault;";
+        String dropIsPartOf = "DROP TABLE IF EXISTS isPartOf;";
+        String dropIsMemberOf = "DROP TABLE IF EXISTS isMemberOf;";
+        String dropComposes = "DROP TABLE IF EXISTS composes;";
+        String dropRequires = "DROP TABLE IF EXISTS requires;";
+        String dropExecutes = "DROP TABLE IF EXISTS executes;";
+        String dropLaunches = "DROP TABLE IF EXISTS launches;";
+        String dropGathers = "DROP TABLE IF EXISTS gathers;";
+        String dropIsA = "DROP TABLE IF EXISTS isA;";        
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(dropActuators);
@@ -60,6 +71,18 @@ public class SQLiteDatabaseManager {
             stmt.execute(dropSensors);
             stmt.execute(dropSensorCategories);
             stmt.execute(dropUsers);
+            
+            stmt.execute(dropOwns);
+            stmt.execute(dropOwnsByDefault);
+            stmt.execute(dropIsPartOf);
+            stmt.execute(dropIsMemberOf);
+            stmt.execute(dropComposes);
+            stmt.execute(dropRequires);
+            stmt.execute(dropExecutes);
+            stmt.execute(dropLaunches);
+            stmt.execute(dropGathers);
+            stmt.execute(dropIsA);
+            
         } catch (SQLException e) {
             System.out.println("ERROR dropping tables : " + e.getMessage());
         }
@@ -249,7 +272,7 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_user_id) REFERENCES users(id) \n"
                 + ");";
 
-        String createOwnsByDefault = "CREATE TABLE IF NOT EXISTS ownsbydefault (\n" 
+        String createOwnsByDefault = "CREATE TABLE IF NOT EXISTS ownsByDefault (\n" 
                 + " fk_right_id integer, \n"
                 + " fk_role_id integer, \n"
                 + " PRIMARY KEY (fk_right_id, fk_role_id), \n"
@@ -257,7 +280,7 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_role_id) REFERENCES roles(id) \n"
                 + ");";
         
-        String createIsPartOf = "CREATE TABLE IF NOT EXISTS ispartof (\n" 
+        String createIsPartOf = "CREATE TABLE IF NOT EXISTS isPartOf (\n" 
                 + " fk_expression_id integer, \n"
                 + " fk_block_id integer, \n"
                 + " PRIMARY KEY (fk_expression_id, fk_block_id), \n"
@@ -265,7 +288,7 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_block_id) REFERENCES blocks(id) \n"
                 + ");";
         
-        String createIsMemberOf = "CREATE TABLE IF NOT EXISTS ismemberof (\n" 
+        String createIsMemberOf = "CREATE TABLE IF NOT EXISTS isMemberOf (\n" 
                 + " fk_expression_id_1 integer, \n"
                 + " fk_expression_id_2 integer, \n"
                 + " PRIMARY KEY (fk_expression_id_1, fk_expression_id_2), \n"
@@ -312,6 +335,14 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_complexAction_id) REFERENCES complexActions(id), \n"
                 + " FOREIGN KEY (fk_atomicAction_id) REFERENCES atomicActions(id) \n"
                 + ");";
+        
+        String createIsA = "CREATE TABLE IF NOT EXISTS isA (\n"
+                + " fk_role_id integer, \n"
+                + " fk_user_id integer, \n"
+                + " PRIMARY KEY (fk_user_id, fk_role_id), \n"
+                + " FOREIGN KEY (fk_role_id) REFERENCES Roles(id), \n"
+                + " FOREIGN KEY (fk_user_id) REFERENCES Users(id) \n"
+                + ");";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createOwns);
@@ -323,6 +354,7 @@ public class SQLiteDatabaseManager {
             stmt.execute(createExecutes);
             stmt.execute(createLaunches);
             stmt.execute(createGathers);
+            stmt.execute(createIsA);
         } catch (SQLException e) {
             System.out.println("ERROR creating relationship tables : " + e.getMessage());
         }

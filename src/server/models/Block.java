@@ -10,6 +10,7 @@ public class Block implements Evaluable{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
+    private int id;
 	private EnvironmentVariable variable;
 	private Object environmentValue;
 	private String operator;
@@ -18,8 +19,8 @@ public class Block implements Evaluable{
     // ==== CONSTRUCTORS ==== //
     // ====================== //
 	public Block() {}
-	
-	public Block(EnvironmentVariable variable, Object environmentValue, String operator) {
+
+    public Block(EnvironmentVariable variable, Object environmentValue, String operator) {
 		this.variable = variable;
 		this.environmentValue = environmentValue;
 		this.operator = operator;
@@ -28,6 +29,36 @@ public class Block implements Evaluable{
     // ================= //
     // ==== METHODS ==== //
     // ================= //
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Object getEnvironmentValue() {
+        return environmentValue;
+    }
+
+    public void setEnvironmentValue(Object environmentValue) {
+        this.environmentValue = environmentValue;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public void setVariable(EnvironmentVariable variable) {
+        this.variable = variable;
+    }
+    
+    // =========================================================
+    
 	public boolean evaluate() {
 		switch (operator) {
 		case "==":

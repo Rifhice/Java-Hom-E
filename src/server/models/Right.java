@@ -1,5 +1,7 @@
 package server.models;
 
+import java.util.ArrayList;
+
 public class Right {
 
     // ==================== //
@@ -7,8 +9,11 @@ public class Right {
     // ==================== //
     private int id;
     private String denomination; 
-    private String description;  
+    private String description;
     
+    // Attributes from other tables
+    private ArrayList<Command> commands;
+
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
@@ -23,6 +28,13 @@ public class Right {
         this.id = id;
         this.denomination = denomination;
         this.description = description;
+    }
+    
+    public Right(int id, String denomination, String description, ArrayList<Command> commands) {
+        this.id = id;
+        this.denomination = denomination;
+        this.description = description;
+        this.commands = commands;
     }
 
     // ================= //
@@ -52,7 +64,15 @@ public class Right {
         this.description = description;
     }
     
- // ==================================
+    public ArrayList<Command> getCommands() {
+        return commands;
+    }
+
+    public void setCommands(ArrayList<Command> commands) {
+        this.commands = commands;
+    }
+    
+    // ==================================
 
     public String toString() {
         String right = "ID: "+ id +"\nDenomination: "+ denomination + "\nDescription: "+ description;          

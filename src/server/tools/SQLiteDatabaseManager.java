@@ -21,6 +21,8 @@ public class SQLiteDatabaseManager {
         String dropAmbiences = "DROP TABLE IF EXISTS ambiences;";
         String dropBehaviours = "DROP TABLE IF EXISTS behaviours;";
         String dropBlocks = "DROP TABLE IF EXISTS blocks;";
+        String dropCommands = "DROP TABLE IF EXISTS commands;";
+        String dropContinuousValues = "DROP TABLE IF EXISTS continuousValues;";
         String dropDiscreteValues = "DROP TABLE IF EXISTS discreteValues;";
         String dropEnvironmentValues = "DROP TABLE IF EXISTS environmentValues;";
         String dropExpressions = "DROP TABLE IF EXISTS expressions;";
@@ -37,6 +39,8 @@ public class SQLiteDatabaseManager {
             stmt.execute(dropAmbiences);
             stmt.execute(dropBehaviours);
             stmt.execute(dropBlocks);
+            stmt.execute(dropCommands);
+            stmt.execute(dropContinuousValues);
             stmt.execute(dropDiscreteValues);
             stmt.execute(dropEnvironmentValues);
             stmt.execute(dropExpressions);
@@ -86,6 +90,21 @@ public class SQLiteDatabaseManager {
                 + " fk_value_id integer, \n"
                 + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id), \n"
                 + " FOREIGN KEY (fk_value_id) REFERENCES environmentValues(id) \n"
+                + ");";
+        
+        String createTableCommands = "CREATE TABLE IF NOT EXISTS commands (\n" 
+                + " id integer PRIMARY KEY, \n"
+                + " name text NOT NULL, \n"
+                + " fk_actuator_id integer, \n"
+                + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
+                + ");";
+        
+        String createTableContinuousValues ="CREATE TABLE IF NOT EXISTS continuousValues (\n"
+                + " fk_environment_value_id integer PRIMARY KEY, \n"
+                + " min real, \n"
+                + " max real, \n"
+                + " precision real, \n"
+                + " FOREIGN KEY (fk_environment_value_id) REFERENCES environmentValues(id) \n"
                 + ");";
         
         String createTableDiscreteValues ="CREATE TABLE IF NOT EXISTS discreteValues (\n"
@@ -153,6 +172,8 @@ public class SQLiteDatabaseManager {
             stmt.execute(createTableAmbiences);
             stmt.execute(createTableBehaviours);
             stmt.execute(createTableBlocks);
+            stmt.execute(createTableCommands);
+            stmt.execute(createTableContinuousValues);
             stmt.execute(createTableDiscreteValues);
             stmt.execute(createTableEnvironmentValues);
             stmt.execute(createTableExpressions);
@@ -190,11 +211,38 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_expression_id) REFERENCES expressions(id), \n"
                 + " FOREIGN KEY (fk_block_id) REFERENCES blocks(id) \n"
                 + ");";
+        
+        String createIsMemberOf = "CREATE TABLE IF NOT EXISTS ismemberof (\n" 
+                + " fk_expression_id_1 integer, \n"
+                + " fk_expression_id_2 integer, \n"
+                + " PRIMARY KEY (fk_expression_id_1, fk_expression_id_2), \n"
+                + " FOREIGN KEY (fk_expression_id_1) REFERENCES expressions(id), \n"
+                + " FOREIGN KEY (fk_expression_id_2) REFERENCES expressions(id) \n"
+                + ");";
+        
+        String createComposes = "CREATE TABLE IF NOT EXISTS composes (\n"
+                + " fk_behaviour_id integer, \n"
+                + " fk_ambience_id integer, \n"
+                + " PRIMARY KEY (fk_behaviour_id, fk_ambience_id), \n"
+                + " FOREIGN KEY (fk_behaviour_id) REFERENCES behaviours(id), \n"
+                + " FOREIGN KEY (fk_ambience_id) REFERENCES ambiences(id) \n"
+                + ");";
+        
+        String createRequires = "CREATE TABLE IF NOT EXISTS requires (\n"
+                + " fk_command_id integer, \n"
+                + " fk_right_id integer, \n"
+                + " PRIMARY KEY (fk_command_id, fk_right_id), \n"
+                + " FOREIGN KEY (fk_command_id) REFERENCES commands(id), \n"
+                + " FOREIGN KEY (fk_right_id) REFERENCES rights(id) \n"
+                + ");";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createOwns);
             stmt.execute(createOwnsByDefault);
             stmt.execute(createIsPartOf);
+            stmt.execute(createIsMemberOf);
+            stmt.execute(createComposes);
+            stmt.execute(createRequires);
         } catch (SQLException e) {
             System.out.println("ERROR creating relationship tables : " + e.getMessage());
         }

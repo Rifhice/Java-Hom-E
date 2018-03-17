@@ -70,7 +70,7 @@ public class SQLiteDatabaseManager {
         String createTableBehaviours = "CREATE TABLE IF NOT EXISTS behaviours (\n" 
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
-                + " isActivated integer, \n"
+                + " is_activated integer, \n"
                 + " fk_expression_id integer, \n"
                 + " FOREIGN KEY (fk_expression_id) REFERENCES expressions(id) \n"
                 + ");";

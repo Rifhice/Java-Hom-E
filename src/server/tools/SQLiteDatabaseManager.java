@@ -288,6 +288,30 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_command_id) REFERENCES commands(id), \n"
                 + " FOREIGN KEY (fk_right_id) REFERENCES rights(id) \n"
                 + ");";
+        
+        String createExecutes = "CREATE TABLE IF NOT EXISTS executes (\n"
+                + " fk_behaviour_id integer, \n"
+                + " fk_complexAction_id integer, \n"
+                + " PRIMARY KEY (fk_behaviour_id, fk_complexAction_id), \n"
+                + " FOREIGN KEY (fk_behaviour_id) REFERENCES behaviours(id), \n"
+                + " FOREIGN KEY (fk_complexAction_id) REFERENCES complexActions(id) \n"
+                + ");";
+        
+        String createLaunches = "CREATE TABLE IF NOT EXISTS launches (\n"
+                + " fk_behaviour_id integer, \n"
+                + " fk_atomicAction_id integer, \n"
+                + " PRIMARY KEY (fk_behaviour_id, fk_atomicAction_id), \n"
+                + " FOREIGN KEY (fk_behaviour_id) REFERENCES behaviours(id), \n"
+                + " FOREIGN KEY (fk_atomicAction_id) REFERENCES atomicActions(id) \n"
+                + ");";
+        
+        String createGathers = "CREATE TABLE IF NOT EXISTS gathers (\n"
+                + " fk_complexAction_id integer, \n"
+                + " fk_atomicAction_id integer, \n"
+                + " PRIMARY KEY (fk_complexAction_id, fk_atomicAction_id), \n"
+                + " FOREIGN KEY (fk_complexAction_id) REFERENCES complexActions(id), \n"
+                + " FOREIGN KEY (fk_atomicAction_id) REFERENCES atomicActions(id) \n"
+                + ");";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createOwns);
@@ -296,6 +320,9 @@ public class SQLiteDatabaseManager {
             stmt.execute(createIsMemberOf);
             stmt.execute(createComposes);
             stmt.execute(createRequires);
+            stmt.execute(createExecutes);
+            stmt.execute(createLaunches);
+            stmt.execute(createGathers);
         } catch (SQLException e) {
             System.out.println("ERROR creating relationship tables : " + e.getMessage());
         }

@@ -17,7 +17,7 @@ public class SQLiteDatabaseManager {
 
         // ==== DROP TABLES SQL
         String dropActuators = "DROP TABLE IF EXISTS actuators;";
-        String dropActuatorCategories = "DROP TABLE IF EXISTS actuatorsCategories;";
+        String dropActuatorCategories = "DROP TABLE IF EXISTS actuatorCategories;";
         String dropAmbiences = "DROP TABLE IF EXISTS ambiences;";
         String dropAtomicActions = "DROP TABLE IF EXISTS atomicActions;";
         String dropBehaviours = "DROP TABLE IF EXISTS behaviours;";
@@ -35,7 +35,7 @@ public class SQLiteDatabaseManager {
         String dropRights = "DROP TABLE IF EXISTS rights;";
         String dropRoles = "DROP TABLE IF EXISTS roles;";
         String dropSensors = "DROP TABLE IF EXISTS sensors;";
-        String dropSensorCategories = "DROP TABLE IF EXISTS sensors;";
+        String dropSensorCategories = "DROP TABLE IF EXISTS sensorCategories;";
         String dropUsers = "DROP TABLE IF EXISTS users;";
         
         String dropOwns = "DROP TABLE IF EXISTS owns;";

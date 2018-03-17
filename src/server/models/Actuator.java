@@ -34,6 +34,12 @@ public class Actuator extends ExternalActor{
         super(id,name,description);
     }
 
+    public Actuator(String name, String description,ArrayList<Command> commands) {
+        super(name,description);
+        this.commands = commands;
+    }
+
+    
     public Actuator(int id, String name, String description,ArrayList<Command> commands) {
         super(id,name,description);
         this.commands = commands;
@@ -114,11 +120,14 @@ public class Actuator extends ExternalActor{
         this.atomicActions = atomicActions;
     }
     
-    // ==================================
-
-    public static Actuator registerToTheSystem(Object jsonToParse) {
-    	// TODO
-        return null;
+    public String toString() {
+    	String res = "ACTUATOR\nName " + name + "\nDescription : " + description + "\n\nCOMMANDS\n";
+    	for (int i = 0; i < commands.size(); i++) {
+			res += commands.get(i).toString() + "\n";
+		}
+    	return res;
     }
+    
+    // ==================================
 
 }

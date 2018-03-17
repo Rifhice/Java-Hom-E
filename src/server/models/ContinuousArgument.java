@@ -1,4 +1,4 @@
-package actuator;
+package server.models;
 
 import org.json.JSONObject;
 
@@ -17,17 +17,9 @@ public class ContinuousArgument extends Argument{
         this.valueMin = valueMin;
         this.precision = precision;
     }
-	
-	@Override
-	public JSONObject getJson() {
-		JSONObject result = new JSONObject();
-		result.put("type", "continuous");
-		result.put("name", name);
-		result.put("description", description);
-		result.put("valuemin", valueMin);
-		result.put("valuemax", valueMax);
-		result.put("precision", precision);
-		return result;
-	}
+    
+    public String toString() {
+    	return "CONTINUOURS ARGUMENT \nName : " + name + "\nDescription : " + description + "\n From " + valueMin + " to " + valueMax + " every " + precision; 
+    }
     
 }

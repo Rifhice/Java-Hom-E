@@ -1,5 +1,7 @@
 package server.models;
 
+import java.util.ArrayList;
+
 /**
  * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
  * @author Clm-Roig
@@ -11,6 +13,9 @@ public class Command {
     // ==================== //
     private int id;
     private String name;
+    private String description;
+    private String key;
+    private ArrayList<Argument> arguments;
     
     // Attributes from other tables
     private int actuatorId;
@@ -33,6 +38,20 @@ public class Command {
         this.id = id;
         this.name = name;
         this.actuatorId = actuatorId;
+    }
+    
+    public Command(String name,String description, String key, ArrayList<Argument> arguments) {
+        this.name = name;
+        this.description = description;
+        this.key = key;
+        this.arguments = arguments;
+    }
+    
+    public Command(int id, String name, int actuatorId,ArrayList<Argument> arguments) {
+        this.id = id;
+        this.name = name;
+        this.actuatorId = actuatorId;
+        this.arguments = arguments;
     }
 
     // ================= //
@@ -60,6 +79,14 @@ public class Command {
 
     public void setActuatorId(int actuatorId) {
         this.actuatorId = actuatorId;
+    }
+    
+    public String toString() {
+    	String res = "Name" + name + "\nDescription : " + description + "\nKey : " + key + "\n\nARGUMENTS\n";
+    	for (int i = 0; i < arguments.size(); i++) {
+			res += arguments.get(i).toString() + "\n";
+		}
+    	return res;
     }
     
     // =================================================    

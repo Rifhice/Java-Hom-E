@@ -1,6 +1,7 @@
 package server.managers;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
@@ -34,12 +35,23 @@ public class SensorManager extends Manager{
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-	public void registerSensorToTheSystem(JSONObject json) {
+	public void registerSensorToTheSystem(JSONObject json,ConnectionToClient client) {
 		Sensor sensor = Sensor.getSensorFromJson(json); //Create the new Sensor object
-		AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
-		// TODO add to database
-		sensors.add(sensor);
-		
+		boolean create = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
+		JSONObject result = new JSONObject();
+		if(create) {
+			sensors.add(sensor);
+			json.put("result", "success");
+			json.put("id", sensor.getId());
+		}
+		else {
+			json.put("result", "failure");
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		System.out.println(sensor + "\nAdded to the system !");
 	}
 	
@@ -79,7 +91,7 @@ public class SensorManager extends Manager{
 		String verb = json.getString("verb");
 		switch (verb) {
 		case "post":
-			registerSensorToTheSystem(json);
+			registerSensorToTheSystem(json,client);
 			break;
 		default:
 			break;

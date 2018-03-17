@@ -35,7 +35,6 @@ public class DiscreteValue extends Value {
     public void setPossibleValues(ArrayList<String> values) {
         this.possibleValues = values;
     }
- 
     
     // ==================================
 

@@ -49,8 +49,6 @@ public class ContinuousValue extends Value{
         this.precision = precision;
     }
 
-
-
     // ==================================
 
    

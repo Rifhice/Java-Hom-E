@@ -37,7 +37,7 @@ public class ExternalActorManager extends Manager{
 		return sensorManager.getSensors();
 	}
 	
-	public void handleMessage(JSONObject json, ConnectionToClient client) {
+	public void handleMessage(JSONObject json, ConnectionToClient client) {/*
 		String type = json.getString("type");
 		String action = json.getString("action");
 		
@@ -65,7 +65,7 @@ public class ExternalActorManager extends Manager{
 				break;
 			default:
 				break;
-		}
+		}*/
 	}
 	
 	public ArrayList<EnvironmentVariable> getEnvironmentVariables(){

@@ -8,10 +8,10 @@ import org.postgresql.shaded.com.ongres.scram.common.message.ClientFinalMessage;
 
 public class Sensor {
 
-	private static String name;
-	private static String description;
-	private static ArrayList<Variable> variables;
-	private static SensorClient client;	
+	private String name;
+	private String description;
+	private ArrayList<Variable> variables;
+	private SensorClient client;	
 	
 	public Sensor(SensorClient client, String name, String description, ArrayList<Variable> variables) {
 		this.name = name;
@@ -21,7 +21,7 @@ public class Sensor {
 		registerToSystem();
 	}
 	
-	public static void registerToSystem() {
+	public void registerToSystem() {
 		JSONObject registration = new JSONObject();
 		registration.put("recipient", "sensor");
 		registration.put("verb", "post");

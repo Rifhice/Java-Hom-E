@@ -100,11 +100,11 @@ public class ActuatorManager extends Manager {
 		JSONObject result = new JSONObject();
 		if(create != null) {
 			actuators.add(actuator);
-			json.put("result", "success");
-			json.put("id", create.getId());
+			result.put("result", "success");
+			result.put("id", create.getId());
 		}
 		else {
-			json.put("result", "failure");
+			result.put("result", "failure");
 		}
 		try {
 			client.sendToClient(result.toString());

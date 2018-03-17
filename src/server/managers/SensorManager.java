@@ -74,11 +74,11 @@ public class SensorManager extends Manager{
 		JSONObject result = new JSONObject();
 		if(sensorCreated != null) {
 			sensors.add(sensor);
-			json.put("result", "success");
-			json.put("id", sensorCreated.getId());
+			result.put("result", "success");
+			result.put("id", sensorCreated.getId());
 		}
 		else {
-			json.put("result", "failure");
+			result.put("result", "failure");
 		}
 		try {
 			client.sendToClient(result.toString());

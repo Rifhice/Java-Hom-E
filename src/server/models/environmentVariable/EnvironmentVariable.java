@@ -3,6 +3,8 @@ package server.models.environmentVariable;
 
 import java.util.Observable;
 
+import server.models.Sensor;
+
 /**
  * An environment variable is an interesting value  for the server, related to the environment. 
  * It allows the server to send the right action to the actuators.
@@ -17,6 +19,9 @@ public abstract class EnvironmentVariable extends Observable{
 	private String name;
 	private String unit;
 	private String description;
+	
+	// Attributes from other tables
+	private Sensor sensor;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -36,6 +41,14 @@ public abstract class EnvironmentVariable extends Observable{
         this.description = description;
     }
 	
+	public EnvironmentVariable(int id, String name, String description, String unit, Sensor sensor) {
+        this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.description = description;
+        this.sensor = sensor;
+    }
+
     // ================= //
     // ==== METHODS ==== //
     // ================= //	
@@ -69,6 +82,15 @@ public abstract class EnvironmentVariable extends Observable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
     }
     
     // =================================================

@@ -17,4 +17,8 @@ public class SQLiteDAOFactory extends AbstractDAOFactory{
         return new SQLiteActuatorDAO(connect);
     }
 	
+    public SensorDAO getSensorDAO() {
+    	return new SQLLiteSensorDao(connect);
+    }
+    
 }

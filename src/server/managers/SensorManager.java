@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import server.factories.AbstractDAOFactory;
 import server.models.EnvironmentVariable;
 import server.models.Sensor;
 import ocsf.server.ConnectionToClient;
@@ -35,8 +36,10 @@ public class SensorManager extends Manager{
     // ================= // 
 	public void registerSensorToTheSystem(JSONObject json) {
 		Sensor sensor = Sensor.getSensorFromJson(json); //Create the new Sensor object
+		AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
 		// TODO add to database
 		sensors.add(sensor);
+		
 		System.out.println(sensor + "\nAdded to the system !");
 	}
 	

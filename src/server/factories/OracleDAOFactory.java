@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 import server.dao.ActuatorDAO;
 import server.dao.DriverConnection;
+import server.dao.SensorDAO;
 import server.dao.UserDAO;
 
 public class OracleDAOFactory extends AbstractDAOFactory {
@@ -20,5 +21,11 @@ public class OracleDAOFactory extends AbstractDAOFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public SensorDAO getSensorDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

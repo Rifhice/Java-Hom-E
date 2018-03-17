@@ -27,6 +27,10 @@ public class Sensor extends ExternalActor{
     // ====================== //
     public Sensor() {}
     
+    public Sensor(String name,String description) {
+    	super(name,description);
+    }
+    
     public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
         super(name, description);
         this.environmentVariable = environmentVariable;
@@ -49,6 +53,10 @@ public class Sensor extends ExternalActor{
 	// ================= //
     // ==== METHODS ==== //
     // ================= //
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public ArrayList<EnvironmentVariable> getEnvironmentVariable() {
         return environmentVariable;
     }
@@ -85,8 +93,10 @@ public class Sensor extends ExternalActor{
     
 	public String toString() {
 		String res = "ID : " + id + "\nName : " + this.name + "\n" + "Description : " + this.description + "\n\nVariables : \n";
-		for (int i = 0; i < environmentVariable.size(); i++) {
-			res += environmentVariable.get(i) + "\n";
+		if(environmentVariable != null) {
+			for (int i = 0; i < environmentVariable.size(); i++) {
+				res += environmentVariable.get(i) + "\n";
+			}
 		}
 		return res;
 	}

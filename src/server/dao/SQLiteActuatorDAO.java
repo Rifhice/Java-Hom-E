@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
+import server.models.Sensor;
 
 public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ====================== //
@@ -84,8 +85,26 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
 
     @Override
     public ArrayList<Actuator> getAll() throws DAOException {
-        // TODO Auto-generated method stub
-        return null;
+    	ArrayList<Actuator> actuators = new ArrayList<Actuator>();
+        // TODO
+        String sql = "SELECT * FROM Actuators";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            ResultSet rs = prepStat.executeQuery();
+            Actuator actuator = null;
+            while (rs.next()) {
+            	actuator = new Actuator();
+            	actuator.setId(rs.getInt("id"));
+            	actuator.setName(rs.getString("name"));
+            	actuator.setDescription(rs.getString("description"));
+            	actuators.add(actuator);
+                // TODO list of commands
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);
+        }
+        return actuators;
     }
     
     // ======================== //
@@ -98,6 +117,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     public static void main (String args[]) {
         ActuatorDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
         System.out.println(test.create(new Actuator("test","qsd")));
+        System.out.println(test.getAll());
     }
     
 }

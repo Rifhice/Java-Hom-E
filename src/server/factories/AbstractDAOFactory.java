@@ -1,6 +1,7 @@
 package server.factories;
 
 import server.dao.ActuatorDAO;
+import server.dao.SensorDAO;
 import server.dao.UserDAO;
 
 public abstract class AbstractDAOFactory {
@@ -39,5 +40,6 @@ public abstract class AbstractDAOFactory {
 	// ==== DAOs ==== //
 	public abstract UserDAO getUserDAO();
 	public abstract ActuatorDAO getActuatorDAO();
+	public abstract SensorDAO getSensorDAO();
 	
 }

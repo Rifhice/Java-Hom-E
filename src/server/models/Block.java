@@ -17,6 +17,8 @@ public class Block implements Evaluable{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+	public Block() {}
+	
 	public Block(EnvironmentVariable variable, Object environmentValue, String operator) {
 		this.variable = variable;
 		this.environmentValue = environmentValue;

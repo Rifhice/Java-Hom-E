@@ -13,8 +13,12 @@ public class DriverConnection {
     public static final int ORACLE_DRIVER = 3;
 	  
 	private static String SQLiteUrl = "jdbc:sqlite:hom-e.db";
+	
 	private static String PostGreSQLUrl = "";
+	private static int PostGreSQLPort = 0000;
+	
 	private static String OracleUrl = "";
+	private static int OraclePort = 0000;
 	
 	private static Connection connect;
 	

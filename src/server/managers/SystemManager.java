@@ -23,6 +23,8 @@ public class SystemManager extends Manager{
 	private UserManager userManager;
 	private SensorManager sensorManager;
 	private ActuatorManager actuatorManager;
+	private ActuatorCategorieManager actuatorCategorieManager;
+	private SensorCategorieManager sensorCategorieManager;
 	
 	private EchoServer userServer;
 	private EchoServer sensorServer;
@@ -43,6 +45,8 @@ public class SystemManager extends Manager{
 		sensorManager = SensorManager.getManager();
 		actuatorManager = ActuatorManager.getManager();
 		userManager = UserManager.getManager();
+		actuatorCategorieManager = ActuatorCategorieManager.getManager();
+		sensorCategorieManager = SensorCategorieManager.getManager();
 		
 		userServer = new EchoServer(USER_SERVER_PORT,this);
 		sensorServer = new EchoServer(SENSOR_SERVER_PORT,sensorManager);
@@ -86,6 +90,12 @@ public class SystemManager extends Manager{
 			break;
 		case "user":
 			userManager.handleMessage(json,client);
+			break;
+		case "sensorCategories":
+			sensorCategorieManager.handleMessage(json,client);
+			break;
+		case "actuatorCategories":
+			actuatorCategorieManager.handleMessage(json,client);
 			break;
 		default:
 			break;

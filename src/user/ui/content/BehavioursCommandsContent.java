@@ -17,4 +17,9 @@ public class BehavioursCommandsContent extends Content {
 		}
 		return content;
 	}
+	
+	@Override
+	public void handleMessage(Object message) {
+		
+	}
 }

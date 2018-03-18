@@ -17,4 +17,9 @@ public class ControlContent extends Content {
 		}
 		return content;
 	}
+	
+	@Override
+	public void handleMessage(Object message) {
+		
+	}
 }

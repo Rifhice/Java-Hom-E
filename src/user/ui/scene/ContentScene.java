@@ -69,7 +69,7 @@ public class ContentScene extends MyScene implements MenuDelegate {
     // ================= //
 	@Override
 	public void handleMessage(Object msg) {
-		
+		this.content.handleMessage(msg);
 	}
 
 	@Override
@@ -79,7 +79,6 @@ public class ContentScene extends MyScene implements MenuDelegate {
 
 	@Override
 	public void chanteCurrentContent(CONTENT content) {
-		// TODO Auto-generated method stub
 		switch(content) {
 			case HOME:
 				this.changeContent(HomeContent.getInstance());

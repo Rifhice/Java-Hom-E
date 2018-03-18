@@ -3,6 +3,14 @@ package server.factories;
 import java.sql.Connection;
 
 import server.dao.*;
+import server.dao.SQLiteDAO.SQLLiteSensorDao;
+import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
+import server.dao.SQLiteDAO.SQLiteActuatorDAO;
+import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
+import server.dao.SQLiteDAO.SQLiteUserDAO;
+import server.dao.abstractDAO.ActuatorDAO;
+import server.dao.abstractDAO.SensorDAO;
+import server.dao.abstractDAO.UserDAO;
 
 public class SQLiteDAOFactory extends AbstractDAOFactory{
     protected Connection connect = DriverConnection.getInstance(DriverConnection.SQLITE_DRIVER); 
@@ -19,6 +27,14 @@ public class SQLiteDAOFactory extends AbstractDAOFactory{
 	
     public SensorDAO getSensorDAO() {
     	return new SQLLiteSensorDao(connect);
+    }
+    
+    public SQLiteSensorCategoriesDAO getSensorCategoriesDAO() {
+    	return new SQLiteSensorCategoriesDAO(connect);
+    }
+    
+    public SQLiteActuatorCategoriesDAO getActuatorCategoriesDAO() {
+    	return new SQLiteActuatorCategoriesDAO(connect);
     }
     
 }

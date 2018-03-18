@@ -1,8 +1,10 @@
 package server.factories;
 
-import server.dao.ActuatorDAO;
-import server.dao.SensorDAO;
-import server.dao.UserDAO;
+import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
+import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
+import server.dao.abstractDAO.ActuatorDAO;
+import server.dao.abstractDAO.SensorDAO;
+import server.dao.abstractDAO.UserDAO;
 
 public abstract class AbstractDAOFactory {
 	
@@ -41,5 +43,7 @@ public abstract class AbstractDAOFactory {
 	public abstract UserDAO getUserDAO();
 	public abstract ActuatorDAO getActuatorDAO();
 	public abstract SensorDAO getSensorDAO();
+    public abstract SQLiteSensorCategoriesDAO getSensorCategoriesDAO();
+    public abstract SQLiteActuatorCategoriesDAO getActuatorCategoriesDAO();
 	
 }

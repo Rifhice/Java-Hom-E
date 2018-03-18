@@ -427,10 +427,22 @@ public class SQLiteDatabaseManager {
         } catch (SQLException e) {
             System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
         }
+        insertActuatorCat1 = "INSERT INTO actuatorCategories ('name', 'description') VALUES ('Heater','Heat the room.');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertActuatorCat1);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
+        }
     }
 
     private static void insertSensorCategories() {
         String insertSensorCat1 = "INSERT INTO sensorCategories ('name', 'description') VALUES ('Movement detector','Detect movement.');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertSensorCat1);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Sensors : " + e.getMessage());
+        }
+        insertSensorCat1 = "INSERT INTO sensorCategories ('name', 'description') VALUES ('Light detector','Detect degree of light.');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensorCat1);
         } catch (SQLException e) {

@@ -9,12 +9,12 @@ import javafx.event.EventHandler;
 
 public class MyTextFieldFX extends TextField{
 	
-	public MyTextFieldFX(String label,Rectangle2D.Float bounds, int widht, int height) {
+	public MyTextFieldFX(String label,Rectangle2D.Float bounds) {
 		new TextField();
-		setLayoutX((int)(bounds.getX() * widht));
-		setLayoutY((int)(bounds.getY() * height));
-		setWidth((int)(bounds.getWidth() * widht));
-		setHeight((int)(bounds.getHeight() * height));
+		setLayoutX((int)(bounds.getX()));
+		setLayoutY((int)(bounds.getY()));
+		setWidth((int)(bounds.getWidth()));
+		setHeight((int)(bounds.getHeight()));
 		this.setPromptText(label);
 		setOnMouseClicked(new EventHandler<Event>() {
 

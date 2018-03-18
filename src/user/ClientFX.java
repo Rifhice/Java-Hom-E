@@ -1,6 +1,9 @@
 package user;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Float;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.*;
@@ -26,8 +29,8 @@ public class ClientFX extends Application{
 	// ==================== //
 	// ==== ATTRIBUTES ==== //
 	// ==================== //
-	private float widthRatio = 0.5f;
-	private float heightRatio = 0.5f;
+	private float widthRatio = 0.7f;
+	private float heightRatio = 0.7f;
 	
 	public static int width;
 	public static int height;

@@ -17,4 +17,9 @@ public class AccountContent extends Content {
 		}
 		return content;
 	}
+	
+	@Override
+	public void handleMessage(Object message) {
+		
+	}
 }

@@ -1,4 +1,4 @@
-package server.dao;
+package server.dao.SQLiteDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import server.dao.abstractDAO.DAOException;
+import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Sensor;

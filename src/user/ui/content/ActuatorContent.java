@@ -17,4 +17,9 @@ public class ActuatorContent extends Content {
 		}
 		return content;
 	}
+	
+	@Override
+	public void handleMessage(Object message) {
+		
+	}
 }

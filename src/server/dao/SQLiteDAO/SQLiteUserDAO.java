@@ -1,8 +1,10 @@
-package server.dao;
+package server.dao.SQLiteDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
 
+import server.dao.abstractDAO.DAOException;
+import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.User;
 

@@ -2,10 +2,12 @@ package server.factories;
 
 import java.sql.Connection;
 
-import server.dao.ActuatorDAO;
 import server.dao.DriverConnection;
-import server.dao.SensorDAO;
-import server.dao.UserDAO;
+import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
+import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
+import server.dao.abstractDAO.ActuatorDAO;
+import server.dao.abstractDAO.SensorDAO;
+import server.dao.abstractDAO.UserDAO;
 
 public class OracleDAOFactory extends AbstractDAOFactory {
     protected Connection connect = DriverConnection.getInstance(DriverConnection.ORACLE_DRIVER); 
@@ -24,6 +26,18 @@ public class OracleDAOFactory extends AbstractDAOFactory {
 
 	@Override
 	public SensorDAO getSensorDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SQLiteSensorCategoriesDAO getSensorCategoriesDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SQLiteActuatorCategoriesDAO getActuatorCategoriesDAO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

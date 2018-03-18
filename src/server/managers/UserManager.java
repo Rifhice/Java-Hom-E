@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import server.dao.DAOException;
-import server.dao.UserDAO;
+import server.dao.abstractDAO.DAOException;
+import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import javafx.util.Pair;
 import server.models.User;

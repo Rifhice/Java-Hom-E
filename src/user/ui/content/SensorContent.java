@@ -17,4 +17,9 @@ public class SensorContent extends Content {
 		}
 		return content;
 	}
+
+	@Override
+	public void handleMessage(Object message) {
+		
+	}
 }

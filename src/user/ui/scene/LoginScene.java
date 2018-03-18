@@ -5,6 +5,7 @@ import java.awt.geom.Rectangle2D;
 import org.json.JSONObject;
 
 import user.ui.componentJavaFX.MyButtonFX;
+import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyTextFieldFX;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -22,10 +23,10 @@ public class LoginScene extends MyScene{
     // ==================== //
 	private static String TITLE = "Log in";
 	
-	private Rectangle2D.Float loginBounds = new Rectangle2D.Float(0.5f, 0.47f, 0.16f, 0.07f);
-	private Rectangle2D.Float loginAsGuestBounds = new Rectangle2D.Float(0.47f, 0.57f, 0.16f, 0.07f);
-	private Rectangle2D.Float pseudoBounds = new Rectangle2D.Float(0.43f, 0.28f, 0.28f, 0.06f);
-	private Rectangle2D.Float passwordBounds = new Rectangle2D.Float(0.43f, 0.37f, 0.28f, 0.06f);
+	private MyRectangle loginBounds = new MyRectangle(0.5f, 0.47f, 0.1f, 0.05f);
+	private MyRectangle loginAsGuestBounds = new MyRectangle(0.47f, 0.57f, 0.1f, 0.05f);
+	private MyRectangle pseudoBounds = new MyRectangle(0.43f, 0.28f, 0.28f, 0.06f);
+	private MyRectangle passwordBounds = new MyRectangle(0.43f, 0.37f, 0.28f, 0.06f);
 
 	private MyTextFieldFX pseudoTextField;
 	private PasswordField passwordTextField = new PasswordField();
@@ -41,7 +42,7 @@ public class LoginScene extends MyScene{
         
         System.out.println("Width : " + this.width + " Height : " + this.height);
                 
-        pseudoTextField = new MyTextFieldFX("Pseudo", pseudoBounds, this.width, this.height);
+        pseudoTextField = new MyTextFieldFX("Pseudo", pseudoBounds.computeBounds(this.width, this.height));
 		root.getChildren().add(pseudoTextField);		
 		
 		passwordTextField.setLayoutX(passwordBounds.getX() * width);passwordTextField.setLayoutY(passwordBounds.getY() * height);passwordTextField.setMaxSize(passwordBounds.getWidth()* width, passwordBounds.getHeight()* height);
@@ -58,7 +59,7 @@ public class LoginScene extends MyScene{
 			}
 		});
         
-        loginButton = new MyButtonFX("Log in", loginBounds, this.width, this.height, new EventHandler<ActionEvent>() {
+        loginButton = new MyButtonFX("Log in", loginBounds.computeBounds(this.width, this.height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if(pseudoTextField.getText().equals("")) {
@@ -84,7 +85,7 @@ public class LoginScene extends MyScene{
 					}
 				}
 			}
-		});
+		}).centerX(this.width);
         
         root.getChildren().add(loginButton);
         
@@ -93,7 +94,7 @@ public class LoginScene extends MyScene{
          * No password required. 
          * Pseudo is optionnal.        
          */
-        loginAsGuestButton = new MyButtonFX("Log in as guest", loginAsGuestBounds, this.width, this.height, new EventHandler<ActionEvent>() {
+        loginAsGuestButton = new MyButtonFX("Log in as guest", loginAsGuestBounds.computeBounds(this.width, this.height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if(!pseudoTextField.getText().equals("")){
@@ -117,7 +118,7 @@ public class LoginScene extends MyScene{
 					ClientFX.client.handleMessageFromClientUI(json.toString());
 				}
 			}
-		});
+		}).centerX(this.width);
         root.getChildren().add(loginAsGuestButton);
         passwordTextField.setOnKeyTyped(new EventHandler<KeyEvent>() {
 			@Override

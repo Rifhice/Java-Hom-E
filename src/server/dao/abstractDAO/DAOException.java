@@ -1,4 +1,4 @@
-package server.dao;
+package server.dao.abstractDAO;
 
 @SuppressWarnings("serial")
 public class DAOException extends RuntimeException {

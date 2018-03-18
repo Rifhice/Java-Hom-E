@@ -12,12 +12,12 @@ import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Sensor;
 
-public class SQLLiteSensorDao extends SensorDAO{
+public class SQLiteSensorDao extends SensorDAO{
 	
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public SQLLiteSensorDao(Connection connectionDriver) {
+    public SQLiteSensorDao(Connection connectionDriver) {
         super(connectionDriver);
     }    
     

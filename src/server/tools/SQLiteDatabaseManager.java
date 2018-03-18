@@ -510,7 +510,7 @@ public class SQLiteDatabaseManager {
     
     private static void insertRights() {
         String insertRightLRLights = "INSERT INTO rights ('id', 'denomination', 'description') VALUES (1, 'Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
-        String insertRightKHeats = "INSERT INTO rights ('id','denomination', 'description') VALUES (2, 'Set kitchen-heater temperature','You can change the temperature of the kitchen.');";
+        String insertRightKHeats = "INSERT INTO rights ('id','denomination', 'description') VALUES (2, 'Set kitchen-heater temperature.','You can change the temperature of the kitchen.');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertRightLRLights);
             stmt.execute(insertRightKHeats);
@@ -555,7 +555,7 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertUsers() {
-        String insertUser1 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('owner', 'password', 1);";
+        String insertUser1 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('The Boss', 'password', 1);";
         String insertUser2 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('Rifhice', 'password', 2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertUser1);

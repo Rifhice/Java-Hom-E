@@ -1,5 +1,7 @@
 package server.models;
 
+import java.util.ArrayList;
+
 public class User {
 
     // ==================== //
@@ -12,6 +14,8 @@ public class User {
     // Attributes from others tables
     private int roleId;
     private String roleName;    
+    
+    private ArrayList<Right> rights;
     
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -46,6 +50,15 @@ public class User {
         this.password = password;
         this.roleId = roleId;
         this.roleName = roleName;
+    }
+    
+    public User(int id, String pseudo, String password, int roleId, String roleName, ArrayList<Right> rights) {
+        this.id = id;
+        this.pseudo = pseudo;
+        this.password = password;
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.rights = rights;
     }
 
     // ================= //
@@ -90,6 +103,15 @@ public class User {
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
+    
+
+    public ArrayList<Right> getRights() {
+        return rights;
+    }
+
+    public void setRights(ArrayList<Right> rights) {
+        this.rights = rights;
+    }
 
     // ==================================
     
@@ -98,6 +120,10 @@ public class User {
         user += pseudo;
         user += "\n" + password;
         user += "\nRole n°" + roleId + ": "+roleName;
+        user += "\nRights:";
+        for (Right right : rights) {
+            user += "\n# "+right.getId() +" " + right.getDenomination() + " - " + right.getDescription();
+        }
         return user;
     }
 

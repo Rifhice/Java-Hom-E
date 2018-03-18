@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
+import server.models.Right;
 import server.models.User;
 
 public class SQLiteUserDAO extends UserDAO {
@@ -56,24 +57,37 @@ public class SQLiteUserDAO extends UserDAO {
     @Override
     public User getById(int id) throws DAOException {
         User user = null;
-        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, R.id AS Rid, R.name AS Rname "
+        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, "
+                + "R.id AS Rid, R.name AS Rname, Ri.denomination AS Ridenomination, "
+                + "Ri.description AS Ridescription, Ri.id AS Riid "
                 + "FROM Users AS U "
                 + "JOIN Roles AS R ON R.id = U.fk_role_id "
-                + "WHERE U.id = ?";
-
+                + "JOIN Owns AS O ON O.fk_user_id = U.id "
+                + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
+                + "WHERE U.id = ?;";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setInt(1, id);
             ResultSet rs = prepStat.executeQuery();
-
-            if (rs.next()) {
+            
+            ArrayList<Right> rights = new ArrayList<Right>();
+            while (rs.next()) {
                 user = new User();
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
                 user.setRoleId(rs.getInt("Rid"));
                 user.setRoleName(rs.getString("Rname"));
+                
+                // Construct right
+                int rightId = rs.getInt("Riid");
+                String rightDenomination = rs.getString("Ridenomination");
+                String rightDescription = rs.getString("Ridescription");
+                Right right = new Right(rightId, rightDenomination, rightDescription);
+                rights.add(right);
             }
+            user.setRights(rights);
+            
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
         }
@@ -178,7 +192,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        System.out.println(test.getAll());
+        System.out.println(test.getById(1));
     }
 
     

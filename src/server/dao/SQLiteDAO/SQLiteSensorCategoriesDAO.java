@@ -8,9 +8,6 @@ import java.util.ArrayList;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorCategoriesDAO;
-import server.models.Actuator;
-import server.models.Sensor;
-import server.models.categories.ActuatorCategory;
 import server.models.categories.SensorCategory;
 
 public class SQLiteSensorCategoriesDAO extends SensorCategoriesDAO{

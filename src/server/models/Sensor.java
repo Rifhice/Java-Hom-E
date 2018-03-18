@@ -3,8 +3,6 @@ package server.models;
 
 import java.util.ArrayList;
 
-import org.json.*;
-
 import server.models.environmentVariable.EnvironmentVariable;
 
 /**

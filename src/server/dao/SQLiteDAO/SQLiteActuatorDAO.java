@@ -10,7 +10,6 @@ import server.dao.abstractDAO.ActuatorDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
-import server.models.Sensor;
 
 public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ====================== //

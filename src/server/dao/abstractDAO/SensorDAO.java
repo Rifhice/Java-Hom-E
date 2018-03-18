@@ -1,9 +1,7 @@
 package server.dao.abstractDAO;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 
-import server.models.Actuator;
 import server.models.Sensor;
 
 public abstract class SensorDAO extends DAO<Sensor>{

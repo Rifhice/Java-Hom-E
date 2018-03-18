@@ -6,10 +6,8 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import server.dao.abstractDAO.ActuatorCategoriesDAO;
 import server.dao.abstractDAO.SensorCategoriesDAO;
 import server.factories.AbstractDAOFactory;
-import server.models.Behaviour;
 import server.models.categories.SensorCategory;
 import ocsf.server.ConnectionToClient;
 

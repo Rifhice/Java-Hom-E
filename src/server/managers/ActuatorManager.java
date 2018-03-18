@@ -10,13 +10,9 @@ import org.json.JSONObject;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Command;
-import server.models.Sensor;
 import server.models.argument.Argument;
 import server.models.argument.ContinuousArgument;
 import server.models.argument.DiscreteArgument;
-import server.models.environmentVariable.ContinuousEnvironmentVariable;
-import server.models.environmentVariable.DiscreteEnvironmentVariable;
-import server.models.environmentVariable.EnvironmentVariable;
 import ocsf.server.ConnectionToClient;
 
 public class ActuatorManager extends Manager {

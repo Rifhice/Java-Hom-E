@@ -6,15 +6,9 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import javafx.util.Pair;
 import server.dao.abstractDAO.ActuatorCategoriesDAO;
-import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
-import server.models.Behaviour;
-import server.models.User;
 import server.models.categories.ActuatorCategory;
-import server.models.categories.SensorCategory;
-import server.tools.Security;
 import ocsf.server.ConnectionToClient;
 
 public class ActuatorCategorieManager extends Manager{

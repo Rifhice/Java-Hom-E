@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
-import server.models.Actuator;
 import server.models.Sensor;
 
 public class SQLiteSensorDao extends SensorDAO{

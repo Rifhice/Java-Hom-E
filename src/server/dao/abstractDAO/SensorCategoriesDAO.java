@@ -3,7 +3,6 @@ package server.dao.abstractDAO;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-import server.models.categories.ActuatorCategory;
 import server.models.categories.SensorCategory;
 
 public class SensorCategoriesDAO extends DAO<SensorCategory>{

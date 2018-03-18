@@ -146,33 +146,33 @@ public class SQLiteDatabaseManager {
                 + ");";
         
         String createTableContinuousEnvironmentVariables ="CREATE TABLE IF NOT EXISTS continuousEnvironmentVariables (\n"
-                + " fk_environment_variable_id integer PRIMARY KEY, \n"
+                + " fk_environmentVariable_id integer PRIMARY KEY, \n"
                 + " value_min real, \n"
                 + " value_max real, \n"
                 + " current_value real, \n"
                 + " precision real, \n"
-                + " FOREIGN KEY (fk_environment_variable_id) REFERENCES environmentVariables(id) \n"
+                + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id) \n"
                 + ");";
         
         String createTableContinuousValues ="CREATE TABLE IF NOT EXISTS continuousValues (\n"
-                + " fk_environment_value_id integer PRIMARY KEY, \n"
+                + " fk_environmentValue_id integer PRIMARY KEY, \n"
                 + " min real, \n"
                 + " max real, \n"
                 + " precision real, \n"
-                + " FOREIGN KEY (fk_environment_value_id) REFERENCES environmentValues(id) \n"
+                + " FOREIGN KEY (fk_environmentValue_id) REFERENCES environmentValues(id) \n"
                 + ");";
         
         String createTableDiscreteEnvironmentVariables ="CREATE TABLE IF NOT EXISTS discreteEnvironmentVariables (\n"
-                + " fk_environment_variable_id integer PRIMARY KEY, \n"
+                + " fk_environmentVariable_id integer PRIMARY KEY, \n"
                 + " current_value text, \n"
                 + " possible_values text, \n" 
-                + " FOREIGN KEY (fk_environment_variable_id) REFERENCES environmentVariables(id) \n"
+                + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id) \n"
                 + ");";
         
         String createTableDiscreteValues ="CREATE TABLE IF NOT EXISTS discreteValues (\n"
-                + " fk_environment_value_id integer PRIMARY KEY, \n"
+                + " fk_environmentValue_id integer PRIMARY KEY, \n"
                 + " possible_values text, \n" 
-                + " FOREIGN KEY (fk_environment_value_id) REFERENCES environmentValues(id) \n"
+                + " FOREIGN KEY (fk_environmentValue_id) REFERENCES environmentValues(id) \n"
                 + ");";
         
         String createTableEnvironmentValues ="CREATE TABLE IF NOT EXISTS environmentValues (\n"
@@ -382,6 +382,7 @@ public class SQLiteDatabaseManager {
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertActuatorCat1);
             stmt.execute(insertActuatorCat2);
+            stmt.execute(insertActuatorCat3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
         }
@@ -408,7 +409,31 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting Commands : " + e.getMessage());
         }       
     }
-
+    
+    private static void insertContinuousValues() {
+        String insertContinuousValue1 = "INSERT INTO continuousValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 0.5, 1);";
+        String insertContinuousValue2 = "INSERT INTO continuousValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 1.0, 2);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertContinuousValue1);
+            stmt.execute(insertContinuousValue2);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting ContinuousValues : " + e.getMessage());
+        }
+    }
+    
+    private static void insertDiscreteValues() {
+        String insertDiscreteValue1 = "INSERT INTO discreteValues ('possible_values', 'fk_environmentValue_id') VALUES ('{\"on\",\"off\"}',3);";
+        String insertDiscreteValue2 = "INSERT INTO discreteValues ('possible_values', 'fk_environmentValue_id') VALUES ('{\"on\",\"off\"}',4);";
+        String insertDiscreteValue3 = "INSERT INTO discreteValues ('possible_values', 'fk_environmentValue_id') VALUES ('{\"very hot\",\"hot\",\"ice\"}',5);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertDiscreteValue1);
+            stmt.execute(insertDiscreteValue2);
+            stmt.execute(insertDiscreteValue3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting DiscreteValues : " + e.getMessage());
+        }
+    }
+    
     private static void insertEnvironmentValues() {
         String insertEnvironmentValue1 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
         String insertEnvironmentValue2 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (2,'temperature',4);";
@@ -541,8 +566,9 @@ public class SQLiteDatabaseManager {
         insertOwns();
         
         insertCommands();
-        
         insertEnvironmentValues();
+        insertDiscreteValues();
+        insertContinuousValues();
         
         insertActuatorCategories();
         insertActuators();

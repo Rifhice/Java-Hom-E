@@ -336,14 +336,6 @@ public class SQLiteDatabaseManager {
                 + " FOREIGN KEY (fk_atomicAction_id) REFERENCES atomicActions(id) \n"
                 + ");";
         
-        String createIsA = "CREATE TABLE IF NOT EXISTS isA (\n"
-                + " fk_role_id integer, \n"
-                + " fk_user_id integer, \n"
-                + " PRIMARY KEY (fk_user_id, fk_role_id), \n"
-                + " FOREIGN KEY (fk_role_id) REFERENCES Roles(id), \n"
-                + " FOREIGN KEY (fk_user_id) REFERENCES Users(id) \n"
-                + ");";
-
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(createOwns);
             stmt.execute(createOwnsByDefault);
@@ -354,7 +346,6 @@ public class SQLiteDatabaseManager {
             stmt.execute(createExecutes);
             stmt.execute(createLaunches);
             stmt.execute(createGathers);
-            stmt.execute(createIsA);
         } catch (SQLException e) {
             System.out.println("ERROR creating relationship tables : " + e.getMessage());
         }
@@ -375,17 +366,8 @@ public class SQLiteDatabaseManager {
         }
     }
 
-    private static void insertUsers() {
-        String insertUsers = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('owner', 'password', 1);";
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(insertUsers);
-        } catch (SQLException e) {
-            System.out.println("ERROR inserting Users : " + e.getMessage());
-        }
-    }
-
     private static void insertHistories() {
-        String insertHistory = "INSERT INTO histories ('user', 'type', 'action') VALUES ('owner', 'command', 'Switch light on');";
+        String insertHistory = "INSERT INTO histories ('date', 'type', 'action', 'user') VALUES ('2018-03-10 08:42:42', 'command', 'Switch light on', 'owner');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertHistory);
         } catch (SQLException e) {
@@ -394,11 +376,37 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertRights() {
-        String insertRightLRLights = "INSERT INTO rights ('denomination', 'description') VALUES ('Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
+        String insertRightLRLights = "INSERT INTO rights ('id', 'denomination', 'description') VALUES (1, 'Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
+        String insertRightKHeats = "INSERT INTO rights ('id','denomination', 'description') VALUES (2, 'Set kitchen-heater temperature','You can change the temperature of the kitchen.');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertRightLRLights);
+            stmt.execute(insertRightKHeats);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Rights : " + e.getMessage());
+        }
+    }
+    
+    private static void insertOwnsByDefault() {
+        String insertOwnsByDefault10 = "INSERT INTO ownsByDefault ('fk_role_id','fk_right_id') VALUES (1,1);";
+        String insertOwnsByDefault11 = "INSERT INTO ownsByDefault ('fk_role_id','fk_right_id') VALUES (1,2);";
+        String insertOwnsByDefault20 = "INSERT INTO ownsByDefault ('fk_role_id','fk_right_id') VALUES (2,1);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertOwnsByDefault10);
+            stmt.execute(insertOwnsByDefault11);
+            stmt.execute(insertOwnsByDefault20);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting OwnsByDefault : " + e.getMessage());
+        }
+    }
+    
+    private static void insertUsers() {
+        String insertUser1 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('owner', 'password', 1);";
+        String insertUser2 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('Rifhice', 'password', 2);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertUser1);
+            stmt.execute(insertUser2);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Users : " + e.getMessage());
         }
     }
 
@@ -463,9 +471,10 @@ public class SQLiteDatabaseManager {
         // Seeders
         System.out.print("Inserting data... ");
         insertRoles();
-        insertUsers();
         insertHistories();
         insertRights();
+        insertUsers();
+        insertOwnsByDefault();
         insertActuators();
         insertSensors();
         insertActuatorCategories();

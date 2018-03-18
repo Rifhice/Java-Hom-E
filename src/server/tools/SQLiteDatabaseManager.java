@@ -488,6 +488,26 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertRequires() {
+        String insertRequire1 = "INSERT INTO requires ('fk_command_id','fk_right_id') VALUES (1,1);";
+        String insertRequire2 = "INSERT INTO requires ('fk_command_id','fk_right_id') VALUES (2,1);";
+        String insertRequire3 = "INSERT INTO requires ('fk_command_id','fk_right_id') VALUES (6,1);";
+        String insertRequire4 = "INSERT INTO requires ('fk_command_id','fk_right_id') VALUES (7,1);";
+        String insertRequire5 = "INSERT INTO requires ('fk_command_id','fk_right_id') VALUES (3,2);";
+        String insertRequire6 = "INSERT INTO requires ('fk_command_id','fk_right_id') VALUES (4,2);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertRequire1);
+            stmt.execute(insertRequire2);
+            stmt.execute(insertRequire3);
+            stmt.execute(insertRequire4);
+            stmt.execute(insertRequire5);
+            stmt.execute(insertRequire6);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting OwnsByDefault : " + e.getMessage());
+        }
+    }
+    
+    
     private static void insertRights() {
         String insertRightLRLights = "INSERT INTO rights ('id', 'denomination', 'description') VALUES (1, 'Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
         String insertRightKHeats = "INSERT INTO rights ('id','denomination', 'description') VALUES (2, 'Set kitchen-heater temperature','You can change the temperature of the kitchen.');";

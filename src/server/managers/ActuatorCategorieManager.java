@@ -32,14 +32,6 @@ public class ActuatorCategorieManager extends Manager{
 		return manager;
 	}
 	
-	public void createActuatorCategorie(JSONObject json) {
-		
-	}
-	
-	public void deleteActuatorCategorie(Behaviour behaviour) {
-
-	}
-	
 	public void getAllActuatorCategorie(ConnectionToClient client) {
 		ArrayList<ActuatorCategory> actuatorCategories = actuatorCategoriesDAO.getAll();
 		JSONObject result = new JSONObject();
@@ -52,10 +44,62 @@ public class ActuatorCategorieManager extends Manager{
 			currentCat.put("description", actuatorCategories.get(i).getDescription());
 			result.append("categories", currentCat);
 		}
-		System.out.println(result.toString());
 		try {
 			client.sendToClient(result.toString());
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void createActuatorCategorie(ActuatorCategory obj, ConnectionToClient client) {
+		JSONObject result = new JSONObject();
+		result.put("recipient", "actuatorCategories");
+		result.put("action", "create");
+		if(actuatorCategoriesDAO.create(obj) == null) {
+			result.put("result", "failure");
+		}
+		else {
+			result.put("result", "success");
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteActuatorCategorie(int id,ConnectionToClient client) {
+		System.out.println("delete");
+		JSONObject result = new JSONObject();
+		result.put("recipient", "actuatorCategories");
+		result.put("action", "delete");
+		if(actuatorCategoriesDAO.delete(id) == 0) {
+			result.put("result", "failure");
+		}
+		else {
+			result.put("result", "success");
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateActuatorCategorie(ActuatorCategory obj,ConnectionToClient client) {
+		JSONObject result = new JSONObject();
+		result.put("recipient", "actuatorCategories");
+		result.put("action", "update");
+		if(!actuatorCategoriesDAO.update(obj)) {
+			System.out.println("hey");
+			result.put("result", "failure");
+		}
+		else {
+			result.put("result", "success");
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -66,6 +110,15 @@ public class ActuatorCategorieManager extends Manager{
         switch(action) {
 	        case "getAll":
 	        	getAllActuatorCategorie(client);
+	            break;
+	        case "create":
+	        	createActuatorCategorie(new ActuatorCategory(json.getString("name"),json.getString("description")),client);
+	            break;
+	        case "delete":
+	        	deleteActuatorCategorie(json.getInt("id"),client);
+	            break;
+	        case "update":
+	        	updateActuatorCategorie(new ActuatorCategory(json.getInt("id"),json.getString("name"),json.getString("description")),client);
 	            break;
         }
 	}

@@ -9,4 +9,8 @@ public class SensorCategory extends Category{
 		this.id = id;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	
 }

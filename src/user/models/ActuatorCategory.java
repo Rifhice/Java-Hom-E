@@ -9,4 +9,8 @@ public class ActuatorCategory extends Category{
 		this.id = id;
 	}
 
+	public int getId() {
+		return id;
+	}
+	
 }

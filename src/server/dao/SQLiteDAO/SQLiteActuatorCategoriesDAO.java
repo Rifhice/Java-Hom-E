@@ -18,6 +18,77 @@ public class SQLiteActuatorCategoriesDAO extends ActuatorCategoriesDAO{
 		super(connect);
 	}
 
+	@Override
+	public ActuatorCategory create(ActuatorCategory obj) throws DAOException {
+		ActuatorCategory actuatorCategory = obj;
+        
+        String sql = "INSERT INTO actuatorCategories "
+                + "(name, description) VALUES "
+                + "(?, ?)";
+        
+        // Insert the object
+        int created = 0;
+          try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, obj.getName());
+              prepStat.setString(2, obj.getDescription());
+              created = prepStat.executeUpdate();
+              
+              // Get the id generated for this object
+              if(created > 0) {
+                  String sqlGetLastId = "SELECT last_insert_rowid()";
+                  PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
+                  int id = prepStatLastId.executeQuery().getInt(1);
+                  actuatorCategory.setId(id);
+              }
+              else {
+            	  actuatorCategory = null;
+              }
+          } catch (SQLException e) {
+              throw new DAOException("DAOException : ActuatorCategoriesDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
+          }
+        return actuatorCategory;
+	}
+
+	@Override
+	public ActuatorCategory getById(int id) throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean update(ActuatorCategory obj) throws DAOException {
+    	String sql = "UPDATE actuatorCategories "
+                + "SET name = ?, description = ?"
+                + "WHERE id = ?";
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, obj.getName());
+              prepStat.setString(2, obj.getDescription());
+              prepStat.setInt(3, obj.getId());
+              updated= prepStat.executeUpdate();
+
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : ActuatorCategories update(" + obj.getId() + ") :" + e.getMessage(), e); 
+          }
+        return updated > 0;
+	}
+
+	@Override
+	public int delete(int id) throws DAOException {
+        String sql = "DELETE FROM actuatorCategories WHERE id = ?";
+        int deleted = 0;
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            deleted = prepStat.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : ActuatorCategories delete(" + id + ") :" + e.getMessage(), e);
+        }
+        return deleted;
+	}
+	
     @Override
     public ArrayList<ActuatorCategory> getAll() throws DAOException {
         ArrayList<ActuatorCategory> actuators = new ArrayList<ActuatorCategory>();

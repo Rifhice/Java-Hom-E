@@ -59,10 +59,10 @@ public class SQLiteRoleDAO extends RoleDAO {
     public Role getById(int id) throws DAOException {
     	
     	Role role = null;   	
-    	String sql = "SELECT  R.id AS id, R.name AS name,"
+    	String sql = "SELECT  R.id AS id, R.name AS name, "
     			+ "Ri.description AS Ridescription, Ri.id AS Riid, "
-    			+ "Ri.denomination AS Ridenomination \"\r\n"  
-                + "FROM Roles AS R ,"
+    			+ "Ri.denomination AS Ridenomination "  
+                + "FROM Roles AS R "
                 + "JOIN OwnsByDefault AS O ON O.fk_role_id = R.id "
                 + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
                 + "WHERE R.id = ?;";
@@ -73,11 +73,10 @@ public class SQLiteRoleDAO extends RoleDAO {
             ResultSet rs = prepStat.executeQuery();
             if(rs.next()) {
                 ArrayList<Right> rights = new ArrayList<Right>();
+                role = new Role();
+                role.setId(rs.getInt("id"));
+                role.setName(rs.getString("name")); 
                 do {
-                    role = new Role();
-                    role.setId(rs.getInt("id"));
-                    role.setName(rs.getString("name"));         
-
                     // Construct right
                     int rightId = rs.getInt("Riid");
                     String rightDenomination = rs.getString("Ridenomination");
@@ -94,7 +93,7 @@ public class SQLiteRoleDAO extends RoleDAO {
     		
     	}
     	
-        return null;
+        return role;
     }
 
     @Override

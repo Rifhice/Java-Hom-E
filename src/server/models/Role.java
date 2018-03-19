@@ -48,6 +48,12 @@ public class Role {
 	public void setRights(ArrayList<Right> rights) {
 		this.rights = rights;
 	}  
+	
+	public String toString() {
+		//TODO faire un plus bel affichage, love Clément <3
+		String role = name + " " + id;
+		return role;
+	}
 
     // ==================================
   

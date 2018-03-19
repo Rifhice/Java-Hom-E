@@ -10,6 +10,7 @@ import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
+import server.models.Right;
 import server.models.Role;
 import server.models.User;
 
@@ -61,12 +62,34 @@ public class SQLiteRoleDAO extends RoleDAO {
     public Role getById(int id) throws DAOException {
     	
     	Role role = null;   	
-    	String sql = "SELECT r.name AS Rname "
-                + "FROM roles AS r"
-                + "(?)";
-        
+    	String sql = "SELECT  R.id AS id, R.name AS name,"
+    			+ "Ri.description AS Ridescription, Ri.id AS Riid, "
+    			+ "Ri.denomination AS Ridenomination, \"\r\n"  
+                + "FROM roles AS R"
+                + "JOIN ownsByDefault AS O ON O.fk_role_id = R.id "
+                + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
+                + "WHERE R.id = ?;";
+
     	try {
     		PreparedStatement prepStat = this.connect.prepareStatement(sql);
+    		prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            if(rs.next()) {
+                ArrayList<Right> rights = new ArrayList<Right>();
+                do {
+                    role = new Role();
+                    role.setId(rs.getInt("id"));
+                    role.setName(rs.getString("name"));         
+
+                    // Construct right
+                    int rightId = rs.getInt("Riid");
+                    String rightDenomination = rs.getString("Ridenomination");
+                    String rightDescription = rs.getString("Ridescription");
+                    Right right = new Right(rightId, rightDenomination, rightDescription);
+                    rights.add(right);
+                } while (rs.next());
+                role.setRights(rights);
+            }
     		
     	}
     	catch(SQLException e) {

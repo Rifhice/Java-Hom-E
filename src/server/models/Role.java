@@ -1,11 +1,16 @@
 package server.models;
 
+import java.util.ArrayList;
+
 public class Role {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
     private int id;
     private String name; 
+    
+ // Attributes from others tables   
+    private ArrayList<Right> rights;
     
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -34,7 +39,15 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
-    }  
+    }
+
+	public ArrayList<Right> getRights() {
+		return rights;
+	}
+
+	public void setRights(ArrayList<Right> rights) {
+		this.rights = rights;
+	}  
 
     // ==================================
   

@@ -43,7 +43,6 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 prepStat.setInt(3, obj.getActuatorCategory().getId());
             }
             created = prepStat.executeUpdate();
-
             // Get the id generated for this object
             if(created > 0) {
                 String sqlGetLastId = "SELECT last_insert_rowid()";
@@ -83,14 +82,13 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 actuator.setId(rs.getInt("id"));
                 actuator.setName(rs.getString("name"));
                 actuator.setDescription(rs.getString("description"));
-                
+    
                 ActuatorCategory ActCat = new ActuatorCategory(rs.getInt("ACid"), rs.getString("ACname"), rs.getString("ACdescription"));
                 actuator.setActuatorCategory(ActCat);
                 
                 // Get commands
                 ArrayList<Command> commands = new ArrayList<Command>();
                 do {
-
                     int commandId = rs.getInt("Cid");
                     String commandName = rs.getString("Cname");
                     Command command = new Command(commandId, commandName);
@@ -112,18 +110,19 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sqlAA);
             prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
+            ResultSet rsAA = prepStat.executeQuery();
 
             ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
-            do {
-
-                int atomicActionId = rs.getInt("AAid");
-                String atomicActionName = rs.getString("AAname");
-                String atomicActionExecutable = rs.getString("AAexecutable");
-                AtomicAction aa = new AtomicAction(atomicActionId, atomicActionName, atomicActionExecutable);
-                atomicActions.add(aa);
-            } while(rs.next());
-            actuator.setAtomicActions(atomicActions);
+            if(rsAA.next()) {
+                do {
+                    int atomicActionId = rsAA.getInt("AAid");
+                    String atomicActionName = rsAA.getString("AAname");
+                    String atomicActionExecutable = rsAA.getString("AAexecutable");
+                    AtomicAction aa = new AtomicAction(atomicActionId, atomicActionName, atomicActionExecutable);
+                    atomicActions.add(aa);
+                } while(rsAA.next());
+                actuator.setAtomicActions(atomicActions);
+            }
         } catch (SQLException e) {
             throw new DAOException("DAOException : ActuatorDAO getById(" + id + ") :" + e.getMessage(), e);
         }
@@ -137,31 +136,60 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     }
 
     @Override
+    /**
+     * Delete an Actuator, his Atomic Actions and his Commands
+     */
     public int delete(int id) throws DAOException {
-        // TODO Auto-generated method stub
-        return 0;
+        String sqlActuator = "DELETE FROM Users "
+                + "WHERE id = ?";
+
+        String sqlAtomic = "DELETE FROM AtomicActions "
+                + "WHERE fk_actuator_id = ?";
+        
+        String sqlCommands = "DELETE FROM Commands "
+                + "WHERE fk_actuator_id = ?";
+
+        int deletedActuator = 0;
+        int deletedAtomic = 0;
+        int deletedCommands = 0;
+        try {
+            PreparedStatement prepStatActuator = this.connect.prepareStatement(sqlActuator);
+            PreparedStatement prepStatAtomic = this.connect.prepareStatement(sqlAtomic);
+            PreparedStatement prepStatCommands = this.connect.prepareStatement(sqlCommands);
+
+            prepStatActuator.setInt(1, id);
+            prepStatAtomic.setInt(1, id);
+            prepStatCommands.setInt(1, id);
+
+            deletedActuator = prepStatActuator.executeUpdate();
+            deletedAtomic = prepStatAtomic.executeUpdate();
+            deletedCommands = prepStatCommands.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : ActuatorDAO delete(" + id + ") :" + e.getMessage(), e);
+        }
+        return deletedActuator + deletedAtomic + deletedCommands;
     }
 
     @Override
-    public ArrayList<Actuator> getAll() throws DAOException {
-        ArrayList<Actuator> actuators = new ArrayList<Actuator>();
-        // TODO
-        String sql = "SELECT * FROM Actuators";
-
+    public ArrayList<Actuator> getAll() throws DAOException {  
+        
+        // Get all the id
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        String sqlAllId = "SELECT id FROM Actuators";
         try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            PreparedStatement prepStat = this.connect.prepareStatement(sqlAllId);
             ResultSet rs = prepStat.executeQuery();
-            Actuator actuator = null;
-            while (rs.next()) {
-                actuator = new Actuator();
-                actuator.setId(rs.getInt("id"));
-                actuator.setName(rs.getString("name"));
-                actuator.setDescription(rs.getString("description"));
-                actuators.add(actuator);
-                // TODO list of commands
+            while(rs.next()) {
+                ids.add(rs.getInt("id"));
             }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);
+        } catch(SQLException e) {
+            throw new DAOException("DAOException : ActuatorDAO getAll() :" + e.getMessage(), e);
+        }
+        
+        // Get all Actuators using getBydId()
+        ArrayList<Actuator> actuators = new ArrayList<Actuator>();
+        for (int id : ids) {
+           actuators.add(this.getById(id));
         }
         return actuators;
     }
@@ -175,8 +203,10 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ============== // 
     public static void main (String args[]) {
         ActuatorDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
-
-        System.out.println(test.getById(1));
+        ArrayList<Actuator> list = test.getAll();
+        for (Actuator actuator : list) {
+            System.out.println(actuator+"\n===============");
+        }
     }
 
 }

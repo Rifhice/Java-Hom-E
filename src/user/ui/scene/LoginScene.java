@@ -153,7 +153,7 @@ public class LoginScene extends MyScene{
 				String result = json.getString("result");
 				if(result.equals("success")) {
 					ClientFX.token = json.getString("token");
-					ClientFX.setScene(new ContentScene(new Group(),width,height,ClientFX.BACKGROUND_COLOR));
+					ClientFX.setScene(new ContentScene(new Group(),width,height));
 				}else if(result.equals("wrong_pseudo")){
 					pseudoTextField.setText("");
 					pseudoTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");

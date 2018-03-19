@@ -43,8 +43,8 @@ public class ContentScene extends MyScene implements MenuDelegate {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-	public ContentScene(Group root, double width, double height, Paint fill) {
-		super(root, width, height, fill);
+	public ContentScene(Group root, double width, double height) {
+		super(root, width, height, ClientFX.BACKGROUND_COLOR);
 		scenePane = new BorderPane();
 		scenePane.setMinSize(ClientFX.width, ClientFX.height);
 		

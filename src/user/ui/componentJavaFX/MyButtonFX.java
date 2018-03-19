@@ -47,14 +47,16 @@ public class MyButtonFX extends Button{
 	
 	public MyButtonFX(Image image, Rectangle2D.Float bounds, EventHandler<ActionEvent> event) {
 		// TODO Auto-generated constructor stub
+		double ratio = bounds.getWidth()/image.getWidth();
+		System.out.println(ratio);
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
+		imageView.setFitWidth(image.getWidth()*ratio);
+		imageView.setFitHeight(image.getHeight()*ratio);
 		setGraphic(imageView);
 		setOnAction(event);
 		setLayoutX((int)(bounds.getX()));
 		setLayoutY((int)(bounds.getY()));
-		setPrefWidth(bounds.getWidth());
-		setPrefHeight(bounds.getHeight());
 	}
 
 	public MyButtonFX centerX(double width) {

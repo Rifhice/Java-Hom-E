@@ -1,16 +1,19 @@
 package user;
 
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Float;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.*;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.stage.*;
+import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import user.communication.UserClient;
 import user.tools.GraphicalCharter;
+import user.ui.scene.ContentScene;
 import user.ui.scene.LoginScene;
 import user.ui.scene.MyScene;
 
@@ -46,14 +49,16 @@ public class ClientFX extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		ClientFX.primaryStage = primaryStage;
-		
+		primaryStage.getIcons().add(new Image("file:asset/images/logo.png"));
 		width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
 		height = (int)(ClientFX.screenSize.getHeight()* heightRatio);
+		
 		LoginScene firstScene = new LoginScene(new Group(),this.width,this.height);
+		ContentScene contentScene = new ContentScene(new Group(),this.width,this.height);
 		
 		try {
-			client = new UserClient(DEFAULT_HOST,DEFAULT_PORT,firstScene);	
-			setScene(firstScene);
+			client = new UserClient(DEFAULT_HOST,DEFAULT_PORT,contentScene);	
+			setScene(contentScene);
 		} catch (Exception e) {
 			System.out.println("Connexion impossible");
 		}

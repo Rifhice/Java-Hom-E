@@ -44,7 +44,8 @@ public class MyButtonFX extends Button{
 		return this;
 	}
 	
-	public void setFontMultiplier(float fontMultiplier) {
+	public MyButtonFX setFontMultiplier(float fontMultiplier) {
 		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));
+		return this;
 	}
 }

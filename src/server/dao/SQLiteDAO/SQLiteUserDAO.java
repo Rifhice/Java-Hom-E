@@ -123,18 +123,31 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    // TODO : delete owns (rights)
+    /**
+     * Delete in Users and Owns (rights)
+     */
     public int delete(int id) throws DAOException {
-        String sql = "DELETE FROM Users WHERE id = ?";
-        int deleted = 0;
+        String sqlUser = "DELETE FROM Users "
+                + "WHERE id = ?";
+        
+        String sqlOwns = "DELETE FROM Owns "
+                + "WHERE fk_user_id = ?";
+        
+        int deletedUser = 0;
+        int deletedOwns = 0;
         try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            deleted = prepStat.executeUpdate();
+            PreparedStatement prepStatUser = this.connect.prepareStatement(sqlUser);
+            PreparedStatement prepStatOwns = this.connect.prepareStatement(sqlOwns);
+
+            prepStatUser.setInt(1, id);
+            prepStatOwns.setInt(1, id);
+            
+            deletedUser = prepStatUser.executeUpdate();
+            deletedOwns = prepStatOwns.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO delete(" + id + ") :" + e.getMessage(), e);
         }
-        return deleted;
+        return deletedUser + deletedOwns;
     }
 
     @Override
@@ -254,6 +267,8 @@ public class SQLiteUserDAO extends UserDAO {
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
         System.out.println(test.getAll().get(0));
+        System.out.println(test.delete(1));
+
     }
 
 

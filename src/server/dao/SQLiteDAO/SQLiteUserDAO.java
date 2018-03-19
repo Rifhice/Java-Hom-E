@@ -138,7 +138,6 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    // TODO : get Rights for each user
     public ArrayList<User> getAll() throws DAOException {
         ArrayList<User> users = new ArrayList<User>();
         String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, "

@@ -93,7 +93,8 @@ public class Expression implements Evaluable {
     }
 
     public String toString() {
-        String res = "(";
+        String res = "EXP #"+id;
+        res += "(";
         int operatorCpt = 0;
         for (int i = 0; i < evaluables.size(); i++) {
             res += "[" + evaluables.get(i).toString() + "]";

@@ -112,7 +112,10 @@ public class Behaviour implements Observer {
     }
 	
 	public String toString() {
-		return expression.toString() + " => " ;//+ command.toString();
+		String res = "BEHAVIOUR #"+id+" "+expression;
+		if(isActivated) { res += " Activated"; }
+		else { res+= " Deactivated"; }
+		return res;
 	}
 	
 	// TODO : to move in a Manager

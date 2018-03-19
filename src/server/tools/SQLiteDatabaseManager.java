@@ -556,9 +556,9 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertSensors() {
-        String insertSensor1 = "INSERT INTO sensors ('id', 'name', 'description') VALUES (1, 'Presensor3000','Sense the presence of something (10m range)');";
-        String insertSensor2 = "INSERT INTO sensors ('id', 'name', 'description') VALUES (2, 'LightCaptor','Measure the light intensity');";
-        String insertSensor3 = "INSERT INTO sensors ('id', 'name', 'description') VALUES (3, 'Thermometer','What is the temperature ?');";
+        String insertSensor1 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (1, 'Presensor3000','Sense the presence of something (10m range)',1);";
+        String insertSensor2 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (2, 'LightCaptor5000','Measure the light intensity', 2);";
+        String insertSensor3 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (3, 'Thermometer450','What is the temperature ?', 3);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensor1);
             stmt.execute(insertSensor2);
@@ -569,17 +569,15 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertSensorCategories() {
-        String insertSensorCat1 = "INSERT INTO sensorCategories ('name', 'description') VALUES ('Movement detector','Detect movement.');";
+        String insertSensorCat1 = "INSERT INTO sensorCategories ('id', 'name', 'description') VALUES (1, 'Movement detector','Detect movement.');";
+        String insertSensorCat2 = "INSERT INTO sensorCategories ('id', 'name', 'description') VALUES (2, 'Luminosity sensor','Measure the light intensity.');";
+        String insertSensorCat3 = "INSERT INTO sensorCategories ('id', 'name', 'description') VALUES (3, 'Thermometer','Measure the temperature.');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensorCat1);
+            stmt.execute(insertSensorCat2);
+            stmt.execute(insertSensorCat3);
         } catch (SQLException e) {
-            System.out.println("ERROR inserting Sensors : " + e.getMessage());
-        }
-        insertSensorCat1 = "INSERT INTO sensorCategories ('name', 'description') VALUES ('Light detector','Detect degree of light.');";
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(insertSensorCat1);
-        } catch (SQLException e) {
-            System.out.println("ERROR inserting Sensors : " + e.getMessage());
+            System.out.println("ERROR inserting SensorCategories : " + e.getMessage());
         }
     }
 

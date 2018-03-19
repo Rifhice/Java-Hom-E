@@ -75,7 +75,7 @@ public class UserManager extends Manager{
     	}
     	
     	// TODO : Use a RoleDAO() to get the id of the role "guest"
-    	// User user = new User(pseudo,User.USERTYPE.GUEST);
+    	// fUser user = new User(pseudo,User.USERTYPE.GUEST);
     	User user = new User(pseudo);
     	users.add(user);
     	return user;

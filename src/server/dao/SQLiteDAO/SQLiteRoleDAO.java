@@ -8,7 +8,10 @@ import java.util.ArrayList;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.RoleDAO;
+import server.dao.abstractDAO.UserDAO;
+import server.factories.AbstractDAOFactory;
 import server.models.Role;
+import server.models.User;
 
 public class SQLiteRoleDAO extends RoleDAO {
 	
@@ -48,8 +51,25 @@ public class SQLiteRoleDAO extends RoleDAO {
 
     @Override
     public ArrayList<Role> getAll() throws DAOException {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList<Role> roles = new ArrayList<Role>();
+        String sql = "SELECT R.id AS id, R.name AS name "
+                + "FROM Roles AS R "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            ResultSet rs = prepStat.executeQuery();
+
+            while (rs.next()) {
+                Role role = new Role();
+                role.setId(rs.getInt("id"));
+                role.setName(rs.getString("name"));
+                roles.add(role);
+            }
+                
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : RoleDAO getAll() :" + e.getMessage(), e);
+        }
+        return roles;
     }
     
     // ======================== //
@@ -60,6 +80,7 @@ public class SQLiteRoleDAO extends RoleDAO {
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
-       
+        RoleDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getRoleDAO();
+
     }
 }

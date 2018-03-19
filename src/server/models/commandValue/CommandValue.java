@@ -1,4 +1,4 @@
-package server.models.environmentValue;
+package server.models.commandValue;
 
 
 /**
@@ -6,7 +6,7 @@ package server.models.environmentValue;
  * It allows the server to send the right action to the actuators.
  * @author Jade
  */
-public abstract class EnvironmentValue {
+public abstract class CommandValue {
 	    
 	// ==================== //
 	// ==== ATTRIBUTES ==== //
@@ -17,13 +17,13 @@ public abstract class EnvironmentValue {
 	// ====================== //
 	// ==== CONSTRUCTORS ==== //
 	// ====================== //
-	public EnvironmentValue() {}
+	public CommandValue() {}
 	    
-	public EnvironmentValue(String name) {
+	public CommandValue(String name) {
 		this.name = name;
 	}
 	
-	public EnvironmentValue(int id, String name) {
+	public CommandValue(int id, String name) {
 	    this.id = id;
         this.name = name;
     }

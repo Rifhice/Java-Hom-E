@@ -1,6 +1,6 @@
 package server.models.evaluable;
 
-import server.models.environmentValue.EnvironmentValue;
+import server.models.commandValue.CommandValue;
 import server.models.environmentVariable.EnvironmentVariable;
 
 /**
@@ -17,7 +17,7 @@ public class Block implements Evaluable {
     private String operator;
     
     // Attributes from other table
-    private EnvironmentValue environmentValue; 
+    private CommandValue environmentValue; 
     private EnvironmentVariable environmentVariable;
 
     // ====================== //
@@ -25,13 +25,13 @@ public class Block implements Evaluable {
     // ====================== //
     public Block() {}
 
-    public Block(EnvironmentVariable environmentVariable, EnvironmentValue environmentValue, String operator) {
+    public Block(EnvironmentVariable environmentVariable, CommandValue environmentValue, String operator) {
         this.environmentVariable = environmentVariable;
         this.environmentValue = environmentValue;
         this.operator = operator;
     }
 
-    public Block(int id, EnvironmentVariable environmentVariable, EnvironmentValue environmentValue, String operator) {
+    public Block(int id, EnvironmentVariable environmentVariable, CommandValue environmentValue, String operator) {
         this.id = id;
         this.environmentValue = environmentValue;
         this.environmentVariable = environmentVariable;
@@ -61,7 +61,7 @@ public class Block implements Evaluable {
         return environmentValue;
     }
 
-    public void setEnvironmentValue(EnvironmentValue environmentValue) {
+    public void setEnvironmentValue(CommandValue environmentValue) {
         this.environmentValue = environmentValue;
     }
 

@@ -1,11 +1,11 @@
-package server.models.environmentValue;
+package server.models.commandValue;
 
 /**
  * A continous value is a float which is an information the actuator needs 
  * to perform an action or modify its state
  * @author Jade Hennebert
  */
-public class ContinuousValue extends EnvironmentValue{
+public class ContinuousCommandValue extends CommandValue {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
@@ -16,13 +16,13 @@ public class ContinuousValue extends EnvironmentValue{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public ContinuousValue(String name, double valueMin,double valueMax, double precision) {
+    public ContinuousCommandValue(String name, double valueMin,double valueMax, double precision) {
         super(name);
         this.valueMax = valueMax;
         this.valueMin = valueMin;
     }
     
-    public ContinuousValue(int id, String name, double valueMin,double valueMax, double precision) {
+    public ContinuousCommandValue(int id, String name, double valueMin,double valueMax, double precision) {
         super(id, name);
         this.valueMax = valueMax;
         this.valueMin = valueMin;

@@ -27,20 +27,17 @@ public class SQLiteUserDAO extends UserDAO {
         User user = obj;
         
         String sql = "INSERT INTO Users "
-                + "(id, pseudo, password, fk_role_id) VALUES "
-                + "(?, ?, ?, ?)";
+                + "(pseudo, password, fk_role_id) VALUES "
+                + "(?, ?, ?)";
         
         // Insert the object
         int created = 0;
           try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
-              if(obj.getId() != 0) {
-                  prepStat.setInt(1, obj.getId());
-              }
-              prepStat.setString(2, obj.getPseudo());
-              prepStat.setString(3, obj.getPassword());
+              prepStat.setString(1, obj.getPseudo());
+              prepStat.setString(2, obj.getPassword());
               if(obj.getRole() != null) {
-                  prepStat.setInt(4, obj.getRole().getId());
+                  prepStat.setInt(3, obj.getRole().getId());
               }
               created = prepStat.executeUpdate();
               

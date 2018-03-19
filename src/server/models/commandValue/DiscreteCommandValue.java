@@ -1,4 +1,4 @@
-package server.models.environmentValue;
+package server.models.commandValue;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * among possible values.
  * @author Clm-Roig
  */
-public class DiscreteValue extends EnvironmentValue {
+public class DiscreteCommandValue extends CommandValue {
 
     // ==================== //
     // ==== ATTRIBUTES ==== //
@@ -18,14 +18,14 @@ public class DiscreteValue extends EnvironmentValue {
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     
-    public DiscreteValue() {}
+    public DiscreteCommandValue() {}
     
-    public DiscreteValue(String name, ArrayList<String> values) {
+    public DiscreteCommandValue(String name, ArrayList<String> values) {
         super(name);
         this.possibleValues = values;   
     }
     
-    public DiscreteValue(int id, String name, ArrayList<String> values) {
+    public DiscreteCommandValue(int id, String name, ArrayList<String> values) {
         super(id, name);
         this.possibleValues = values;   
     }

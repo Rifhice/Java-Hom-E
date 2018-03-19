@@ -453,16 +453,12 @@ public class SQLiteDatabaseManager {
     
     private static void insertEnvironmentValues() {
         String insertEnvironmentValue1 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
-        String insertEnvironmentValue2 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (2,'temperature',4);";
-        String insertEnvironmentValue3 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (3,'light',1);";
-        String insertEnvironmentValue4 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (4,'light',2);";
-        String insertEnvironmentValue5 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (5,'tea temperature',7);";
+        String insertEnvironmentValue2 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (2,'light',1);";
+        String insertEnvironmentValue3 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (3,'light',2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertEnvironmentValue1);
             stmt.execute(insertEnvironmentValue2);
             stmt.execute(insertEnvironmentValue3);
-            stmt.execute(insertEnvironmentValue4);
-            stmt.execute(insertEnvironmentValue5);
         } catch (SQLException e) {
             System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
         }
@@ -470,16 +466,12 @@ public class SQLiteDatabaseManager {
     
     private static void insertEnvironmentVariables() {
         String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (1,'temperature','Variable temperature', '°C');";
-        String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (2,'temperature','Variable temperature', '°C');";
+        String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (2,'presence','Is anybody in there ?', '');";
         String insertEnvironmentVariable3 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (3,'light','Measure the light intensity', 'L');";
-        String insertEnvironmentVariable4 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (4,'light','Measure the light intensity', 'L');";
-        String insertEnvironmentVariable5 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (5,'hour','The time','ms');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertEnvironmentVariable1);
             stmt.execute(insertEnvironmentVariable2);
             stmt.execute(insertEnvironmentVariable3);
-            stmt.execute(insertEnvironmentVariable4);
-            stmt.execute(insertEnvironmentVariable5);
         } catch (SQLException e) {
             System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
         }
@@ -564,9 +556,13 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertSensors() {
-        String insertSensor1 = "INSERT INTO sensors ('name', 'description') VALUES ('Presensor3000','Sense the presence of something (10m range)');";
+        String insertSensor1 = "INSERT INTO sensors ('id', 'name', 'description') VALUES (1, 'Presensor3000','Sense the presence of something (10m range)');";
+        String insertSensor2 = "INSERT INTO sensors ('id', 'name', 'description') VALUES (2, 'LightCaptor','Measure the light intensity');";
+        String insertSensor3 = "INSERT INTO sensors ('id', 'name', 'description') VALUES (3, 'Thermometer','What is the temperature ?');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensor1);
+            stmt.execute(insertSensor2);
+            stmt.execute(insertSensor3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Sensors : " + e.getMessage());
         }

@@ -98,12 +98,15 @@ public class Actuator extends ExternalActor{
     }
     
     public String toString() {
-    	String res = "ACTUATOR #" + id + " "+ name + "\n" + description + "\nCOMMANDS\n";
+    	String res = "ACTUATOR #" + id + " "+ name;
+    	if(actuatorCategory != null) {
+    	    res += "\nCat: "+ actuatorCategory.getName();
+    	}       
+    	res += "\n" + description + "\nCOMMANDS\n";
     	if(commands != null) {
         	for (Command command : commands) {
                 res += command + "\n";
             }
-    		
     	}
     	return res;
     }

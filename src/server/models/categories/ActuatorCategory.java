@@ -44,7 +44,8 @@ public class ActuatorCategory extends Category{
     // ==========================================
     
     public String toString() {
-        return "Actuator category : " + id + "\nName : " + name + "\nDescription : " + description;
+        String res = "ACTUATOR CAT. #" + id + " " + name + "\n" + description;
+        return res;
     }
 
     

@@ -68,14 +68,28 @@ public class Ambience {
     }
 
     public void activateAmbience() {
-        for (int i = 0; i < behaviours.size(); i++) {
-            behaviours.get(i).setActivated(true);
+        if(behaviours != null) {
+            for (Behaviour behaviour : behaviours) {
+                behaviour.setActivated(true);
+            }
         }
     }
 
     public void deactivateAmbience() {
-        for (int i = 0; i < behaviours.size(); i++) {
-            behaviours.get(i).setActivated(false);
+        if(behaviours != null) {
+            for (Behaviour behaviour : behaviours) {
+                behaviour.setActivated(false);
+            }
         }
+    }
+    
+    public String toString() {
+        String res = "AMBIENCE #"+id+" "+name;
+        if(behaviours != null) {
+            for (Behaviour behaviour : behaviours) {
+                res += "\n" + behaviour;
+            }
+        }
+        return res;
     }
 }

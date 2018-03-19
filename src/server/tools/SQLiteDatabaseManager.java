@@ -167,7 +167,7 @@ public class SQLiteDatabaseManager {
                 + " current_value text, \n"
                 + " possible_values text, \n" 
                 + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id) \n"
-                + ");";
+                + ");";       
         
         String createTableDiscreteCommandValues ="CREATE TABLE IF NOT EXISTS discreteCommandValues (\n"
                 + " fk_environmentValue_id integer PRIMARY KEY, \n"
@@ -461,13 +461,6 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting DiscreteCommandValues : " + e.getMessage());
         }
     }
-    
-    String createTableDiscreteEnvironmentVariables ="CREATE TABLE IF NOT EXISTS discreteEnvironmentVariables (\n"
-            + " fk_environmentVariable_id integer PRIMARY KEY, \n"
-            + " current_value text, \n"
-            + " possible_values text, \n" 
-            + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id) \n"
-            + ");";
     
     
     private static void insertDiscreteEnvironmentVariables() {

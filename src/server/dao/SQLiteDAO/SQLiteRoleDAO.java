@@ -75,12 +75,36 @@ public class SQLiteRoleDAO extends RoleDAO {
     // ======================== //
     // ==== Custom methods ==== //
     // ======================== //
+    @Override
+    public Role getByName(String name) throws DAOException {
+        Role role = null;
+        String sql = "SELECT R.id AS id, R.name AS name "
+                + "FROM Roles AS R "
+                + "WHERE name = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setString(1, name);
+            ResultSet rs = prepStat.executeQuery();
+
+            if (rs.next()) {
+                role = new Role();
+                role.setId(rs.getInt("id"));
+                role.setName(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : RoleDAO getByName(" + name + ") :" + e.getMessage(), e);
+        }
+        return role;
+    }
     
     // ============== //
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
         RoleDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getRoleDAO();
-
+        System.out.println(test.getByName("owner").getName());
     }
+
+    
 }

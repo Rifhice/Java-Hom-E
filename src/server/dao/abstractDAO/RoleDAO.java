@@ -16,4 +16,12 @@ public abstract class RoleDAO extends DAO<Role>{
     // ======================== //
     // ==== CUSTOM METHODS ==== //
     // ======================== //
+    /**
+     * Return a Role according to the name given.
+     * @param name
+     * @return Role, the role matching the name given or null if none
+     * @throws DAOException
+     */
+    public abstract Role getByName(String name) throws DAOException;
+
 }

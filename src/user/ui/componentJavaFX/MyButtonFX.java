@@ -1,6 +1,12 @@
 package user.ui.componentJavaFX;
 
+
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import java.awt.geom.Rectangle2D;
+
+
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -36,6 +42,18 @@ public class MyButtonFX extends Button{
 		setPrefHeight(height);
 	}
 	
+	public MyButtonFX(Image image, Rectangle2D.Float bounds, EventHandler<ActionEvent> event) {
+		// TODO Auto-generated constructor stub
+		ImageView imageView = new ImageView();
+		imageView.setImage(image);
+		setGraphic(imageView);
+		setOnAction(event);
+		setLayoutX((int)(bounds.getX()));
+		setLayoutY((int)(bounds.getY()));
+		setPrefWidth(bounds.getWidth());
+		setPrefHeight(bounds.getHeight());
+	}
+
 	public MyButtonFX centerX(double width) {
 		setLayoutX(width * 0.5f - getPrefWidth() / 2);
 		return this;

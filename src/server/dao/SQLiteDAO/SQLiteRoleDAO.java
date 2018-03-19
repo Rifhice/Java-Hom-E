@@ -61,9 +61,9 @@ public class SQLiteRoleDAO extends RoleDAO {
     	Role role = null;   	
     	String sql = "SELECT  R.id AS id, R.name AS name,"
     			+ "Ri.description AS Ridescription, Ri.id AS Riid, "
-    			+ "Ri.denomination AS Ridenomination, \"\r\n"  
-                + "FROM roles AS R"
-                + "JOIN ownsByDefault AS O ON O.fk_role_id = R.id "
+    			+ "Ri.denomination AS Ridenomination \"\r\n"  
+                + "FROM Roles AS R ,"
+                + "JOIN OwnsByDefault AS O ON O.fk_role_id = R.id "
                 + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
                 + "WHERE R.id = ?;";
 
@@ -98,9 +98,53 @@ public class SQLiteRoleDAO extends RoleDAO {
     }
 
     @Override
-    public int update(Role obj) throws DAOException {
-        // TODO Auto-generated method stub
-        return 0;
+    public boolean update(Role obj) throws DAOException {
+    	//TODO � modifier
+    	// Update Role
+        String sql = "UPDATE roles "
+                + "SET name = ?, rights = ? "
+                + "WHERE id = ?";
+        int userUpdated = 0;
+        /*try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setString(1, obj.getName());
+            prepStat.setInt(2, obj.getName());
+            prepStat.setInt(3, obj.getId());
+            userUpdated = prepStat.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+        }
+
+        // Delete his rights
+        String sqlDeleteRights = "DELETE FROM Owns "
+                + "WHERE fk_user_id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sqlDeleteRights);
+            prepStat.setInt(1, obj.getId());
+            prepStat.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+        }        
+
+        // Update his rights
+        String sqlInsertRights = "INSERT INTO Owns "
+                + "(fk_user_id, fk_user_id) VALUES "
+                + "(?, ?);";
+
+        if(obj.getRights() != null) {
+            for (Right right : obj.getRights()) {
+                try {
+                    PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertRights);
+                    prepStat.setInt(1, obj.getId());
+                    prepStat.setInt(2, right.getId());
+                    prepStat.executeUpdate();
+                } catch (SQLException e) {
+                    throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+                }
+            } 
+        }*/
+
+        return userUpdated > 0;
     }
 
     @Override
@@ -163,7 +207,7 @@ public class SQLiteRoleDAO extends RoleDAO {
     // ============== // 
     public static void main (String args[]) {
         RoleDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getRoleDAO();
-        System.out.println(test.getByName("owner").getName());
+        System.out.println(test.getById(1));
     }
 
     

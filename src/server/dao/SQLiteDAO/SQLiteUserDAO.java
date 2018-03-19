@@ -23,7 +23,9 @@ public class SQLiteUserDAO extends UserDAO {
     // ==== METHODS ==== //
     // ================= //
     @Override
-    // TODO : Insert rights -> if no rights provided, rights = ownsByDefault from his role. 
+    /**
+     * If no rights provided, rights = ownsByDefault from his role. 
+     */
     public User create(User obj) throws DAOException {
         User user = obj;
 

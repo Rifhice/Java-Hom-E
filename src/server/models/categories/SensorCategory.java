@@ -7,6 +7,8 @@ public class SensorCategory extends Category{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
+    
+    // Attributes from other tables
     ArrayList<Sensor> sensors;
 
     // ====================== //
@@ -37,6 +39,8 @@ public class SensorCategory extends Category{
     public void setSensors(ArrayList<Sensor> sensors) {
         this.sensors = sensors;
     }
+    
+    // ==========================================   
     
     public String toString() {
         return "Sensor category : " + id + "\nName : " + name + "\nDescription : " + description;

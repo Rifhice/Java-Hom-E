@@ -11,6 +11,7 @@ import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Command;
+import server.models.categories.ActuatorCategory;
 
 public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ====================== //
@@ -37,7 +38,9 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setString(1, obj.getName());
             prepStat.setString(2, obj.getDescription());
-            prepStat.setInt(3, obj.getActuatorCategoryId());
+            if(obj.getActuatorCategory() != null) {
+                prepStat.setInt(3, obj.getActuatorCategory().getId());
+            }
             created = prepStat.executeUpdate();
 
             // Get the id generated for this object
@@ -65,8 +68,8 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 + "AC.id AS ACid, AC.name AS ACname, AC.description AS ACdescription, "
                 + "C.id AS Cid, C.name AS Cname "
                 + "FROM Actuators AS A "
-                + "JOIN actuatorCategories AS AC ON AC.id = A.fk_actuatorCategory_id "
-                + "JOIN commands AS C ON C.id = A.id"
+                + "JOIN ActuatorCategories AS AC ON AC.id = A.fk_actuatorCategory_id "
+                + "JOIN commands AS C ON C.id = A.id "
                 + "WHERE A.id = ?";
 
         try {
@@ -79,9 +82,9 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 actuator.setId(rs.getInt("id"));
                 actuator.setName(rs.getString("name"));
                 actuator.setDescription(rs.getString("description"));
-                actuator.setActuatorCategoryId(rs.getInt("ACid"));
-                actuator.setActuatorCategoryName(rs.getString("ACname"));
-                actuator.setActuatorCategoryDescription(rs.getString("ACdescription"));
+                
+                ActuatorCategory ActCat = new ActuatorCategory(rs.getInt("ACid"), rs.getString("ACname"), rs.getString("ACdescription"));
+                actuator.setActuatorCategory(ActCat);
                 
                 ArrayList<Command> commands = new ArrayList<Command>();
                 do {
@@ -143,11 +146,11 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ============== // 
     public static void main (String args[]) {
         ActuatorDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
-        System.out.println(test.create(new Actuator("test","qsd")));
         ArrayList<Actuator> act = test.getAll();
         for (Actuator actuator : act) {
-            System.out.println(actuator.getId());            
+            System.out.println(actuator);            
         }
+        System.out.println(test.getById(1));
     }
 
 }

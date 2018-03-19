@@ -84,10 +84,13 @@ public class Command {
     }
     
     public String toString() {
-    	String res = "Name" + name + "\nDescription : " + description + "\nKey : " + key + "\n\nARGUMENTS\n";
-    	for (int i = 0; i < arguments.size(); i++) {
-			res += arguments.get(i).toString() + "\n";
-		}
+    	String res = "#"+id +" "+ name + "\n" + description + "\nKey : " + key + "\nARGUMENTS\n";
+    	if(arguments != null) {
+    	    for (Argument argument : arguments) {
+                res += argument + "\n";
+            }
+    	}
+    	
     	return res;
     }
     

@@ -100,9 +100,10 @@ public class Actuator extends ExternalActor{
     public String toString() {
     	String res = "ACTUATOR #" + id + " "+ name + "\n" + description + "\nCOMMANDS\n";
     	if(commands != null) {
-        	for (int i = 0; i < commands.size(); i++) {
-    			res += commands.get(i).toString() + "\n";
-    		}
+        	for (Command command : commands) {
+                res += command + "\n";
+            }
+    		
     	}
     	return res;
     }

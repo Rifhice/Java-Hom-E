@@ -10,6 +10,7 @@ import server.dao.abstractDAO.ActuatorDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
+import server.models.Command;
 
 public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ====================== //
@@ -57,14 +58,15 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         return actuator;
     }
 
-    // TODO : return ArrayList<Command>
     @Override
     public Actuator getById(int id) throws DAOException {
         Actuator actuator = null;
-        // TODO
-        String sql = "SELECT A.id AS id, A.name AS name, A.description AS description, AC.id AS ACid, AC.name AS ACname, AC.description AS ACdescription "
+        String sql = "SELECT A.id AS id, A.name AS name, A.description AS description, "
+                + "AC.id AS ACid, AC.name AS ACname, AC.description AS ACdescription, "
+                + "C.id AS Cid, C.name AS Cname "
                 + "FROM Actuators AS A "
-                + "JOIN actuatorCategories AS AC ON AC.id = A.actuator_category_id "
+                + "JOIN actuatorCategories AS AC ON AC.id = A.fk_actuatorCategory_id "
+                + "JOIN commands AS C ON C.id = A.id"
                 + "WHERE A.id = ?";
 
         try {
@@ -80,8 +82,15 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 actuator.setActuatorCategoryId(rs.getInt("ACid"));
                 actuator.setActuatorCategoryName(rs.getString("ACname"));
                 actuator.setActuatorCategoryDescription(rs.getString("ACdescription"));
-                // TODO list of commands
-
+                
+                ArrayList<Command> commands = new ArrayList<Command>();
+                do {
+                    int commandId = rs.getInt("Cid");
+                    String commandName = rs.getString("Cname");
+                    Command command = new Command(commandId, commandName);
+                    commands.add(command);
+                } while(rs.next());
+                actuator.setCommands(commands);
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : ActuatorDAO getById(" + id + ") :" + e.getMessage(), e);

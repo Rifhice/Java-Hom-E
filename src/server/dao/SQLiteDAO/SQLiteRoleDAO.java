@@ -98,8 +98,8 @@ public class SQLiteRoleDAO extends RoleDAO {
     }
 
     @Override
-    public boolean update(Role obj) throws DAOException {
-    	//TODO ï¿½ modifier
+    public int update(Role obj) throws DAOException {
+    	//TODO à modifier
     	// Update Role
         String sql = "UPDATE roles "
                 + "SET name = ?, rights = ? "
@@ -142,9 +142,10 @@ public class SQLiteRoleDAO extends RoleDAO {
                     throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
                 }
             } 
-        }*/
+        }
+*/
+        return userUpdated;
 
-        return userUpdated > 0;
     }
 
     @Override

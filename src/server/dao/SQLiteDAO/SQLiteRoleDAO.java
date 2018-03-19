@@ -15,6 +15,8 @@ import server.models.User;
 
 public class SQLiteRoleDAO extends RoleDAO {
 	
+	private static final Role NULL = null;
+
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
@@ -27,13 +29,51 @@ public class SQLiteRoleDAO extends RoleDAO {
     // ================= //
     @Override
     public Role create(Role obj) throws DAOException {
-        // TODO Auto-generated method stub
-        return null;
+        Role role = obj;
+        String sql = "INSERT INTO roles "
+                + "(name) VALUES "
+                + "(?)";
+
+        // Insert the object
+        int created = 0;
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setString(1, obj.getName());
+            created = prepStat.executeUpdate();
+
+            // Get the id generated for this object
+            if(created > 0) {
+                String sqlGetLastId = "SELECT last_insert_rowid()";
+                PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
+                int id = prepStatLastId.executeQuery().getInt(1);
+                role.setId(id);
+            }
+            else {
+                role = null;
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : RoleDAO create(" + obj.getName() + ") :" + e.getMessage(), e); 
+        }
+        return role;
     }
 
     @Override
     public Role getById(int id) throws DAOException {
-        // TODO Auto-generated method stub
+    	
+    	Role role = null;   	
+    	String sql = "SELECT r.name AS Rname "
+                + "FROM roles AS r"
+                + "(?)";
+        
+    	try {
+    		PreparedStatement prepStat = this.connect.prepareStatement(sql);
+    		
+    	}
+    	catch(SQLException e) {
+    		throw new DAOException("DAOException : RoleDAO getbyId(" + id + ") : " + e.getMessage(),e);
+    		
+    	}
+    	
         return null;
     }
 

@@ -128,9 +128,9 @@ public class SQLiteDatabaseManager {
                 + " id integer PRIMARY KEY, \n"
                 + " operator text NOT NULL, \n"
                 + " fk_environmentVariable_id integer, \n"
-                + " fk_value_id integer, \n"
+                + " fk_environmentValue_id integer, \n"
                 + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id), \n"
-                + " FOREIGN KEY (fk_value_id) REFERENCES environmentValues(id) \n"
+                + " FOREIGN KEY (fk_environmentValue_id) REFERENCES environmentValues(id) \n"
                 + ");";
         
         String createTableCommands = "CREATE TABLE IF NOT EXISTS commands (\n" 
@@ -388,6 +388,23 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertBlocks() {
+        String insertBlock1 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (1,'<',1);";
+        String insertBlock2 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (2,'==','2');";
+        String insertBlock3 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (3,'>=','3');";
+        String insertBlock4 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (4,'>','4');";
+        String insertBlock5 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (5,'!=','5');";        
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertBlock1);
+            stmt.execute(insertBlock2);
+            stmt.execute(insertBlock3);
+            stmt.execute(insertBlock4);
+            stmt.execute(insertBlock5);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
+        }
+    }
+    
     private static void insertCommands() {
         String insertCommand1 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (1,'switch on',1);";
         String insertCommand2 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (2,'switch off',1);";
@@ -507,7 +524,6 @@ public class SQLiteDatabaseManager {
         }
     }
     
-    
     private static void insertRights() {
         String insertRightLRLights = "INSERT INTO rights ('id', 'denomination', 'description') VALUES (1, 'Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
         String insertRightKHeats = "INSERT INTO rights ('id','denomination', 'description') VALUES (2, 'Set kitchen-heater temperature.','You can change the temperature of the kitchen.');";
@@ -591,6 +607,8 @@ public class SQLiteDatabaseManager {
         insertEnvironmentValues();
         insertDiscreteValues();
         insertContinuousValues();
+        
+        insertBlocks();
         
         insertActuatorCategories();
         insertActuators();

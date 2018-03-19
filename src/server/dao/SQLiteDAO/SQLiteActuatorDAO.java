@@ -10,6 +10,7 @@ import server.dao.abstractDAO.ActuatorDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
+import server.models.AtomicAction;
 import server.models.Command;
 import server.models.categories.ActuatorCategory;
 
@@ -69,7 +70,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 + "C.id AS Cid, C.name AS Cname "
                 + "FROM Actuators AS A "
                 + "JOIN ActuatorCategories AS AC ON AC.id = A.fk_actuatorCategory_id "
-                + "JOIN commands AS C ON C.id = A.id "
+                + "JOIN Commands AS C ON C.fk_actuator_id = A.id "
                 + "WHERE A.id = ?";
 
         try {
@@ -86,8 +87,10 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 ActuatorCategory ActCat = new ActuatorCategory(rs.getInt("ACid"), rs.getString("ACname"), rs.getString("ACdescription"));
                 actuator.setActuatorCategory(ActCat);
                 
+                // Get commands
                 ArrayList<Command> commands = new ArrayList<Command>();
                 do {
+
                     int commandId = rs.getInt("Cid");
                     String commandName = rs.getString("Cname");
                     Command command = new Command(commandId, commandName);
@@ -95,6 +98,32 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 } while(rs.next());
                 actuator.setCommands(commands);
             }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : ActuatorDAO getById(" + id + ") :" + e.getMessage(), e);
+        }
+            
+        // Get Atomic Actions
+        String sqlAA = "SELECT A.id AS id, A.name AS name, A.description AS description, "
+                + "AA.id AS AAid, AA.name AS AAname, AA.executable AS AAexecutable "
+                + "FROM Actuators AS A "
+                + "JOIN AtomicActions AS AA ON AA.fk_actuator_id = A.id "
+                + "WHERE A.id = ?";
+        
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sqlAA);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+
+            ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
+            do {
+
+                int atomicActionId = rs.getInt("AAid");
+                String atomicActionName = rs.getString("AAname");
+                String atomicActionExecutable = rs.getString("AAexecutable");
+                AtomicAction aa = new AtomicAction(atomicActionId, atomicActionName, atomicActionExecutable);
+                atomicActions.add(aa);
+            } while(rs.next());
+            actuator.setAtomicActions(atomicActions);
         } catch (SQLException e) {
             throw new DAOException("DAOException : ActuatorDAO getById(" + id + ") :" + e.getMessage(), e);
         }
@@ -146,10 +175,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     // ============== // 
     public static void main (String args[]) {
         ActuatorDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
-        ArrayList<Actuator> act = test.getAll();
-        for (Actuator actuator : act) {
-            System.out.println(actuator);            
-        }
+
         System.out.println(test.getById(1));
     }
 

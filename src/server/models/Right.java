@@ -75,8 +75,13 @@ public class Right {
     // ==================================
 
     public String toString() {
-        String right = "ID: "+ id +"\nDenomination: "+ denomination + "\nDescription: "+ description;          
+        String right = "Right #"+ id +" "+ denomination + "\n"+ description;          
         return right;
+    }
+    
+    public static void main(String[] args) {
+        Right r = new Right(1,"test","blabla");
+        System.out.println(r);
     }
 
 }

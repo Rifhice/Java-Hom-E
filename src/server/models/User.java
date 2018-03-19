@@ -107,17 +107,22 @@ public class User {
     // ==================================
     
     public String toString() {
-        String user = "USER n°"+ id +"\n";
-        user += pseudo;
-        user += "\n" + password;
-        user += "\nRole n°" + role.getId() + ": "+role.getName();
+        String user = "USER #"+ id;
+        user += "\nPseudo: " + pseudo;
+        user += "  Password: " + password;
+        user += "\nRole #" + role.getId() + ": "+role.getName();
         user += "\nRights:";
         if(rights != null) {
             for (Right right : rights) {
-                user += "\n# "+right.getId() +" " + right.getDenomination() + " - " + right.getDescription();
+                user += "\n"+right;
             }
         }
         return user;
+    }
+    
+    public static void main(String[] args) {
+        User u = new User("test", new Role(1,"bla"));
+        System.out.println(u);
     }
 
 }

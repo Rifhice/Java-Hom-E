@@ -29,8 +29,8 @@ public class ClientFX extends Application{
 	// ==================== //
 	// ==== ATTRIBUTES ==== //
 	// ==================== //
-	private float widthRatio = 0.7f;
-	private float heightRatio = 0.7f;
+	public static final float widthRatio = 0.7f;
+	public static final float heightRatio = 0.7f;
 	
 	public static int width;
 	public static int height;

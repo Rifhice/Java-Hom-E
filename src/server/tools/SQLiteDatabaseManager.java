@@ -583,9 +583,11 @@ public class SQLiteDatabaseManager {
         insertRights();
         insertUsers();
         insertOwnsByDefault();
-        insertOwns();
+        insertOwns();        
         
         insertCommands();
+        insertRequires();
+        
         insertEnvironmentValues();
         insertDiscreteValues();
         insertContinuousValues();

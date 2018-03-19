@@ -2,6 +2,8 @@ package server.models;
 
 import java.util.ArrayList;
 
+import server.models.categories.ActuatorCategory;
+
 /**
  * An actuator is a connected object managed by the server and performing physical actions according to it. 
  * @author Clm-Roig
@@ -11,14 +13,10 @@ public class Actuator extends ExternalActor{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private int id;
-    private ArrayList<Command> commands;
-
-    // Attributes from others tables
-    private int actuatorCategoryId;
-    private String actuatorCategoryName;
-    private String actuatorCategoryDescription;
     
+    // Attributes from others tables
+    private ArrayList<Command> commands;    
+    private ActuatorCategory actuatorCategory;
     private ArrayList<AtomicAction> atomicActions;
 
     // ====================== //
@@ -47,25 +45,20 @@ public class Actuator extends ExternalActor{
 
     public Actuator(
         int id, String name, String description, ArrayList<Command> commands, 
-        int actuatorCategoryId, String actuatorCategoryName, String actuatorCategoryDescription
+        ActuatorCategory actuatorCategory
     ) {
         super(id,name,description);
         this.commands = commands;
-        this.actuatorCategoryId = actuatorCategoryId;
-        this.actuatorCategoryName = actuatorCategoryName;
-        this.actuatorCategoryDescription = actuatorCategoryDescription;
+        this.actuatorCategory = actuatorCategory;
     }
     
     public Actuator(
         int id, String name, String description,ArrayList<Command> commands, 
-        int actuatorCategoryId, String actuatorCategoryName, String actuatorCategoryDescription, 
-        ArrayList<AtomicAction> atomicActions
+        ActuatorCategory actuatorCategory, ArrayList<AtomicAction> atomicActions
     ) {
         super(id,name,description);
         this.commands = commands;
-        this.actuatorCategoryId = actuatorCategoryId;
-        this.actuatorCategoryName = actuatorCategoryName;
-        this.actuatorCategoryDescription = actuatorCategoryDescription;
+        this.actuatorCategory = actuatorCategory;
         this.atomicActions = atomicActions;
     }
 
@@ -88,28 +81,12 @@ public class Actuator extends ExternalActor{
         this.commands = commands;
     }
 
-    public int getActuatorCategoryId() {
-        return actuatorCategoryId;
+    public ActuatorCategory getActuatorCategory() {
+        return actuatorCategory;
     }
 
-    public void setActuatorCategoryId(int actuatorCategoryId) {
-        this.actuatorCategoryId = actuatorCategoryId;
-    }
-
-    public String getActuatorCategoryName() {
-        return actuatorCategoryName;
-    }
-
-    public void setActuatorCategoryName(String actuatorCategoryName) {
-        this.actuatorCategoryName = actuatorCategoryName;
-    }
-
-    public String getActuatorCategoryDescription() {
-        return actuatorCategoryDescription;
-    }
-
-    public void setActuatorCategoryDescription(String actuatorCategoryDescription) {
-        this.actuatorCategoryDescription = actuatorCategoryDescription;
+    public void setActuatorCategory(ActuatorCategory actuatorCategory) {
+        this.actuatorCategory = actuatorCategory;
     }
 
     public ArrayList<AtomicAction> getAtomicActions() {
@@ -121,10 +98,12 @@ public class Actuator extends ExternalActor{
     }
     
     public String toString() {
-    	String res = "ACTUATOR\nName " + name + "\nDescription : " + description + "\n\nCOMMANDS\n";
-    	for (int i = 0; i < commands.size(); i++) {
-			res += commands.get(i).toString() + "\n";
-		}
+    	String res = "ACTUATOR #" + id + " "+ name + "\n" + description + "\nCOMMANDS\n";
+    	if(commands != null) {
+        	for (int i = 0; i < commands.size(); i++) {
+    			res += commands.get(i).toString() + "\n";
+    		}
+    	}
     	return res;
     }
     

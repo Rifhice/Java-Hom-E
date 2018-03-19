@@ -98,9 +98,9 @@ public class SQLiteRoleDAO extends RoleDAO {
     }
 
     @Override
-    public boolean update(Role obj) throws DAOException {
+    public int update(Role obj) throws DAOException {
         // TODO Auto-generated method stub
-        return false;
+        return 0;
     }
 
     @Override

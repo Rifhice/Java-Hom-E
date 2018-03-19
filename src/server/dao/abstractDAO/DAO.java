@@ -37,9 +37,9 @@ public abstract class DAO <T> {
 	/**
 	 * Modify an existing object.
 	 * @param obj
-	 * @return boolean
+	 * @return int, number of lines updated
 	 */
-	public abstract boolean update(T obj) throws DAOException;
+	public abstract int update(T obj) throws DAOException;
 	
 	/**
 	 * Delete the object with id equals to the given one.

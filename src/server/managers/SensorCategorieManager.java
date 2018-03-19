@@ -64,7 +64,7 @@ public class SensorCategorieManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "sensorCategories");
 		result.put("action", "update");
-		if(!sensorCategoriesDAO.update(obj)) {
+		if(sensorCategoriesDAO.update(obj) < 1) {
 			System.out.println("hey");
 			result.put("result", "failure");
 		}

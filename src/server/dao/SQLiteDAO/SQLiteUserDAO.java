@@ -169,7 +169,7 @@ public class SQLiteUserDAO extends UserDAO {
      * Update the users and his rights. 
      * If no rights provided, delete all his rights.
      */
-    public boolean update(User obj) throws DAOException {
+    public int update(User obj) throws DAOException {
         // Update User
         String sql = "UPDATE Users "
                 + "SET pseudo = ?, password = ?, fk_role_id = ? "
@@ -186,10 +186,11 @@ public class SQLiteUserDAO extends UserDAO {
         // Delete his rights
         String sqlDeleteRights = "DELETE FROM Owns "
                 + "WHERE fk_user_id = ?";
+        int rightsDeleted = 0;
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sqlDeleteRights);
             prepStat.setInt(1, obj.getId());
-            prepStat.executeUpdate();
+            rightsDeleted = prepStat.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
         }        
@@ -199,20 +200,21 @@ public class SQLiteUserDAO extends UserDAO {
                 + "(fk_user_id, fk_user_id) VALUES "
                 + "(?, ?);";
 
+        int rightsInserted = 0;
         if(obj.getRights() != null) {
             for (Right right : obj.getRights()) {
                 try {
                     PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertRights);
                     prepStat.setInt(1, obj.getId());
                     prepStat.setInt(2, right.getId());
-                    prepStat.executeUpdate();
+                    rightsInserted = prepStat.executeUpdate();
                 } catch (SQLException e) {
                     throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
                 }
             } 
         }
 
-        return userUpdated > 0;
+        return userUpdated + rightsDeleted + rightsInserted;
     }
 
     @Override

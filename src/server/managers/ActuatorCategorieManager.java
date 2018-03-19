@@ -84,7 +84,7 @@ public class ActuatorCategorieManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
 		result.put("action", "update");
-		if(!actuatorCategoriesDAO.update(obj)) {
+		if(actuatorCategoriesDAO.update(obj) < 1) {
 			System.out.println("hey");
 			result.put("result", "failure");
 		}

@@ -55,7 +55,7 @@ public class SQLiteActuatorCategoriesDAO extends ActuatorCategoriesDAO{
 	}
 
 	@Override
-	public boolean update(ActuatorCategory obj) throws DAOException {
+	public int update(ActuatorCategory obj) throws DAOException {
     	String sql = "UPDATE actuatorCategories "
                 + "SET name = ?, description = ?"
                 + "WHERE id = ?";
@@ -70,7 +70,7 @@ public class SQLiteActuatorCategoriesDAO extends ActuatorCategoriesDAO{
           } catch (SQLException e) {
         	  throw new DAOException("DAOException : ActuatorCategories update(" + obj.getId() + ") :" + e.getMessage(), e); 
           }
-        return updated > 0;
+        return updated;
 	}
 
 	@Override

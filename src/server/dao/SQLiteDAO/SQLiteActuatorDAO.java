@@ -90,9 +90,9 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     }
 
     @Override
-    public boolean update(Actuator obj) throws DAOException {
+    public int update(Actuator obj) throws DAOException {
         // TODO Auto-generated method stub
-        return false;
+        return 0;
     }
 
     @Override

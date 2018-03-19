@@ -56,7 +56,7 @@ public class SQLiteSensorCategoriesDAO extends SensorCategoriesDAO{
 	}
 
 	@Override
-	public boolean update(SensorCategory obj) throws DAOException {
+	public int update(SensorCategory obj) throws DAOException {
     	String sql = "UPDATE sensorCategories "
                 + "SET name = ?, description = ?"
                 + "WHERE id = ?";
@@ -71,7 +71,7 @@ public class SQLiteSensorCategoriesDAO extends SensorCategoriesDAO{
           } catch (SQLException e) {
         	  throw new DAOException("DAOException : SensorCategories update(" + obj.getId() + ") :" + e.getMessage(), e); 
           }
-        return updated > 0;
+        return updated;
 	}
 
 	@Override

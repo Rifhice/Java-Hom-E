@@ -29,17 +29,15 @@ public class SQLiteUserDAO extends UserDAO {
 
         String sql = "INSERT INTO Users "
                 + "(pseudo, password, fk_role_id) VALUES "
-                + "(?, ?, ?)";
+                + "(?, ?, ?);";
 
-        // Insert the object
+        // Insert the User
         int created = 0;
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setString(1, obj.getPseudo());
             prepStat.setString(2, obj.getPassword());
-            if(obj.getRole() != null) {
-                prepStat.setInt(3, obj.getRole().getId());
-            }
+            prepStat.setInt(3, obj.getRole().getId());
             created = prepStat.executeUpdate();
 
             // Get the id generated for this object
@@ -55,6 +53,70 @@ public class SQLiteUserDAO extends UserDAO {
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO create(" + obj.getPseudo() + ") :" + e.getMessage(), e); 
         }
+
+        // Insert his rights
+        String sqlInsertRights = "INSERT INTO Owns "
+                + "(fk_user_id, fk_user_id) VALUES "
+                + "(?, ?);";
+
+        // Rights provided, insert them
+        if(obj.getRights() != null) {
+            for (Right right : obj.getRights()) {
+                try {
+                    PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertRights);
+                    prepStat.setInt(1, obj.getId());
+                    prepStat.setInt(2, right.getId());
+                    prepStat.executeUpdate();
+                } catch (SQLException e) {
+                    throw new DAOException("DAOException : UserDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
+                }
+            } 
+        }
+        // No rights provided, use OwnsByDefault
+        else {
+            // Get rights of OwnsByDefault
+            ArrayList<Right> rights = new ArrayList<Right>();
+            int roleId = obj.getRole().getId();
+            String ownsByDefaultSql = "SELECT O.fk_right_id AS ofk_right_id, "
+                    + " R.id AS Rid, R.denomination AS Rdenomination, R.description AS Rdescription "
+                    + " FROM ownsByDefault AS O "
+                    + " JOIN Rights AS R ON O.fk_right_id = R.id "
+                    + " WHERE fk_role_id = ?;";
+            try {
+                PreparedStatement prepStat = this.connect.prepareStatement(ownsByDefaultSql);
+                prepStat.setInt(1, roleId);
+                ResultSet rs = prepStat.executeQuery();
+                
+                if(rs.next()) {
+                    do {
+                        // Construct right
+                        rights.add(new Right( rs.getInt("Rid"), rs.getString("Rdenomination"), rs.getString("Rdescription") ));
+                    } while (rs.next());
+                }                
+            } catch (SQLException e) {
+                throw new DAOException("DAOException : UserDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
+            }
+            
+            // Insert rights into owns
+            String sqlInsertRights2 = "INSERT INTO Owns "
+                    + "(fk_user_id, fk_user_id) VALUES "
+                    + "(?, ?);";
+
+            if(rights != null) {
+                for (Right right : rights) {
+                    try {
+                        PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertRights2);
+                        prepStat.setInt(1, user.getId());
+                        prepStat.setInt(2, right.getId());
+                        prepStat.executeUpdate();
+                    } catch (SQLException e) {
+                        throw new DAOException("DAOException : UserDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
+                    }
+                } 
+                user.setRights(rights);
+            }
+        }
+
         return user;
     }
 
@@ -101,25 +163,54 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
-    // TODO : Update rights
+    /**
+     * Update the users and his rights. 
+     * If no rights provided, delete all his rights.
+     */
     public boolean update(User obj) throws DAOException {
-
+        // Update User
         String sql = "UPDATE Users "
                 + "SET pseudo = ?, password = ?, fk_role_id = ? "
                 + "WHERE id = ?";
-        int updated = 0;
+        int userUpdated = 0;
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setString(1, obj.getPseudo());
-            prepStat.setString(2, obj.getPassword());
-            prepStat.setInt(3, obj.getRole().getId());
-            prepStat.setInt(4, obj.getId());
-            updated= prepStat.executeUpdate();
-
+            prepStat.setInt(1, obj.getId());
+            userUpdated = prepStat.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
         }
-        return updated > 0;
+
+        // Delete his rights
+        String sqlDeleteRights = "DELETE FROM Owns "
+                + "WHERE fk_user_id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sqlDeleteRights);
+            prepStat.setInt(1, obj.getId());
+            prepStat.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+        }        
+
+        // Update his rights
+        String sqlInsertRights = "INSERT INTO Owns "
+                + "(fk_user_id, fk_user_id) VALUES "
+                + "(?, ?);";
+
+        if(obj.getRights() != null) {
+            for (Right right : obj.getRights()) {
+                try {
+                    PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertRights);
+                    prepStat.setInt(1, obj.getId());
+                    prepStat.setInt(2, right.getId());
+                    prepStat.executeUpdate();
+                } catch (SQLException e) {
+                    throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+                }
+            } 
+        }
+
+        return userUpdated > 0;
     }
 
     @Override
@@ -129,10 +220,10 @@ public class SQLiteUserDAO extends UserDAO {
     public int delete(int id) throws DAOException {
         String sqlUser = "DELETE FROM Users "
                 + "WHERE id = ?";
-        
+
         String sqlOwns = "DELETE FROM Owns "
                 + "WHERE fk_user_id = ?";
-        
+
         int deletedUser = 0;
         int deletedOwns = 0;
         try {
@@ -141,7 +232,7 @@ public class SQLiteUserDAO extends UserDAO {
 
             prepStatUser.setInt(1, id);
             prepStatOwns.setInt(1, id);
-            
+
             deletedUser = prepStatUser.executeUpdate();
             deletedOwns = prepStatOwns.executeUpdate();
         } catch (SQLException e) {
@@ -191,10 +282,10 @@ public class SQLiteUserDAO extends UserDAO {
                         user.setPseudo(rs.getString("pseudo"));
                         user.setPassword(rs.getString("password"));
                         user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname"))); 
-                        
+
                         previousId = rs.getInt("id");                      
                     }
-                    
+
                     // Same user as previous ony, we add the next right
                     int rightId = rs.getInt("Riid");
                     String rightDenomination = rs.getString("Ridenomination");
@@ -266,9 +357,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        System.out.println(test.getAll().get(0));
-        System.out.println(test.delete(1));
-
+        User u = test.getById(1);
     }
 
 

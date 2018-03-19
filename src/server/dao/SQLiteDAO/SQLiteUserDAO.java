@@ -23,6 +23,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ==== METHODS ==== //
     // ================= //
     @Override
+    // TODO : Insert rights -> if no rights provided, rights = ownsByDefault from his role. 
     public User create(User obj) throws DAOException {
         User user = obj;
         
@@ -97,6 +98,7 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
+    // TODO : Update rights
     public boolean update(User obj) throws DAOException {
 
     	String sql = "UPDATE Users "
@@ -118,6 +120,7 @@ public class SQLiteUserDAO extends UserDAO {
     }
 
     @Override
+    // TODO : delete owns (rights)
     public int delete(int id) throws DAOException {
          String sql = "DELETE FROM Users WHERE id = ?";
          int deleted = 0;
@@ -132,6 +135,7 @@ public class SQLiteUserDAO extends UserDAO {
     }
     
     @Override
+    // TODO : get Rights for each user
     public ArrayList<User> getAll() throws DAOException {
         ArrayList<User> users = new ArrayList<User>();
         String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, R.id AS Rid, R.name AS Rname "
@@ -160,6 +164,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ======================== //
 
     @Override
+    // TODO : get Rights
     public User getByPseudo(String pseudo) throws DAOException {
         User user = null;
         String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, R.id AS Rid, R.name AS Rname "

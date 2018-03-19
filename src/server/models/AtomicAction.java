@@ -53,10 +53,17 @@ public class AtomicAction {
     }
     
     // ================================
+    public String toString() {
+        String res = "AT.ACTION #"+id+" "+name ;
+        res += "  " + executable;      
+        return res;
+    }
     
     public void execute() {
         // TODO
     }
+    
+    
 
     
 

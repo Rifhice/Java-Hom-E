@@ -102,12 +102,18 @@ public class Actuator extends ExternalActor{
     	if(actuatorCategory != null) {
     	    res += "\nCat: "+ actuatorCategory.getName();
     	}       
-    	res += "\n" + description + "\nCOMMANDS\n";
+    	res += "\n" + description + "\nCOMMANDS";
     	if(commands != null) {
         	for (Command command : commands) {
-                res += command + "\n";
+                res +=  "\n" + command;
             }
     	}
+    	res += "\nATOMIC ACTIONS:";
+    	if(atomicActions != null) {
+            for (AtomicAction atomicAction : atomicActions) {
+                res += "\n" + atomicAction;
+            }
+        }
     	return res;
     }
     

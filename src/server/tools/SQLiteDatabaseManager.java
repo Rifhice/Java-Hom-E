@@ -388,6 +388,25 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertAtomicActions() {
+        String insertAtomicAction1 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (1, 'Switch On','switchOn',1);";
+        String insertAtomicAction2 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (2, 'Switch Off','switchOff',1);";
+        String insertAtomicAction3 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (3, 'Set Temperature','setTemperature',2);";
+        String insertAtomicAction4 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (4, 'Set Temperature','setTemperature',3);";
+        String insertAtomicAction5 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (5, 'Make tea','makeTea',4);";
+        String insertAtomicAction6 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (6, 'Switch on','switchOn',5);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertAtomicAction1);
+            stmt.execute(insertAtomicAction2);
+            stmt.execute(insertAtomicAction3);
+            stmt.execute(insertAtomicAction4);
+            stmt.execute(insertAtomicAction5);
+            stmt.execute(insertAtomicAction6);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting AtomicActions : " + e.getMessage());
+        }
+    }
+    
     private static void insertBlocks() {
         String insertBlock1 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (1,'<',1);";
         String insertBlock2 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (2,'==','2');";
@@ -652,10 +671,13 @@ public class SQLiteDatabaseManager {
         
         insertActuatorCategories();
         insertActuators();
+        
+        insertAtomicActions();
+        
         insertSensorCategories();
         insertSensors();
+        
         System.out.println("Data inserted.");
-
         System.out.println("**** Process complete ! ****");
     }
 }

@@ -7,6 +7,7 @@ import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Right;
+import server.models.Role;
 import server.models.User;
 
 public class SQLiteUserDAO extends UserDAO {
@@ -26,16 +27,21 @@ public class SQLiteUserDAO extends UserDAO {
         User user = obj;
         
         String sql = "INSERT INTO Users "
-                + "(pseudo, password, fk_role_id) VALUES "
-                + "(?, ?, ?)";
+                + "(id, pseudo, password, fk_role_id) VALUES "
+                + "(?, ?, ?, ?)";
         
         // Insert the object
         int created = 0;
           try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
-              prepStat.setString(1, obj.getPseudo());
-              prepStat.setString(2, obj.getPassword());
-              prepStat.setInt(3, obj.getRoleId());
+              if(obj.getId() != 0) {
+                  prepStat.setInt(1, obj.getId());
+              }
+              prepStat.setString(2, obj.getPseudo());
+              prepStat.setString(3, obj.getPassword());
+              if(obj.getRole() != null) {
+                  prepStat.setInt(4, obj.getRole().getId());
+              }
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
@@ -49,7 +55,7 @@ public class SQLiteUserDAO extends UserDAO {
                   user = null;
               }
           } catch (SQLException e) {
-              throw new DAOException("DAOException : UserDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
+              throw new DAOException("DAOException : UserDAO create(" + obj.getPseudo() + ") :" + e.getMessage(), e); 
           }
         return user;
     }
@@ -76,8 +82,7 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("Rid"));
-                user.setRoleName(rs.getString("Rname"));
+                user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname")));          
                 
                 // Construct right
                 int rightId = rs.getInt("Riid");
@@ -105,7 +110,7 @@ public class SQLiteUserDAO extends UserDAO {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getPseudo());
               prepStat.setString(2, obj.getPassword());
-              prepStat.setInt(3, obj.getRoleId());
+              prepStat.setInt(3, obj.getRole().getId());
               prepStat.setInt(4, obj.getId());
               updated= prepStat.executeUpdate();
 
@@ -144,8 +149,6 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("Rid"));
-                user.setRoleName(rs.getString("Rname"));
                 users.add(user);
             }
                 
@@ -178,8 +181,6 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("Rid"));
-                user.setRoleName(rs.getString("Rname"));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getByPseudo(" + pseudo + ") :" + e.getMessage(), e);
@@ -192,7 +193,8 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        System.out.println(test.getById(1));
+        User user = new User("pseudqsdsqoqsdsqds", "MDP", new Role(1,"test"));
+        System.out.println(test.create(user));
     }
 
     

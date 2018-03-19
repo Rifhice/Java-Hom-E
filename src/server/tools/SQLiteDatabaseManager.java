@@ -128,9 +128,9 @@ public class SQLiteDatabaseManager {
                 + " id integer PRIMARY KEY, \n"
                 + " operator text NOT NULL, \n"
                 + " fk_environmentVariable_id integer, \n"
-                + " fk_value_id integer, \n"
+                + " fk_environmentValue_id integer, \n"
                 + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id), \n"
-                + " FOREIGN KEY (fk_value_id) REFERENCES environmentValues(id) \n"
+                + " FOREIGN KEY (fk_environmentValue_id) REFERENCES environmentValues(id) \n"
                 + ");";
         
         String createTableCommands = "CREATE TABLE IF NOT EXISTS commands (\n" 
@@ -388,6 +388,23 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertBlocks() {
+        String insertBlock1 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (1,'<',1);";
+        String insertBlock2 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (2,'==','2');";
+        String insertBlock3 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (3,'>=','3');";
+        String insertBlock4 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (4,'>','4');";
+        String insertBlock5 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (5,'!=','5');";        
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertBlock1);
+            stmt.execute(insertBlock2);
+            stmt.execute(insertBlock3);
+            stmt.execute(insertBlock4);
+            stmt.execute(insertBlock5);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
+        }
+    }
+    
     private static void insertCommands() {
         String insertCommand1 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (1,'switch on',1);";
         String insertCommand2 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (2,'switch off',1);";
@@ -436,16 +453,25 @@ public class SQLiteDatabaseManager {
     
     private static void insertEnvironmentValues() {
         String insertEnvironmentValue1 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
-        String insertEnvironmentValue2 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (2,'temperature',4);";
-        String insertEnvironmentValue3 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (3,'light',1);";
-        String insertEnvironmentValue4 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (4,'light',2);";
-        String insertEnvironmentValue5 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (5,'tea temperature',7);";
+        String insertEnvironmentValue2 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (2,'light',1);";
+        String insertEnvironmentValue3 = "INSERT INTO environmentValues ('id', 'name', 'fk_command_id') VALUES (3,'light',2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertEnvironmentValue1);
             stmt.execute(insertEnvironmentValue2);
             stmt.execute(insertEnvironmentValue3);
-            stmt.execute(insertEnvironmentValue4);
-            stmt.execute(insertEnvironmentValue5);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
+        }
+    }
+    
+    private static void insertEnvironmentVariables() {
+        String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (1,'temperature','Variable temperature', '°C');";
+        String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (2,'presence','Is anybody in there ?', '');";
+        String insertEnvironmentVariable3 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (3,'light','Measure the light intensity', 'L');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertEnvironmentVariable1);
+            stmt.execute(insertEnvironmentVariable2);
+            stmt.execute(insertEnvironmentVariable3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
         }
@@ -507,7 +533,6 @@ public class SQLiteDatabaseManager {
         }
     }
     
-    
     private static void insertRights() {
         String insertRightLRLights = "INSERT INTO rights ('id', 'denomination', 'description') VALUES (1, 'Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
         String insertRightKHeats = "INSERT INTO rights ('id','denomination', 'description') VALUES (2, 'Set kitchen-heater temperature.','You can change the temperature of the kitchen.');";
@@ -531,26 +556,28 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertSensors() {
-        String insertSensor1 = "INSERT INTO sensors ('name', 'description') VALUES ('Presensor3000','Sense the presence of something (10m range)');";
+        String insertSensor1 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (1, 'Presensor3000','Sense the presence of something (10m range)',1);";
+        String insertSensor2 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (2, 'LightCaptor5000','Measure the light intensity', 2);";
+        String insertSensor3 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (3, 'Thermometer450','What is the temperature ?', 3);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensor1);
+            stmt.execute(insertSensor2);
+            stmt.execute(insertSensor3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Sensors : " + e.getMessage());
         }
     }
 
     private static void insertSensorCategories() {
-        String insertSensorCat1 = "INSERT INTO sensorCategories ('name', 'description') VALUES ('Movement detector','Detect movement.');";
+        String insertSensorCat1 = "INSERT INTO sensorCategories ('id', 'name', 'description') VALUES (1, 'Movement detector','Detect movement.');";
+        String insertSensorCat2 = "INSERT INTO sensorCategories ('id', 'name', 'description') VALUES (2, 'Luminosity sensor','Measure the light intensity.');";
+        String insertSensorCat3 = "INSERT INTO sensorCategories ('id', 'name', 'description') VALUES (3, 'Thermometer','Measure the temperature.');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensorCat1);
+            stmt.execute(insertSensorCat2);
+            stmt.execute(insertSensorCat3);
         } catch (SQLException e) {
-            System.out.println("ERROR inserting Sensors : " + e.getMessage());
-        }
-        insertSensorCat1 = "INSERT INTO sensorCategories ('name', 'description') VALUES ('Light detector','Detect degree of light.');";
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(insertSensorCat1);
-        } catch (SQLException e) {
-            System.out.println("ERROR inserting Sensors : " + e.getMessage());
+            System.out.println("ERROR inserting SensorCategories : " + e.getMessage());
         }
     }
 
@@ -583,12 +610,17 @@ public class SQLiteDatabaseManager {
         insertRights();
         insertUsers();
         insertOwnsByDefault();
-        insertOwns();
+        insertOwns();        
         
         insertCommands();
+        insertRequires();
+        
         insertEnvironmentValues();
         insertDiscreteValues();
         insertContinuousValues();
+        
+        insertBlocks();
+        insertEnvironmentVariables();
         
         insertActuatorCategories();
         insertActuators();

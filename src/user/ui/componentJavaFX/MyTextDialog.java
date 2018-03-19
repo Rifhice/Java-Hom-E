@@ -2,6 +2,7 @@ package user.ui.componentJavaFX;
 import java.util.Optional;
 
 import javafx.application.Platform;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -9,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+
 
 public class MyTextDialog{
 	
@@ -21,9 +23,11 @@ public class MyTextDialog{
 		    	dialog.setTitle(title);
 		    	dialog.setHeaderText(header);
 		    	
-		    	// Set the button types.
-		    	ButtonType validButtonType = new ButtonType("Valider");
-		    	dialog.getDialogPane().getButtonTypes().addAll(validButtonType, ButtonType.CANCEL);
+		    	// Set the button types. 
+		    	ButtonType validButtonType = new ButtonType("Validate", ButtonBar.ButtonData.OK_DONE);
+		    	ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE); 
+	            dialog.getDialogPane().getButtonTypes().add(cancelButtonType);    
+		    	dialog.getDialogPane().getButtonTypes().add(validButtonType);
 
 		    	// Create the username and password labels and fields.
 		    	GridPane grid = new GridPane();

@@ -92,9 +92,7 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
-        UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        User u = test.getByPseudo("owner");
-        System.out.println(u.getRoleId());
+
     }
 
 

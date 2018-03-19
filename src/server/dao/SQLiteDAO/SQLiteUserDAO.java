@@ -181,6 +181,7 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
+                user.setRole(new Role(rs.getInt("Rid"), rs.getString("Rname")));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getByPseudo(" + pseudo + ") :" + e.getMessage(), e);
@@ -193,8 +194,7 @@ public class SQLiteUserDAO extends UserDAO {
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        User user = new User("pseudqsdsqoqsdsqds", "MDP", new Role(1,"test"));
-        System.out.println(test.create(user));
+        System.out.println(test.getByPseudo("The Boss"));
     }
 
     

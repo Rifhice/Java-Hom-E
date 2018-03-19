@@ -547,9 +547,11 @@ public class SQLiteDatabaseManager {
     private static void insertRoles() {
         String insertRoleOwner = "INSERT INTO roles ('id','name') VALUES (1,'owner');";
         String insertRoleFamilyMember = "INSERT INTO roles ('id', 'name') VALUES (2,'family member');";
+        String insertRoleGuest = "INSERT INTO roles ('id', 'name') VALUES (3,'guest');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertRoleOwner);
             stmt.execute(insertRoleFamilyMember);
+            stmt.execute(insertRoleGuest);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Roles : " + e.getMessage());
         }

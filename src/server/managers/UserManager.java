@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
+import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import javafx.util.Pair;
+import server.models.Role;
 import server.models.User;
 import ocsf.server.ConnectionToClient;
 import server.tools.Security;
@@ -20,6 +22,7 @@ public class UserManager extends Manager{
     // ==================== //
     private ArrayList<User> users;
     private UserDAO userDAO = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO();
+    private RoleDAO roleDAO = AbstractDAOFactory.getFactory(SystemManager.db).getRoleDAO();
     private static UserManager manager = null;
 
     // ====================== //
@@ -71,12 +74,11 @@ public class UserManager extends Manager{
     
     public User loginAsGuest(String pseudo) {
     	if(pseudo.equals("")) {
-    		//Donner un pseudo
+    	    // TODO : give a random pseudo
+    		pseudo = "Guest";
     	}
-    	
-    	// TODO : Use a RoleDAO() to get the id of the role "guest"
-    	// User user = new User(pseudo,User.USERTYPE.GUEST);
-    	User user = new User(pseudo);
+    	Role role = roleDAO.getByName("guest");
+    	User user = new User(pseudo, role);
     	users.add(user);
     	return user;
     }

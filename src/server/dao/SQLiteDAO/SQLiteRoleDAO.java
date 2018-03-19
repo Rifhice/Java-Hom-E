@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.RoleDAO;
-import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Right;
 import server.models.Role;
@@ -16,8 +15,6 @@ import server.models.User;
 
 public class SQLiteRoleDAO extends RoleDAO {
 	
-	private static final Role NULL = null;
-
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //

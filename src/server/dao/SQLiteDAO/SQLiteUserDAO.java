@@ -360,6 +360,7 @@ public class SQLiteUserDAO extends UserDAO {
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
         User u = test.getById(1);
+        System.out.println(u);
     }
 
 

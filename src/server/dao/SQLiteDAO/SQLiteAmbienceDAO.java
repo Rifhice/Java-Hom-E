@@ -5,11 +5,8 @@ import java.util.ArrayList;
 
 import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.DAOException;
-import server.dao.abstractDAO.UserDAO;
-import server.factories.AbstractDAOFactory;
 import server.models.Ambience;
 import server.models.Behaviour;
-import server.models.User;
 
 public class SQLiteAmbienceDAO extends AmbienceDAO {
 

@@ -7,6 +7,7 @@ import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Right;
+import server.models.Role;
 import server.models.User;
 
 public class SQLiteUserDAO extends UserDAO {
@@ -35,7 +36,7 @@ public class SQLiteUserDAO extends UserDAO {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getPseudo());
               prepStat.setString(2, obj.getPassword());
-              prepStat.setInt(3, obj.getRoleId());
+              prepStat.setInt(3, obj.getRole().getId());
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
@@ -76,8 +77,7 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("Rid"));
-                user.setRoleName(rs.getString("Rname"));
+                user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname")));          
                 
                 // Construct right
                 int rightId = rs.getInt("Riid");
@@ -105,7 +105,7 @@ public class SQLiteUserDAO extends UserDAO {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getPseudo());
               prepStat.setString(2, obj.getPassword());
-              prepStat.setInt(3, obj.getRoleId());
+              prepStat.setInt(3, obj.getRole().getId());
               prepStat.setInt(4, obj.getId());
               updated= prepStat.executeUpdate();
 
@@ -144,8 +144,6 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("Rid"));
-                user.setRoleName(rs.getString("Rname"));
                 users.add(user);
             }
                 
@@ -178,8 +176,6 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("Rid"));
-                user.setRoleName(rs.getString("Rname"));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getByPseudo(" + pseudo + ") :" + e.getMessage(), e);

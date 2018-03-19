@@ -95,7 +95,7 @@ public class UserManager extends Manager{
 	            if(user.getKey() != null) {
 	                JSONObject token = new JSONObject();
 	                token.put("id", user.getKey().getId());
-	                token.put("type", user.getKey().getRoleId());
+	                token.put("type", user.getKey().getRole().getId());
 	                
 	                JSONObject result = new JSONObject();
 	                result.put("result","success");
@@ -132,7 +132,7 @@ public class UserManager extends Manager{
 				}
 	        	System.out.println(tmp);
                 JSONObject token = new JSONObject();
-                token.put("type", tmp.getRoleId());
+                token.put("type", tmp.getRole().getId());
                 token.put("pseudo", tmp.getPseudo());
                 
                 JSONObject result = new JSONObject();

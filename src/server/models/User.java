@@ -12,9 +12,7 @@ public class User {
     private String password;
     
     // Attributes from others tables
-    private int roleId;
-    private String roleName;    
-    
+    private Role role;    
     private ArrayList<Right> rights;
     
     // ====================== //
@@ -37,27 +35,24 @@ public class User {
         this.password = password;
     }
     
-    public User(String pseudo, String password, int roleId, String roleName) {
+    public User(String pseudo, String password, int roleId, Role role) {
         this.pseudo = pseudo;
         this.password = password;
-        this.roleId = roleId;
-        this.roleName = roleName;
+        this.role = role;
     }
     
-    public User(int id, String pseudo, String password, int roleId, String roleName) {
+    public User(int id, String pseudo, String password, int roleId, Role role) {
         this.id = id;
         this.pseudo = pseudo;
         this.password = password;
-        this.roleId = roleId;
-        this.roleName = roleName;
+        this.role = role;;
     }
     
-    public User(int id, String pseudo, String password, int roleId, String roleName, ArrayList<Right> rights) {
+    public User(int id, String pseudo, String password, int roleId, Role role, ArrayList<Right> rights) {
         this.id = id;
         this.pseudo = pseudo;
         this.password = password;
-        this.roleId = roleId;
-        this.roleName = roleName;
+        this.role = role;
         this.rights = rights;
     }
 
@@ -87,23 +82,14 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public int getRoleId() {
-        return roleId;
+
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRole(Role role) {
+        this.role = role;
     }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-    
 
     public ArrayList<Right> getRights() {
         return rights;
@@ -119,7 +105,7 @@ public class User {
         String user = "USER n°"+ id +"\n";
         user += pseudo;
         user += "\n" + password;
-        user += "\nRole n°" + roleId + ": "+roleName;
+        user += "\nRole n°" + role.getId() + ": "+role.getName();
         user += "\nRights:";
         for (Right right : rights) {
             user += "\n# "+right.getId() +" " + right.getDenomination() + " - " + right.getDescription();

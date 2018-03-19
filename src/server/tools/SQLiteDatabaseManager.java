@@ -462,7 +462,6 @@ public class SQLiteDatabaseManager {
         }
     }
     
-    
     private static void insertDiscreteEnvironmentVariables() {
         String insertDiscreteEnvironmentVariable1 = "INSERT INTO discreteEnvironmentVariables ('possible_values', 'current_value', 'fk_environmentVariable_id') VALUES ('{\"true\",\"false\"}', 'true', 2);";
         try (Statement stmt = conn.createStatement()) {
@@ -500,9 +499,11 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertHistories() {
-        String insertHistory = "INSERT INTO histories ('date', 'type', 'action', 'user') VALUES ('2018-03-10 08:42:42', 'command', 'Switch light on', 'owner');";
+        String insertHistory1 = "INSERT INTO histories ('date', 'type', 'action', 'user') VALUES ('2018-03-10 08:42:42', 'command', 'Switch light on', 'owner');";
+        String insertHistory2 = "INSERT INTO histories ('date', 'type', 'action', 'user') VALUES ('2018-03-12 13:10:12', 'command', 'Set temperature to 30C', 'Rifhice');";
         try (Statement stmt = conn.createStatement()) {
-            stmt.execute(insertHistory);
+            stmt.execute(insertHistory1);
+            stmt.execute(insertHistory2);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Histories : " + e.getMessage());
         }

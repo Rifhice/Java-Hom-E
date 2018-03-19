@@ -8,15 +8,15 @@ public class Role {
     // ==================== //
     private int id;
     private String name; 
-    
- // Attributes from others tables   
+
+    // Attributes from others tables   
     private ArrayList<Right> rights;
-    
+
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Role() {}
-    
+
     public Role(int id, String name) {
         this.id = id;
         this.name = name;
@@ -41,21 +41,19 @@ public class Role {
         this.name = name;
     }
 
-	public ArrayList<Right> getRights() {
-		return rights;
-	}
+    public ArrayList<Right> getRights() {
+        return rights;
+    }
 
-	public void setRights(ArrayList<Right> rights) {
-		this.rights = rights;
-	}  
-	
-	public String toString() {
-		//TODO faire un plus bel affichage, love Clément <3
-		String role = name + " " + id;
-		return role;
-	}
+    public void setRights(ArrayList<Right> rights) {
+        this.rights = rights;
+    }  
 
     // ==================================
-  
+
+    public String toString() {
+        String role = "ROLE #"+id+" "+name;
+        return role;
+    }  
 
 }

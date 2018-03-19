@@ -83,6 +83,8 @@ public class Command {
         this.actuatorId = actuatorId;
     }
     
+    // =================================================    
+
     public String toString() {
     	String res = "#"+id +" "+ name + "\n" + description + "\nKey : " + key + "\nARGUMENTS\n";
     	if(arguments != null) {
@@ -90,11 +92,9 @@ public class Command {
                 res += argument + "\n";
             }
     	}
-    	
     	return res;
     }
     
-    // =================================================    
 	
 	
 }

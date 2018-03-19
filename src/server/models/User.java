@@ -35,20 +35,20 @@ public class User {
         this.password = password;
     }
     
-    public User(String pseudo, String password, int roleId, Role role) {
+    public User(String pseudo, String password, Role role) {
         this.pseudo = pseudo;
         this.password = password;
         this.role = role;
     }
     
-    public User(int id, String pseudo, String password, int roleId, Role role) {
+    public User(int id, String pseudo, String password, Role role) {
         this.id = id;
         this.pseudo = pseudo;
         this.password = password;
         this.role = role;;
     }
     
-    public User(int id, String pseudo, String password, int roleId, Role role, ArrayList<Right> rights) {
+    public User(int id, String pseudo, String password, Role role, ArrayList<Right> rights) {
         this.id = id;
         this.pseudo = pseudo;
         this.password = password;
@@ -107,8 +107,10 @@ public class User {
         user += "\n" + password;
         user += "\nRole n°" + role.getId() + ": "+role.getName();
         user += "\nRights:";
-        for (Right right : rights) {
-            user += "\n# "+right.getId() +" " + right.getDenomination() + " - " + right.getDescription();
+        if(rights != null) {
+            for (Right right : rights) {
+                user += "\n# "+right.getId() +" " + right.getDenomination() + " - " + right.getDescription();
+            }
         }
         return user;
     }

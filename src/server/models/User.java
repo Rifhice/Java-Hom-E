@@ -23,6 +23,11 @@ public class User {
     public User(String pseudo) {
         this.pseudo = pseudo;
     }
+    
+    public User(String pseudo, Role role) {
+        this.pseudo = pseudo;
+        this.role = role;
+    }
 
     public User(String pseudo, String password) {
         this.pseudo = pseudo;

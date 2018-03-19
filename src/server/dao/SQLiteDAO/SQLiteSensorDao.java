@@ -60,7 +60,6 @@ public class SQLiteSensorDao extends SensorDAO{
     @Override
     public Sensor getById(int id) throws DAOException {
         Sensor sensor = null;
-        // TODO
         String sql = "SELECT S.id AS id, S.name AS name, S.description AS description "
                 + "FROM Sensors AS S "
                 + "WHERE S.id = ?";
@@ -96,9 +95,9 @@ public class SQLiteSensorDao extends SensorDAO{
     }
 
     @Override
+    // TODO JOINS for list of Env Variables + category
     public ArrayList<Sensor> getAll() throws DAOException {
     	ArrayList<Sensor> sensors = new ArrayList<Sensor>();
-        // TODO
         String sql = "SELECT * FROM Sensors";
 
         try {
@@ -111,7 +110,6 @@ public class SQLiteSensorDao extends SensorDAO{
             	sensor.setName(rs.getString("name"));
             	sensor.setDescription(rs.getString("description"));
                 sensors.add(sensor);
-                // TODO list of commands
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);

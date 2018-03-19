@@ -110,7 +110,7 @@ public class User {
         String user = "USER #"+ id;
         user += "\nPseudo: " + pseudo;
         user += "  Password: " + password;
-        user += "\nRole #" + role.getId() + ": "+role.getName();
+        //user += "\nRole #" + role.getId() + ": "+role.getName();
         user += "\nRights:";
         if(rights != null) {
             for (Right right : rights) {

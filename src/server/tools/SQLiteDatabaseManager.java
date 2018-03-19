@@ -28,7 +28,7 @@ public class SQLiteDatabaseManager {
         String dropContinuousCommandValues = "DROP TABLE IF EXISTS continuousCommandValues;";
         String dropDiscreteEnvironmentVariables = "DROP TABLE IF EXISTS discreteEnvironmentVariables;";
         String dropDiscreteCommandValues = "DROP TABLE IF EXISTS discreteCommandValues;";
-        String dropEnvironmentValues = "DROP TABLE IF EXISTS environmentValues;";
+        String dropCommandValues = "DROP TABLE IF EXISTS commandValues;";
         String dropEnvironmentVariables = "DROP TABLE IF EXISTS environmentVariables;";
         String dropExpressions = "DROP TABLE IF EXISTS expressions;";
         String dropHistories = "DROP TABLE IF EXISTS histories;";
@@ -62,7 +62,7 @@ public class SQLiteDatabaseManager {
             stmt.execute(dropContinuousCommandValues);
             stmt.execute(dropDiscreteEnvironmentVariables);
             stmt.execute(dropDiscreteCommandValues);
-            stmt.execute(dropEnvironmentValues);
+            stmt.execute(dropCommandValues);
             stmt.execute(dropEnvironmentVariables);
             stmt.execute(dropExpressions);
             stmt.execute(dropHistories);
@@ -438,9 +438,9 @@ public class SQLiteDatabaseManager {
         }
     }
     
-    private static void insertContinuousEnvironmentVariable() {
-        String insertContinuousEnvironmentVariable1 = "INSERT INTO continuousEnvironmentVariable ('value_min', 'value_max', 'current_value', 'precision', 'fk_environmentVariable_id') VALUES (0, 30, 19, 1.0, 1);";
-        String insertContinuousEnvironmentVariable2 = "INSERT INTO continuousEnvironmentVariable ('value_min', 'value_max', 'current_value', 'precision', 'fk_environmentVariable_id') VALUES (10, 50, 25, 1.0, 3);";
+    private static void insertContinuousEnvironmentVariables() {
+        String insertContinuousEnvironmentVariable1 = "INSERT INTO continuousEnvironmentVariables ('value_min', 'value_max', 'current_value', 'precision', 'fk_environmentVariable_id') VALUES (0, 30, 19, 1.0, 1);";
+        String insertContinuousEnvironmentVariable2 = "INSERT INTO continuousEnvironmentVariables ('value_min', 'value_max', 'current_value', 'precision', 'fk_environmentVariable_id') VALUES (10, 50, 25, 1.0, 3);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertContinuousEnvironmentVariable1);
             stmt.execute(insertContinuousEnvironmentVariable2);
@@ -462,14 +462,21 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    String createTableDiscreteEnvironmentVariables ="CREATE TABLE IF NOT EXISTS discreteEnvironmentVariables (\n"
+            + " fk_environmentVariable_id integer PRIMARY KEY, \n"
+            + " current_value text, \n"
+            + " possible_values text, \n" 
+            + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id) \n"
+            + ");";
     
-    private static void insertDiscreteEnvironmentVariable() {
-        String insertDiscreteEnvironmentVariable1 = "INSERT INTO discreteEnvironmentVariable ('possible_values', 'current_value' 'fk_environmentValue_id') VALUES ('{\"true\",\"false\"}', 'true', 2);";
+    
+    private static void insertDiscreteEnvironmentVariables() {
+        String insertDiscreteEnvironmentVariable1 = "INSERT INTO discreteEnvironmentVariables ('possible_values', 'current_value', 'fk_environmentVariable_id') VALUES ('{\"true\",\"false\"}', 'true', 2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertDiscreteEnvironmentVariable1);
          
         } catch (SQLException e) {
-            System.out.println("ERROR inserting DiscreteEnvironmentVariable : " + e.getMessage());
+            System.out.println("ERROR inserting DiscreteEnvironmentVariables : " + e.getMessage());
         }
     }
     
@@ -645,8 +652,8 @@ public class SQLiteDatabaseManager {
         
         insertBlocks();
         insertEnvironmentVariables();
-        insertDiscreteEnvironmentVariable();
-        insertContinuousEnvironmentVariable();
+        insertDiscreteEnvironmentVariables();
+        insertContinuousEnvironmentVariables();
        
         
         insertActuatorCategories();

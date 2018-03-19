@@ -2,10 +2,16 @@ package server.models.categories;
 
 public abstract class Category {
 
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	protected int id;
 	protected String name;
 	protected String description;
-	
+
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
 	public Category() {
 		
 	}
@@ -20,7 +26,10 @@ public abstract class Category {
 		this.name = name;
 		this.description = description;
 	}
-	
+
+    // ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public int getId() {
 		return id;
 	}

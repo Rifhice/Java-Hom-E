@@ -467,6 +467,23 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
         }
     }
+    
+    private static void insertEnvironmentVariables() {
+        String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (1,'temperature','Variable temperature', '°C');";
+        String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (2,'temperature','Variable temperature', '°C');";
+        String insertEnvironmentVariable3 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (3,'light','Measure the light intensity', 'L');";
+        String insertEnvironmentVariable4 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (4,'light','Measure the light intensity', 'L');";
+        String insertEnvironmentVariable5 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (5,'hour','The time','ms');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertEnvironmentVariable1);
+            stmt.execute(insertEnvironmentVariable2);
+            stmt.execute(insertEnvironmentVariable3);
+            stmt.execute(insertEnvironmentVariable4);
+            stmt.execute(insertEnvironmentVariable5);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
+        }
+    }
 
     private static void insertHistories() {
         String insertHistory = "INSERT INTO histories ('date', 'type', 'action', 'user') VALUES ('2018-03-10 08:42:42', 'command', 'Switch light on', 'owner');";
@@ -609,6 +626,7 @@ public class SQLiteDatabaseManager {
         insertContinuousValues();
         
         insertBlocks();
+        insertEnvironmentVariables();
         
         insertActuatorCategories();
         insertActuators();

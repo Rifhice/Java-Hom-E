@@ -140,13 +140,12 @@ public class SQLiteUserDAO extends UserDAO {
 
             if(rs.next()) {
                 ArrayList<Right> rights = new ArrayList<Right>();
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setPseudo(rs.getString("pseudo"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname"))); 
                 do {
-                    user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setPseudo(rs.getString("pseudo"));
-                    user.setPassword(rs.getString("password"));
-                    user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname")));          
-
                     // Construct right
                     int rightId = rs.getInt("Riid");
                     String rightDenomination = rs.getString("Ridenomination");
@@ -333,13 +332,12 @@ public class SQLiteUserDAO extends UserDAO {
             // If no user found, we do nothing and return null.
             if(rs.next()) {
                 ArrayList<Right> rights = new ArrayList<Right>();
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setPseudo(rs.getString("pseudo"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname"))); 
                 do {
-                    user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setPseudo(rs.getString("pseudo"));
-                    user.setPassword(rs.getString("password"));
-                    user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname")));          
-
                     // Construct right
                     int rightId = rs.getInt("Riid");
                     String rightDenomination = rs.getString("Ridenomination");
@@ -362,7 +360,9 @@ public class SQLiteUserDAO extends UserDAO {
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
         User u = test.getById(1);
+        User pseudo = test.getByPseudo("The Boss");
         System.out.println(u);
+        System.out.println(pseudo);
     }
 
 

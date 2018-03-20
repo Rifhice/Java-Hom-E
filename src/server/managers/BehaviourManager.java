@@ -36,6 +36,19 @@ public class BehaviourManager extends Manager{
 	
 	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
 		ArrayList<Behaviour> behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+		JSONObject result = new JSONObject();
+		result.put("recipient", "behaviours");
+		result.put("action", "getAll");
+		for (int i = 0; i < behaviours.size(); i++) {
+			JSONObject behaviour = new JSONObject();
+			behaviour.put("name", behaviours.get(i));
+			result.append("behaviours", behaviour);
+		}
+		try {
+			client.sendToClient(result);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	public void deleteBehaviours(JSONObject json, ConnectionToClient client) {

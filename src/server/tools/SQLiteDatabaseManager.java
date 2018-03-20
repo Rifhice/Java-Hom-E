@@ -390,6 +390,17 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertAmbiences() {
+        String insertAmbience1 = "INSERT INTO ambiences ('id','name','description') VALUES (1,'Winter','Winter is here...');";
+        String insertAmbience2 = "INSERT INTO ambiences ('id','name','description') VALUES (2,'Lounge','Very nice ambience. Beautiful.');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertAmbience1);
+            stmt.execute(insertAmbience2);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
+        }
+    }
+    
     private static void insertAtomicActions() {
         String insertAtomicAction1 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (1, 'Switch On','switchOn',1);";
         String insertAtomicAction2 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (2, 'Switch Off','switchOff',1);";
@@ -694,6 +705,7 @@ public class SQLiteDatabaseManager {
        
         insertExpressions();
         insertBehaviours();
+        insertAmbiences();
         insertActuatorCategories();
         insertActuators();
         

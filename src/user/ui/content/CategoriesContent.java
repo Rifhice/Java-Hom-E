@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import javafx.application.Platform;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import server.managers.ActuatorCategorieManager;
-import server.models.argument.Argument;
+import server.models.commandValue.CommandValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;

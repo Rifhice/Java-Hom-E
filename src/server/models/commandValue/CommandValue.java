@@ -1,54 +1,17 @@
-package server.models.commandValue;
+package server.models.argument;
+
+import java.util.ArrayList;
+
+import org.json.JSONObject;
+
+public abstract class Argument {
 
 
-/**
- * A value is an information the actuator needs to perform an action or modify its state
- * It allows the server to send the right action to the actuators.
- * @author Jade
- */
-public abstract class CommandValue {
-	    
-	// ==================== //
-	// ==== ATTRIBUTES ==== //
-	// ==================== //
-	private int id;
-	private String name;   
-
-	// ====================== //
-	// ==== CONSTRUCTORS ==== //
-	// ====================== //
-	public CommandValue() {}
-	    
-	public CommandValue(String name) {
+	protected String name;
+	protected String description;
+	
+	public Argument(String name,String description) {
 		this.name = name;
+		this.description = description;
 	}
-	
-	public CommandValue(int id, String name) {
-	    this.id = id;
-        this.name = name;
-    }
-	
-	// ================= //
-    // ==== METHODS ==== //
-    // ================= //
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    // ===========================================
-	
-		
-
 }

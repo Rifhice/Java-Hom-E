@@ -1,13 +1,10 @@
-package server.models.commandValue;
+package server.models.argument;
 
 import java.util.ArrayList;
 
-/**
- * A discrete value is a variable which the current value is a String 
- * among possible values.
- * @author Clm-Roig
- */
-public class DiscreteCommandValue extends CommandValue {
+import org.json.JSONObject;
+
+public class DiscreteArgument extends Argument {
 
     // ==================== //
     // ==== ATTRIBUTES ==== //
@@ -17,31 +14,13 @@ public class DiscreteCommandValue extends CommandValue {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    
-    public DiscreteCommandValue() {}
-    
-    public DiscreteCommandValue(String name, ArrayList<String> values) {
-        super(name);
-        this.possibleValues = values;   
-    }
-    
-    public DiscreteCommandValue(int id, String name, ArrayList<String> values) {
-        super(id, name);
-        this.possibleValues = values;   
-    }
-
-    // ================= //
-    // ==== METHODS ==== //
-    // ================= //	    
-    public ArrayList<String> getPossibleValues() {
-        return possibleValues;
-    }
-
-    public void setPossibleValues(ArrayList<String> values) {
+    public DiscreteArgument(String name, String description, ArrayList<String> values) {
+        super(name,description);
         this.possibleValues = values;
     }
+	
+    public String toString() {
+    	return "DISCRETE ARGUMENT \nName : " + name + "\nDescription : " + description + "\n values " + possibleValues; 
+    }
     
-    // ==================================
-
-
 }

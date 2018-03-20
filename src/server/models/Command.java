@@ -2,7 +2,7 @@ package server.models;
 
 import java.util.ArrayList;
 
-import server.models.argument.Argument;
+import server.models.commandValue.CommandValue;
 
 /**
  * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
@@ -17,10 +17,10 @@ public class Command {
     private String name;
     private String description;
     private String key;
-    private ArrayList<Argument> arguments;
     
     // Attributes from other tables
-    private int actuatorId;
+    private Actuator actuator;
+    private ArrayList<CommandValue> commandValues;
     
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -36,24 +36,24 @@ public class Command {
         this.name = name;
     }
     
-    public Command(int id, String name, int actuatorId) {
+    public Command(int id, String name, Actuator actuator) {
         this.id = id;
         this.name = name;
-        this.actuatorId = actuatorId;
+        this.actuator = actuator;
     }
     
-    public Command(String name,String description, String key, ArrayList<Argument> arguments) {
+    public Command(String name,String description, String key, ArrayList<CommandValue> commandValues) {
         this.name = name;
         this.description = description;
         this.key = key;
-        this.arguments = arguments;
+        this.commandValues = commandValues;
     }
     
-    public Command(int id, String name, int actuatorId,ArrayList<Argument> arguments) {
+    public Command(int id, String name, Actuator actuator,ArrayList<CommandValue> commandValues) {
         this.id = id;
         this.name = name;
-        this.actuatorId = actuatorId;
-        this.arguments = arguments;
+        this.actuator = actuator;
+        this.commandValues = commandValues;
     }
 
     // ================= //
@@ -75,26 +75,48 @@ public class Command {
         this.name = name;
     }
 
-    public int getActuatorId() {
-        return actuatorId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setActuatorId(int actuatorId) {
-        this.actuatorId = actuatorId;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public ArrayList<CommandValue> getCommandValues() {
+        return commandValues;
+    }
+
+    public void setCommandValues(ArrayList<CommandValue> commandValues) {
+        this.commandValues = commandValues;
+    }
+
+    public Actuator getActuator() {
+        return actuator;
+    }
+
+    public void setActuator(Actuator actuator) {
+        this.actuator = actuator;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
     
     // =================================================    
 
     public String toString() {
     	String res = "#"+id +" "+ name + "\n" + description + "\nKey : " + key + "\nARGUMENTS\n";
-    	if(arguments != null) {
-    	    for (Argument argument : arguments) {
-                res += argument + "\n";
+    	if(commandValues != null) {
+    	    for (CommandValue commandValue : commandValues) {
+                res += commandValue + "\n";
             }
     	}
     	return res;
     }
-    
-	
 	
 }

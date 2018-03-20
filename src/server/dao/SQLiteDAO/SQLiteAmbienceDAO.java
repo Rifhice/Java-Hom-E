@@ -57,8 +57,8 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
     @Override
     public ArrayList<Ambience> getAll() throws DAOException {
         ArrayList<Ambience> ambiences = new ArrayList<Ambience>();
-        String sql = "SELECT A.id AS id, A.name AS name"
-                + "FROM Ambiences AS A;";
+        String sql = "SELECT *"
+                + " FROM Ambiences;";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             ResultSet rs = prepStat.executeQuery();

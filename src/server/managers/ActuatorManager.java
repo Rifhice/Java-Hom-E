@@ -80,7 +80,6 @@ public class ActuatorManager extends Manager {
 						arguments.add(new DiscreteCommandValue(current.getString("name"), values));
 					}
 				}
-				Command c = new Command(nameCommand, descriptionCommand, keyCommand, arguments);
 				commands.add(new Command(nameCommand, descriptionCommand, keyCommand, arguments));
 			}
 			return new Actuator(name, description, commands);

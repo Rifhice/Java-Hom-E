@@ -18,6 +18,7 @@ public class Behaviour implements Observer {
     // ==== ATTRIBUTES ==== //
     // ==================== //
     private int id;
+    private String name;
 	private Expression expression;
 	private boolean isActivated;
 	
@@ -39,14 +40,21 @@ public class Behaviour implements Observer {
 	    this.expression = expression;
 	}
 	
+	public Behaviour(int id, String name, Expression expression) {
+        this.id = id;
+        this.name = name;
+        this.expression = expression;
+    }
+	
 	public Behaviour(int id, Expression expression, boolean isActivated) {
 	    this.id = id;
 		this.expression = expression;
 		this.isActivated = isActivated;
 	}
 	
-	public Behaviour(int id, Expression expression, boolean isActivated, ArrayList<AtomicAction> atomicActions, ArrayList<ComplexAction> complexActions) {
+	public Behaviour(int id, String name, Expression expression, boolean isActivated, ArrayList<AtomicAction> atomicActions, ArrayList<ComplexAction> complexActions) {
         this.id = id;
+        this.name = name;
         this.expression = expression;
         this.isActivated = isActivated;
         this.atomicActions = atomicActions;
@@ -63,6 +71,14 @@ public class Behaviour implements Observer {
     public void setId(int id) {
         this.id = id;
     }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Expression getExpression() {
         return expression;
@@ -72,10 +88,10 @@ public class Behaviour implements Observer {
         this.expression = expression;
     }
     
-    public boolean getActivated() {
-        return this.isActivated;
+    public boolean isActivated() {
+        return isActivated;
     }
-    
+
     public void setActivated(boolean isActivated) {
         this.isActivated = isActivated;
     }

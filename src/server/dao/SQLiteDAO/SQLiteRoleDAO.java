@@ -101,33 +101,32 @@ public class SQLiteRoleDAO extends RoleDAO {
     	//TODO à modifier
     	// Update Role
         String sql = "UPDATE roles "
-                + "SET name = ?, rights = ? "
+                + "SET name = ? "
                 + "WHERE id = ?";
-        int userUpdated = 0;
-        /*try {
+        int roleUpdated = 0;
+        try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setString(1, obj.getName());
-            prepStat.setInt(2, obj.getName());
-            prepStat.setInt(3, obj.getId());
-            userUpdated = prepStat.executeUpdate();
+            prepStat.setInt(2, obj.getId());
+            roleUpdated = prepStat.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+            throw new DAOException("DAOException : RoleDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
         }
 
         // Delete his rights
-        String sqlDeleteRights = "DELETE FROM Owns "
-                + "WHERE fk_user_id = ?";
+        String sqlDeleteRights = "DELETE FROM OwnsByDefault "
+                + "WHERE fk_role_id = ?";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sqlDeleteRights);
             prepStat.setInt(1, obj.getId());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+            throw new DAOException("DAOException : RoleDAO update.rightsdeletion(" + obj.getId() + ") :" + e.getMessage(), e); 
         }        
 
         // Update his rights
-        String sqlInsertRights = "INSERT INTO Owns "
-                + "(fk_user_id, fk_user_id) VALUES "
+        String sqlInsertRights = "INSERT INTO OwnsByDefault "
+                + "(fk_role_id, fk_right_id) VALUES "
                 + "(?, ?);";
 
         if(obj.getRights() != null) {
@@ -138,12 +137,11 @@ public class SQLiteRoleDAO extends RoleDAO {
                     prepStat.setInt(2, right.getId());
                     prepStat.executeUpdate();
                 } catch (SQLException e) {
-                    throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
+                    throw new DAOException("DAOException : roleDAO update.rightsAddition(" + obj.getId() + ") :" + e.getMessage(), e); 
                 }
             } 
         }
-*/
-        return userUpdated;
+        return roleUpdated;
 
     }
 
@@ -207,7 +205,13 @@ public class SQLiteRoleDAO extends RoleDAO {
     // ============== // 
     public static void main (String args[]) {
         RoleDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getRoleDAO();
-        System.out.println(test.getById(1));
+        Role role1 = test.getById(1) ;
+        Role role2 = test.getById(2) ;
+        System.out.println(role1);
+        System.out.println(role2);
+        role2.setRights(role1.getRights());
+        test.update(role2);
+        System.out.println(role2);
     }
 
     

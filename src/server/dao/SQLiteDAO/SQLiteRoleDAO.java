@@ -98,7 +98,6 @@ public class SQLiteRoleDAO extends RoleDAO {
 
     @Override
     public int update(Role obj) throws DAOException {
-    	//TODO à modifier
     	// Update Role
         String sql = "UPDATE roles "
                 + "SET name = ? "
@@ -113,7 +112,7 @@ public class SQLiteRoleDAO extends RoleDAO {
             throw new DAOException("DAOException : RoleDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
         }
 
-        // Delete his rights
+        // Delete role's rights
         String sqlDeleteRights = "DELETE FROM OwnsByDefault "
                 + "WHERE fk_role_id = ?";
         try {
@@ -124,7 +123,7 @@ public class SQLiteRoleDAO extends RoleDAO {
             throw new DAOException("DAOException : RoleDAO update.rightsdeletion(" + obj.getId() + ") :" + e.getMessage(), e); 
         }        
 
-        // Update his rights
+        // Update role's rights
         String sqlInsertRights = "INSERT INTO OwnsByDefault "
                 + "(fk_role_id, fk_right_id) VALUES "
                 + "(?, ?);";
@@ -147,27 +146,63 @@ public class SQLiteRoleDAO extends RoleDAO {
 
     @Override
     public int delete(int id) throws DAOException {
-        // TODO Auto-generated method stub
-        return 0;
+    	return 0;
     }
 
     @Override
     public ArrayList<Role> getAll() throws DAOException {
-        ArrayList<Role> roles = new ArrayList<Role>();
-        String sql = "SELECT R.id AS id, R.name AS name "
+    	ArrayList<Role> roles = new ArrayList<Role>();
+        String sql = "SELECT R.id AS id, R.name AS name, "
+                + "Ri.denomination AS Ridenomination, "
+                + "Ri.description AS Ridescription, Ri.id AS Riid "
                 + "FROM Roles AS R "
+                + "JOIN OwnsByDefault AS O ON O.fk_role_id = R.id "
+                + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             ResultSet rs = prepStat.executeQuery();
 
-            while (rs.next()) {
+            if(rs.next()) {
+                // Know if the user manipulated changed.
+                int previousId = 0;
+                ArrayList<Right> rights = new ArrayList<Right>();
                 Role role = new Role();
-                role.setId(rs.getInt("id"));
-                role.setName(rs.getString("name"));
+                do {
+                    /* New User : 
+                     *  - Add the rights to the previous one
+                     *  - Add the previous one to users
+                     *  - Empty the rights variable
+                     *  - Empty the user variable
+                     */  
+                    if(previousId != rs.getInt("id")) {
+                        // Not first user : push the previous user
+                        if(previousId != 0) {
+                            role.setRights(rights);
+                            roles.add(role);   
+
+                            rights = new ArrayList<Right>();
+                            role = new Role();  
+                        }   
+
+                        role.setId(rs.getInt("id"));
+                        role.setName(rs.getString("name"));
+                        previousId = rs.getInt("id");                      
+                    }
+
+                    // Same role as previous only, we add the next right
+                    int rightId = rs.getInt("Riid");
+                    String rightDenomination = rs.getString("Ridenomination");
+                    String rightDescription = rs.getString("Ridescription");
+                    Right right = new Right(rightId, rightDenomination, rightDescription);
+                    rights.add(right);
+
+                } while (rs.next());
+                // Push the last role
+                role.setRights(rights);
                 roles.add(role);
             }
-                
+
         } catch (SQLException e) {
             throw new DAOException("DAOException : RoleDAO getAll() :" + e.getMessage(), e);
         }
@@ -209,9 +244,15 @@ public class SQLiteRoleDAO extends RoleDAO {
         Role role2 = test.getById(2) ;
         System.out.println(role1);
         System.out.println(role2);
+        
+        //Test Update 
+        /*
         role2.setRights(role1.getRights());
         test.update(role2);
         System.out.println(role2);
+        */
+        System.out.println(" \n\n **Ici commence la requête getAll() ** \n\n");
+        System.out.println(test.getAll());
     }
 
     

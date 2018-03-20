@@ -49,6 +49,7 @@ public class ClientFX extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		ClientFX.primaryStage = primaryStage;
+		ClientFX.primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("file:asset/images/logo.png"));
 		width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
 		height = (int)(ClientFX.screenSize.getHeight()* heightRatio);

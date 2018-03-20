@@ -60,44 +60,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	        return behaviour;
 	}
 
-	@Override
-	public Behaviour getById(int id) throws DAOException {
-		Behaviour behaviour = null;
-        String sql = "SELECT B.id AS id, B.name AS name, B.isActivated AS isActivated, "
-                + "E.id AS Eid, E.operators AS Eoperators "
-                + "FROM Behaviour AS B "
-                + "JOIN Expression AS E ON E.id = B.fk_expression_id "
-                + "WHERE E.id = ?;";
-        
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
 
-            if(rs.next()) {
-                behaviour = new Behaviour();
-                behaviour.setId(rs.getInt("id"));
-                behaviour.setName(rs.getString("name"));
-                behaviour.setActivated(rs.getBoolean("isActivated"));
-                try {
-					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
-					JSONArray array = JSON.getJSONArray("operators");
-					ArrayList<String> arrayl = new ArrayList(array.toList());
-					behaviour.setExpression(new Expression(rs.getInt("Eid"), arrayl));
-				} catch (Exception e) {
-					throw new Exception(e); 
-				}
-                
-               ; 
-            }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
-        }
-       
-        behaviour.setExpression(this.getExpression(behaviour.getId()));
-        
-        return behaviour;
-	}
 
 	@Override
 	public int update(Behaviour obj) throws DAOException {
@@ -113,6 +76,12 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
 	@Override
 	public ArrayList<Behaviour> getAll() throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Behaviour getById(int id) throws DAOException {
 		// TODO Auto-generated method stub
 		return null;
 	}

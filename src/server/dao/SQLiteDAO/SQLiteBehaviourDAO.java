@@ -16,6 +16,7 @@ import server.models.Behaviour;
 import server.models.Right;
 import server.models.Role;
 import server.models.User;
+import server.models.categories.ActuatorCategory;
 import server.models.evaluable.Expression;
 
 public class SQLiteBehaviourDAO extends BehaviourDAO{
@@ -76,8 +77,24 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
 	@Override
 	public ArrayList<Behaviour> getAll() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Behaviour> behaviours = new ArrayList<Behaviour>();
+        String sql = "SELECT * FROM Behaviours";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            ResultSet rs = prepStat.executeQuery();
+            Behaviour behaviour = null;
+            while (rs.next()) {
+            	//TODO manque pleins de parametres
+            	behaviour = new Behaviour();
+            	behaviour.setName(rs.getString("name"));
+            	behaviour.setId(rs.getInt("id"));
+            	behaviours.add(behaviour);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);
+        }
+        return behaviours;
 	}
 
 	@Override

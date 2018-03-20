@@ -590,6 +590,21 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting IsPartOf : " + e.getMessage());
         }
     }
+    
+    private static void insertLaunches() {
+        String insertLaunches1 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (1,1);";
+        String insertLaunches2 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (1,6);";
+        String insertLaunches3 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (2,3);";
+        String insertLaunches4 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (3,5);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertLaunches1);
+            stmt.execute(insertLaunches2);
+            stmt.execute(insertLaunches3);
+            stmt.execute(insertLaunches4);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Launches : " + e.getMessage());
+        }
+    }
 
 
     private static void insertOwns() {
@@ -741,6 +756,7 @@ public class SQLiteDatabaseManager {
         insertActuators();
         
         insertAtomicActions();
+        insertLaunches();
         
         insertSensorCategories();
         insertSensors();

@@ -41,7 +41,8 @@ public class BehaviourManager extends Manager{
 		result.put("action", "getAll");
 		for (int i = 0; i < behaviours.size(); i++) {
 			JSONObject behaviour = new JSONObject();
-			behaviour.put("name", behaviours.get(i));
+			behaviour.put("id", behaviours.get(i).getId());
+			behaviour.put("name", behaviours.get(i).getName());
 			result.append("behaviours", behaviour);
 		}
 		try {

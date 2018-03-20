@@ -272,8 +272,8 @@ public class SQLiteUserDAO extends UserDAO {
         return user;
     }
     
-    public ArrayList<Right> getRights(int id) throws DAOException {
-        User user = null;
+    public ArrayList<AtomicAction> getAtomicActions(int id) throws DAOException {
+        Behaviour behaviour = null;
         // Get owns rights
         String sql = "SELECT Ri.denomination AS Ridenomination, "
                 + "Ri.description AS Ridescription, Ri.id AS Riid "

@@ -45,7 +45,11 @@ public class Expression implements Evaluable {
         this.evaluables = evaluables;
         this.operators = operators;
     }
-
+    
+    public Expression(int id, ArrayList<String> operators) {
+        this.id = id;
+        this.operators = operators;
+    }
     // ================= //
     // ==== METHODS ==== //
     // ================= //

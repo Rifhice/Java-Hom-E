@@ -6,6 +6,7 @@ import server.dao.DriverConnection;
 import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
 import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
 import server.dao.abstractDAO.ActuatorDAO;
+import server.dao.abstractDAO.BehaviourDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
@@ -48,5 +49,11 @@ public class OracleDAOFactory extends AbstractDAOFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public BehaviourDAO getBehaviourDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

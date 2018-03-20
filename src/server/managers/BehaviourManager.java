@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import server.factories.AbstractDAOFactory;
 import server.models.Behaviour;
+import server.models.categories.SensorCategory;
 import ocsf.server.ConnectionToClient;
 
 public class BehaviourManager extends Manager{
@@ -32,6 +34,22 @@ public class BehaviourManager extends Manager{
 		System.out.println(behaviours.get(behaviours.size()-1));
 	}
 	
+	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
+		ArrayList<Behaviour> behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+	}
+	
+	public void deleteBehaviours(JSONObject json, ConnectionToClient client) {
+		
+	}
+	
+	public void createBehaviours(JSONObject json, ConnectionToClient client) {
+		
+	}
+	
+	public void updateBehaviours(JSONObject json, ConnectionToClient client) {
+		
+	}
+	
 	public void deleteBehaviour(Behaviour behaviour) {
 		behaviours.remove(behaviour);
 	}
@@ -46,7 +64,20 @@ public class BehaviourManager extends Manager{
 
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		// TODO Auto-generated method stub
-		
+		String action = json.getString("action");
+        switch(action) {
+	        case "getAll":
+	        	getAllBehaviours(json,client);
+	            break;
+	        case "create":
+	        	createBehaviours(json,client);
+	            break;
+	        case "delete":
+	        	deleteBehaviours(json,client);
+	            break;
+	        case "update":
+	        	updateBehaviours(json,client);
+	            break;
+        }
 	}
 }

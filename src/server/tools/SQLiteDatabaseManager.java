@@ -411,16 +411,12 @@ public class SQLiteDatabaseManager {
     
     private static void insertBehaviours() {
         String insertBehaviour1 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (1,'Light presence kitchen', 1, 1);";
-        String insertBehaviour2 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (2,);";
-        String insertBehaviour3 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (3,'>=','3');";
-        String insertBehaviour4 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (4,'>','4');";
-        String insertBehaviour5 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (5,'!=','5');";        
+        String insertBehaviour2 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (2,'So hot',1,2);";
+        String insertBehaviour3 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (3,'It''s cold : I want tea',1,3);";      
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertBehaviour1);
             stmt.execute(insertBehaviour2);
             stmt.execute(insertBehaviour3);
-            stmt.execute(insertBehaviour4);
-            stmt.execute(insertBehaviour5);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Behaviours : " + e.getMessage());
         }
@@ -697,6 +693,7 @@ public class SQLiteDatabaseManager {
         insertContinuousEnvironmentVariables();
        
         insertExpressions();
+        insertBehaviours();
         insertActuatorCategories();
         insertActuators();
         

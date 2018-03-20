@@ -13,10 +13,8 @@ import ocsf.server.ConnectionToClient;
 public class BehaviourManager extends Manager{
 
 	private static BehaviourManager manager = null;
-	private ArrayList<Behaviour> behaviours;
 	
 	private BehaviourManager() {
-		behaviours = new ArrayList<Behaviour>();
 	}
 	
 	public static BehaviourManager getManager() {
@@ -25,19 +23,19 @@ public class BehaviourManager extends Manager{
 		return manager;
 	}
 	
-	public ArrayList<Behaviour> getAllBehaviours(){
-		return behaviours;	
-	}
-	
 	public void createBehaviour(JSONObject json) {
-		behaviours.add(Behaviour.createBehaviour(json));
-		System.out.println(behaviours.get(behaviours.size()-1));
 	}
 	
 	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
-		ArrayList<Behaviour> behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+		ArrayList<Behaviour> behaviours = null;
+
+		try {
+			behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		JSONObject result = new JSONObject();
-		result.put("recipient", "behaviours");
+		result.put("recipient", "behaviour");
 		result.put("action", "getAll");
 		for (int i = 0; i < behaviours.size(); i++) {
 			JSONObject behaviour = new JSONObject();
@@ -46,7 +44,7 @@ public class BehaviourManager extends Manager{
 			result.append("behaviours", behaviour);
 		}
 		try {
-			client.sendToClient(result);
+			client.sendToClient(result.toString());
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -65,7 +63,6 @@ public class BehaviourManager extends Manager{
 	}
 	
 	public void deleteBehaviour(Behaviour behaviour) {
-		behaviours.remove(behaviour);
 	}
 	
 	public void activateBehaviour(Behaviour behaviour) {

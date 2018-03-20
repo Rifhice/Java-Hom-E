@@ -4,6 +4,7 @@ import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
 import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
 import server.dao.abstractDAO.ActuatorCategoriesDAO;
 import server.dao.abstractDAO.ActuatorDAO;
+import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorCategoriesDAO;
@@ -51,5 +52,6 @@ public abstract class AbstractDAOFactory {
     public abstract SensorCategoriesDAO getSensorCategoriesDAO();
     public abstract ActuatorCategoriesDAO getActuatorCategoriesDAO();
     public abstract BehaviourDAO getBehaviourDAO();
+    public abstract AmbienceDAO getAmbienceDAO();
 	
 }

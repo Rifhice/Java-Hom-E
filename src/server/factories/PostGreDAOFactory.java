@@ -6,6 +6,7 @@ import server.dao.DriverConnection;
 import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
 import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
 import server.dao.abstractDAO.ActuatorDAO;
+import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
@@ -52,6 +53,12 @@ public class PostGreDAOFactory extends AbstractDAOFactory {
 
 	@Override
 	public BehaviourDAO getBehaviourDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AmbienceDAO getAmbienceDAO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

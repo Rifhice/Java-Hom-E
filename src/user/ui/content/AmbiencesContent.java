@@ -114,7 +114,7 @@ public class AmbiencesContent extends Content {
 	
 	public void updateBehaviours() {
 		JSONObject getActuator = new JSONObject();
-		getActuator.put("recipient", "behaviours");
+		getActuator.put("recipient", "behaviour");
 		getActuator.put("action", "getAll");
 		
 		try {
@@ -126,7 +126,7 @@ public class AmbiencesContent extends Content {
 	
 	public void updateAmbiences() {
 		JSONObject getActuator = new JSONObject();
-		getActuator.put("recipient", "ambiences");
+		getActuator.put("recipient", "ambience");
 		getActuator.put("action", "getAll");
 		
 		try {
@@ -145,7 +145,7 @@ public class AmbiencesContent extends Content {
 				String recipient = json.getString("recipient");
 				String action;
 				switch(recipient) {
-				case "behaviours":
+				case "behaviour":
 					action = json.getString("action");
 					switch (action) {
 					case "getAll":
@@ -159,7 +159,7 @@ public class AmbiencesContent extends Content {
 						break;
 					}
 					break;
-				case "ambiences":
+				case "ambience":
 					action = json.getString("action");
 					switch (action) {
 					case "getAll":
@@ -250,7 +250,7 @@ public class AmbiencesContent extends Content {
          						new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent event) {
-										
+										int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
 									}
 								}
          				),0,i);

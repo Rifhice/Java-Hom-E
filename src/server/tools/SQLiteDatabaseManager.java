@@ -397,7 +397,7 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertAmbience1);
             stmt.execute(insertAmbience2);
         } catch (SQLException e) {
-            System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
+            System.out.println("ERROR inserting Ambiences : " + e.getMessage());
         }
     }
     
@@ -478,6 +478,19 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertCommandValue3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting CommandValues : " + e.getMessage());
+        }
+    }
+    
+    private static void insertComposes() {
+        String insertComposes1 = "INSERT INTO composes ('fk_ambience_id', 'fk_behaviour_id') VALUES (1,2);";
+        String insertComposes2 = "INSERT INTO composes ('fk_ambience_id', 'fk_behaviour_id') VALUES (2,1);";
+        String insertComposes3 = "INSERT INTO composes ('fk_ambience_id', 'fk_behaviour_id') VALUES (2,3);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertComposes1);
+            stmt.execute(insertComposes2);
+            stmt.execute(insertComposes3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Composes : " + e.getMessage());
         }
     }
 
@@ -706,6 +719,7 @@ public class SQLiteDatabaseManager {
         insertExpressions();
         insertBehaviours();
         insertAmbiences();
+        insertComposes();
         insertActuatorCategories();
         insertActuators();
         

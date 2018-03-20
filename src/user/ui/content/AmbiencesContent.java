@@ -91,15 +91,19 @@ public class AmbiencesContent extends Content {
 		this.getChildren().add(behavioursNotChosenScrollPane);
 		this.getChildren().add(behavioursChosenScrollPane);
 		notSelectedBehaviours = new ArrayList<Behaviour>();
+		
 		notChosenBehavioursList.setPrefWidth(behavioursNotChosenScrollPane.getPrefWidth());
 		notChosenBehavioursList.setPrefHeight(behavioursNotChosenScrollPane.getPrefHeight());
 		behavioursNotChosenScrollPane.setContent(notChosenBehavioursList);
+		
 		chosenBehavioursList.setPrefWidth(behavioursChosenScrollPane.getPrefWidth());
 		chosenBehavioursList.setPrefHeight(behavioursChosenScrollPane.getPrefHeight());
 		behavioursChosenScrollPane.setContent(chosenBehavioursList);
-		ambiencesList.setPrefWidth(behavioursChosenScrollPane.getPrefWidth());
-		ambiencesList.setPrefHeight(behavioursChosenScrollPane.getPrefHeight());
+		
+		ambiencesList.setPrefWidth(ambiencesScrollPane.getPrefWidth());
+		ambiencesList.setPrefHeight(ambiencesScrollPane.getPrefHeight());
 		ambiencesScrollPane.setContent(ambiencesList);
+		
 		this.updateAmbiences();
 		this.updateBehaviours();
 	}
@@ -167,11 +171,11 @@ public class AmbiencesContent extends Content {
 						JSONArray arrArg = json.getJSONArray("ambiences");
 						for (int j = 0; j < arrArg.length(); j++){
 							JSONObject current = arrArg.getJSONObject(j);
-							JSONArray arrBehav = current.getJSONArray("behaviours");
 							List<Integer> behav = new ArrayList<Integer>();
+							/*JSONArray arrBehav = current.getJSONArray("behaviours");
 							for(int k = 0; k < arrBehav.length(); k++) {
 								behav.add(arrBehav.getJSONObject(k).getInt("id"));
-							}
+							}*/
 							this.ambiences.add(new Ambience(current.getInt("id"), current.getString("name"), behav));
 						}
 						updateAmbienceUI();

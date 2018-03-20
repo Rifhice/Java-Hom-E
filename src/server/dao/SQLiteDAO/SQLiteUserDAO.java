@@ -66,15 +66,10 @@ public class SQLiteUserDAO extends UserDAO {
     public User getById(int id) throws DAOException {
         User user = null;
         String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, "
-                + "R.id AS Rid, R.name AS Rname, Ri.denomination AS Ridenomination, "
-                + "Ri.description AS Ridescription, Ri.id AS Riid "
+                + "R.id AS Rid, R.name AS Rname "
                 + "FROM Users AS U "
                 + "JOIN Roles AS R ON R.id = U.fk_role_id "
-                + "JOIN Owns AS O ON O.fk_user_id = U.id "
-                + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
                 + "WHERE U.id = ?;";
-        
-        ArrayList<Right> rightsOwns = new ArrayList<Right>();
         
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
@@ -87,66 +82,12 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname"))); 
-                do {
-                    // Construct rights in owns
-                    int rightId = rs.getInt("Riid");
-                    String rightDenomination = rs.getString("Ridenomination");
-                    String rightDescription = rs.getString("Ridescription");
-                    Right right = new Right(rightId, rightDenomination, rightDescription);
-                    rightsOwns.add(right);
-                } while (rs.next());
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
-        }
-        
-        // Get rights from Owns By Default
-        String sqlRightsOBD = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, "
-                + "Ri.description AS Ridescription, Ri.id AS Riid, Ri.denomination AS Ridenomination "
-                + "FROM Users AS U "
-                + "JOIN Roles AS R ON R.id = U.fk_role_id "
-                + "JOIN OwnsByDefault AS OBD ON OBD.fk_role_id = R.id "
-                + "JOIN Rights AS Ri ON Ri.id = OBD.fk_right_id "
-                + "WHERE U.id = ?;";
-        
-        ArrayList<Right> rightsOBD = new ArrayList<Right>();
-        
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sqlRightsOBD);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
-            if(rs.next()) {
-                do {
-                    // Construct rights in owns
-                    int rightId = rs.getInt("Riid");
-                    String rightDenomination = rs.getString("Ridenomination");
-                    String rightDescription = rs.getString("Ridescription");
-                    Right right = new Right(rightId, rightDenomination, rightDescription);
-                    rightsOBD.add(right);
-                } while (rs.next());
-            }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
-        }
-        
-        // Build the list of DISTINCT rights
-        ArrayList<Right> allRights = rightsOBD;
-        boolean isAlreadyHere;
-        if(rightsOwns != null) {
-            for (Right rightO : rightsOwns) {
-                isAlreadyHere = false;
-                for (Right right : allRights) {
-                    if(rightO.getId() == right.getId()) {
-                        isAlreadyHere = true;
-                    }
-                }
-                if(!isAlreadyHere) {
-                    allRights.add(rightO);
-                }
-            }
         }
        
-        user.setRights(allRights);
+        user.setRights(this.getRights(user.getId()));
         
         return user;
     }
@@ -304,12 +245,9 @@ public class SQLiteUserDAO extends UserDAO {
     public User getByPseudo(String pseudo) throws DAOException {
         User user = null;
         String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, "
-                + "R.id AS Rid, R.name AS Rname,"
-                + "Ri.id AS Riid, Ri.denomination AS Ridenomination, Ri.description AS Ridescription "
+                + "R.id AS Rid, R.name AS Rname "
                 + "FROM Users AS U "
                 + "JOIN Roles AS R ON R.id = U.fk_role_id "
-                + "JOIN Owns AS O ON O.fk_user_id = U.id "
-                + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
                 + "WHERE U.pseudo = ?;";
 
         try {
@@ -319,37 +257,110 @@ public class SQLiteUserDAO extends UserDAO {
 
             // If no user found, we do nothing and return null.
             if(rs.next()) {
-                ArrayList<Right> rights = new ArrayList<Right>();
                 user = new User();
                 user.setId(rs.getInt("id"));
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname"))); 
-                do {
-                    // Construct right
-                    int rightId = rs.getInt("Riid");
-                    String rightDenomination = rs.getString("Ridenomination");
-                    String rightDescription = rs.getString("Ridescription");
-                    Right right = new Right(rightId, rightDenomination, rightDescription);
-                    rights.add(right);
-                } while (rs.next());
-                user.setRights(rights);
             }
 
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getByPseudo(" + pseudo + ") :" + e.getMessage(), e);
         }
+        
+        if(user != null) {
+            user.setRights(this.getRights(user.getId()));
+        }
+        
         return user;
     }
+    
+    public ArrayList<Right> getRights(int id) throws DAOException {
+        User user = null;
+        // Get owns rights
+        String sql = "SELECT Ri.denomination AS Ridenomination, "
+                + "Ri.description AS Ridescription, Ri.id AS Riid "
+                + "FROM Users AS U "
+                + "JOIN Owns AS O ON O.fk_user_id = U.id "
+                + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
+                + "WHERE U.id = ?;";
+        
+        ArrayList<Right> rightsOwns = new ArrayList<Right>();
+        
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                do {
+                    // Construct rights in owns
+                    int rightId = rs.getInt("Riid");
+                    String rightDenomination = rs.getString("Ridenomination");
+                    String rightDescription = rs.getString("Ridescription");
+                    Right right = new Right(rightId, rightDenomination, rightDescription);
+                    rightsOwns.add(right);
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : UserDAO getRights(" + id + ") (owns):" + e.getMessage(), e);
+        }
+        
+        // Get rights from Owns By Default
+        String sqlRightsOBD = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, "
+                + "Ri.description AS Ridescription, Ri.id AS Riid, Ri.denomination AS Ridenomination "
+                + "FROM Users AS U "
+                + "JOIN Roles AS R ON R.id = U.fk_role_id "
+                + "JOIN OwnsByDefault AS OBD ON OBD.fk_role_id = R.id "
+                + "JOIN Rights AS Ri ON Ri.id = OBD.fk_right_id "
+                + "WHERE U.id = ?;";
+        
+        ArrayList<Right> rightsOBD = new ArrayList<Right>();
+        
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sqlRightsOBD);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            if(rs.next()) {
+                do {
+                    // Construct rights in owns
+                    int rightId = rs.getInt("Riid");
+                    String rightDenomination = rs.getString("Ridenomination");
+                    String rightDescription = rs.getString("Ridescription");
+                    Right right = new Right(rightId, rightDenomination, rightDescription);
+                    rightsOBD.add(right);
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : UserDAO getRights(" + id + ") (ownsByDefault) :" + e.getMessage(), e);
+        }
+        
+        // Build the list of DISTINCT rights
+        ArrayList<Right> allRights = rightsOBD;
+        boolean isAlreadyHere;
+        if(rightsOwns != null) {
+            for (Right rightO : rightsOwns) {
+                isAlreadyHere = false;
+                for (Right right : allRights) {
+                    if(rightO.getId() == right.getId()) {
+                        isAlreadyHere = true;
+                    }
+                }
+                if(!isAlreadyHere) {
+                    allRights.add(rightO);
+                }
+            }
+        }        
+        return allRights;
+    }
+
 
     // ============== //
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
         UserDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO();
-        User u = test.getById(1);
-        User pseudo = test.getByPseudo("The Boss");
-        System.out.println(u);
+        System.out.println(test.getByPseudo("The Boss"));
     }
 
 

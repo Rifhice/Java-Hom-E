@@ -45,10 +45,20 @@ public class MyButtonFX extends Button{
 		setPrefHeight(height);
 	}
 	
+	public MyButtonFX(String label, int id, Rectangle2D.Float bounds, EventHandler<ActionEvent> event) {
+		setText(label);
+		setId(id +"");
+		setOnAction(event);
+		setOnAction(event);
+		setLayoutX((int)(bounds.getX()));
+		setLayoutY((int)(bounds.getY()));
+		setPrefWidth((int)bounds.getWidth());
+		setPrefHeight((int)bounds.getHeight());
+	}
+	
 	public MyButtonFX(Image image, Rectangle2D.Float bounds, EventHandler<ActionEvent> event) {
 		// TODO Auto-generated constructor stub
 		double ratio = bounds.getWidth()/image.getWidth();
-		System.out.println(ratio);
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
 		imageView.setFitWidth(image.getWidth()*ratio);
@@ -57,6 +67,25 @@ public class MyButtonFX extends Button{
 		setOnAction(event);
 		setLayoutX((int)(bounds.getX()));
 		setLayoutY((int)(bounds.getY()));
+	}
+	
+	
+	
+	public MyButtonFX(Image image, Rectangle2D.Float bounds, EventHandler<ActionEvent> event, int id) {
+		// TODO Auto-generated constructor stub
+		double ratioWidth = bounds.getWidth()/image.getWidth();
+		double ratioHeight = bounds.getHeight()/image.getHeight();
+		setId(id +"");
+		ImageView imageView = new ImageView();
+		imageView.setImage(image);
+		imageView.setFitWidth(image.getWidth()*ratioWidth);
+		imageView.setFitHeight(image.getHeight()*ratioHeight / 1.2);
+		setGraphic(imageView);
+		setOnAction(event);
+		setLayoutX((int)(bounds.getX()));
+		setLayoutY((int)(bounds.getY()));
+		setPrefHeight((int)bounds.getHeight());
+		setPrefWidth((int)bounds.getWidth());
 	}
 
 	public MyButtonFX centerX(double width) {

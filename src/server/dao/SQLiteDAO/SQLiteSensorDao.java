@@ -37,7 +37,7 @@ public class SQLiteSensorDao extends SensorDAO{
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getName());
               prepStat.setString(2, obj.getDescription());
-              prepStat.setInt(3, obj.getSensorCategoryId());
+              prepStat.setInt(3, obj.getSensorCategory().getId());
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object

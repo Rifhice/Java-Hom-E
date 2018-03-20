@@ -575,6 +575,22 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting Histories : " + e.getMessage());
         }
     }
+    
+    private static void insertIsPartOf() {
+        String insertIsPartOf1 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (1,1);";
+        String insertIsPartOf2 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (2,1);";
+        String insertIsPartOf3 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (2,3);";
+        String insertIsPartOf4 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (4,2);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertIsPartOf1);
+            stmt.execute(insertIsPartOf2);
+            stmt.execute(insertIsPartOf3);
+            stmt.execute(insertIsPartOf4);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting IsPartOf : " + e.getMessage());
+        }
+    }
+
 
     private static void insertOwns() {
         String insertOwns10 = "INSERT INTO owns ('fk_user_id','fk_right_id') VALUES (1,1);";
@@ -717,6 +733,7 @@ public class SQLiteDatabaseManager {
         insertContinuousEnvironmentVariables();
        
         insertExpressions();
+        insertIsPartOf();
         insertBehaviours();
         insertAmbiences();
         insertComposes();

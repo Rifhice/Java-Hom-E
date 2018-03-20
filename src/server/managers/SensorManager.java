@@ -54,7 +54,7 @@ public class SensorManager extends Manager{
 					ArrayList<String> values = new ArrayList<String>();
 					JSONArray valuesArray = object.getJSONArray("values");
 					for (int j = 0; j < valuesArray.length(); j++) {
-						values.add(valuesArray.getString(i));
+						values.add(valuesArray.getString(j));
 					}
 					variables.add(new DiscreteEnvironmentVariable(object.getString("name"), object.getString("description"), object.getString("unity"), values, object.getString("currentvalue")));
 				}
@@ -70,7 +70,12 @@ public class SensorManager extends Manager{
 	
 	public void registerSensorToTheSystem(JSONObject json,ConnectionToClient client) {
 		Sensor sensor = getSensorFromJson(json); //Create the new Sensor object
-		Sensor sensorCreated = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
+		Sensor sensorCreated = null;
+		try {
+			sensorCreated = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		JSONObject result = new JSONObject();
 		if(sensorCreated != null) {
 			sensors.add(sensor);

@@ -49,15 +49,17 @@ public class SQLiteSensorDao extends SensorDAO{
               
               // Get the id generated for this object
               if(created > 0) {
-                  String sqlGetLastId = "SELECT last_insert_rowid()";
-                  PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                  int id = prepStatLastId.executeQuery().getInt(1);
-                  sensor.setId(id);
+                  sensor.setId(SQLiteDAOTools.getLastId(connect));
+                  for (int i = 0; i < sensor.getEnvironmentVariable().size(); i++) {
+                	boolean tmp = createEnvironmentVariable(sensor.getEnvironmentVariable().get(i));
+                	if(!tmp) {
+						return null;
+					}
+				}
               }
               else {
                   sensor = null;
               }
-              
           } catch (SQLException e) {
               throw new DAOException("DAOException : SensorDAO create(" + obj.getId() + ") :" + e.getMessage(), e); 
           }
@@ -72,21 +74,25 @@ public class SQLiteSensorDao extends SensorDAO{
         // Insert the object
         int created = 0;
           try {
+        	  
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, variable.getName());
               prepStat.setString(2, variable.getDescription());
               prepStat.setString(3, variable.getUnit());
               prepStat.setInt(4, variable.getSensor().getId());
               created = prepStat.executeUpdate();
-              
               // Get the id generated for this object
               if(created > 0) {
                   variable.setId(SQLiteDAOTools.getLastId(connect));
                   if(variable instanceof ContinuousEnvironmentVariable) {
-                	  createContinuousVariable((ContinuousEnvironmentVariable)variable);
+                	  if(!createContinuousVariable((ContinuousEnvironmentVariable)variable)) {
+                		  return false;
+                	  }
                   }
                   else if(variable instanceof DiscreteEnvironmentVariable) {
-                	  createDiscreteVariable((DiscreteEnvironmentVariable)variable);
+                	  if(!createDiscreteVariable((DiscreteEnvironmentVariable)variable)) {
+                		  return false;
+                	  }
                   }
               }
               else {
@@ -96,7 +102,7 @@ public class SQLiteSensorDao extends SensorDAO{
           } catch (SQLException e) {
               throw new DAOException("DAOException : SensorDAO create(" + variable.getId() + ") :" + e.getMessage(), e); 
           }
-          return false;
+          return true;
     }
     
     private boolean createContinuousVariable(ContinuousEnvironmentVariable variable) {

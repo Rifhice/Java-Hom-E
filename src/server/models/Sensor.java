@@ -33,6 +33,10 @@ public class Sensor extends ExternalActor{
     public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
         super(name, description);
         this.environmentVariable = environmentVariable;
+        for (int i = 0; i < environmentVariable.size(); i++) {
+			environmentVariable.get(i).setSensor(this);
+			
+		}
     }
     
 	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {

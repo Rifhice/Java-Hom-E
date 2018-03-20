@@ -7,6 +7,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.text.Font;
 import user.tools.GraphicalCharter;
 
+/**
+ * Custom Home-E text area.
+ * By default : 
+ *  - words wrap activated
+ *  - size and layout rounded (fix blurry bug in some cases) 
+ * @author Clm-Roig
+ *
+ */
 public class MyTextArea extends TextArea{
 	
 	public MyTextArea(String text,Rectangle2D.Float bounds) {	
@@ -26,6 +34,7 @@ public class MyTextArea extends TextArea{
         
         setText(text);
         setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE));
+        setWrapText(true);
 	}
 	
 	public MyTextArea(String text,Rectangle2D.Float bounds,float fontMultiplier) {	
@@ -45,6 +54,7 @@ public class MyTextArea extends TextArea{
         
         setText(text);
         setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));
+        setWrapText(true);
 	}
 	
 	public MyTextArea lockText() {

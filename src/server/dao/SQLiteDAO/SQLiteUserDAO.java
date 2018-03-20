@@ -48,10 +48,7 @@ public class SQLiteUserDAO extends UserDAO {
 
             // Get the id generated for this object
             if(created > 0) {
-                String sqlGetLastId = "SELECT last_insert_rowid()";
-                PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                int id = prepStatLastId.executeQuery().getInt(1);
-                user.setId(id);
+                user.setId(SQLiteDAOTools.getLastId(connect));
             }
             else {
                 user = null;

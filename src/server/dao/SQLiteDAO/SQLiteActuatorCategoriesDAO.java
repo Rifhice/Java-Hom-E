@@ -34,10 +34,7 @@ public class SQLiteActuatorCategoriesDAO extends ActuatorCategoriesDAO{
               
               // Get the id generated for this object
               if(created > 0) {
-                  String sqlGetLastId = "SELECT last_insert_rowid()";
-                  PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                  int id = prepStatLastId.executeQuery().getInt(1);
-                  actuatorCategory.setId(id);
+                  actuatorCategory.setId(SQLiteDAOTools.getLastId(connect));
               }
               else {
             	  actuatorCategory = null;

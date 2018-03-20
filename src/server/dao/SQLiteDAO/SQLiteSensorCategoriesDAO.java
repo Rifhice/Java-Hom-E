@@ -35,10 +35,7 @@ public class SQLiteSensorCategoriesDAO extends SensorCategoriesDAO{
               
               // Get the id generated for this object
               if(created > 0) {
-                  String sqlGetLastId = "SELECT last_insert_rowid()";
-                  PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                  int id = prepStatLastId.executeQuery().getInt(1);
-                  sensorCategory.setId(id);
+                  sensorCategory.setId(SQLiteDAOTools.getLastId(connect));
               }
               else {
             	  sensorCategory = null;

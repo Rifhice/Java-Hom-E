@@ -64,8 +64,8 @@ public class AmbiencesContent extends Content {
 	private AmbiencesContent() {
 		MyPane newAmbiencePane = new MyPane(newAmbienceBounds.computeBounds(width, height));
 		
-		MyLabel newAmbienceLabel = new MyLabel("Nouvelle ambiance: ", newAmbienceLabelBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()), 1f);
-		MyTextFieldFX newAmbienceName = new MyTextFieldFX("Nom de l'ambiance", newAmbienceTextFieldBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()));
+		MyLabel newAmbienceLabel = new MyLabel("New ambience: ", newAmbienceLabelBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()), 1f);
+		MyTextFieldFX newAmbienceName = new MyTextFieldFX("Name", newAmbienceTextFieldBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()));
 		Image image = new Image("file:asset/images/check.png");
 		MyButtonFX newAmbienceButton = new MyButtonFX(image, newAmbienceButtonBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
 

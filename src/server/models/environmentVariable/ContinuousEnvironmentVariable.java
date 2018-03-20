@@ -57,6 +57,10 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
         this.precision = precision;
     }
 
+    public double getCurrentValue() {
+    	return currentValue;
+    }
+    
     public void setCurrentValue(double currentValue) {
         this.currentValue = currentValue;
         setChanged();

@@ -136,6 +136,8 @@ public class SQLiteDatabaseManager {
         String createTableCommands = "CREATE TABLE IF NOT EXISTS commands (\n" 
                 + " id integer PRIMARY KEY, \n"
                 + " name text NOT NULL, \n"
+                + " key text NOT NULL, \n"
+                + " description text, \n"
                 + " fk_actuator_id integer, \n"
                 + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
                 + ");";
@@ -425,13 +427,11 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertCommands() {
-        String insertCommand1 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (1,'switch on',1);";
-        String insertCommand2 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (2,'switch off',1);";
-        String insertCommand3 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (3,'set temperature',2);";
-        String insertCommand4 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (4,'set temperature',3);";
-        String insertCommand5 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (5,'make tea',4);";
-        String insertCommand6 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (6,'switch on',5);";
-        String insertCommand7 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (7,'switch off',5);";
+        String insertCommand1 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (1,'switch','sw','Switch on or off',1);";
+        String insertCommand2 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (2,'set temperature','set','',2);";
+        String insertCommand3 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (3,'set temperature','set','',3);";
+        String insertCommand4 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (4,'make tea','mkt','',4);";
+        String insertCommand5 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (5,'switch','sw','Switch on or off',5);";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertCommand1);
@@ -439,13 +439,24 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertCommand3);
             stmt.execute(insertCommand4);
             stmt.execute(insertCommand5);
-            stmt.execute(insertCommand6);
-            stmt.execute(insertCommand7);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Commands : " + e.getMessage());
         }       
     }
     
+    private static void insertCommandValues() {
+        String insertCommandValue1 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
+        String insertCommandValue2 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (2,'light',1);";
+        String insertCommandValue3 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (3,'light',2);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertCommandValue1);
+            stmt.execute(insertCommandValue2);
+            stmt.execute(insertCommandValue3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting CommandValues : " + e.getMessage());
+        }
+    }
+
     private static void insertContinuousCommandValues() {
         String insertContinuousCommandValue1 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 0.5, 1);";
         String insertContinuousCommandValue2 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 1.0, 2);";
@@ -488,19 +499,6 @@ public class SQLiteDatabaseManager {
          
         } catch (SQLException e) {
             System.out.println("ERROR inserting DiscreteEnvironmentVariables : " + e.getMessage());
-        }
-    }
-    
-    private static void insertCommandValues() {
-        String insertCommandValue1 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
-        String insertCommandValue2 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (2,'light',1);";
-        String insertCommandValue3 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (3,'light',2);";
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(insertCommandValue1);
-            stmt.execute(insertCommandValue2);
-            stmt.execute(insertCommandValue3);
-        } catch (SQLException e) {
-            System.out.println("ERROR inserting CommandValues : " + e.getMessage());
         }
     }
     

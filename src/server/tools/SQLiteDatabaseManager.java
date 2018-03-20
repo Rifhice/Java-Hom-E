@@ -409,6 +409,23 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertBehaviours() {
+        String insertBehaviour1 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (1,'Light presence kitchen', 1, 1);";
+        String insertBehaviour2 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (2,);";
+        String insertBehaviour3 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (3,'>=','3');";
+        String insertBehaviour4 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (4,'>','4');";
+        String insertBehaviour5 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (5,'!=','5');";        
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertBehaviour1);
+            stmt.execute(insertBehaviour2);
+            stmt.execute(insertBehaviour3);
+            stmt.execute(insertBehaviour4);
+            stmt.execute(insertBehaviour5);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Behaviours : " + e.getMessage());
+        }
+    }
+    
     private static void insertBlocks() {
         String insertBlock1 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (1,'<',1);";
         String insertBlock2 = "INSERT INTO blocks ('id','operator','fk_environmentValue_id') VALUES (2,'==','2');";
@@ -512,6 +529,19 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertEnvironmentVariable3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
+        }
+    }
+    
+    private static void insertExpressions() {
+        String insertExpression1 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (1,'{\"<\",\"==\"}',1);";
+        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{\"<\"}',2);";
+        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{\"!=\"}',3);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertExpression1);
+            stmt.execute(insertExpression2);
+            stmt.execute(insertExpression3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Expressions : " + e.getMessage());
         }
     }
 
@@ -666,7 +696,7 @@ public class SQLiteDatabaseManager {
         insertDiscreteEnvironmentVariables();
         insertContinuousEnvironmentVariables();
        
-        
+        insertExpressions();
         insertActuatorCategories();
         insertActuators();
         

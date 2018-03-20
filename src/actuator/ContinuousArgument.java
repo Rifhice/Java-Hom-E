@@ -11,8 +11,8 @@ public class ContinuousArgument extends Argument{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public ContinuousArgument(String name, String description, double valueMin,double valueMax, double precision) {
-        super(name, description);
+    public ContinuousArgument(String name, double valueMin,double valueMax, double precision) {
+        super(name);
         this.valueMax = valueMax;
         this.valueMin = valueMin;
         this.precision = precision;
@@ -23,7 +23,6 @@ public class ContinuousArgument extends Argument{
 		JSONObject result = new JSONObject();
 		result.put("type", "continuous");
 		result.put("name", name);
-		result.put("description", description);
 		result.put("valuemin", valueMin);
 		result.put("valuemax", valueMax);
 		result.put("precision", precision);

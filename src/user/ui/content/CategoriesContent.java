@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import javafx.application.Platform;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import server.managers.ActuatorCategorieManager;
-import server.models.argument.Argument;
+import server.models.commandValue.CommandValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
@@ -302,11 +303,14 @@ public class CategoriesContent extends Content {
 		if(content == null) {
 			content = new CategoriesContent();
 		}
+		content.updateSensorData();
+		content.updateActuatorData();
 		return content;
 	}
 	
 	@Override
 	public void handleMessage(Object message) {
+		System.out.println("Received : " + message);
 		if(message instanceof String) {
 			try {
 				System.out.println(message.toString());

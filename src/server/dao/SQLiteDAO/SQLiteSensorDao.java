@@ -6,10 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
+import server.models.environmentVariable.ContinuousEnvironmentVariable;
+import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.EnvironmentVariable;
 
 public class SQLiteSensorDao extends SensorDAO{
 	
@@ -37,15 +42,20 @@ public class SQLiteSensorDao extends SensorDAO{
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
               prepStat.setString(1, obj.getName());
               prepStat.setString(2, obj.getDescription());
-              prepStat.setInt(3, obj.getSensorCategoryId());
+              if(obj.getSensorCategory() != null) {
+            	  prepStat.setInt(3, obj.getSensorCategory().getId());
+              }
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
               if(created > 0) {
-                  String sqlGetLastId = "SELECT last_insert_rowid()";
-                  PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                  int id = prepStatLastId.executeQuery().getInt(1);
-                  sensor.setId(id);
+                  sensor.setId(SQLiteDAOTools.getLastId(connect));
+                  for (int i = 0; i < sensor.getEnvironmentVariable().size(); i++) {
+                	boolean tmp = createEnvironmentVariable(sensor.getEnvironmentVariable().get(i));
+                	if(!tmp) {
+						return null;
+					}
+				}
               }
               else {
                   sensor = null;
@@ -56,6 +66,105 @@ public class SQLiteSensorDao extends SensorDAO{
         return sensor;
     }
 
+    private boolean createEnvironmentVariable(EnvironmentVariable variable) {
+    	String sql = "INSERT INTO environmentVariables "
+                + "(name, description,unit, fk_sensor_id) VALUES "
+                + "(?, ?, ?,?)";
+        
+        // Insert the object
+        int created = 0;
+          try {
+        	  
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, variable.getName());
+              prepStat.setString(2, variable.getDescription());
+              prepStat.setString(3, variable.getUnit());
+              prepStat.setInt(4, variable.getSensor().getId());
+              created = prepStat.executeUpdate();
+              // Get the id generated for this object
+              if(created > 0) {
+                  variable.setId(SQLiteDAOTools.getLastId(connect));
+                  if(variable instanceof ContinuousEnvironmentVariable) {
+                	  if(!createContinuousVariable((ContinuousEnvironmentVariable)variable)) {
+                		  return false;
+                	  }
+                  }
+                  else if(variable instanceof DiscreteEnvironmentVariable) {
+                	  if(!createDiscreteVariable((DiscreteEnvironmentVariable)variable)) {
+                		  return false;
+                	  }
+                  }
+              }
+              else {
+                  return false;
+              }
+              
+          } catch (SQLException e) {
+              throw new DAOException("DAOException : SensorDAO create(" + variable.getId() + ") :" + e.getMessage(), e); 
+          }
+          return true;
+    }
+    
+    private boolean createContinuousVariable(ContinuousEnvironmentVariable variable) {
+    	String sql = "INSERT INTO continuousEnvironmentVariables "
+                + "(fk_environmentVariable_id, value_min, value_max,current_value,precision) VALUES "
+                + "(?, ?, ?,?,?)";
+        
+        // Insert the object
+        int created = 0;
+          try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setInt(1, variable.getId());
+              prepStat.setFloat(2,(float) variable.getValueMin());
+              prepStat.setFloat(3, (float)variable.getValueMax());
+              prepStat.setFloat(4,(float) variable.getCurrentValue());
+              prepStat.setFloat(5, (float)variable.getPrecision());          
+              created = prepStat.executeUpdate();
+              
+              // Get the id generated for this object
+              if(created > 0) {
+                  return true;
+              }
+              else {
+                  return false;
+              }
+              
+          } catch (SQLException e) {
+              throw new DAOException("DAOException : SensorDAO create(" + variable.getId() + ") :" + e.getMessage(), e); 
+          }
+    }
+    
+    private boolean createDiscreteVariable(DiscreteEnvironmentVariable variable) {
+    	String sql = "INSERT INTO discreteEnvironmentVariables "
+                + "(fk_environmentVariable_id, current_value, possible_values) VALUES "
+                + "(?, ?, ?)";
+        
+        // Insert the object
+        int created = 0;
+          try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setInt(1, variable.getId());
+              prepStat.setString(2,variable.getCurrentValue());
+              JSONObject json = new JSONObject();
+              for (int i = 0; i < variable.getPossibleValues().size(); i++) {
+				json.append("possibleValues", variable.getPossibleValues().get(i));
+              }
+              prepStat.setString(3, json.toString());       
+              created = prepStat.executeUpdate();
+              
+              // Get the id generated for this object
+              if(created > 0) {
+                  return true;
+              }
+              else {
+                  return false;
+              }
+              
+          } catch (SQLException e) {
+              throw new DAOException("DAOException : SensorDAO create(" + variable.getId() + ") :" + e.getMessage(), e); 
+          }
+    }
+    
     // TODO : return ArrayList<Command>
     @Override
     public Sensor getById(int id) throws DAOException {

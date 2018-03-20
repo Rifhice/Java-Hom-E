@@ -136,6 +136,8 @@ public class SQLiteDatabaseManager {
         String createTableCommands = "CREATE TABLE IF NOT EXISTS commands (\n" 
                 + " id integer PRIMARY KEY, \n"
                 + " name text NOT NULL, \n"
+                + " key text NOT NULL, \n"
+                + " description text, \n"
                 + " fk_actuator_id integer, \n"
                 + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
                 + ");";
@@ -388,6 +390,17 @@ public class SQLiteDatabaseManager {
         }
     }
     
+    private static void insertAmbiences() {
+        String insertAmbience1 = "INSERT INTO ambiences ('id','name','description') VALUES (1,'Winter','Winter is here...');";
+        String insertAmbience2 = "INSERT INTO ambiences ('id','name','description') VALUES (2,'Lounge','Very nice ambience. Beautiful.');";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertAmbience1);
+            stmt.execute(insertAmbience2);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Ambiences : " + e.getMessage());
+        }
+    }
+    
     private static void insertAtomicActions() {
         String insertAtomicAction1 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (1, 'Switch On','switchOn',1);";
         String insertAtomicAction2 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (2, 'Switch Off','switchOff',1);";
@@ -404,6 +417,19 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertAtomicAction6);
         } catch (SQLException e) {
             System.out.println("ERROR inserting AtomicActions : " + e.getMessage());
+        }
+    }
+    
+    private static void insertBehaviours() {
+        String insertBehaviour1 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (1,'Light presence kitchen', 1, 1);";
+        String insertBehaviour2 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (2,'So hot',0,2);";
+        String insertBehaviour3 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (3,'It''s cold : I want tea',1,3);";      
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertBehaviour1);
+            stmt.execute(insertBehaviour2);
+            stmt.execute(insertBehaviour3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Behaviours : " + e.getMessage());
         }
     }
     
@@ -425,13 +451,11 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertCommands() {
-        String insertCommand1 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (1,'switch on',1);";
-        String insertCommand2 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (2,'switch off',1);";
-        String insertCommand3 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (3,'set temperature',2);";
-        String insertCommand4 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (4,'set temperature',3);";
-        String insertCommand5 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (5,'make tea',4);";
-        String insertCommand6 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (6,'switch on',5);";
-        String insertCommand7 = "INSERT INTO commands ('id', 'name', 'fk_actuator_id') VALUES (7,'switch off',5);";
+        String insertCommand1 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (1,'switch','sw','Switch on or off',1);";
+        String insertCommand2 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (2,'set temperature','set','',2);";
+        String insertCommand3 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (3,'set temperature','set','',3);";
+        String insertCommand4 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (4,'make tea','mkt','',4);";
+        String insertCommand5 = "INSERT INTO commands ('id', 'name', 'key', 'description', 'fk_actuator_id') VALUES (5,'switch','sw','Switch on or off',5);";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertCommand1);
@@ -439,13 +463,37 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertCommand3);
             stmt.execute(insertCommand4);
             stmt.execute(insertCommand5);
-            stmt.execute(insertCommand6);
-            stmt.execute(insertCommand7);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Commands : " + e.getMessage());
         }       
     }
     
+    private static void insertCommandValues() {
+        String insertCommandValue1 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
+        String insertCommandValue2 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (2,'light',1);";
+        String insertCommandValue3 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (3,'light',2);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertCommandValue1);
+            stmt.execute(insertCommandValue2);
+            stmt.execute(insertCommandValue3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting CommandValues : " + e.getMessage());
+        }
+    }
+    
+    private static void insertComposes() {
+        String insertComposes1 = "INSERT INTO composes ('fk_ambience_id', 'fk_behaviour_id') VALUES (1,2);";
+        String insertComposes2 = "INSERT INTO composes ('fk_ambience_id', 'fk_behaviour_id') VALUES (2,1);";
+        String insertComposes3 = "INSERT INTO composes ('fk_ambience_id', 'fk_behaviour_id') VALUES (2,3);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertComposes1);
+            stmt.execute(insertComposes2);
+            stmt.execute(insertComposes3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Composes : " + e.getMessage());
+        }
+    }
+
     private static void insertContinuousCommandValues() {
         String insertContinuousCommandValue1 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 0.5, 1);";
         String insertContinuousCommandValue2 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 1.0, 2);";
@@ -491,19 +539,6 @@ public class SQLiteDatabaseManager {
         }
     }
     
-    private static void insertCommandValues() {
-        String insertCommandValue1 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
-        String insertCommandValue2 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (2,'light',1);";
-        String insertCommandValue3 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (3,'light',2);";
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(insertCommandValue1);
-            stmt.execute(insertCommandValue2);
-            stmt.execute(insertCommandValue3);
-        } catch (SQLException e) {
-            System.out.println("ERROR inserting CommandValues : " + e.getMessage());
-        }
-    }
-    
     private static void insertEnvironmentVariables() {
         String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (1,'temperature','Variable temperature', '°C');";
         String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (2,'presence','Is anybody in there ?', '');";
@@ -514,6 +549,19 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertEnvironmentVariable3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
+        }
+    }
+    
+    private static void insertExpressions() {
+        String insertExpression1 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (1,'{\"<\",\"==\"}',1);";
+        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{\"<\"}',2);";
+        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{\"!=\"}',3);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertExpression1);
+            stmt.execute(insertExpression2);
+            stmt.execute(insertExpression3);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Expressions : " + e.getMessage());
         }
     }
 
@@ -527,6 +575,37 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting Histories : " + e.getMessage());
         }
     }
+    
+    private static void insertIsPartOf() {
+        String insertIsPartOf1 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (1,1);";
+        String insertIsPartOf2 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (2,1);";
+        String insertIsPartOf3 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (2,3);";
+        String insertIsPartOf4 = "INSERT INTO isPartOf ('fk_block_id', 'fk_expression_id') VALUES (4,2);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertIsPartOf1);
+            stmt.execute(insertIsPartOf2);
+            stmt.execute(insertIsPartOf3);
+            stmt.execute(insertIsPartOf4);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting IsPartOf : " + e.getMessage());
+        }
+    }
+    
+    private static void insertLaunches() {
+        String insertLaunches1 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (1,1);";
+        String insertLaunches2 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (1,6);";
+        String insertLaunches3 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (2,3);";
+        String insertLaunches4 = "INSERT INTO launches ('fk_behaviour_id', 'fk_atomicAction_id') VALUES (3,5);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertLaunches1);
+            stmt.execute(insertLaunches2);
+            stmt.execute(insertLaunches3);
+            stmt.execute(insertLaunches4);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Launches : " + e.getMessage());
+        }
+    }
+
 
     private static void insertOwns() {
         String insertOwns10 = "INSERT INTO owns ('fk_user_id','fk_right_id') VALUES (1,1);";
@@ -668,11 +747,16 @@ public class SQLiteDatabaseManager {
         insertDiscreteEnvironmentVariables();
         insertContinuousEnvironmentVariables();
        
-        
+        insertExpressions();
+        insertIsPartOf();
+        insertBehaviours();
+        insertAmbiences();
+        insertComposes();
         insertActuatorCategories();
         insertActuators();
         
         insertAtomicActions();
+        insertLaunches();
         
         insertSensorCategories();
         insertSensors();

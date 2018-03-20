@@ -1,5 +1,6 @@
 package server.models.commandValue;
 
+import java.util.ArrayList;
 
 /**
  * A value is an information the actuator needs to perform an action or modify its state
@@ -7,28 +8,27 @@ package server.models.commandValue;
  * @author Jade
  */
 public abstract class CommandValue {
-	    
-	// ==================== //
-	// ==== ATTRIBUTES ==== //
-	// ==================== //
-	private int id;
-	private String name;   
+ // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
+    private int id;
+    private String name;   
 
-	// ====================== //
-	// ==== CONSTRUCTORS ==== //
-	// ====================== //
-	public CommandValue() {}
-	    
-	public CommandValue(String name) {
-		this.name = name;
-	}
-	
-	public CommandValue(int id, String name) {
-	    this.id = id;
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    public CommandValue() {}
+        
+    public CommandValue(String name) {
         this.name = name;
     }
-	
-	// ================= //
+    
+    public CommandValue(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    // ================= //
     // ==== METHODS ==== //
     // ================= //
     public int getId() {
@@ -48,7 +48,4 @@ public abstract class CommandValue {
     }
     
     // ===========================================
-	
-		
-
 }

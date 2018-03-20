@@ -8,7 +8,6 @@ import java.util.ArrayList;
  * @author Clm-Roig
  */
 public class DiscreteCommandValue extends CommandValue {
-
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
@@ -32,7 +31,7 @@ public class DiscreteCommandValue extends CommandValue {
 
     // ================= //
     // ==== METHODS ==== //
-    // ================= //	    
+    // ================= //     
     public ArrayList<String> getPossibleValues() {
         return possibleValues;
     }
@@ -42,6 +41,5 @@ public class DiscreteCommandValue extends CommandValue {
     }
     
     // ==================================
-
-
+    
 }

@@ -5,7 +5,8 @@ package server.models.commandValue;
  * to perform an action or modify its state
  * @author Jade Hennebert
  */
-public class ContinuousCommandValue extends CommandValue {
+public class ContinuousCommandValue extends CommandValue{
+	
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
@@ -57,5 +58,5 @@ public class ContinuousCommandValue extends CommandValue {
 
     // ==================================
 
-   
+    
 }

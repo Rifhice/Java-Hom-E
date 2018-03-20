@@ -10,9 +10,9 @@ import org.json.JSONObject;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Command;
-import server.models.argument.Argument;
-import server.models.argument.ContinuousArgument;
-import server.models.argument.DiscreteArgument;
+import server.models.commandValue.CommandValue;
+import server.models.commandValue.ContinuousCommandValue;
+import server.models.commandValue.DiscreteCommandValue;
 import ocsf.server.ConnectionToClient;
 
 public class ActuatorManager extends Manager {
@@ -63,13 +63,13 @@ public class ActuatorManager extends Manager {
 				String keyCommand = object.getString("key");
 				
 				JSONArray arrArg = object.getJSONArray("args");
-				ArrayList<Argument> arguments = new ArrayList<Argument>();
+				ArrayList<CommandValue> arguments = new ArrayList<CommandValue>();
 				for (int j = 0; j < arrArg.length(); j++){
 					
 					JSONObject current = arrArg.getJSONObject(j);
 					System.out.println(current.toString());
 					if(current.getString("type").equals("continuous")) {
-						arguments.add(new ContinuousArgument(current.getString("name"), current.getString("description"), current.getDouble("valuemin"), current.getDouble("valuemax"), current.getDouble("precision")));
+						arguments.add(new ContinuousCommandValue(current.getString("name"), current.getDouble("valuemin"), current.getDouble("valuemax"), current.getDouble("precision")));
 					}
 					else if(current.getString("type").equals("discrete")){
 						ArrayList<String> values = new ArrayList<String>();
@@ -77,7 +77,7 @@ public class ActuatorManager extends Manager {
 						for (int z = 0; z < valuesArray.length(); z++) {
 							values.add(valuesArray.getString(z));
 						}
-						arguments.add(new DiscreteArgument(current.getString("name"), current.getString("description"), values));
+						arguments.add(new DiscreteCommandValue(current.getString("name"), values));
 					}
 				}
 				commands.add(new Command(nameCommand, descriptionCommand, keyCommand, arguments));

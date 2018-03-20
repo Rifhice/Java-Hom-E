@@ -56,7 +56,10 @@ public class AmbiencesContent extends Content {
 	private List<Behaviour> selectedBehaviours;
 	private List<Ambience> ambiences;
 	
-	private double NB_OF_BEHAVIOURS_DISPLAYED = 10;
+	private int NB_OF_BEHAVIOURS_DISPLAYED = 10;
+	private int NB_OF_AMBIENCES_DISPLAYED = 8;
+	
+	private int currentAmbiencesSelected = -1;
 	
 	private AmbiencesContent() {
 		MyPane newAmbiencePane = new MyPane(newAmbienceBounds.computeBounds(width, height));
@@ -87,13 +90,16 @@ public class AmbiencesContent extends Content {
 		this.getChildren().add(ambiencesScrollPane);
 		this.getChildren().add(behavioursNotChosenScrollPane);
 		this.getChildren().add(behavioursChosenScrollPane);
+		notSelectedBehaviours = new ArrayList<Behaviour>();
 		notChosenBehavioursList.setPrefWidth(behavioursNotChosenScrollPane.getPrefWidth());
 		notChosenBehavioursList.setPrefHeight(behavioursNotChosenScrollPane.getPrefHeight());
 		behavioursNotChosenScrollPane.setContent(notChosenBehavioursList);
 		chosenBehavioursList.setPrefWidth(behavioursChosenScrollPane.getPrefWidth());
 		chosenBehavioursList.setPrefHeight(behavioursChosenScrollPane.getPrefHeight());
 		behavioursChosenScrollPane.setContent(chosenBehavioursList);
-		notSelectedBehaviours = new ArrayList<Behaviour>();
+		ambiencesList.setPrefWidth(behavioursChosenScrollPane.getPrefWidth());
+		ambiencesList.setPrefHeight(behavioursChosenScrollPane.getPrefHeight());
+		ambiencesScrollPane.setContent(ambiencesList);
 		this.updateAmbiences();
 		this.updateBehaviours();
 	}
@@ -166,7 +172,7 @@ public class AmbiencesContent extends Content {
 							for(int k = 0; k < arrBehav.length(); k++) {
 								behav.add(arrBehav.getJSONObject(k).getInt("id"));
 							}
-							this.ambiences.add(new Ambience(current.getInt("id"), behav));
+							this.ambiences.add(new Ambience(current.getInt("id"), current.getString("name"), behav));
 						}
 						updateAmbienceUI();
 						break;
@@ -211,7 +217,6 @@ public class AmbiencesContent extends Content {
                  @Override public void run() {
                 	notChosenBehavioursList.getChildren().clear();
          			for (int i = 0; i < notSelectedBehaviours.size(); i++) {
-         				System.out.println("mdr");
          				notChosenBehavioursList.add(new BehaviourCell(notSelectedBehaviours.get(i) ,notChosenBehavioursList.getPrefWidth(),notChosenBehavioursList.getPrefHeight() / NB_OF_BEHAVIOURS_DISPLAYED, 
          						new EventHandler<ActionEvent>() {
 									@Override
@@ -235,28 +240,19 @@ public class AmbiencesContent extends Content {
 	}
 	
 	private void updateAmbienceUI() {
-		if(this.notSelectedBehaviours.size() > 0) {
+		if(this.ambiences.size() > 0) {
 			
              Platform.runLater(new Runnable() {
                  @Override public void run() {
-                	notChosenBehavioursList.getChildren().clear();
-         			for (int i = 0; i < notSelectedBehaviours.size(); i++) {
-         				System.out.println("mdr");
-         				notChosenBehavioursList.add(new BehaviourCell(notSelectedBehaviours.get(i) ,notChosenBehavioursList.getPrefWidth(),notChosenBehavioursList.getPrefHeight() / NB_OF_BEHAVIOURS_DISPLAYED, 
+                	ambiencesList.getChildren().clear();
+         			for (int i = 0; i < ambiences.size(); i++) {
+         				ambiencesList.add(new MyButtonFX(ambiences.get(i).getName(), ambiences.get(i).getId(), ambiencesList.getPrefWidth(),ambiencesList.getPrefHeight() / NB_OF_AMBIENCES_DISPLAYED, 
          						new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent event) {
-										int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-										changeBehaviourState(pressedButton);
+										
 									}
-								},
-         						new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent event) {
-										int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-									}
-								}, 
-         						false
+								}
          				),0,i);
          			}
                  }

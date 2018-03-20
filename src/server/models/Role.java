@@ -52,7 +52,7 @@ public class Role {
     // ==================================
 
     public String toString() {
-        String role = "ROLE #"+id+" "+name;
+        String role = "\n ROLE #"+id+" "+name;
         role += "\nRights:";
         if(rights != null) {
             for (Right right : rights) {

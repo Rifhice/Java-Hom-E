@@ -236,9 +236,10 @@ public class SQLiteRoleDAO extends RoleDAO {
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
-        RoleDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getRoleDAO();
+        //Test getBy()
+    	RoleDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getRoleDAO();
         Role role1 = test.getById(1) ;
-        Role role2 = test.getById(2) ;
+        Role role2 = test.getByName("family member") ;
         System.out.println(role1);
         System.out.println(role2);
         
@@ -248,6 +249,9 @@ public class SQLiteRoleDAO extends RoleDAO {
         test.update(role2);
         System.out.println(role2);
         */
+        
+        // Test getAll()
+        
         System.out.println(" \n\n **Ici commence la requête getAll() ** \n\n");
         System.out.println(test.getAll());
     }

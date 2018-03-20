@@ -8,11 +8,9 @@ public abstract class Argument {
 
 
 	protected String name;
-	protected String description;
 	
-	public Argument(String name,String description) {
+	public Argument(String name) {
 		this.name = name;
-		this.description = description;
 	}
 
 	public abstract JSONObject getJson(); 

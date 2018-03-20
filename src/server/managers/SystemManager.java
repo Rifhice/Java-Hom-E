@@ -26,9 +26,9 @@ public class SystemManager extends Manager{
 	private ActuatorCategorieManager actuatorCategorieManager;
 	private SensorCategorieManager sensorCategorieManager;
 	
-	private EchoServer userServer;
-	private EchoServer sensorServer;
-	private EchoServer actuatorServer;
+	private static EchoServer userServer;
+	private static EchoServer sensorServer;
+	private static EchoServer actuatorServer;
 	
 	// Currently used DB = SQLite
 	public static final int db = AbstractDAOFactory.SQLITE_DAO_FACTORY;
@@ -100,6 +100,10 @@ public class SystemManager extends Manager{
 		default:
 			break;
 		}
+	}
+	
+	public static void sendToAllClient(String message) {
+		userServer.sendToAllClients(message);
 	}
 	
 	// ============== //

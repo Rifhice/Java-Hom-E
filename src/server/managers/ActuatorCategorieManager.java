@@ -49,14 +49,15 @@ public class ActuatorCategorieManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
 		result.put("action", "create");
-		if(actuatorCategoriesDAO.create(obj) == null) {
-			result.put("result", "failure");
-		}
-		else {
-			result.put("result", "success");
-		}
 		try {
-			client.sendToClient(result.toString());
+			if(actuatorCategoriesDAO.create(obj) == null) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,14 +68,15 @@ public class ActuatorCategorieManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
 		result.put("action", "delete");
-		if(actuatorCategoriesDAO.delete(id) == 0) {
-			result.put("result", "failure");
-		}
-		else {
-			result.put("result", "success");
-		}
 		try {
-			client.sendToClient(result.toString());
+			if(actuatorCategoriesDAO.delete(id) == 0) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,15 +86,15 @@ public class ActuatorCategorieManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
 		result.put("action", "update");
-		if(actuatorCategoriesDAO.update(obj) < 1) {
-			System.out.println("hey");
-			result.put("result", "failure");
-		}
-		else {
-			result.put("result", "success");
-		}
 		try {
-			client.sendToClient(result.toString());
+			if(actuatorCategoriesDAO.update(obj) < 1) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -303,11 +303,14 @@ public class CategoriesContent extends Content {
 		if(content == null) {
 			content = new CategoriesContent();
 		}
+		content.updateSensorData();
+		content.updateActuatorData();
 		return content;
 	}
 	
 	@Override
 	public void handleMessage(Object message) {
+		System.out.println("Received : " + message);
 		if(message instanceof String) {
 			try {
 				System.out.println(message.toString());

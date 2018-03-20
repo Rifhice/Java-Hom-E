@@ -30,14 +30,15 @@ public class SensorCategorieManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "sensorCategories");
 		result.put("action", "create");
-		if(sensorCategoriesDAO.create(obj) == null) {
-			result.put("result", "failure");
-		}
-		else {
-			result.put("result", "success");
-		}
 		try {
-			client.sendToClient(result.toString());
+			if(sensorCategoriesDAO.create(obj) == null) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -47,35 +48,39 @@ public class SensorCategorieManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "sensorCategories");
 		result.put("action", "delete");
-		if(sensorCategoriesDAO.delete(id) == 0) {
-			result.put("result", "failure");
-		}
-		else {
-			result.put("result", "success");
-		}
 		try {
-			client.sendToClient(result.toString());
+			if(sensorCategoriesDAO.delete(id) == 0) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 	
 	public void updateSensorCategorie(SensorCategory obj, ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "sensorCategories");
 		result.put("action", "update");
-		if(sensorCategoriesDAO.update(obj) < 1) {
-			System.out.println("hey");
-			result.put("result", "failure");
-		}
-		else {
-			result.put("result", "success");
-		}
 		try {
-			client.sendToClient(result.toString());
+			if(sensorCategoriesDAO.update(obj) < 1) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+			
+
 	}
 	
 	public void getAllSensorCategorie(ConnectionToClient client) {

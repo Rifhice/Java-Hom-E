@@ -48,7 +48,10 @@ public class SQLiteUserDAO extends UserDAO {
 
             // Get the id generated for this object
             if(created > 0) {
-                user.setId(SQLiteDAOTools.getLastId(connect));
+                String sqlGetLastId = "SELECT last_insert_rowid()";
+                PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
+                int id = prepStatLastId.executeQuery().getInt(1);
+                user.setId(id);
             }
             else {
                 user = null;
@@ -272,8 +275,8 @@ public class SQLiteUserDAO extends UserDAO {
         return user;
     }
     
-    public ArrayList<AtomicAction> getAtomicActions(int id) throws DAOException {
-        Behaviour behaviour = null;
+    public ArrayList<Right> getRights(int id) throws DAOException {
+        User user = null;
         // Get owns rights
         String sql = "SELECT Ri.denomination AS Ridenomination, "
                 + "Ri.description AS Ridescription, Ri.id AS Riid "

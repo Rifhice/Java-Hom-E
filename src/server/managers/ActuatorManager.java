@@ -92,7 +92,14 @@ public class ActuatorManager extends Manager {
 	
 	public void registerActuatorToTheSystem(JSONObject json,ConnectionToClient client) {
 		Actuator actuator = getActuatorFromJson(json);
-		Actuator create = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO().create(actuator);
+		Actuator create = null;
+		try {
+		 create = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO().create(actuator);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		JSONObject result = new JSONObject();
 		if(create != null) {
 			actuators.add(actuator);

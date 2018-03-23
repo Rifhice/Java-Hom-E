@@ -103,6 +103,7 @@ public class SystemManager extends Manager{
 			commandManager.handleMessage(json,client);
 			break;
 		default:
+			System.out.println("System manager: NOT FOUND");
 			break;
 		}
 	}

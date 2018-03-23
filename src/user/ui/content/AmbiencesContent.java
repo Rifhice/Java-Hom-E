@@ -133,10 +133,10 @@ public class AmbiencesContent extends Content {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				String name = newAmbienceLabel.getText();
+				String name = newAmbienceName.getText();
 				if(!name.equals("")) {
 					JSONObject json = new JSONObject();
-	                json.put("recipient", "ambiences");
+	                json.put("recipient", "ambience");
 	                json.put("action", "create");
 	                json.put("name", name);
 	                for (int i = 0; i < selectedBehaviours.size(); i++) {
@@ -225,65 +225,69 @@ public class AmbiencesContent extends Content {
 				String recipient = json.getString("recipient");
 				String action;
 				switch(recipient) {
-				case "behaviour":
-					action = json.getString("action");
-					switch (action) {
-					case "getAll":
-						this.notSelectedBehaviours = new ArrayList<Behaviour>();
-						JSONArray arrArg = json.getJSONArray("behaviours");
-						for (int j = 0; j < arrArg.length(); j++){
-							JSONObject current = arrArg.getJSONObject(j);
-							Behaviour behaviour = new Behaviour(current.getInt("id"), current.getString("name"));
-							this.notSelectedBehaviours.add(behaviour);
-							this.behaviourCells.add(new BehaviourCell(behaviour ,notChosenBehavioursList.getPrefWidth(),notChosenBehavioursList.getPrefHeight() / NB_OF_BEHAVIOURS_DISPLAYED, 
-        						new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent event) {
-										int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-										changeBehaviourState(pressedButton);
-									}
-								},
-        						new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent event) {
-										int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-									}
-								}, 
-        						false
-							));
-						}
-						updateBehavioursUI();
-						break;
-					}
-					break;
-				case "ambience":
-					action = json.getString("action");
-					switch (action) {
-					case "getAll":
-						this.ambiences = new ArrayList<Ambience>();
-						JSONArray arrArg = json.getJSONArray("ambiences");
-						for (int j = 0; j < arrArg.length(); j++){
-							JSONObject current = arrArg.getJSONObject(j);
-							List<Integer> behav = new ArrayList<Integer>();
-							JSONArray arrBehav = current.getJSONArray("behaviours");
-							for(int k = 0; k < arrBehav.length(); k++) {
-								behav.add(arrBehav.getJSONObject(k).getInt("id"));
+					case "behaviour":
+						action = json.getString("action");
+						switch (action) {
+							case "getAll":
+								this.notSelectedBehaviours = new ArrayList<Behaviour>();
+								JSONArray arrArg = json.getJSONArray("behaviours");
+								for (int j = 0; j < arrArg.length(); j++){
+									JSONObject current = arrArg.getJSONObject(j);
+									Behaviour behaviour = new Behaviour(current.getInt("id"), current.getString("name"));
+									this.notSelectedBehaviours.add(behaviour);
+									this.behaviourCells.add(new BehaviourCell(behaviour ,notChosenBehavioursList.getPrefWidth(),notChosenBehavioursList.getPrefHeight() / NB_OF_BEHAVIOURS_DISPLAYED, 
+		        						new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent event) {
+												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+												changeBehaviourState(pressedButton);
+											}
+										},
+		        						new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent event) {
+												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+											}
+										}, 
+		        						false
+									));
+								}
+								updateBehavioursUI();
+								break;
 							}
-							this.ambiences.add(new Ambience(current.getInt("id"), current.getString("name"), behav));
-						}
-						updateAmbienceUI();
 						break;
-					}
-					break;
-					case "create":
-						List<Integer> behav = new ArrayList<Integer>();
-						JSONArray arrBehav = json.getJSONArray("behaviours");
-						for(int k = 0; k < arrBehav.length(); k++) {
-							behav.add(arrBehav.getJSONObject(k).getInt("id"));
+					case "ambience":
+						action = json.getString("action");
+						switch (action) {
+							case "getAll":
+								this.ambiences = new ArrayList<Ambience>();
+								JSONArray arrArg = json.getJSONArray("ambiences");
+								for (int j = 0; j < arrArg.length(); j++){
+									JSONObject current = arrArg.getJSONObject(j);
+									List<Integer> behav = new ArrayList<Integer>();
+									JSONArray arrBehav = current.getJSONArray("behaviours");
+									for(int k = 0; k < arrBehav.length(); k++) {
+										behav.add(arrBehav.getJSONObject(k).getInt("id"));
+									}
+									this.ambiences.add(new Ambience(current.getInt("id"), current.getString("name"), behav));
+								}
+								updateAmbienceUI();
+								break;
+							case "create":
+								try {
+									List<Integer> behav = new ArrayList<Integer>();
+									JSONObject ambience = json.getJSONObject("ambience");
+									JSONArray arrBehav = ambience.getJSONArray("behaviours");
+									for(int k = 0; k < arrBehav.length(); k++) {
+										behav.add(arrBehav.getJSONObject(k).getInt("id"));
+									}
+									this.ambiences.add(new Ambience(ambience.getInt("id"), ambience.getString("name"), behav));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								updateAmbienceUI();
+								break;
 						}
-						this.ambiences.add(new Ambience(json.getInt("id"), json.getString("name"), behav));
-						updateAmbienceUI();
-						break;
 				}
 			} catch(Exception e) {
 				

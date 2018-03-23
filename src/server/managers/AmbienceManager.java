@@ -77,7 +77,9 @@ public class AmbienceManager extends Manager{
 				client.sendToClient(result.toString());
 			}
 			else {
+				result.put("ambience", ambience.toJSON());
 				result.put("result", "success");
+				System.out.println(result.toString());
 				SystemManager.sendToAllClient(result.toString());
 			}
 		} catch (Exception e) {
@@ -108,15 +110,21 @@ public class AmbienceManager extends Manager{
 	            break;
 	        case "create":
 	        	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
-	        	JSONArray behavioursJSON = json.getJSONArray("behaviours");
-	        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
-	        	for(int i = 0; i < behavioursJSON.length(); i++) {
-	        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
+	        	try {
+	        		JSONArray behavioursJSON = json.getJSONArray("behaviours");
+		        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
+		        	for(int i = 0; i < behavioursJSON.length(); i++) {
+		        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
+		        	}
+		        	System.out.println(behaviours);
+		        	Ambience ambience = new Ambience();
+		        	ambience.setName(json.getString("name"));
+		        	ambience.setBehaviours(behaviours);
+		        	createAmbience(ambience ,client);
+	        	} catch (Exception e) {
+	        		e.printStackTrace();
 	        	}
-	        	Ambience ambience = new Ambience();
-	        	ambience.setName(json.getString("name"));
-	        	ambience.setBehaviours(behaviours);
-	        	createAmbience(ambience ,client);
+	        	
 	            break;
 	        case "delete":
 	        	deleteAmbience(json,client);

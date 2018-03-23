@@ -139,5 +139,12 @@ public class Behaviour implements Observer {
 	    Expression expression = Expression.createExpressionFromJson(json.getJSONObject("expression"));
 		return new Behaviour(expression);
 	}
+
+	public JSONObject toJSON() {
+		JSONObject result = new JSONObject();
+		result.put("id", id);
+		result.put("name", name);
+		return result;
+	}
 	
 }

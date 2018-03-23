@@ -60,7 +60,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	        return behaviour;
 	}
 
-	@Override
+	/*@Override
 	public Behaviour getById(int id) throws DAOException {
 		Behaviour behaviour = null;
         String sql = "SELECT B.id AS id, B.name AS name, B.is_activated AS isActivated, "
@@ -149,7 +149,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	            }
 	        }        
 	        return allAtomicActions;
-	    }
+	    }*/
 	 
 	 //manque Arraylist de complex action
 	 
@@ -382,9 +382,30 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return behaviours;
 	}
 
-    public static void main (String args[]) {
-        BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
-        System.out.println(test.getAll());
-    }
+	@Override
+	public Behaviour getById(int id) throws DAOException {
+		// TODO Auto-generated method stub
+		Behaviour behaviour = null;
+        String sql = "SELECT * FROM Behaviours B " +
+        			 "WHERE B.id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+
+            // If no user found, we do nothing and return null.
+            if(rs.next()) {
+            	behaviour = new Behaviour();
+            	behaviour.setId(rs.getInt("id"));
+            	behaviour.setName(rs.getString("name"));
+            	System.out.println("uubb" + rs.getInt("id"));
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getById(" + id + ") :" + e.getMessage(), e);
+        }
+        return behaviour;
+	}
+
 	
 }

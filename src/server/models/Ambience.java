@@ -4,6 +4,8 @@ package server.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class Ambience {
 
     // ==================== //
@@ -92,5 +94,17 @@ public class Ambience {
             }
         }
         return res;
+    }
+    
+    public JSONObject toJSON() {
+    	
+    	JSONObject result = new JSONObject();
+
+        result.put("id", id);
+        result.put("name", name);
+        for (int i = 0; i < behaviours.size(); i++) {
+			result.append("behaviours", behaviours.get(i).toJSON());
+		}
+        return result;
     }
 }

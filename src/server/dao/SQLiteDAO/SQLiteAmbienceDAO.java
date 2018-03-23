@@ -26,7 +26,7 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
         // TODO Auto-generated method stub
     	Ambience ambience = obj;
     	
-    	String sql = "INSERT INTO Ambience ('name') VALUES (?)";
+    	String sql = "INSERT INTO Ambiences ('name') VALUES (?)";
     	// Insert the ambience
         int created = 0;
         try {
@@ -61,15 +61,6 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
                     prepStat.setInt(1, obj.getId());
                     prepStat.setInt(2, behaviour.getId());
                     behaviourInserted = prepStat.executeUpdate();
-                    if(behaviourInserted > 0) {
-                        String sqlGetLastId = "SELECT last_insert_rowid()";
-                        PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                        int id = prepStatLastId.executeQuery().getInt(1);
-                        behaviour.setId(id);
-                    }
-                    else {
-                        behaviour = null;
-                    }
                 } catch (SQLException e) {
                     throw new DAOException("DAOException : Ambience create(" + obj.getId() + ") :" + e.getMessage(), e); 
                 }   

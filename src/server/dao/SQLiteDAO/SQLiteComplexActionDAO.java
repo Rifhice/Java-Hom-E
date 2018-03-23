@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.ComplexActionDAO;
 import server.dao.abstractDAO.DAOException;
+import server.factories.AbstractDAOFactory;
+import server.models.AtomicAction;
 import server.models.Behaviour;
 import server.models.Command;
 import server.models.ComplexAction;
@@ -52,12 +54,60 @@ public class SQLiteComplexActionDAO extends ComplexActionDAO {
             	action = new ComplexAction();
             	action.setName(rs.getString("name"));
             	action.setId(rs.getInt("id"));
+            	action.setAtomicActions(getAllAtomicAction(action.getId()));
             	actions.add(action);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : ComplexCommandDAO getAll() :" + e.getMessage(), e);
+        }
+        return actions;
+	}
+	
+	private ArrayList<AtomicAction> getAllAtomicAction(int idComplex) throws DAOException{
+		ArrayList<AtomicAction> actions = new ArrayList<AtomicAction>();
+        String sql = "SELECT * FROM Gathers WHERE fk_complexAction_id = ?";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, idComplex);
+            ResultSet rs = prepStat.executeQuery();
+            while (rs.next()) {
+            	actions.add(getAtomicAction(rs.getInt("fk_atomicAction_id")));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : CommandDAO getAll() :" + e.getMessage(), e);
         }
         return actions;
+	}
+	
+	private AtomicAction getAtomicAction(int id) throws DAOException{
+        String sql = "SELECT * FROM AtomicActions WHERE id = ?";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            AtomicAction action = null;
+            while (rs.next()) {
+            	action = new AtomicAction();
+            	action.setName(rs.getString("name"));
+            	action.setId(rs.getInt("id"));
+            	action.setExecutable(rs.getString("executable"));
+            	return action;
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : CommandDAO getAll() :" + e.getMessage(), e);
+        }
+		return null;
+	}
+	
+	public static void main(String[] args) {
+		try {
+			System.out.println(AbstractDAOFactory.getFactory(0).getComplexActionDAO().getAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

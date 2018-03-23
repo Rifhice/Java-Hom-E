@@ -714,6 +714,26 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting Users : " + e.getMessage());
         }
     }
+    
+    private static void insertComplexAction() {
+       String insertComplexAction1 = "INSERT INTO complexactions ('name') VALUES ('All lights');";
+       String insertComplexAction2 = "INSERT INTO complexactions ('name') VALUES ('All heat');";
+       try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertComplexAction1);
+            stmt.execute(insertComplexAction2);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Users : " + e.getMessage());
+        }
+    }
+    
+    private static void insertGathers() {
+        String insertGathers = "INSERT INTO gathers ('fk_complexAction_id','fk_atomicAction_id') VALUES (1,1);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertGathers);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Ambiences : " + e.getMessage());
+        }
+    }
 
     // ============== //
     // ==== MAIN ==== //
@@ -760,6 +780,9 @@ public class SQLiteDatabaseManager {
         
         insertSensorCategories();
         insertSensors();
+        
+        insertComplexAction();
+        insertGathers();
         
         System.out.println("Data inserted.");
         System.out.println("**** Process complete ! ****");

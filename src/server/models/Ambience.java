@@ -2,6 +2,7 @@ package server.models;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Ambience {
 
@@ -12,7 +13,7 @@ public class Ambience {
     private String name;
 
     // Attributes from other tables
-    private ArrayList<Behaviour> behaviours = new ArrayList<Behaviour>();
+    private List<Behaviour> behaviours = new ArrayList<Behaviour>();
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -49,11 +50,11 @@ public class Ambience {
         return name;
     }
     
-    public void setBehaviours(ArrayList<Behaviour> behaviours) {
+    public void setBehaviours(List<Behaviour> behaviours) {
         this.behaviours = behaviours;
     }
 
-    public ArrayList<Behaviour> getBehaviours(){
+    public List<Behaviour> getBehaviours(){
         return behaviours;
     }
     

@@ -77,8 +77,6 @@ public class BehaviourCell extends MyPane {
 		modifyButton = new MyButtonFX(arrow, modifyButtonBounds.computeBounds(getPrefWidth(), getPrefHeight()), modifyStateEvent, behaviour.getId());
 		this.getChildren().add(labelButton);
 		this.getChildren().add(modifyButton);
-		System.out.println(modifyButton.getLayoutX());
-		System.out.println(modifyButton.getLayoutY());
 		labelButton.setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE));
 	}
 	

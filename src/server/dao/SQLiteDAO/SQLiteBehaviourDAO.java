@@ -101,7 +101,25 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	@Override
 	public Behaviour getById(int id) throws DAOException {
 		// TODO Auto-generated method stub
-		return null;
+		Behaviour behaviour = null;
+        String sql = "SELECT * FROM Behaviours B " +
+        			 "WHERE B.id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+
+            // If no user found, we do nothing and return null.
+            if(rs.next()) {
+            	behaviour = new Behaviour();
+            	behaviour.setId(rs.getInt("id"));
+            	behaviour.setName(rs.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getById(" + id + ") :" + e.getMessage(), e);
+        }
+        return behaviour;
 	}
 
 	

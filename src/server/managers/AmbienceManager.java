@@ -4,9 +4,12 @@ package server.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ocsf.server.ConnectionToClient;
+import server.dao.abstractDAO.AmbienceDAO;
+import server.dao.abstractDAO.BehaviourDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Ambience;
 import server.models.Behaviour;
@@ -62,7 +65,24 @@ public class AmbienceManager extends Manager{
 		}
 	}
 	
-	public void createAmbience(JSONObject json, ConnectionToClient client) {
+	public void createAmbience(Ambience ambience, ConnectionToClient client) {
+		
+		JSONObject result = new JSONObject();
+		result.put("recipient", "ambience");
+		result.put("action", "create");
+		try {
+        	AmbienceDAO ambienceDAO = AbstractDAOFactory.getFactory(SystemManager.db).getAmbienceDAO();
+			if(ambienceDAO.create(ambience) == null) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -87,7 +107,16 @@ public class AmbienceManager extends Manager{
 	        	getAllAmbience(json,client);
 	            break;
 	        case "create":
-	        	createAmbience(json,client);
+	        	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
+	        	JSONArray behavioursJSON = json.getJSONArray("behaviours");
+	        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
+	        	for(int i = 0; i < behavioursJSON.length(); i++) {
+	        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
+	        	}
+	        	Ambience ambience = new Ambience();
+	        	ambience.setName(json.getString("name"));
+	        	ambience.setBehaviours(behaviours);
+	        	createAmbience(ambience ,client);
 	            break;
 	        case "delete":
 	        	deleteAmbience(json,client);

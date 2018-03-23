@@ -99,7 +99,7 @@ public class AmbiencesContent extends Content {
 		modifyAmbiencePane = new MyPane(modifyAmbienceBounds.computeBounds(width, height));
 		modifyAmbiencePane.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-		modifyAmbienceLabel = new MyLabel("", validateAmbienceModificationBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), 1f);
+		modifyAmbienceLabel = new MyLabel("", nameAmbienceBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), 1f);
 		validateAmbienceModification = new MyButtonFX(checkImage, validateAmbienceModificationBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
 
 			@Override
@@ -133,7 +133,22 @@ public class AmbiencesContent extends Content {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				
+				String name = newAmbienceLabel.getText();
+				if(!name.equals("")) {
+					JSONObject json = new JSONObject();
+	                json.put("recipient", "ambiences");
+	                json.put("action", "create");
+	                json.put("name", name);
+	                for (int i = 0; i < selectedBehaviours.size(); i++) {
+		                json.append("behaviours", selectedBehaviours.get(i).getId());
+	                }
+	                try {
+	                    ClientFX.client.sendToServer(json.toString());
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }	
+				}
+				 
 			}
 			
 		});
@@ -260,6 +275,15 @@ public class AmbiencesContent extends Content {
 						break;
 					}
 					break;
+					case "create":
+						List<Integer> behav = new ArrayList<Integer>();
+						JSONArray arrBehav = json.getJSONArray("behaviours");
+						for(int k = 0; k < arrBehav.length(); k++) {
+							behav.add(arrBehav.getJSONObject(k).getInt("id"));
+						}
+						this.ambiences.add(new Ambience(json.getInt("id"), json.getString("name"), behav));
+						updateAmbienceUI();
+						break;
 				}
 			} catch(Exception e) {
 				
@@ -307,13 +331,21 @@ public class AmbiencesContent extends Content {
 		if(behaviourCell.getState() == true) {
 			selectedBehaviours.add(behaviourCell.getBehaviour());
 			notSelectedBehaviours.remove(behaviourCell.getBehaviour());
-			notChosenBehavioursList.getChildren().remove(behaviourCell);
-			chosenBehavioursList.getChildren().add(behaviourCell);
+			 Platform.runLater(new Runnable() {
+			        @Override public void run() {
+						notChosenBehavioursList.getChildren().remove(behaviourCell);
+						chosenBehavioursList.getChildren().add(behaviourCell);
+			        }
+			 });
 		} else {
 			notSelectedBehaviours.add(behaviourCell.getBehaviour());
-			selectedBehaviours.remove(behaviourCell.getBehaviour());
-			chosenBehavioursList.getChildren().remove(behaviourCell);
-			notChosenBehavioursList.getChildren().add(behaviourCell);
+			 selectedBehaviours.remove(behaviourCell.getBehaviour());
+			 Platform.runLater(new Runnable() {
+			        @Override public void run() {
+						chosenBehavioursList.getChildren().remove(behaviourCell);
+						notChosenBehavioursList.getChildren().add(behaviourCell);
+			        }
+			 });
 		}
 		
 	}
@@ -377,6 +409,7 @@ public class AmbiencesContent extends Content {
 		}
 		behavioursNotChosenScrollPane.changeBounds(behavioursNotChosenBoundsModif.computeBounds(width, height));
 		behavioursChosenScrollPane.changeBounds(behavioursChosenBoundsModif.computeBounds(width, height));
+		modifyAmbienceLabel.setText(ambience.getName());
 		if(!this.getChildren().contains(modifyAmbiencePane)){
 			context.getChildren().add(modifyAmbiencePane);
 		}
@@ -384,6 +417,7 @@ public class AmbiencesContent extends Content {
 
 	private void reinitBehaviours() {
 		// TODO Auto-generated method stub
+		System.out.println(selectedBehaviours.size());
 		for (int i = 0; i < selectedBehaviours.size(); i++) {
 			changeBehaviourState(selectedBehaviours.get(i).getId());
 		}

@@ -8,9 +8,12 @@ import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
 import server.dao.abstractDAO.ActuatorDAO;
 import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
+import server.dao.abstractDAO.CommandDAO;
+import server.dao.abstractDAO.ComplexActionDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
+import server.models.ComplexAction;
 
 public class OracleDAOFactory extends AbstractDAOFactory {
     protected Connection connect = DriverConnection.getInstance(DriverConnection.ORACLE_DRIVER); 
@@ -59,6 +62,18 @@ public class OracleDAOFactory extends AbstractDAOFactory {
 
 	@Override
 	public AmbienceDAO getAmbienceDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CommandDAO getCommandDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ComplexActionDAO getComplexActionDAO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

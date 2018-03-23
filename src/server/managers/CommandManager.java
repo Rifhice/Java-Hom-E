@@ -42,7 +42,7 @@ public class CommandManager extends Manager{
 	}
 	
 	public void getAllCommand(JSONObject json,ConnectionToClient client) {
-
+		
 	}
 
 	@Override

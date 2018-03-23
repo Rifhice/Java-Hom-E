@@ -1,7 +1,9 @@
 package user.ui.content;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
@@ -15,6 +17,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import user.ClientFX;
+import user.models.ActuatorCategory;
+import user.models.SensorCategory;
 import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyGridPane;
@@ -58,7 +62,7 @@ public class ControlContent extends Content {
 		this.getChildren().add(composedList);
 		this.getChildren().add(atomicList);
 		
-		
+		updateData();
 	}
 
 	public static Content getInstance() {
@@ -69,12 +73,11 @@ public class ControlContent extends Content {
 	}
 	
     public void updateData() {
-        JSONObject getSensor = new JSONObject();
-        getSensor.put("recipient", "sensorCategories");
-        getSensor.put("action", "getAll");
-
+        JSONObject getCommands = new JSONObject();
+        getCommands.put("recipient", "command");
+        getCommands.put("action", "getAll");
         try {
-            ClientFX.client.sendToServer(getSensor.toString());
+            ClientFX.client.sendToServer(getCommands.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,6 +113,33 @@ public class ControlContent extends Content {
 	
 	@Override
 	public void handleMessage(Object message) {
-		
+        System.out.println("Received: " + message);
+        if(message instanceof String) {
+            try {
+                System.out.println(message.toString());
+                JSONObject json = new JSONObject((String)message);
+                if(json.getString("recipient").equals("command")) {
+                    String action = json.getString("action");
+                    switch (action) {
+                    case "getAll":
+                        
+                        break;
+                    case "create":
+                        
+                        break;
+                    case "update":
+                        
+                        break;
+                    case "delete":
+                       
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 }

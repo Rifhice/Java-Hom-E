@@ -1,0 +1,94 @@
+package server.managers;
+
+
+import java.util.ArrayList;
+
+import org.json.JSONObject;
+
+import server.factories.AbstractDAOFactory;
+import server.models.Behaviour;
+import server.models.categories.SensorCategory;
+import ocsf.server.ConnectionToClient;
+
+public class BehaviourManager extends Manager{
+
+	private static BehaviourManager manager = null;
+	
+	private BehaviourManager() {
+	}
+	
+	public static BehaviourManager getManager() {
+		if(manager == null) 
+			manager = new BehaviourManager();
+		return manager;
+	}
+	
+	public void createBehaviour(JSONObject json) {
+	}
+	
+	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
+		ArrayList<Behaviour> behaviours = null;
+
+		try {
+			behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		result.put("recipient", "behaviour");
+		result.put("action", "getAll");
+		for (int i = 0; i < behaviours.size(); i++) {
+			JSONObject behaviour = new JSONObject();
+			behaviour.put("id", behaviours.get(i).getId());
+			behaviour.put("name", behaviours.get(i).getName());
+			result.append("behaviours", behaviour);
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void deleteBehaviours(JSONObject json, ConnectionToClient client) {
+		
+	}
+	
+	public void createBehaviours(JSONObject json, ConnectionToClient client) {
+		
+	}
+	
+	public void updateBehaviours(JSONObject json, ConnectionToClient client) {
+		
+	}
+	
+	public void deleteBehaviour(Behaviour behaviour) {
+	}
+	
+	public void activateBehaviour(Behaviour behaviour) {
+		behaviour.setActivated(true);
+	}
+	
+	public void deactivateBehaviour(Behaviour behaviour) {
+		behaviour.setActivated(false);
+	}
+
+	@Override
+	public void handleMessage(JSONObject json, ConnectionToClient client) {
+		String action = json.getString("action");
+        switch(action) {
+	        case "getAll":
+	        	getAllBehaviours(json,client);
+	            break;
+	        case "create":
+	        	createBehaviours(json,client);
+	            break;
+	        case "delete":
+	        	deleteBehaviours(json,client);
+	            break;
+	        case "update":
+	        	updateBehaviours(json,client);
+	            break;
+        }
+	}
+}

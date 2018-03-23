@@ -5,10 +5,12 @@ import java.awt.Toolkit;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import user.communication.UserClient;
@@ -50,6 +52,14 @@ public class ClientFX extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		ClientFX.primaryStage = primaryStage;
 		primaryStage.getIcons().add(new Image("file:asset/images/logo.png"));
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			
+			@Override
+			public void handle(WindowEvent arg0) {
+		        Platform.exit();
+		        System.exit(0);
+			}
+		});
 		width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
 		height = (int)(ClientFX.screenSize.getHeight()* heightRatio);
 		

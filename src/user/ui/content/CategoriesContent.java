@@ -130,9 +130,6 @@ public class CategoriesContent extends Content {
             }
         }).centerX(actuatorInfo.getPrefWidth()));
 
-
-
-
         MyScrollPane sensorList = new MyScrollPane(sensorScrollPaneBounds.computeBounds(width,height));
         sensorListGrid.setPrefWidth(sensorList.getPrefWidth());
         sensorListGrid.setPrefHeight(sensorList.getPrefHeight());

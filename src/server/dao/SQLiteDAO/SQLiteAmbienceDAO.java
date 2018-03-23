@@ -57,19 +57,36 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
     @Override
     public ArrayList<Ambience> getAll() throws DAOException {
         ArrayList<Ambience> ambiences = new ArrayList<Ambience>();
-        String sql = "SELECT *"
-                + " FROM Ambiences;";
+        String sql = "SELECT A.id, A.name, B.id AS id_behaviour"
+                + " FROM Ambiences AS A"
+        		+ " JOIN Composes AS C ON A.id = C.fk_ambience_id"
+                + " JOIN Behaviours AS B ON B.id = C.fk_behaviour_id"
+        		+ " GROUP BY A.id";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             ResultSet rs = prepStat.executeQuery();
-
+        	int previousId = -1;
+            Ambience ambience = null;
             while (rs.next()) {
-                Ambience ambience = new Ambience();
-                ambience.setId(rs.getInt("id"));
-                ambience.setName(rs.getString("name"));
-                ambiences.add(ambience);
+            	int id = rs.getInt("id");
+            	if(previousId == -1) {
+            		ambience = new Ambience();
+                    ambience.setId(id);
+                    ambience.setName(rs.getString("name"));
+            		previousId = id;
+            	}
+            	if(id != previousId) {
+            		previousId = id;
+                    ambiences.add(ambience);
+                    ambience = new Ambience();
+                    ambience.setId(id);
+                    ambience.setName(rs.getString("name"));
+            	}
+            	Behaviour behaviour = new Behaviour(rs.getInt("id_behaviour"), null);
+            	ambience.addBehaviour(behaviour);
+                
             }
-
+            ambiences.add(ambience);
         } catch (SQLException e) {
             throw new DAOException("DAOException : AmbienceDAO getAll() :" + e.getMessage(), e);
         }

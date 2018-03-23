@@ -81,4 +81,8 @@ public class BehaviourCell extends MyPane {
 		System.out.println(modifyButton.getLayoutY());
 		labelButton.setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE));
 	}
+	
+	public Behaviour getBehaviour() {
+		return this.behaviour;
+	}
 }

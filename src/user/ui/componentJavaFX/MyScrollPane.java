@@ -12,4 +12,11 @@ public class MyScrollPane extends ScrollPane{
 		setPrefHeight(bounds.getHeight());
 	}
 	
+	public void changeBounds(Rectangle2D.Float bounds) {
+		this.setLayoutX(bounds.getX());
+		this.setLayoutY(bounds.getY());
+		this.setPrefWidth(bounds.getWidth());
+		this.setPrefHeight(bounds.getHeight());
+	}
+	
 }

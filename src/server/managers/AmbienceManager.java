@@ -2,13 +2,14 @@ package server.managers;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
+import ocsf.server.ConnectionToClient;
 import server.factories.AbstractDAOFactory;
 import server.models.Ambience;
 import server.models.Behaviour;
-import ocsf.server.ConnectionToClient;
 
 public class AmbienceManager extends Manager{
 
@@ -36,9 +37,22 @@ public class AmbienceManager extends Manager{
 		result.put("recipient", "ambience");
 		result.put("action", "getAll");
 		for (int i = 0; i < ambiences.size(); i++) {
+			Ambience currentAmbience = ambiences.get(i);
 			JSONObject ambience = new JSONObject();
-			ambience.put("id", ambiences.get(i).getId());
-			ambience.put("name", ambiences.get(i).getName());
+			ambience.put("id", currentAmbience.getId());
+			ambience.put("name", currentAmbience.getName());
+			List<Behaviour> behaviours = currentAmbience.getBehaviours();
+			try {
+				for(int j = 0; j < behaviours.size(); j++) {
+					Behaviour behaviour = behaviours.get(j);
+					System.out.println(behaviour.getId());
+					JSONObject behaviourJSON = new JSONObject();
+					behaviourJSON.put("id", behaviour.getId());
+					ambience.append("behaviours", behaviourJSON);
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 			result.append("ambiences", ambience);
 		}
 		try {

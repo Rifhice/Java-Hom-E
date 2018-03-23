@@ -12,7 +12,7 @@ public class Ambience {
     private String name;
 
     // Attributes from other tables
-    private ArrayList<Behaviour> behaviours;
+    private ArrayList<Behaviour> behaviours = new ArrayList<Behaviour>();
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //

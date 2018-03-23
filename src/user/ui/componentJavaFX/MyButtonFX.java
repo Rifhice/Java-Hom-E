@@ -89,7 +89,7 @@ public class MyButtonFX extends Button{
 	}
 
 	public MyButtonFX centerX(double width) {
-		setLayoutX(width * 0.5f - getPrefWidth() / 2);
+		setLayoutX(width * 0.5f - getPrefWidth() / 2.0f);
 		return this;
 	}
 	

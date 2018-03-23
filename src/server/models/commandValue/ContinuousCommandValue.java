@@ -17,6 +17,10 @@ public class ContinuousCommandValue extends CommandValue{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    public ContinuousCommandValue() {
+    	
+    }
+    
     public ContinuousCommandValue(String name, double valueMin,double valueMax, double precision) {
         super(name);
         this.valueMax = valueMax;

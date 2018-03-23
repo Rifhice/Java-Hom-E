@@ -1,4 +1,4 @@
-package user.ui.content;
+	package user.ui.content;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -129,9 +129,6 @@ public class CategoriesContent extends Content {
                 }
             }
         }).centerX(actuatorInfo.getPrefWidth()));
-
-
-
 
         MyScrollPane sensorList = new MyScrollPane(sensorScrollPaneBounds.computeBounds(width,height));
         sensorListGrid.setPrefWidth(sensorList.getPrefWidth());

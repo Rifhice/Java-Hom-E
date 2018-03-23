@@ -118,21 +118,23 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     	return created;
     }
     
-    public int createCommands(Actuator obj) throws SQLException{
+    //Create Command
+    
+    public int createCommand(Actuator obj, Command command) throws SQLException{
     	
     	String sqlCommands = 
         		" INSERT INTO Commands"
-        		+ "(name, fk_actuator_id) VALUES"
-        		+ "(?,?)";
+        		+ "(name, key, description, fk_actuator_id) VALUES"
+        		+ "(?,?,?,?)";
     	
     	int created = 0;
-        
-    	
-	    	for (Command command : obj.getCommands()) {
+	    	
 	    		try {
 			    	PreparedStatement prepStatCommand = this.connect.prepareStatement(sqlCommands);
 			        prepStatCommand.setString(1, command.getName());
-			        prepStatCommand.setInt(2, obj.getId());
+			        prepStatCommand.setString(2, command.getKey());
+			        prepStatCommand.setString(3, command.getDescription());
+			        prepStatCommand.setInt(4, obj.getId());
 			        created = prepStatCommand.executeUpdate();
 			        // command is created in the database
 			        if (created > 0 ) {
@@ -154,13 +156,15 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
 	    		catch (SQLException e) {
 	                throw new SQLException("SQLException : Command (" + command.getId() + ") :" + e.getMessage(), e);
 	            }
-    	}
     	return created; 
     }
+
+	//Create an actuator which has been loaded in the database
     
     @Override
     public Actuator create(Actuator obj) throws DAOException {
         Actuator actuator = obj;
+        System.out.println("\n\nLe Manager rentre dans la fonction \n\n");
         
         String sql = "INSERT INTO Actuators "
                 + "(name, description, fk_actuatorCategory_id) VALUES "
@@ -169,6 +173,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         
         // Insert the object
         int created = 0;
+       
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setString(1, obj.getName());
@@ -177,12 +182,18 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 prepStat.setInt(3, obj.getActuatorCategory().getId());
             }
             created = prepStat.executeUpdate();
+            System.out.println("\n\nIci != 0 si l'actuator a bien été créé:" + created);
             // Get the id generated for this object
             if(created > 0) {
             	actuator.setId(SQLiteDAOTools.getLastId(connect));
+            	System.out.println("\n\nIci :" + actuator.getId());
             	if(obj.getCommands() != null) {
-	                int commandsCreated = createCommands(actuator);
-	                if (commandsCreated == 0) {
+	                int commandCreated = 0;
+	                for (Command command : obj.getCommands()) {
+	                	commandCreated = createCommand(actuator, command);
+	                	System.out.println(commandCreated);
+	                }
+	                if (commandCreated == 0) {
 	                	return null;
 	                }
             	}

@@ -105,7 +105,10 @@ public class SQLiteUserDAO extends UserDAO {
         int userUpdated = 0;
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, obj.getId());
+            prepStat.setString(1, obj.getPseudo());
+            prepStat.setString(2, obj.getPassword());
+            prepStat.setInt(3, obj.getRole().getId());
+            prepStat.setInt(4, obj.getId());
             userUpdated = prepStat.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 

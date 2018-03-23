@@ -8,15 +8,20 @@ import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
 import server.dao.SQLiteDAO.SQLiteActuatorDAO;
 import server.dao.SQLiteDAO.SQLiteAmbienceDAO;
 import server.dao.SQLiteDAO.SQLiteBehaviourDAO;
+import server.dao.SQLiteDAO.SQLiteCommandDAO;
+import server.dao.SQLiteDAO.SQLiteComplexActionDAO;
 import server.dao.SQLiteDAO.SQLiteRoleDAO;
 import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
 import server.dao.SQLiteDAO.SQLiteUserDAO;
 import server.dao.abstractDAO.ActuatorDAO;
 import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
+import server.dao.abstractDAO.CommandDAO;
+import server.dao.abstractDAO.ComplexActionDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
+import server.models.ComplexAction;
 
 public class SQLiteDAOFactory extends AbstractDAOFactory{
     protected Connection connect = DriverConnection.getInstance(DriverConnection.SQLITE_DRIVER); 
@@ -56,6 +61,16 @@ public class SQLiteDAOFactory extends AbstractDAOFactory{
 	@Override
 	public AmbienceDAO getAmbienceDAO() {
 		return new SQLiteAmbienceDAO(connect);
+	}
+
+	@Override
+	public CommandDAO getCommandDAO() {
+		return new SQLiteCommandDAO(connect);
+	}
+
+	@Override
+	public ComplexActionDAO getComplexActionDAO() {
+		return new SQLiteComplexActionDAO(connect);
 	}
     
 }

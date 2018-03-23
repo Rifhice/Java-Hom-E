@@ -89,6 +89,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             	behaviour = new Behaviour();
             	behaviour.setName(rs.getString("name"));
             	behaviour.setId(rs.getInt("id"));
+            	behaviour.setActivated(rs.getBoolean("isActivated"));
             	behaviours.add(behaviour);
             }
         } catch (SQLException e) {

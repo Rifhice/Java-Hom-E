@@ -15,8 +15,8 @@ public class MyButtonImage extends Button {
 		double ratio = bounds.getWidth()/image.getWidth();
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
-		imageView.setFitWidth(image.getWidth()*ratio);
-		imageView.setFitHeight(image.getHeight()*ratio);
+		imageView.setFitWidth(image.getWidth()*ratio / 1.2);
+		imageView.setFitHeight(image.getHeight()*ratio / 1.2);
 		setGraphic(imageView);
 		setOnAction(event);
 		setLayoutX((int)(bounds.getX()));

@@ -232,14 +232,14 @@ public class AmbiencesContent extends Content {
 		        						new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent event) {
-												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+												int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 												changeBehaviourState(pressedButton);
 											}
 										},
 		        						new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent event) {
-												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+												int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 											}
 										}, 
 		        						false
@@ -390,7 +390,7 @@ public class AmbiencesContent extends Content {
          						new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent event) {
-										currentAmbienceSelected = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+										currentAmbienceSelected = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 										modificateAmbience();
 									}
 								}

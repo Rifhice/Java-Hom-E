@@ -27,12 +27,14 @@ import user.models.DiscreteCommandValue;
 import user.models.SensorCategory;
 import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;
+import user.ui.componentJavaFX.MyComboBox;
 import user.ui.componentJavaFX.MyGridPane;
 import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
 import user.ui.componentJavaFX.MySlider;
+import javafx.scene.layout.ColumnConstraints;
 
 public class ControlContent extends Content {
 
@@ -62,9 +64,8 @@ public class ControlContent extends Content {
         
         
         bottomGridPane  = new MyGridPane(bottomPaneBounds.computeBounds(width, height));
-		MyLabel label2 = new MyLabel("Atomic Commands", atomicLabelCommandBounds.computeBounds(topGridPane.getPrefWidth(), topGridPane.getPrefHeight()),2f);
+        MyLabel label2 = new MyLabel("Atomic Commands", atomicLabelCommandBounds.computeBounds(topGridPane.getPrefWidth(), topGridPane.getPrefHeight()),2f);
 		bottomGridPane.add(label2, 0, 0);
-		bottomGridPane.setGridLinesVisible(true);
         MyScrollPane atomicList = new MyScrollPane(bottomPaneBounds.computeBounds(width,height));
         atomicList.setBackground(new Background(new BackgroundFill(Color.web(GraphicalCharter.LIGHT_GRAY), CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -97,28 +98,68 @@ public class ControlContent extends Content {
     public void updateUI() {
         Platform.runLater(new Runnable() {
             @Override public void run() {
+            	//Create commmands UI
                 for (int i = 0; i < commands.size(); i++) {
+                    ColumnConstraints col1 = new ColumnConstraints();
+                    col1.setPercentWidth(0.1f * bottomGridPane.getPrefWidth());
+                    bottomGridPane.getColumnConstraints().addAll(col1);
                 	bottomGridPane.add(new MyLabel(commands.get(i).getName()), 0, i + 1);
-                	for (int j = 0; j < commands.get(i).getCommandValues().size(); j++) {
+                	int j;
+                	for (j= 0; j < commands.get(i).getCommandValues().size(); j++) {
 						CommandValue argument = commands.get(i).getCommandValues().get(j);
 	                    if(argument instanceof DiscreteCommandValue) {
 	                    	DiscreteCommandValue argumentCasted = (DiscreteCommandValue)argument;
+	                    	/*if(argumentCasted.getPossibleValues().size() < 6) {
+	                    		for (int k = 0; k < argumentCasted.getPossibleValues().size(); k++) {
+	                    			String currentValue = argumentCasted.getPossibleValues().get(k);
+	                    			bottomGridPane.add(new MyButtonFX(commands.get(i).getKey() + " " currentValue, new EventHandler<ActionEvent>() {
+	            						
+	            						@Override
+	            						public void handle(ActionEvent arg0) {
+	            							//SEND ACTION
+	            						}
+	            					}),k + 1,i + 1);
+								}
+	                    	}
+	                    	else {
+	                    		
+	                    	}	*/     
+	                    	bottomGridPane.add(new MyComboBox(argumentCasted.getPossibleValues()),j + 1, i + 1);
 	                    }
 	                    else {
 	                    	ContinuousCommandValue argumentCasted = (ContinuousCommandValue)argument;
-	                    	bottomGridPane.add(new MySlider(argumentCasted.getValueMin(), argumentCasted.getValueMax(), argumentCasted.getPrecision()), 1, i + 1);
-	                    	bottomGridPane.add(new MyButtonFX("Validate", new EventHandler<ActionEvent>() {
-								
-								@Override
-								public void handle(ActionEvent arg0) {
-									
-								}
-							}),3,i + 1);
+	                    	bottomGridPane.add(new MySlider(argumentCasted.getValueMin(), argumentCasted.getValueMax(), argumentCasted.getPrecision()), j + 1, i + 1);
 	                    }
 					}
-
+                	bottomGridPane.add(new MyButtonFX("Validate", new EventHandler<ActionEvent>() {
+						
+						@Override
+						public void handle(ActionEvent arg0) {
+							
+						}
+					}),j + 1,i + 1);
                 }
-            }
+                //Create complex action UI
+                int x = 1;
+                int y = 0;
+                for (int i = 0; i < complexAction.size(); i++) {
+                    ColumnConstraints col1 = new ColumnConstraints();
+                    col1.setPercentWidth(0.1f * topGridPane.getPrefWidth());
+                    topGridPane.getColumnConstraints().addAll(col1);
+					if(y == 5) {
+						x++;
+						y = 0;
+					}
+					topGridPane.add(new MyButtonFX(complexAction.get(i).getName(), new EventHandler<ActionEvent>() {
+						
+						@Override
+						public void handle(ActionEvent event) {
+							
+						}
+					}),y,x);
+					y++;
+				}
+            }          
         });
     }
 	

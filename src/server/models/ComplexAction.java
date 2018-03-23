@@ -68,6 +68,14 @@ public class ComplexAction {
         this.atomicActions = atomicActions;
     }
     
+    public String toString() {
+    	String res = "Id : " + id + "\nName : " + name+"\n";
+    	for (int i = 0; i < atomicActions.size(); i++) {
+			res += atomicActions.get(i).toString()+"\n";
+		}
+    	return res;
+    }
+    
     // ================================
     
     public void execute() {

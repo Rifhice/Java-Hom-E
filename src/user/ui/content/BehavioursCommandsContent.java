@@ -20,6 +20,8 @@ import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
+import user.ui.componentJavaFX.MyTextArea;
+import user.ui.componentJavaFX.MyTextFieldFX;
 
 public class BehavioursCommandsContent extends Content {
 
@@ -36,12 +38,12 @@ public class BehavioursCommandsContent extends Content {
     
     private MyGridPane behavioursGrid = new MyGridPane(new MyRectangle(0f, 0f, 1f, 1f));
     
-    private MyRectangle nameLabelBounds = new MyRectangle(0.0f,0.05f,1f,0.1f);
-    private MyRectangle descriptionLegendBounds = new MyRectangle(MARGIN, 0.15f, 1.0f, 0.1f);
-    private MyRectangle descriptionLabelBounds = new MyRectangle(MARGIN, 0.25f, 1.0f, 0.1f);
+    private MyRectangle nameLabelBounds = new MyRectangle(0.0f,0.02f,1f,0.1f);
+    private MyRectangle descriptionLegendBounds = new MyRectangle(MARGIN, 0.15f, (1.0f - 2*MARGIN), 0.1f);
+    private MyRectangle descriptionLabelBounds = new MyRectangle(MARGIN, 0.25f, (1.0f - 2*MARGIN), 0.3f);
 
     private MyLabel currentBehaviourName;
-    private MyLabel currentBehaviourDescription;
+    private MyTextArea currentBehaviourDescription;
 
     // ==== Content attributes ==== // 
     
@@ -77,13 +79,14 @@ public class BehavioursCommandsContent extends Content {
         selectedBehaviourPane.getChildren().add(currentBehaviourName);
         
         // Description
-        selectedBehaviourPane.getChildren().add(new MyLabel("Description",descriptionLegendBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight())));
-        currentBehaviourDescription = new MyLabel("Behaviour description",descriptionLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
-        currentBehaviourDescription.setStyle("-fx-background-color: rgb(50, 255, 255)");
-        currentBehaviourDescription.centerX(selectedBehaviourPane.getPrefWidth());
+        MyLabel test = new MyLabel("Description",descriptionLegendBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        test.setStyle("-fx-background-color: rgb(10, 150, 50)");
+        selectedBehaviourPane.getChildren().add(test);
+        currentBehaviourDescription = new MyTextArea("Behaviour description test",descriptionLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        currentBehaviourDescription.lockText();
         selectedBehaviourPane.getChildren().add(currentBehaviourDescription);
 
-        
+ 
         // ==== Commands List (right)
         MyPane commandsPane = new MyPane(commandsBounds.computeBounds(width, height));
         commandsPane.setStyle("-fx-background-color: rgb(255, 255, 50)");

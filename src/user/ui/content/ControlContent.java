@@ -122,7 +122,7 @@ public class ControlContent extends Content {
                     String action = json.getString("action");
                     switch (action) {
                     case "getAll":
-                        
+                    	
                         break;
                     case "create":
                         

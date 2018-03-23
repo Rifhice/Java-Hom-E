@@ -2,6 +2,9 @@ package server.models;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * A complex action is a collection of atomic actions.
  * @author Clm-Roig
@@ -80,6 +83,16 @@ public class ComplexAction {
     
     public void execute() {
         // TODO
+    }
+    
+    public JSONObject getJson() {
+    	JSONObject result = new JSONObject();
+    	result.put("id", id);
+    	result.put("name",name);
+    	for (int i = 0; i < atomicActions.size(); i++) {
+			result.append("atomicAction", atomicActions.get(i).getJson());
+		}
+    	return result;
     }
 
 }

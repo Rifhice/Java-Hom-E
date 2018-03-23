@@ -390,7 +390,7 @@ public class AmbiencesContent extends Content {
          						new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent event) {
-										currentAmbienceSelected = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+										currentAmbienceSelected = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
 										modificateAmbience();
 									}
 								}

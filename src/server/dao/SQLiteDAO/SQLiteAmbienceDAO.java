@@ -104,7 +104,7 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
                 + " FROM Ambiences AS A"
         		+ " JOIN Composes AS C ON A.id = C.fk_ambience_id"
                 + " JOIN Behaviours AS B ON B.id = C.fk_behaviour_id"
-        		+ " GROUP BY A.id";
+        		+ " ORDER BY A.id";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             ResultSet rs = prepStat.executeQuery();

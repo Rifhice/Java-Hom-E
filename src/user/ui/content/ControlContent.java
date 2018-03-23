@@ -81,6 +81,7 @@ public class ControlContent extends Content {
     }
 
     public void updateUI() {
+    	/*
         if(actuator.size() != 0) {
             if(currentActuatorCategoryIndex == -1) {
                 currentActuatorCategoryIndex = 0;
@@ -104,6 +105,7 @@ public class ControlContent extends Content {
                 }
             });
         }
+        */
     }
 	
 	@Override

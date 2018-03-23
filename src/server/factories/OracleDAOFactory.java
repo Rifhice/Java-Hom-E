@@ -61,12 +61,6 @@ public class OracleDAOFactory extends AbstractDAOFactory {
     }
 
 	@Override
-	public BehaviourDAO getBehaviourDAO() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public AmbienceDAO getAmbienceDAO() {
 		// TODO Auto-generated method stub
 		return null;

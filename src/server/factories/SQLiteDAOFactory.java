@@ -59,11 +59,6 @@ public class SQLiteDAOFactory extends AbstractDAOFactory{
     }
 
 	@Override
-	public BehaviourDAO getBehaviourDAO() {
-		return new SQLiteBehaviourDAO(connect);
-	}
-
-	@Override
 	public AmbienceDAO getAmbienceDAO() {
 		return new SQLiteAmbienceDAO(connect);
 	}

@@ -78,7 +78,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 behaviour = new Behaviour();
                 behaviour.setId(rs.getInt("id"));
                 behaviour.setName(rs.getString("name"));
-                behaviour.setActivated(rs.getBoolean("isActivated"));
+                behaviour.setActivated(rs.getBoolean("is_activated"));
                 try {
 					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
 					JSONArray array = JSON.getJSONArray("operators");

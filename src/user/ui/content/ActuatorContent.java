@@ -8,9 +8,9 @@ public class ActuatorContent extends Content {
 
 	private static ActuatorContent content = null;
 	
-	private MyRectangle actuatorsListBounds = new MyRectangle(0f, 0f, 0.2f, 1.0f);
-	private MyRectangle currentActuatorBounds = new MyRectangle(0.2f, 0f, 0.4f, 1.0f);
-    private MyRectangle latestActionsBounds = new MyRectangle(0.6f, 0f, 0.4f, 1.0f);
+	private MyRectangle actuatorsListBounds = new MyRectangle(0f, 0f, 0.25f, 1.0f);
+	private MyRectangle currentActuatorBounds = new MyRectangle(0.25f, 0f, 0.375f, 1.0f);
+    private MyRectangle latestActionsBounds = new MyRectangle(0.625f, 0f, 0.375f, 1.0f);
 
 
 	private ActuatorContent() {

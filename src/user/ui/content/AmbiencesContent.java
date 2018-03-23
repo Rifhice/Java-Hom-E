@@ -1,9 +1,5 @@
 package user.ui.content;
 
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.event.EventHandler;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,24 +8,21 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import user.ClientFX;
-import user.models.ActuatorCategory;
 import user.models.Ambience;
 import user.models.Behaviour;
-import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.BehaviourCell;
 import user.ui.componentJavaFX.MyButtonFX;
+import user.ui.componentJavaFX.MyButtonImage;
 import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
@@ -63,10 +56,10 @@ public class AmbiencesContent extends Content {
 	private MyRectangle modifyAmbienceBounds = new MyRectangle(0f, 0.90f, 0.6f, 0.1f);
 	private MyRectangle nameAmbienceBounds = new MyRectangle(0.2f, 0.35f, 0.3f, 0.3f);
 	private MyRectangle validateAmbienceModificationBounds = new MyRectangle(0.75f, 0.25f, 0.05f, 0.05f);
-	private MyRectangle cancelAmbienceModificationBounds = new MyRectangle(0.85f, 0.25f, 0.05f, 0.05f);
+	private MyRectangle cancelAmbienceModificationBounds = new MyRectangle(0.95f, 0f, 0.05f, 0.05f);
 	private MyLabel modifyAmbienceLabel;
-	private MyButtonFX validateAmbienceModification;
-	private MyButtonFX cancelAmbienceModification;
+	private MyButtonImage validateAmbienceModification;
+	private MyButtonImage cancelAmbienceModification;
 
 	private MyPane newAmbiencePane;
 	private MyPane modifyAmbiencePane;
@@ -100,7 +93,7 @@ public class AmbiencesContent extends Content {
 		modifyAmbiencePane.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
 
 		modifyAmbienceLabel = new MyLabel("", nameAmbienceBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), 1f);
-		validateAmbienceModification = new MyButtonFX(checkImage, validateAmbienceModificationBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
+		validateAmbienceModification = new MyButtonImage(checkImage, validateAmbienceModificationBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -110,7 +103,7 @@ public class AmbiencesContent extends Content {
 			
 		});
 		
-		cancelAmbienceModification = new MyButtonFX(removeImage, cancelAmbienceModificationBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
+		cancelAmbienceModification = new MyButtonImage(removeImage, cancelAmbienceModificationBounds.computeBounds(modifyAmbiencePane.getPrefWidth(), modifyAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -128,7 +121,7 @@ public class AmbiencesContent extends Content {
 		MyLabel newAmbienceLabel = new MyLabel("New ambience: ", newAmbienceLabelBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()), 1f);
 		MyTextFieldFX newAmbienceName = new MyTextFieldFX("Name", newAmbienceTextFieldBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()));
 		
-		MyButtonFX newAmbienceButton = new MyButtonFX(checkImage, newAmbienceButtonBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
+		MyButtonImage newAmbienceButton = new MyButtonImage(checkImage, newAmbienceButtonBounds.computeBounds(newAmbiencePane.getPrefWidth(), newAmbiencePane.getPrefHeight()), new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -266,6 +259,7 @@ public class AmbiencesContent extends Content {
 									JSONObject current = arrArg.getJSONObject(j);
 									List<Integer> behav = new ArrayList<Integer>();
 									JSONArray arrBehav = current.getJSONArray("behaviours");
+									System.out.println(arrBehav);
 									for(int k = 0; k < arrBehav.length(); k++) {
 										behav.add(arrBehav.getJSONObject(k).getInt("id"));
 									}
@@ -335,21 +329,27 @@ public class AmbiencesContent extends Content {
 		if(behaviourCell.getState() == true) {
 			selectedBehaviours.add(behaviourCell.getBehaviour());
 			notSelectedBehaviours.remove(behaviourCell.getBehaviour());
+
 			 Platform.runLater(new Runnable() {
 			        @Override public void run() {
-						notChosenBehavioursList.getChildren().remove(behaviourCell);
-						chosenBehavioursList.getChildren().add(behaviourCell);
-			        }
-			 });
+			        	System.out.println("Set selected: " + behaviourCell.getCellId());
+			        	BehaviourCell bc = behaviourCell;
+			notChosenBehavioursList.getChildren().remove(bc);
+			chosenBehavioursList.getChildren().add(bc);
+
+				    }
+				});
 		} else {
 			notSelectedBehaviours.add(behaviourCell.getBehaviour());
 			 selectedBehaviours.remove(behaviourCell.getBehaviour());
+
 			 Platform.runLater(new Runnable() {
 			        @Override public void run() {
-						chosenBehavioursList.getChildren().remove(behaviourCell);
-						notChosenBehavioursList.getChildren().add(behaviourCell);
-			        }
-			 });
+			        	BehaviourCell bc = behaviourCell;
+			chosenBehavioursList.getChildren().remove(bc);
+			notChosenBehavioursList.getChildren().add(bc);
+				    }
+				});
 		}
 		
 	}
@@ -407,7 +407,9 @@ public class AmbiencesContent extends Content {
 		if(ambience == null) {
 			return;
 		}
+		System.out.println("Reinit");
 		reinitBehaviours();
+		System.out.println(ambience.getBehaviours());
 		for (Integer id : ambience.getBehaviours()) {
 			changeBehaviourState(id);
 		}
@@ -420,10 +422,12 @@ public class AmbiencesContent extends Content {
 	}
 
 	private void reinitBehaviours() {
-		// TODO Auto-generated method stub
-		System.out.println(selectedBehaviours.size());
+		List<Behaviour> behavioursSelected = new ArrayList<Behaviour>();
 		for (int i = 0; i < selectedBehaviours.size(); i++) {
-			changeBehaviourState(selectedBehaviours.get(i).getId());
+			behavioursSelected.add(selectedBehaviours.get(i));
+		}
+		for (int i = 0; i < behavioursSelected.size(); i++) {
+			changeBehaviourState(behavioursSelected.get(i).getId());
 		}
 	}
 }

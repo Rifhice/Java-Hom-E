@@ -1,20 +1,11 @@
 package user.ui.componentJavaFX;
 
-import java.awt.geom.Rectangle2D;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import user.models.Behaviour;
 import user.tools.GraphicalCharter;
-
-import javafx.scene.image.Image;
 
 public class BehaviourCell extends MyPane {
 	
@@ -25,7 +16,7 @@ public class BehaviourCell extends MyPane {
 	MyRectangle modifyButtonBounds;
 	
 	MyButtonFX labelButton = null;
-	MyButtonFX modifyButton = null;
+	MyButtonImage modifyButton = null;
 	
 	Behaviour behaviour;
 	boolean activated;
@@ -74,7 +65,7 @@ public class BehaviourCell extends MyPane {
 			this.getChildren().remove(modifyButton);
 		}
 		labelButton = new MyButtonFX(behaviour.getName(), behaviour.getId(), labelButtonBounds.computeBounds(getPrefWidth(), getPrefHeight()), infoEvent);
-		modifyButton = new MyButtonFX(arrow, modifyButtonBounds.computeBounds(getPrefWidth(), getPrefHeight()), modifyStateEvent, behaviour.getId());
+		modifyButton = new MyButtonImage(arrow, modifyButtonBounds.computeBounds(getPrefWidth(), getPrefHeight()), modifyStateEvent, behaviour.getId());
 		this.getChildren().add(labelButton);
 		this.getChildren().add(modifyButton);
 		labelButton.setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE));

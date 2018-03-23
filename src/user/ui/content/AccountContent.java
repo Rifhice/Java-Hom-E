@@ -10,16 +10,13 @@ import org.json.JSONObject;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import user.ClientFX;
-import user.models.Ambience;
-import user.models.Behaviour;
 import user.models.Right;
 import user.models.User;
-import user.ui.componentJavaFX.BehaviourCell;
 import user.ui.componentJavaFX.MyButtonFX;
+import user.ui.componentJavaFX.MyButtonImage;
 import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
@@ -77,7 +74,7 @@ public class AccountContent extends Content {
 		MyScrollPane familyMembersScrollPane = new MyScrollPane(familyMembersBounds.computeBounds(width, height));
 		//this.getChildren().add(new Label("Account"));
 		Image image = new Image("file:asset/images/check.png");
-		MyButtonFX newFamilyMemberButton = new MyButtonFX(image, newFamilyMemberButtonBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), new EventHandler<ActionEvent>() {
+		MyButtonImage newFamilyMemberButton = new MyButtonImage(image, newFamilyMemberButtonBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {

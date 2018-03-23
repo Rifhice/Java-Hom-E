@@ -157,11 +157,11 @@ public class SQLiteDatabaseManager {
                 + ");";
         
         String createTableContinuousCommandValues ="CREATE TABLE IF NOT EXISTS continuousCommandValues (\n"
-                + " fk_environmentValue_id integer PRIMARY KEY, \n"
+                + " fk_commandValue_id integer PRIMARY KEY, \n"
                 + " min real, \n"
                 + " max real, \n"
                 + " precision real, \n"
-                + " FOREIGN KEY (fk_environmentValue_id) REFERENCES commandValues(id) \n"
+                + " FOREIGN KEY (fk_commandValue_id) REFERENCES commandValues(id) \n"
                 + ");";
         
         String createTableDiscreteEnvironmentVariables ="CREATE TABLE IF NOT EXISTS discreteEnvironmentVariables (\n"
@@ -172,9 +172,9 @@ public class SQLiteDatabaseManager {
                 + ");";       
         
         String createTableDiscreteCommandValues ="CREATE TABLE IF NOT EXISTS discreteCommandValues (\n"
-                + " fk_environmentValue_id integer PRIMARY KEY, \n"
+                + " fk_commandValue_id integer PRIMARY KEY, \n"
                 + " possible_values text, \n" 
-                + " FOREIGN KEY (fk_environmentValue_id) REFERENCES commandValues(id) \n"
+                + " FOREIGN KEY (fk_commandValue_id) REFERENCES commandValues(id) \n"
                 + ");";
         
         String createTableCommandValues ="CREATE TABLE IF NOT EXISTS commandValues (\n"
@@ -471,11 +471,15 @@ public class SQLiteDatabaseManager {
     private static void insertCommandValues() {
         String insertCommandValue1 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (1,'temperature',3);";
         String insertCommandValue2 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (2,'light',1);";
-        String insertCommandValue3 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (3,'light',2);";
+        String insertCommandValue3 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (3,'hey',2);";
+        String insertCommandValue4 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (4,'jesaispas',2);";
+        String insertCommandValue5 = "INSERT INTO commandValues ('id', 'name', 'fk_command_id') VALUES (5,'superargument',2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertCommandValue1);
             stmt.execute(insertCommandValue2);
             stmt.execute(insertCommandValue3);
+            stmt.execute(insertCommandValue4);
+            stmt.execute(insertCommandValue5);
         } catch (SQLException e) {
             System.out.println("ERROR inserting CommandValues : " + e.getMessage());
         }
@@ -495,8 +499,8 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertContinuousCommandValues() {
-        String insertContinuousCommandValue1 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 0.5, 1);";
-        String insertContinuousCommandValue2 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_environmentValue_id') VALUES (10, 30, 1.0, 2);";
+        String insertContinuousCommandValue1 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_commandValue_id') VALUES (10, 30, 0.5, 1);";
+        String insertContinuousCommandValue2 = "INSERT INTO continuousCommandValues ('min', 'max', 'precision', 'fk_commandValue_id') VALUES (10, 30, 1.0, 2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertContinuousCommandValue1);
             stmt.execute(insertContinuousCommandValue2);
@@ -517,9 +521,9 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertDiscreteCommandValues() {
-        String insertDiscreteValue1 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_environmentValue_id') VALUES ('{\"on\",\"off\"}',3);";
-        String insertDiscreteValue2 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_environmentValue_id') VALUES ('{\"on\",\"off\"}',4);";
-        String insertDiscreteValue3 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_environmentValue_id') VALUES ('{\"very hot\",\"hot\",\"ice\"}',5);";
+        String insertDiscreteValue1 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{possibleValues : [\"on\",\"off\"]}',3);";
+        String insertDiscreteValue2 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{possibleValues : [\"on\",\"off\"]}',4);";
+        String insertDiscreteValue3 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{possibleValues : [\"very hot\",\"hot\",\"ice\"]}',5);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertDiscreteValue1);
             stmt.execute(insertDiscreteValue2);

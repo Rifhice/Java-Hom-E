@@ -1,6 +1,4 @@
-package server.models;
-
-import org.json.JSONObject;
+package user.models;
 
 /**
  * An action is a message sent by the server to the actuators which needs to react according to it.
@@ -65,12 +63,8 @@ public class AtomicAction {
         // TODO
     }
     
-    public JSONObject getJson() {
-    	JSONObject result = new JSONObject();
-    	result.put("id", id);
-    	result.put("name", name);
-    	result.put("executable", executable);
-    	return result;
-    }    
+    
+
+    
 
 }

@@ -1,6 +1,7 @@
 package user.ui.content;
 
 import java.io.IOException;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import user.ClientFX;
 import user.models.Behaviour;
@@ -18,22 +20,30 @@ import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
+import user.ui.componentJavaFX.MyTextArea;
+import user.ui.componentJavaFX.MyTextFieldFX;
 
 public class BehavioursCommandsContent extends Content {
 
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    
+   
     // ==== UI attributes ==== // 
+    private static final float MARGIN = 0.05f;
+    
     private MyRectangle behavioursListBounds = new MyRectangle(0f, 0f, 0.25f, 1.0f);
     private MyRectangle currentBehaviourBounds = new MyRectangle(0.25f, 0f, 0.375f, 1.0f);
     private MyRectangle commandsBounds = new MyRectangle(0.625f, 0f, 0.375f, 1.0f);
     
     private MyGridPane behavioursGrid = new MyGridPane(new MyRectangle(0f, 0f, 1f, 1f));
     
-    private MyRectangle nameLabelBounds = new MyRectangle(0.05f,0f,1f,0.1f);
+    private MyRectangle nameLabelBounds = new MyRectangle(0.0f,0.02f,1f,0.1f);
+    private MyRectangle descriptionLegendBounds = new MyRectangle(MARGIN, 0.15f, (1.0f - 2*MARGIN), 0.1f);
+    private MyRectangle descriptionLabelBounds = new MyRectangle(MARGIN, 0.25f, (1.0f - 2*MARGIN), 0.3f);
+
     private MyLabel currentBehaviourName;
+    private MyTextArea currentBehaviourDescription;
 
     // ==== Content attributes ==== // 
     
@@ -60,10 +70,23 @@ public class BehavioursCommandsContent extends Content {
         // ==== Current Behaviour (center)
         MyPane selectedBehaviourPane = new MyPane(currentBehaviourBounds.computeBounds(width, height));
         selectedBehaviourPane.setStyle("-fx-background-color: rgb(50, 50, 255)");
-        currentBehaviourName = new MyLabel("Name",nameLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        
+        // Name
+        currentBehaviourName = new MyLabel("Behaviour name",nameLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
         currentBehaviourName.setStyle("-fx-background-color: rgb(50, 255, 50)");
+        currentBehaviourName.centerX(selectedBehaviourPane.getPrefWidth());
+        currentBehaviourName.setAlignment(Pos.CENTER);
         selectedBehaviourPane.getChildren().add(currentBehaviourName);
         
+        // Description
+        MyLabel test = new MyLabel("Description",descriptionLegendBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        test.setStyle("-fx-background-color: rgb(10, 150, 50)");
+        selectedBehaviourPane.getChildren().add(test);
+        currentBehaviourDescription = new MyTextArea("Behaviour description test",descriptionLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        currentBehaviourDescription.lockText();
+        selectedBehaviourPane.getChildren().add(currentBehaviourDescription);
+
+ 
         // ==== Commands List (right)
         MyPane commandsPane = new MyPane(commandsBounds.computeBounds(width, height));
         commandsPane.setStyle("-fx-background-color: rgb(255, 255, 50)");

@@ -146,6 +146,19 @@ public class UserManager extends Manager{
                     e.printStackTrace();
                 }
 	        	break;
+	        case "getAll":
+	        	//TODO ici ce n'est qu'un test il faut renvoyer le code complet
+	        	System.out.println("le message est arrivé jusqu'ici");
+                JSONObject test = new JSONObject();
+                test.put("users",users);
+                test.put("action","getAll");
+                test.put("result","success");
+                try {
+                    client.sendToClient(test.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+	        	break;
         }
     }
 }

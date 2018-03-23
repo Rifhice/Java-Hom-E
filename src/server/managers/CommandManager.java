@@ -1,10 +1,19 @@
 package server.managers;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 
+import server.factories.AbstractDAOFactory;
 import server.models.Behaviour;
+import server.models.Command;
+import server.models.ComplexAction;
 import server.models.categories.SensorCategory;
+import server.models.commandValue.CommandValue;
+import server.models.commandValue.ContinuousCommandValue;
+import server.models.commandValue.DiscreteCommandValue;
 import ocsf.server.ConnectionToClient;
 
 public class CommandManager extends Manager{
@@ -34,15 +43,67 @@ public class CommandManager extends Manager{
 	}
 	
 	public void getAllAtomicCommand(JSONObject json,ConnectionToClient client) {
-
+		ArrayList<Command> command = AbstractDAOFactory.getFactory(0).getCommandDAO().getAll();
+		JSONObject result = new JSONObject();
+		result.put("recipient", "command");
+		result.put("action", "getAllAtomic");
+		for (int i = 0; i < command.size(); i++) {
+			result.append("command", command.get(i).getJson());
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void getAllComplexCommand(JSONObject json,ConnectionToClient client) {
-
+	public void getAllComplexAction(JSONObject json,ConnectionToClient client) {
+		ArrayList<ComplexAction> complexValue = AbstractDAOFactory.getFactory(0).getComplexActionDAO().getAll();
+		JSONObject result = new JSONObject();
+		result.put("recipient", "command");
+		result.put("action", "getAllComplex");
+		for (int i = 0; i < complexValue.size(); i++) {
+			result.append("complexAction", complexValue.get(i).getJson());
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void getAllCommand(JSONObject json,ConnectionToClient client) {
-		
+		ArrayList<Command> command = null;
+		ArrayList<ComplexAction> complexValue = null;
+		try {
+			command = AbstractDAOFactory.getFactory(0).getCommandDAO().getAll();
+			complexValue = AbstractDAOFactory.getFactory(0).getComplexActionDAO().getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		result.put("recipient", "command");
+		result.put("action", "getAll");
+		for (int i = 0; i < complexValue.size(); i++) {
+			result.append("complexAction", complexValue.get(i).getJson());
+		}
+		System.out.println(command.size());
+		for (int j = 0; j < command.size(); j++) {
+			System.out.println("salut");
+			try {
+				System.out.println(command.get(j).getJson());				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			result.append("command", command.get(j).getJson());
+		}
+		System.out.println(result);
+		System.out.println("hey");
+		try {
+			client.sendToClient(result.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -50,10 +111,11 @@ public class CommandManager extends Manager{
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
+	        	System.out.println("hey");
 	        	getAllCommand(json,client);
 	            break;
 	        case "getAllComplex":
-	        	getAllComplexCommand(json,client);
+	        	getAllComplexAction(json,client);
 	            break;
 	        case "getAllAtomic":
 	        	getAllAtomicCommand(json,client);

@@ -23,6 +23,12 @@ public class OracleDAOFactory extends AbstractDAOFactory {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    @Override
+    public BehaviourDAO getBehaviourDAO() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public ActuatorDAO getActuatorDAO() {
@@ -53,12 +59,6 @@ public class OracleDAOFactory extends AbstractDAOFactory {
         // TODO Auto-generated method stub
         return null;
     }
-
-	@Override
-	public BehaviourDAO getBehaviourDAO() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public AmbienceDAO getAmbienceDAO() {

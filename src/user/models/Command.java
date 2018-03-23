@@ -1,13 +1,8 @@
-package server.models;
+package user.models;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import server.models.commandValue.CommandValue;
-import server.models.commandValue.ContinuousCommandValue;
-import server.models.commandValue.DiscreteCommandValue;
 
 /**
  * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
@@ -122,42 +117,6 @@ public class Command {
             }
     	}
     	return res;
-    }
-    
-    public JSONObject getJson() {
-    	try {
-        	JSONObject curentCommand = new JSONObject();
-    		curentCommand.put("id", getId());
-    		curentCommand.put("name", getName());
-    		curentCommand.put("description", getDescription());
-    		curentCommand.put("key", getKey());
-    		ArrayList<CommandValue> commandValue = getCommandValues();
-    		for (int j = 0; j < commandValue.size(); j++) {
-    			JSONObject curentCommandValue = new JSONObject();
-    			curentCommandValue.put("name",commandValue.get(j).getName());
-    			if(commandValue.get(j) instanceof ContinuousCommandValue) {
-    				ContinuousCommandValue current = (ContinuousCommandValue)commandValue.get(j);
-    				curentCommandValue.put("type","continuous");
-    				curentCommandValue.put("valueMin", current.getValueMin());
-    				curentCommandValue.put("valueMax", current.getValueMax());
-    				curentCommandValue.put("precision", current.getPrecision());
-    			}
-    			else {
-    	    		System.out.println("1" + curentCommand);
-    				DiscreteCommandValue current = (DiscreteCommandValue)commandValue.get(j);
-    				curentCommandValue.put("type","discrete");
-    				for (int k = 0; k < current.getPossibleValues().size(); k++) {
-    					curentCommandValue.append("possibleValues", current.getPossibleValues().get(k));
-    				}
-    			}
-    			curentCommand.append("commandValue", curentCommandValue);
-    		}
-    		return curentCommand;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	return null;
-
     }
 	
 }

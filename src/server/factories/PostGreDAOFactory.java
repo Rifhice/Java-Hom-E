@@ -29,6 +29,12 @@ public class PostGreDAOFactory extends AbstractDAOFactory {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    @Override
+    public BehaviourDAO getBehaviourDAO() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 	@Override
 	public SensorDAO getSensorDAO() {
@@ -53,12 +59,6 @@ public class PostGreDAOFactory extends AbstractDAOFactory {
         // TODO Auto-generated method stub
         return null;
     }
-
-	@Override
-	public BehaviourDAO getBehaviourDAO() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public AmbienceDAO getAmbienceDAO() {

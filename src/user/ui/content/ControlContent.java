@@ -18,18 +18,31 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import user.ClientFX;
 import user.models.ActuatorCategory;
+import user.models.AtomicAction;
+import user.models.Command;
+import user.models.CommandValue;
+import user.models.ComplexAction;
+import user.models.ContinuousCommandValue;
+import user.models.DiscreteCommandValue;
 import user.models.SensorCategory;
 import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;
+import user.ui.componentJavaFX.MyComboBox;
 import user.ui.componentJavaFX.MyGridPane;
 import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
+import user.ui.componentJavaFX.MySlider;
+import javafx.scene.layout.ColumnConstraints;
 
 public class ControlContent extends Content {
 
 	private static ControlContent content = null;
+	
+	private ArrayList<Command> commands = new ArrayList<>();
+	private ArrayList<ComplexAction> complexAction = new ArrayList<>();
+	
 	private MyGridPane topGridPane;
 	private MyGridPane bottomGridPane;
 	
@@ -51,9 +64,8 @@ public class ControlContent extends Content {
         
         
         bottomGridPane  = new MyGridPane(bottomPaneBounds.computeBounds(width, height));
-		MyLabel label2 = new MyLabel("Atomic Commands", atomicLabelCommandBounds.computeBounds(topGridPane.getPrefWidth(), topGridPane.getPrefHeight()),2f);
+        MyLabel label2 = new MyLabel("Atomic Commands", atomicLabelCommandBounds.computeBounds(topGridPane.getPrefWidth(), topGridPane.getPrefHeight()),2f);
 		bottomGridPane.add(label2, 0, 0);
-
         MyScrollPane atomicList = new MyScrollPane(bottomPaneBounds.computeBounds(width,height));
         atomicList.setBackground(new Background(new BackgroundFill(Color.web(GraphicalCharter.LIGHT_GRAY), CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -84,31 +96,71 @@ public class ControlContent extends Content {
     }
 
     public void updateUI() {
-    	/*
-        if(actuator.size() != 0) {
-            if(currentActuatorCategoryIndex == -1) {
-                currentActuatorCategoryIndex = 0;
-            }
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    actuatorListGrid.getChildren().clear();
-                    for (int i = 0; i < actuator.size(); i++) {
-                        actuatorListGrid.add(new MyButtonFX(actuator.get(i).getName(),i,actuatorListGrid.getPrefWidth(),actuatorListGrid.getPrefHeight() / NB_OF_CAT_DISPLAYED, new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent event) {
-                                int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-                                currentActuatorCategoryIndex = pressedButton;
-                                currentActuatorCategoryName.setText(actuator.get(currentActuatorCategoryIndex).getName());
-                                currentActuatorCategoryDescription.setText(actuator.get(currentActuatorCategoryIndex).getDescription());
-                            }
-                        }),0,i);
-                    }
-                    currentActuatorCategoryName.setText(actuator.get(currentActuatorCategoryIndex).getName());
-                    currentActuatorCategoryDescription.setText(actuator.get(currentActuatorCategoryIndex).getDescription());
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+            	//Create commmands UI
+                for (int i = 0; i < commands.size(); i++) {
+                    ColumnConstraints col1 = new ColumnConstraints();
+                    col1.setPercentWidth(0.1f * bottomGridPane.getPrefWidth());
+                    bottomGridPane.getColumnConstraints().addAll(col1);
+                	bottomGridPane.add(new MyLabel(commands.get(i).getName()), 0, i + 1);
+                	int j;
+                	for (j= 0; j < commands.get(i).getCommandValues().size(); j++) {
+						CommandValue argument = commands.get(i).getCommandValues().get(j);
+	                    if(argument instanceof DiscreteCommandValue) {
+	                    	DiscreteCommandValue argumentCasted = (DiscreteCommandValue)argument;
+	                    	/*if(argumentCasted.getPossibleValues().size() < 6) {
+	                    		for (int k = 0; k < argumentCasted.getPossibleValues().size(); k++) {
+	                    			String currentValue = argumentCasted.getPossibleValues().get(k);
+	                    			bottomGridPane.add(new MyButtonFX(commands.get(i).getKey() + " " currentValue, new EventHandler<ActionEvent>() {
+	            						
+	            						@Override
+	            						public void handle(ActionEvent arg0) {
+	            							//SEND ACTION
+	            						}
+	            					}),k + 1,i + 1);
+								}
+	                    	}
+	                    	else {
+	                    		
+	                    	}	*/     
+	                    	bottomGridPane.add(new MyComboBox(argumentCasted.getPossibleValues()),j + 1, i + 1);
+	                    }
+	                    else {
+	                    	ContinuousCommandValue argumentCasted = (ContinuousCommandValue)argument;
+	                    	bottomGridPane.add(new MySlider(argumentCasted.getValueMin(), argumentCasted.getValueMax(), argumentCasted.getPrecision()), j + 1, i + 1);
+	                    }
+					}
+                	bottomGridPane.add(new MyButtonFX("Validate", new EventHandler<ActionEvent>() {
+						
+						@Override
+						public void handle(ActionEvent arg0) {
+							
+						}
+					}),j + 1,i + 1);
                 }
-            });
-        }
-        */
+                //Create complex action UI
+                int x = 1;
+                int y = 0;
+                for (int i = 0; i < complexAction.size(); i++) {
+                    ColumnConstraints col1 = new ColumnConstraints();
+                    col1.setPercentWidth(0.1f * topGridPane.getPrefWidth());
+                    topGridPane.getColumnConstraints().addAll(col1);
+					if(y == 5) {
+						x++;
+						y = 0;
+					}
+					topGridPane.add(new MyButtonFX(complexAction.get(i).getName(), new EventHandler<ActionEvent>() {
+						
+						@Override
+						public void handle(ActionEvent event) {
+							
+						}
+					}),y,x);
+					y++;
+				}
+            }          
+        });
     }
 	
 	@Override
@@ -122,7 +174,51 @@ public class ControlContent extends Content {
                     String action = json.getString("action");
                     switch (action) {
                     case "getAll":
+                    	//Parses the commands
+                    	JSONArray commands = json.getJSONArray("commands");
+                    	for (int i = 0; i < commands.length(); i++) {
+                    		JSONObject currentCommand = commands.getJSONObject(i);
+							ArrayList<CommandValue> arguments = new ArrayList<CommandValue>();
+							try {
+	                    		for (int j = 0; j < currentCommand.getJSONArray("commandValue").length(); j++) {
+									JSONObject currentArgument = currentCommand.getJSONArray("commandValue").getJSONObject(j);
+									if(currentArgument.getString("type").equals("discrete")) {
+										ArrayList<String> possibleValues = new ArrayList<String>();
+										for (int k = 0; k < currentArgument.getJSONArray("possibleValues").length(); k++) {
+											possibleValues.add(currentArgument.getJSONArray("possibleValues").getString(k));
+										}
+										arguments.add(new DiscreteCommandValue(possibleValues));
+									}
+									else {
+										arguments.add(new ContinuousCommandValue(currentArgument.getFloat("valueMin"),currentArgument.getFloat("valueMax"),currentArgument.getFloat("precision")));
+									}
+								}
+							}
+							catch(Exception e) {
+								System.out.println("Pas d'arguments pour cette commande !");
+							}
+                    		this.commands.add(new Command(currentCommand.getString("name"),currentCommand.getString("description"),currentCommand.getString("key"),arguments));
+						}
                     	
+                    	//Parses the complex action
+                    	JSONArray complexCommands = json.getJSONArray("complexAction");
+                    	for (int i = 0; i < complexCommands.length(); i++) {
+                    		JSONObject currentComplexCommands = complexCommands.getJSONObject(i);
+							ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
+                    		try {
+								for (int j = 0; j < currentComplexCommands.getJSONArray("atomicAction").length(); j++) {
+									JSONObject currentAtomicAction = currentComplexCommands.getJSONArray("atomicAction").getJSONObject(j);
+									atomicActions.add(new AtomicAction(currentAtomicAction.getString("name"),currentAtomicAction.getString("executable")));
+								}
+                    		}
+                    		catch(Exception e) {
+                    			System.out.println("Pas d'atomic action pour cette action complexe !");
+                    		}
+                    		this.complexAction.add(new ComplexAction(currentComplexCommands.getString("name"),atomicActions));
+						}
+                    	System.out.println(this.commands);
+                    	System.out.println(this.complexAction);
+                    	updateUI();
                         break;
                     case "create":
                         

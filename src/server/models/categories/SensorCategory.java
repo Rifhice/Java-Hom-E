@@ -1,6 +1,10 @@
 package server.models.categories;
 
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import server.models.Sensor;
 
 public class SensorCategory extends Category{
@@ -44,5 +48,13 @@ public class SensorCategory extends Category{
     
     public String toString() {
         return "Sensor category : " + id + "\nName : " + name + "\nDescription : " + description;
+    }
+    
+    public JSONObject toJson() {
+    	JSONObject result = super.toJson();
+    	for (int i = 0; i < sensors.size(); i++) {
+			result.append("sensors", sensors.get(i).toJson());
+		}
+    	return result;
     }
 }

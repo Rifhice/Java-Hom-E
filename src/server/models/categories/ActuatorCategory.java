@@ -2,6 +2,8 @@ package server.models.categories;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import server.models.Actuator;
 
 public class ActuatorCategory extends Category{
@@ -48,5 +50,12 @@ public class ActuatorCategory extends Category{
         return res;
     }
 
+    public JSONObject toJson() {
+    	JSONObject result = super.toJson();
+    	for (int i = 0; i < actuators.size(); i++) {
+			result.append("actuators", actuators.get(i).toJson());
+		}
+    	return result;
+    }
     
 }

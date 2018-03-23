@@ -2,6 +2,9 @@ package server.models.environmentVariable;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * A discrete environment is a string which is an information the actuator needs 
  * to perform an action or modify its state
@@ -53,6 +56,15 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     
     // ==================================
 
+    public JSONObject toJson() {
+        JSONObject result = super.toJson();
+        result.put("type", "discrete");
+        result.put("currentValue", currentValue);
+    	JSONArray array = new JSONArray(possibleValues);
+    	result.put("possibleValues", array);
+    	return result;
+    }
+    
     public boolean isEqual(Object value) {
         if(value instanceof String) {
             return ((String)value).equals(currentValue);

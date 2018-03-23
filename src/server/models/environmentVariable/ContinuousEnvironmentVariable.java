@@ -1,5 +1,7 @@
 package server.models.environmentVariable;
 
+import org.json.JSONObject;
+
 /**
  * A continous environment variable is a variable which current value is a decimal number.
  * @author Clm-Roig
@@ -67,6 +69,15 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
         notifyObservers();
     }
 
+    public JSONObject toJson() {
+    	JSONObject result = super.toJson();
+    	result.put("type", "continuous");
+    	result.put("valueMin", valueMin);
+    	result.put("valueMax", valueMax);
+    	result.put("precision", precision);
+    	result.put("currentValue", currentValue);
+    	return result;
+    }
 
     // ==================================
 

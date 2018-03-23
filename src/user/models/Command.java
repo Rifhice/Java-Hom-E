@@ -2,8 +2,6 @@ package user.models;
 
 import java.util.ArrayList;
 
-import server.models.commandValue.CommandValue;
-
 /**
  * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
  * @author Clm-Roig
@@ -15,7 +13,7 @@ public class Command {
     // ==================== //
     private int id;
     private String name;
-    private String description;
+    private String description; 
     private String key;
     
     // Attributes from other tables

@@ -48,7 +48,7 @@ public class CommandManager extends Manager{
 		result.put("recipient", "command");
 		result.put("action", "getAllAtomic");
 		for (int i = 0; i < command.size(); i++) {
-			result.append("command", command.get(i).getJson());
+			result.append("command", command.get(i).toJson());
 		}
 		try {
 			client.sendToClient(result.toString());
@@ -63,7 +63,7 @@ public class CommandManager extends Manager{
 		result.put("recipient", "command");
 		result.put("action", "getAllComplex");
 		for (int i = 0; i < complexValue.size(); i++) {
-			result.append("complexAction", complexValue.get(i).getJson());
+			result.append("complexAction", complexValue.get(i).toJson());
 		}
 		try {
 			client.sendToClient(result.toString());
@@ -85,20 +85,16 @@ public class CommandManager extends Manager{
 		result.put("recipient", "command");
 		result.put("action", "getAll");
 		for (int i = 0; i < complexValue.size(); i++) {
-			result.append("complexAction", complexValue.get(i).getJson());
+			result.append("complexAction", complexValue.get(i).toJson());
 		}
-		System.out.println(command.size());
 		for (int j = 0; j < command.size(); j++) {
-			System.out.println("salut");
 			try {
-				System.out.println(command.get(j).getJson());				
+				System.out.println(command.get(j).toJson());				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			result.append("command", command.get(j).getJson());
+			result.append("commands", command.get(j).toJson());
 		}
-		System.out.println(result);
-		System.out.println("hey");
 		try {
 			client.sendToClient(result.toString());
 		} catch (IOException e) {
@@ -111,7 +107,6 @@ public class CommandManager extends Manager{
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
-	        	System.out.println("hey");
 	        	getAllCommand(json,client);
 	            break;
 	        case "getAllComplex":

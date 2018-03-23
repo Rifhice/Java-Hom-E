@@ -1,5 +1,7 @@
 package user.models;
 
+import org.json.JSONObject;
+
 /**
  * An action is a message sent by the server to the actuators which needs to react according to it.
  * @author Clm-Roig
@@ -21,6 +23,11 @@ public class AtomicAction {
 
     public AtomicAction(int id, String name, String executable) {
         this.id = id;
+        this.name = name;
+        this.executable = executable;
+    }
+    
+    public AtomicAction(String name, String executable) {
         this.name = name;
         this.executable = executable;
     }
@@ -64,7 +71,14 @@ public class AtomicAction {
     }
     
     
-
+    
+    public JSONObject toJson() {
+    	JSONObject result = new JSONObject();
+    	result.put("id", id);
+    	result.put("name", name);
+    	result.put("executable", executable);
+    	return result;
+    }  
     
 
 }

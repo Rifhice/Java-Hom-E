@@ -30,12 +30,15 @@ public class Behaviour {
 	public int getId() {
 		return id;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -46,6 +49,5 @@ public class Behaviour {
 
     public void setActivated(boolean isActivated) {
         this.isActivated = isActivated;
-    }
-	
+    }	
 }

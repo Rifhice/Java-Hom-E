@@ -25,5 +25,15 @@ public class MyLabel extends Label{
 		setPrefHeight(bounds.getHeight());
 		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));
 	}
+	 
+	/** 
+	 * Center-X the label in his father 
+	 * @param fatherWidth, the width of the father
+	 * @return the label centered
+	 */
+	public MyLabel centerX(double fatherWidth) {
+        setLayoutX(fatherWidth * 0.5f - getPrefWidth() / 2.0f); 
+        return this;
+    }
 	
 }

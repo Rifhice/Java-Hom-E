@@ -1,4 +1,4 @@
-package server.models.commandValue;
+package user.models;
 
 import org.json.JSONObject;
 
@@ -33,6 +33,14 @@ public class ContinuousCommandValue extends CommandValue{
         super(id, name);
         this.valueMax = valueMax;
         this.valueMin = valueMin;
+        this.precision = precision;
+    }
+    
+    public ContinuousCommandValue(double valueMin,double valueMax, double precision) {
+        super();
+        this.valueMax = valueMax;
+        this.valueMin = valueMin;
+        this.precision = precision;
     }
 
     // ================= //

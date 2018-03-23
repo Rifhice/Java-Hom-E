@@ -1,5 +1,7 @@
 package server.models.evaluable;
 
+import org.json.JSONObject;
+
 import server.models.commandValue.CommandValue;
 import server.models.environmentVariable.EnvironmentVariable;
 
@@ -17,7 +19,7 @@ public class Block implements Evaluable {
     private String operator;
     
     // Attributes from other table
-    private CommandValue environmentValue; 
+    private CommandValue commandValue; 
     private EnvironmentVariable environmentVariable;
 
     // ====================== //
@@ -25,15 +27,15 @@ public class Block implements Evaluable {
     // ====================== //
     public Block() {}
 
-    public Block(EnvironmentVariable environmentVariable, CommandValue environmentValue, String operator) {
+    public Block(EnvironmentVariable environmentVariable, CommandValue commandValue, String operator) {
         this.environmentVariable = environmentVariable;
-        this.environmentValue = environmentValue;
+        this.commandValue = commandValue;
         this.operator = operator;
     }
 
-    public Block(int id, EnvironmentVariable environmentVariable, CommandValue environmentValue, String operator) {
+    public Block(int id, EnvironmentVariable environmentVariable, CommandValue commandValue, String operator) {
         this.id = id;
-        this.environmentValue = environmentValue;
+        this.commandValue = commandValue;
         this.environmentVariable = environmentVariable;
         this.operator = operator;
     }
@@ -57,12 +59,12 @@ public class Block implements Evaluable {
         this.operator = operator;
     }
     
-    public Object getEnvironmentValue() {
-        return environmentValue;
+    public Object getCommandValue() {
+        return commandValue;
     }
 
-    public void setEnvironmentValue(CommandValue environmentValue) {
-        this.environmentValue = environmentValue;
+    public void setCommandValue(CommandValue commandValue) {
+        this.commandValue = commandValue;
     }
 
     public EnvironmentVariable getEnvironmentVariable() {
@@ -78,23 +80,33 @@ public class Block implements Evaluable {
     public boolean evaluate() {
         switch (operator) {
         case "==":
-            return environmentVariable.isEqual(environmentValue);
+            return environmentVariable.isEqual(commandValue);
         case "!=":
-            return environmentVariable.isNotEqual(environmentValue);
+            return environmentVariable.isNotEqual(commandValue);
         case "<=":
-            return environmentVariable.isInferiorOrEqual(environmentValue);
+            return environmentVariable.isInferiorOrEqual(commandValue);
         case ">=":
-            return environmentVariable.isSuperiorOrEqual(environmentValue);
+            return environmentVariable.isSuperiorOrEqual(commandValue);
         case "<":
-            return environmentVariable.isSuperior(environmentValue);
+            return environmentVariable.isSuperior(commandValue);
         case ">":
-            return environmentVariable.isInferior(environmentValue);
+            return environmentVariable.isInferior(commandValue);
         }
         return false;
     }
 
     public String toString() {
-        return environmentVariable.toString() + " " + operator + " " + environmentValue;
+        return environmentVariable.toString() + " " + operator + " " + commandValue;
     }
 
+    public JSONObject toJson() {
+        JSONObject result = new JSONObject();
+        result.put("type", "block");
+        result.put("id", id);
+        result.put("operator",operator);
+        result.put("command", commandValue.toJson());
+        result.put("variable", environmentVariable.toJson());
+        return result;
+    }
+    
 }

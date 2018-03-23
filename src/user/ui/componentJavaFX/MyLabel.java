@@ -17,6 +17,11 @@ public class MyLabel extends Label{
 		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE));
 	}
 	
+	public MyLabel(String text) {
+		setText(text);
+		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE));
+	}
+	
 	public MyLabel(String text,Rectangle2D.Float bounds,float fontMultiplier) {
 		setText(text);
 		setLayoutX(bounds.getX());

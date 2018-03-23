@@ -2,6 +2,8 @@ package server.models;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 public class Right {
 
     // ==================== //
@@ -77,6 +79,17 @@ public class Right {
     public String toString() {
         String right = "Right #"+ id +" "+ denomination + "\n"+ description;          
         return right;
+    }
+    
+    public JSONObject toJson() {
+        JSONObject result = new JSONObject();
+        result.put("id", id);
+        result.put("denomination",denomination);
+        result.put("description", description);
+        for (int i = 0; i < commands.size(); i++) {
+			result.append("commands", commands.get(i).toJson());
+		}
+        return result;
     }
     
     public static void main(String[] args) {

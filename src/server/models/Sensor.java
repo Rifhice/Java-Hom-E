@@ -3,6 +3,8 @@ package server.models;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import server.models.categories.SensorCategory;
 import server.models.environmentVariable.EnvironmentVariable;
 
@@ -85,5 +87,14 @@ public class Sensor extends ExternalActor{
 		}
 		return res;
 	}
+    
+    public JSONObject toJson() {
+    	JSONObject result = super.toJson();
+        for (int i = 0; i < environmentVariable.size(); i++) {
+			result.append("environmentVariable", environmentVariable.get(i).toJson());
+		}
+        result.put("category", sensorCategory);
+        return result;
+    }
 
 }

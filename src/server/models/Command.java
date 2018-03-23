@@ -124,7 +124,7 @@ public class Command {
     	return res;
     }
     
-    public JSONObject getJson() {
+    public JSONObject toJson() {
     	try {
         	JSONObject curentCommand = new JSONObject();
     		curentCommand.put("id", getId());
@@ -133,24 +133,7 @@ public class Command {
     		curentCommand.put("key", getKey());
     		ArrayList<CommandValue> commandValue = getCommandValues();
     		for (int j = 0; j < commandValue.size(); j++) {
-    			JSONObject curentCommandValue = new JSONObject();
-    			curentCommandValue.put("name",commandValue.get(j).getName());
-    			if(commandValue.get(j) instanceof ContinuousCommandValue) {
-    				ContinuousCommandValue current = (ContinuousCommandValue)commandValue.get(j);
-    				curentCommandValue.put("type","continuous");
-    				curentCommandValue.put("valueMin", current.getValueMin());
-    				curentCommandValue.put("valueMax", current.getValueMax());
-    				curentCommandValue.put("precision", current.getPrecision());
-    			}
-    			else {
-    	    		System.out.println("1" + curentCommand);
-    				DiscreteCommandValue current = (DiscreteCommandValue)commandValue.get(j);
-    				curentCommandValue.put("type","discrete");
-    				for (int k = 0; k < current.getPossibleValues().size(); k++) {
-    					curentCommandValue.append("possibleValues", current.getPossibleValues().get(k));
-    				}
-    			}
-    			curentCommand.append("commandValue", curentCommandValue);
+    			curentCommand.append("commandValue", commandValue.get(j).toJson());
     		}
     		return curentCommand;
 		} catch (Exception e) {

@@ -103,7 +103,7 @@ public class Ambience {
         result.put("id", id);
         result.put("name", name);
         for (int i = 0; i < behaviours.size(); i++) {
-			result.append("behaviours", behaviours.get(i).toJSON());
+			result.append("behaviours", behaviours.get(i).toJson());
 		}
         return result;
     }

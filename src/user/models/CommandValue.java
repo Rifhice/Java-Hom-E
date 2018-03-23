@@ -1,4 +1,4 @@
-package server.models.commandValue;
+package user.models;
 
 import java.util.ArrayList;
 

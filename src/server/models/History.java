@@ -2,6 +2,10 @@ package server.models;
 
 import java.util.Date;
 
+import org.json.JSONObject;
+
+import org.json.JSONArray;
+
 /**
  *
  * @author Clm-Roig
@@ -81,6 +85,14 @@ public abstract class History {
     }
     
     // ===========================================
-		
+	public JSONObject toJson() {
+		JSONObject result = new JSONObject();
+		result.put("id",id);
+		result.put("type", type);
+		result.put("action", action);
+		result.put("user",user);
+		result.put("date", date);
+		return result;
+	}
 
 }

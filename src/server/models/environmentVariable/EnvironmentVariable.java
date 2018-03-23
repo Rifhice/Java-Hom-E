@@ -3,6 +3,9 @@ package server.models.environmentVariable;
 
 import java.util.Observable;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import server.models.Sensor;
 
 /**
@@ -97,6 +100,15 @@ public abstract class EnvironmentVariable extends Observable{
     
     public String toString() {
         return id + ": " + name;
+    }
+    
+    public JSONObject toJson() {
+    	JSONObject result = new JSONObject();
+    	result.put("id", id);
+    	result.put("name", name);
+    	result.put("unit", unit);
+    	result.put("description", description);
+    	return result;
     }
 
     public abstract boolean isEqual(Object value);

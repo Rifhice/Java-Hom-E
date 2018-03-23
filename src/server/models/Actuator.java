@@ -2,6 +2,8 @@ package server.models;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import server.models.categories.ActuatorCategory;
 
 /**
@@ -19,7 +21,8 @@ public class Actuator extends ExternalActor{
     private ActuatorCategory actuatorCategory;
     private ArrayList<AtomicAction> atomicActions;
 
-    // ====================== //
+
+	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Actuator() {}
@@ -59,7 +62,6 @@ public class Actuator extends ExternalActor{
         super(id,name,description);
         this.commands = commands;
         this.actuatorCategory = actuatorCategory;
-        this.atomicActions = atomicActions;
     }
 
     // ================= //
@@ -80,6 +82,14 @@ public class Actuator extends ExternalActor{
     public void setCommands(ArrayList<Command> commands) {
         this.commands = commands;
     }
+    
+    public ArrayList<AtomicAction> getAtomicActions() {
+		return atomicActions;
+	}
+
+	public void setAtomicActions(ArrayList<AtomicAction> atomicActions) {
+		this.atomicActions = atomicActions;
+	}
 
     public ActuatorCategory getActuatorCategory() {
         return actuatorCategory;
@@ -87,14 +97,6 @@ public class Actuator extends ExternalActor{
 
     public void setActuatorCategory(ActuatorCategory actuatorCategory) {
         this.actuatorCategory = actuatorCategory;
-    }
-
-    public ArrayList<AtomicAction> getAtomicActions() {
-        return atomicActions;
-    }
-
-    public void setAtomicActions(ArrayList<AtomicAction> atomicActions) {
-        this.atomicActions = atomicActions;
     }
     
     public String toString() {
@@ -108,13 +110,16 @@ public class Actuator extends ExternalActor{
                 res +=  "\n" + command;
             }
     	}
-    	res += "\nATOMIC ACTIONS:";
-    	if(atomicActions != null) {
-            for (AtomicAction atomicAction : atomicActions) {
-                res += "\n" + atomicAction;
-            }
-        }
     	return res;
+    }
+    
+    public JSONObject toJson() {
+        JSONObject result = super.toJson();
+        result.put("actuatorCategory", actuatorCategory.toJson());
+        for (int i = 0; i < commands.size(); i++) {
+			result.append("commands", commands.get(i).toJson());
+		}
+        return result;
     }
     
     // ==================================

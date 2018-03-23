@@ -13,6 +13,7 @@ public class AtomicAction {
     private int id;
     private String name;
     private String executable;
+    private Actuator actuator;
     
     // Attributes from other tables
 
@@ -25,6 +26,13 @@ public class AtomicAction {
         this.id = id;
         this.name = name;
         this.executable = executable;
+    }
+    
+    public AtomicAction(int id, String name, String executable,Actuator actuator) {
+        this.id = id;
+        this.name = name;
+        this.executable = executable;
+        this.actuator = actuator;
     }
 
     // ================= //
@@ -46,7 +54,15 @@ public class AtomicAction {
         this.name = name;
     }
 
-    public String getExecutable() {
+    public Actuator getActuator() {
+		return actuator;
+	}
+
+	public void setActuator(Actuator actuator) {
+		this.actuator = actuator;
+	}
+
+	public String getExecutable() {
         return executable;
     }
 
@@ -65,11 +81,12 @@ public class AtomicAction {
         // TODO
     }
     
-    public JSONObject getJson() {
+    public JSONObject toJson() {
     	JSONObject result = new JSONObject();
     	result.put("id", id);
     	result.put("name", name);
     	result.put("executable", executable);
+    	result.put("actuator", actuator);
     	return result;
     }    
 

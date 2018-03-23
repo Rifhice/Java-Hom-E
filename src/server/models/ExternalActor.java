@@ -1,5 +1,6 @@
 package server.models;
 
+import org.json.JSONObject;
 
 public class ExternalActor {
     
@@ -61,5 +62,13 @@ public class ExternalActor {
 	
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	public JSONObject toJson() {
+		JSONObject result = new JSONObject();
+		result.put("id"	, id);
+		result.put("name", name);
+		result.put("description", description);
+		return result;
 	}
 }

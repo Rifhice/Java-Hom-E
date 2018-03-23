@@ -2,6 +2,8 @@ package server.models;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 public class Role {
     // ==================== //
     // ==== ATTRIBUTES ==== //
@@ -61,5 +63,15 @@ public class Role {
         }
         return role;
     }  
+    
+    public JSONObject toJson() {
+        JSONObject result = new JSONObject();
+        result.put("id", id);
+        result.put("name", name);
+        for (int i = 0; i < rights.size(); i++) {
+			result.append("rights", rights.get(i).toJson());
+		}
+        return result;
+    }
 
 }

@@ -140,10 +140,20 @@ public class Behaviour implements Observer {
 		return new Behaviour(expression);
 	}
 
-	public JSONObject toJSON() {
+	public JSONObject toJson() {
 		JSONObject result = new JSONObject();
 		result.put("id", id);
 		result.put("name", name);
+		if(atomicActions != null) {
+		    for (int i = 0; i < atomicActions.size(); i++) {
+				result.append("atomicAction",atomicActions.get(i).toJson());
+			}
+		}
+		if(complexActions != null) {
+		    for (int i = 0; i < complexActions.size(); i++) {
+				result.append("complexActions",complexActions.get(i).toJson());
+			}
+		}
 		return result;
 	}
 	

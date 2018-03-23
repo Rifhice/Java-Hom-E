@@ -268,7 +268,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                     String atomicActionName = rsAA.getString("AAname");
                     String atomicActionExecutable = rsAA.getString("AAexecutable");
                     AtomicAction aa = new AtomicAction(atomicActionId, atomicActionName, atomicActionExecutable);
-                    atomicActions.add(aa);
+                    atomicActions.add(aa); 
                 } while(rsAA.next());
                 actuator.setAtomicActions(atomicActions);
             }

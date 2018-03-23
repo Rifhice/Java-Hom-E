@@ -110,6 +110,19 @@ public class Expression implements Evaluable {
         return res + ")";
     }
 
+    public JSONObject toJson() {
+    	JSONObject result = new JSONObject();
+        result.put("id", id);
+        result.put("type", "expression");
+        for (int i = 0; i < evaluables.size(); i++) {
+			result.append("evaluable",evaluables.get(i).toJson());
+		}
+        for (int i = 0; i < operators.size(); i++) {
+			result.append("operators", operators.get(i));
+		}
+        return result;
+    }
+    
     public ArrayList<EnvironmentVariable> getVariables(){
         ArrayList<EnvironmentVariable> result = new ArrayList<EnvironmentVariable>();
         for (int i = 0; i < evaluables.size(); i++) {

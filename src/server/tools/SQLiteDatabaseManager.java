@@ -521,9 +521,9 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertDiscreteCommandValues() {
-        String insertDiscreteValue1 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{possibleValues : [\"on\",\"off\"]}',3);";
-        String insertDiscreteValue2 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{possibleValues : [\"on\",\"off\"]}',4);";
-        String insertDiscreteValue3 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{possibleValues : [\"very hot\",\"hot\",\"ice\"]}',5);";
+        String insertDiscreteValue1 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{\"possibleValues\" : [\"on\",\"off\"]}',3);";
+        String insertDiscreteValue2 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{\"possibleValues\" : [\"on\",\"off\"]}',4);";
+        String insertDiscreteValue3 = "INSERT INTO discreteCommandValues ('possible_values', 'fk_commandValue_id') VALUES ('{\"possibleValues\" : [\"very hot\",\"hot\",\"ice\"]}',5);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertDiscreteValue1);
             stmt.execute(insertDiscreteValue2);

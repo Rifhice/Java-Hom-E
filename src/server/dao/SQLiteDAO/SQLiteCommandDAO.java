@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.DAOException;
+import server.factories.AbstractDAOFactory;
 import server.models.Behaviour;
 import server.models.Command;
 import server.models.commandValue.CommandValue;
@@ -118,8 +119,8 @@ public class SQLiteCommandDAO extends CommandDAO {
             while (rs.next()) {
             	command = new DiscreteCommandValue();
             	ArrayList<String> values = new ArrayList<>();
-            	JSONObject json = new JSONObject(rs.getDouble("possible_values"));
-            	JSONArray array = new JSONArray(json.get("possibleValues"));
+            	JSONObject json = new JSONObject(rs.getString("possible_values"));
+            	JSONArray array = json.getJSONArray("possibleValues");
             	for (int i = 0; i < array.length(); i++) {
 					values.add(array.getString(i));
 				}
@@ -130,6 +131,15 @@ public class SQLiteCommandDAO extends CommandDAO {
             throw new DAOException("DAOException : CommandDAO getAll() :" + e.getMessage(), e);
         }
         return commandValues;
+	}
+	
+	public static void main(String[] args) {
+		try {
+			System.out.println(AbstractDAOFactory.getFactory(0).getCommandDAO().getAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

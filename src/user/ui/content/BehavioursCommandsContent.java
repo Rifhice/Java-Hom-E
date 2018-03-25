@@ -32,7 +32,7 @@ public class BehavioursCommandsContent extends Content {
     // ==== UI attributes ==== // 
     private static final float MARGIN = 0.05f;
     
-    private MyRectangle behavioursListBounds = new MyRectangle(0f, 0f, 0.25f, 1.0f);
+    private MyRectangle behavioursScrollPaneBounds = new MyRectangle(0f, 0f, 0.25f, 1.0f);
     private MyRectangle currentBehaviourBounds = new MyRectangle(0.25f, 0f, 0.375f, 1.0f);
     private MyRectangle commandsBounds = new MyRectangle(0.625f, 0f, 0.375f, 1.0f);
     
@@ -76,13 +76,13 @@ public class BehavioursCommandsContent extends Content {
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     private BehavioursCommandsContent() {
-        System.out.println(buttonWidth);
+
         // ==== Behaviours List (left) 
-        MyScrollPane behavioursListPane = new MyScrollPane(behavioursListBounds.computeBounds(width, height));
+        MyScrollPane behavioursListPane = new MyScrollPane(behavioursScrollPaneBounds.computeBounds(width, height));
         
         // Grid
         behavioursGrid.setPrefWidth(behavioursListPane.getPrefWidth());
-        behavioursGrid.setPrefHeight(behavioursListPane.getHeight());
+        behavioursGrid.setPrefHeight(behavioursListPane.getPrefHeight());        
         behavioursListPane.setContent(behavioursGrid);
 
         // ==== Current Behaviour (center)
@@ -185,7 +185,6 @@ public class BehavioursCommandsContent extends Content {
 
     @Override
     public void handleMessage(Object message) {
-        System.out.println("BEHAVIOURS PANE - Received: " + message);
         if(message instanceof String) {
             try {
                 JSONObject json = new JSONObject((String)message);
@@ -200,7 +199,7 @@ public class BehavioursCommandsContent extends Content {
                             
                             // TODO : decomment 1rst line and delete 2nd one when getAll() functional
                             // behaviours.add(new Behaviour(current.getInt("id"), current.getString("name"), current.getBoolean("isActivated")));
-                            behaviours.add(new Behaviour(current.getInt("id"), current.getString("name")));
+                            behaviours.add(new Behaviour(current.getInt("id"), current.getString("name"), current.getString("description")));
                         }
                         this.updateBehaviourUI();
                         break;
@@ -234,25 +233,25 @@ public class BehavioursCommandsContent extends Content {
     /**
      * Update the UI parts relatives to the behaviours
      */
-    public void updateBehaviourUI() {
-        System.out.println("Updating behaviours");
-        
+    public void updateBehaviourUI() {       
         if(behaviours.size() != 0) {
             if(currentBehaviourIndex == -1) {
                 currentBehaviourIndex = 0;
             }
             
-
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     behavioursGrid.getChildren().clear();
                     for (int i = 0; i < behaviours.size(); i++) {
+                        
+                        // Create a button for each Behaviour in the grid
                         behavioursGrid.add(new MyButtonFX(behaviours.get(i).getName(),i,behavioursGrid.getPrefWidth(),behavioursGrid.getPrefHeight() / NB_OF_BEHAVIOURS_DISPLAYED, new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent event) {
                                 int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
                                 currentBehaviourIndex = pressedButton;
                                 currentBehaviourName.setText(behaviours.get(currentBehaviourIndex).getName());
+                                currentBehaviourDescription.setText(behaviours.get(currentBehaviourIndex).getDescription());
                             }
                         }),0,i);
                     }

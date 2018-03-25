@@ -534,7 +534,7 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertDiscreteEnvironmentVariables() {
-        String insertDiscreteEnvironmentVariable1 = "INSERT INTO discreteEnvironmentVariables ('possible_values', 'current_value', 'fk_environmentVariable_id') VALUES ('{\"true\",\"false\"}', 'true', 2);";
+        String insertDiscreteEnvironmentVariable1 = "INSERT INTO discreteEnvironmentVariables ('possible_values', 'current_value', 'fk_environmentVariable_id') VALUES ('{possibleValues : [\"true\", \"false\"]}', 'true', 2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertDiscreteEnvironmentVariable1);
          

@@ -558,9 +558,9 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertExpressions() {
-        String insertExpression1 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (1,'{\"<\",\"==\"}',1);";
-        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{\"<\"}',2);";
-        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{\"!=\"}',3);";
+        String insertExpression1 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (1,'{operators: [\"<\",\"==\"]}',1);";
+        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{operators: [\"<\"]}',2);";
+        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{operators: [\"!=\"]}',3);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertExpression1);
             stmt.execute(insertExpression2);

@@ -32,16 +32,17 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 		 Behaviour behaviour = obj;
 
 	        String sql = "INSERT INTO Behaviours "
-	                + "(name, is_activated, fk_expression_id) VALUES "
-	                + "(?, ?, ?);";
+	                + "(name, description, is_activated, fk_expression_id) VALUES "
+	                + "(?, ?, ?, ?);";
 
 	        // Insert the User
 	        int created = 0;
 	        try {
 	            PreparedStatement prepStat = this.connect.prepareStatement(sql);
 	            prepStat.setString(1, obj.getName());
-	            prepStat.setBoolean(2, obj.isActivated());
-	            prepStat.setInt(3, obj.getExpression().getId());
+	            prepStat.setString(2, obj.getDescription());
+	            prepStat.setBoolean(3, obj.isActivated());
+	            prepStat.setInt(4, obj.getExpression().getId());
 	            created = prepStat.executeUpdate();
 
 	            // Get the id generated for this object
@@ -151,7 +152,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	        return allAtomicActions;
 	    }*/
 	 
-	 //manque Arraylist de complex action
+	 // TODO : missing Arraylist<ComplexAction>
 	 
 	 public ArrayList<ComplexAction> getComplexActions(int id) throws DAOException {
 	        Behaviour Behaviour = null;
@@ -207,20 +208,22 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	public int update(Behaviour obj) throws DAOException {
 		// Update Behaviour
         String sql = "UPDATE Behaviour "
-                + "SET name = ?, is_activated = ?, fk_expression_id = ? "
+                + "SET name = ?, description = ?, is_activated = ?, fk_expression_id = ? "
                 + "WHERE id = ?";
         int behaviourUpdated = 0;
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setString(1, obj.getName());
-            prepStat.setBoolean(2, obj.isActivated());
-            prepStat.setInt(1, obj.getExpression().getId()); // Verifier si l'id de l'expression existe sinon erreur
+            prepStat.setString(2, obj.getDescription());
+            prepStat.setBoolean(3, obj.isActivated());
+            prepStat.setInt(4, obj.getExpression().getId()); // TODO Check if Expression ID is not null
+            prepStat.setInt(5, obj.getId());
             behaviourUpdated = prepStat.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("DAOException : BehaviourDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
         }
 
-        // Delete his atomicactions
+        // Delete his atomicActions
         String sqlDeleteAtomics = "DELETE FROM Launches "
                 + "WHERE fk_behaviour_id = ?";
         int atomicsDeleted = 0;
@@ -232,7 +235,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             throw new DAOException("DAOException : AtomicsDAO update(" + obj.getId() + ") :" + e.getMessage(), e); 
         }        
 
-        // Update his atomicsactions
+        // Update his atomicsActions
         String sqlInsertAtomics = "INSERT INTO Launches "
                 + "(fk_behaviour_id, fk_atomicaction_id) VALUES "
                 + "(?, ?);";
@@ -289,7 +292,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	@Override
 	public ArrayList<Behaviour> getAll() throws DAOException {
         ArrayList<Behaviour> behaviours = new ArrayList<Behaviour>();
-        String sql = "SELECT B.id AS id, B.name AS name, B.is_activated AS isActivated, "
+        String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
                 + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid "
                 + "FROM Behaviours AS B "
@@ -305,7 +308,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
            
-            //affiche resultat du rs
+            // Print rs
+            
             //while (rs.next()) {
             //    for (int i = 1; i <= columnsNumber; i++) {
             //        if (i > 1) System.out.print(" | ");
@@ -337,11 +341,9 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         
                         behaviour.setId(rs.getInt("id"));
                         behaviour.setName(rs.getString("name"));
+                        behaviour.setDescription(rs.getString("description"));
                         behaviour.setActivated(rs.getBoolean("isActivated"));
-                        //System.out.println(rs.getString("name"));
-                        //System.out.println(rs.getInt("id"));
-                        //System.out.println(rs.getBoolean("isActivated"));
-    					//System.out.println(rs.getString("Acid"));
+
     					System.out.println(rs.getString("Eoperators"));
 
                         try {
@@ -384,7 +386,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
 	@Override
 	public Behaviour getById(int id) throws DAOException {
-		// TODO Auto-generated method stub
 		Behaviour behaviour = null;
         String sql = "SELECT * FROM Behaviours B " +
         			 "WHERE B.id = ?";
@@ -393,10 +394,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             prepStat.setInt(1, id);
             ResultSet rs = prepStat.executeQuery();
 
-            // If no user found, we do nothing and return null.
             if(rs.next()) {
             	behaviour = new Behaviour();
             	behaviour.setId(rs.getInt("id"));
+            	behaviour.setDescription(rs.getString("description"));
             	behaviour.setName(rs.getString("name"));
             	System.out.println("uubb" + rs.getInt("id"));
             }

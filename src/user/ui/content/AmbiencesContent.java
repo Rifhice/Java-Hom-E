@@ -107,7 +107,6 @@ public class AmbiencesContent extends Content {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				behavioursNotChosenScrollPane.changeBounds(behavioursNotChosenBounds.computeBounds(width, height));
 				behavioursChosenScrollPane.changeBounds(behavioursChosenBounds.computeBounds(width, height));
 				context.getChildren().remove(modifyAmbiencePane);
@@ -125,7 +124,6 @@ public class AmbiencesContent extends Content {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				String name = newAmbienceName.getText();
 				if(!name.equals("")) {
 					JSONObject json = new JSONObject();
@@ -318,14 +316,12 @@ public class AmbiencesContent extends Content {
 
 
 	private void changeBehaviourState(int pressedButton) {
-		// TODO Auto-generated method stub
 		BehaviourCell behaviourCell = this.getBehaviourCell(pressedButton);
 		behaviourCell.changeState();
 		this.updateCellState(behaviourCell);
 	}
 	
 	private void updateCellState(BehaviourCell behaviourCell) {
-		// TODO Auto-generated method stub
 		if(behaviourCell.getState() == true) {
 			selectedBehaviours.add(behaviourCell.getBehaviour());
 			notSelectedBehaviours.remove(behaviourCell.getBehaviour());
@@ -402,7 +398,6 @@ public class AmbiencesContent extends Content {
 	}
 
 	private void modificateAmbience() {
-		// TODO Auto-generated method stub
 		Ambience ambience = this.getAmbienceSelected();
 		if(ambience == null) {
 			return;

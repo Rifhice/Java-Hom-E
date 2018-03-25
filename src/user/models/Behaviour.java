@@ -1,5 +1,9 @@
 package user.models;
 
+import java.util.ArrayList;
+
+import server.models.AtomicAction;
+import server.models.ComplexAction;
 import server.models.evaluable.Expression;
 
 public class Behaviour {
@@ -11,6 +15,11 @@ public class Behaviour {
 	private String description;
 	private boolean isActivated;
 	
+    // Attributes from others tables
+	private Expression expression;
+	private ArrayList<AtomicAction> atomicActions;
+    private ArrayList<ComplexAction> complexActions;
+    
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
@@ -37,6 +46,15 @@ public class Behaviour {
         this.description = description;
         this.isActivated = isActivated;
     }
+	
+	public Behaviour(int id, String name, String description, Boolean isActivated, Expression expression, ArrayList<AtomicAction> atomicActions) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.isActivated = isActivated;
+        this.expression = expression;
+        this.atomicActions = atomicActions;
+    }	
 	
 	// ================= //
     // ==== METHODS ==== //
@@ -71,6 +89,30 @@ public class Behaviour {
 
     public void setActivated(boolean isActivated) {
         this.isActivated = isActivated;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public void setExpression(Expression expression) {
+        this.expression = expression;
+    }
+
+    public ArrayList<AtomicAction> getAtomicActions() {
+        return atomicActions;
+    }
+
+    public void setAtomicActions(ArrayList<AtomicAction> atomicActions) {
+        this.atomicActions = atomicActions;
+    }
+
+    public ArrayList<ComplexAction> getComplexActions() {
+        return complexActions;
+    }
+
+    public void setComplexActions(ArrayList<ComplexAction> complexActions) {
+        this.complexActions = complexActions;
     }
 
 }

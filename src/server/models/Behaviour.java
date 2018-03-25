@@ -20,10 +20,10 @@ public class Behaviour implements Observer {
     private int id;
     private String name;
     private String description;
-	private Expression expression;
 	private boolean isActivated;
 	
 	// Attributes from other tables
+	private Expression expression;
 	private ArrayList<AtomicAction> atomicActions;
     private ArrayList<ComplexAction> complexActions;
 	

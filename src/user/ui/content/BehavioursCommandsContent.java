@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 
+import javax.swing.plaf.RootPaneUI;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +34,11 @@ public class BehavioursCommandsContent extends Content {
     // ==== UI attributes ==== // 
     private static final float MARGIN = 0.05f;
     
-    private MyRectangle behavioursScrollPaneBounds = new MyRectangle(0f, 0f, 0.25f, 1.0f);
+    private MyRectangle leftPaneBounds = new MyRectangle(0, 0, 0.25f, 1.0f);
+    private MyRectangle addBehaviourBounds = new MyRectangle(0, 0, 1f, 0.1f);
+    private MyRectangle addBehaviourButtonBounds = new MyRectangle(0, 0, 0.7f, 0.7f);
+    private MyRectangle behavioursScrollPaneBounds = new MyRectangle(0, 0.1f, 0.25f, 0.9f);
+    
     private MyRectangle currentBehaviourBounds = new MyRectangle(0.25f, 0f, 0.375f, 1.0f);
     private MyRectangle commandsBounds = new MyRectangle(0.625f, 0f, 0.375f, 1.0f);
     
@@ -77,13 +83,33 @@ public class BehavioursCommandsContent extends Content {
     // ====================== //
     private BehavioursCommandsContent() {
 
-        // ==== Behaviours List (left) 
+        // ==== Behaviours List (left)      
+        MyPane leftPane = new MyPane(leftPaneBounds.computeBounds(width, height));
+        MyPane addBehaviourPane = new MyPane(addBehaviourBounds.computeBounds(leftPane.getPrefWidth(), leftPane.getPrefHeight()));
+        
+        // Add button
+        MyButtonFX addBehaviourButton = new MyButtonFX("Add behaviour",addBehaviourButtonBounds.computeBounds(addBehaviourPane.getPrefWidth(),addBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO : open add-Behaviour pop-up
+            }
+        });
+        
+        addBehaviourButton.centerX(addBehaviourPane.getPrefWidth());
+        addBehaviourButton.centerY(addBehaviourPane.getPrefHeight());
+        addBehaviourButton.setStyle("-fx-font-size: 14;");
+
+        addBehaviourPane.getChildren().add(addBehaviourButton);
+
+        leftPane.getChildren().add(addBehaviourPane);
         MyScrollPane behavioursListPane = new MyScrollPane(behavioursScrollPaneBounds.computeBounds(width, height));
         
         // Grid
         behavioursGrid.setPrefWidth(behavioursListPane.getPrefWidth());
         behavioursGrid.setPrefHeight(behavioursListPane.getPrefHeight());        
         behavioursListPane.setContent(behavioursGrid);
+        
+        leftPane.getChildren().add(behavioursListPane);
 
         // ==== Current Behaviour (center)
         MyPane selectedBehaviourPane = new MyPane(currentBehaviourBounds.computeBounds(width, height));
@@ -152,7 +178,7 @@ public class BehavioursCommandsContent extends Content {
         commandsPane.setStyle("-fx-background-color: rgb(255, 255, 50)");
         commandsPane.getChildren().add(new Label("All commands"));
 
-        this.getChildren().add(behavioursListPane);
+        this.getChildren().add(leftPane);
         this.getChildren().add(selectedBehaviourPane);
         this.getChildren().add(commandsPane);
     }

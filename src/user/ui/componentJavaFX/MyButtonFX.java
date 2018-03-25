@@ -61,6 +61,11 @@ public class MyButtonFX extends Button{
 		return this;
 	}
 	
+	public MyButtonFX centerY(double height) {
+        setLayoutY(height * 0.5f - getPrefHeight() / 2.0f);
+        return this;
+    }
+	
 	public MyButtonFX setFontMultiplier(float fontMultiplier) {
 		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));
 		return this;

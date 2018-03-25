@@ -118,6 +118,7 @@ public class BehavioursCommandsContent extends Content {
         currentBehaviourName = new MyLabel("Behaviour name",nameLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
         currentBehaviourName.centerX(selectedBehaviourPane.getPrefWidth());
         currentBehaviourName.setAlignment(Pos.CENTER);
+        currentBehaviourName.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
         selectedBehaviourPane.getChildren().add(currentBehaviourName);
         
         // Description
@@ -212,6 +213,7 @@ public class BehavioursCommandsContent extends Content {
     @Override
     public void handleMessage(Object message) {
         if(message instanceof String) {
+            System.out.println(message);
             try {
                 JSONObject json = new JSONObject((String)message);
                 if(json.getString("recipient").equals("behaviour")) {

@@ -38,12 +38,30 @@ public class BehavioursCommandsContent extends Content {
     
     private MyGridPane behavioursGrid = new MyGridPane(new MyRectangle(0f, 0f, 1f, 1f));
     
-    private MyRectangle nameLabelBounds = new MyRectangle(0.0f,0.02f,1f,0.1f);
-    private MyRectangle descriptionLegendBounds = new MyRectangle(MARGIN, 0.15f, (1.0f - 2*MARGIN), 0.1f);
-    private MyRectangle descriptionLabelBounds = new MyRectangle(MARGIN, 0.25f, (1.0f - 2*MARGIN), 0.3f);
-
+    // ==== Current behaviour ==== //
+    private MyRectangle nameLabelBounds = new MyRectangle(0.0f,0.0f,1f,0.1f);
+    
+    private MyRectangle descriptionLegendBounds = new MyRectangle(MARGIN, 0.1f, (1.0f - 2*MARGIN), 0.05f);
+    private MyRectangle descriptionTextAreaBounds = new MyRectangle(MARGIN, 0.15f, (1.0f - 2*MARGIN), 0.20f);
+    
+    private MyRectangle expressionLegendBounds = new MyRectangle(MARGIN, 0.4f, (1.0f - 2*MARGIN), 0.05f);
+    private MyRectangle expressionValueBounds = new MyRectangle(MARGIN, 0.45f, (1.0f - 2*MARGIN), 0.05f);
+    
+    private MyRectangle commandLegendBounds = new MyRectangle(MARGIN, 0.55f, (1.0f - 2*MARGIN), 0.05f);
+    private MyRectangle commandValueBounds = new MyRectangle(MARGIN, 0.60f, (1.0f - 2*MARGIN), 0.05f);
+    
+    // Buttons
+    private float buttonWidth = (1.0f / 2.0f) - ((3.0f/2.0f)*MARGIN);
+    
+    private MyRectangle activateButtonBounds = new MyRectangle(MARGIN, 0.7f, buttonWidth, 0.05f);
+    private MyRectangle deactivateButtonBounds = new MyRectangle(2*MARGIN + buttonWidth, 0.7f, buttonWidth, 0.05f);
+    private MyRectangle modifyButtonBounds = new MyRectangle(MARGIN, 0.8f, buttonWidth, 0.05f);
+    
+    // Dynamic Values
     private MyLabel currentBehaviourName;
     private MyTextArea currentBehaviourDescription;
+    private MyLabel currentBehaviourExpression;
+    private MyLabel currentBehaviourCommand;
 
     // ==== Content attributes ==== // 
     
@@ -58,7 +76,7 @@ public class BehavioursCommandsContent extends Content {
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     private BehavioursCommandsContent() {
-        
+        System.out.println(buttonWidth);
         // ==== Behaviours List (left) 
         MyScrollPane behavioursListPane = new MyScrollPane(behavioursListBounds.computeBounds(width, height));
         
@@ -69,24 +87,66 @@ public class BehavioursCommandsContent extends Content {
 
         // ==== Current Behaviour (center)
         MyPane selectedBehaviourPane = new MyPane(currentBehaviourBounds.computeBounds(width, height));
-        selectedBehaviourPane.setStyle("-fx-background-color: rgb(50, 50, 255)");
         
         // Name
         currentBehaviourName = new MyLabel("Behaviour name",nameLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
-        currentBehaviourName.setStyle("-fx-background-color: rgb(50, 255, 50)");
         currentBehaviourName.centerX(selectedBehaviourPane.getPrefWidth());
         currentBehaviourName.setAlignment(Pos.CENTER);
         selectedBehaviourPane.getChildren().add(currentBehaviourName);
         
         // Description
-        MyLabel test = new MyLabel("Description",descriptionLegendBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
-        test.setStyle("-fx-background-color: rgb(10, 150, 50)");
-        selectedBehaviourPane.getChildren().add(test);
-        currentBehaviourDescription = new MyTextArea("Behaviour description test",descriptionLabelBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        MyLabel descriptionLabel = new MyLabel("Description",descriptionLegendBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        descriptionLabel.setStyle("-fx-font-weight: bold;");
+        selectedBehaviourPane.getChildren().add(descriptionLabel);
+        currentBehaviourDescription = new MyTextArea("Behaviour description test",descriptionTextAreaBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
         currentBehaviourDescription.lockText();
         selectedBehaviourPane.getChildren().add(currentBehaviourDescription);
-
- 
+        
+        // Expression
+        MyLabel expressionLabel = new MyLabel("Expression",expressionLegendBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        expressionLabel.setStyle("-fx-font-weight: bold;");
+        selectedBehaviourPane.getChildren().add(expressionLabel);
+        // TODO : delete test value
+        currentBehaviourExpression = new MyLabel("42 > 5 & T == 32", expressionValueBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        selectedBehaviourPane.getChildren().add(currentBehaviourExpression);
+        
+        // Command
+        MyLabel commandLabel = new MyLabel("Command", commandLegendBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        commandLabel.setStyle("-fx-font-weight: bold;");
+        selectedBehaviourPane.getChildren().add(commandLabel);
+        // TODO : delete test value
+        currentBehaviourCommand = new MyLabel("LightOn", commandValueBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()));
+        selectedBehaviourPane.getChildren().add(currentBehaviourCommand);
+        
+        // Buttons
+        MyButtonFX activateButton = new MyButtonFX("Activate", activateButtonBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+        
+        MyButtonFX deactivateButton = new MyButtonFX("Deactivate", deactivateButtonBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+        
+        MyButtonFX modifyButton = new MyButtonFX("Modify", modifyButtonBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+        modifyButton.centerX(selectedBehaviourPane.getPrefWidth());
+        selectedBehaviourPane.getChildren().add(activateButton);
+        selectedBehaviourPane.getChildren().add(deactivateButton);
+        selectedBehaviourPane.getChildren().add(modifyButton);
+        
         // ==== Commands List (right)
         MyPane commandsPane = new MyPane(commandsBounds.computeBounds(width, height));
         commandsPane.setStyle("-fx-background-color: rgb(255, 255, 50)");
@@ -181,11 +241,11 @@ public class BehavioursCommandsContent extends Content {
             if(currentBehaviourIndex == -1) {
                 currentBehaviourIndex = 0;
             }
+            
 
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     behavioursGrid.getChildren().clear();
-                    
                     for (int i = 0; i < behaviours.size(); i++) {
                         behavioursGrid.add(new MyButtonFX(behaviours.get(i).getName(),i,behavioursGrid.getPrefWidth(),behavioursGrid.getPrefHeight() / NB_OF_BEHAVIOURS_DISPLAYED, new EventHandler<ActionEvent>() {
                             @Override
@@ -196,7 +256,9 @@ public class BehavioursCommandsContent extends Content {
                             }
                         }),0,i);
                     }
-                    currentBehaviourName.setText(behaviours.get(currentBehaviourIndex).getName());
+                    Behaviour currentBehaviour = behaviours.get(currentBehaviourIndex);
+                    currentBehaviourName.setText(currentBehaviour.getName());
+                    currentBehaviourDescription.setText(currentBehaviour.getDescription());
                 }
             });
         }

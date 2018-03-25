@@ -19,6 +19,7 @@ public class Behaviour implements Observer {
     // ==================== //
     private int id;
     private String name;
+    private String description;
 	private Expression expression;
 	private boolean isActivated;
 	
@@ -60,6 +61,16 @@ public class Behaviour implements Observer {
         this.atomicActions = atomicActions;
         this.complexActions = complexActions;
     }
+	
+	public Behaviour(int id, String name, String description, Expression expression, boolean isActivated, ArrayList<AtomicAction> atomicActions, ArrayList<ComplexAction> complexActions) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.expression = expression;
+        this.isActivated = isActivated;
+        this.atomicActions = atomicActions;
+        this.complexActions = complexActions;
+    }
 
     // ================= //
     // ==== METHODS ==== //
@@ -78,6 +89,14 @@ public class Behaviour implements Observer {
     
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Expression getExpression() {

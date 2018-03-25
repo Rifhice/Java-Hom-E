@@ -41,6 +41,7 @@ public class BehaviourManager extends Manager{
 			JSONObject behaviour = new JSONObject();
 			behaviour.put("id", behaviours.get(i).getId());
 			behaviour.put("name", behaviours.get(i).getName());
+			behaviour.put("description", behaviours.get(i).getDescription());
 			result.append("behaviours", behaviour);
 		}
 		try {

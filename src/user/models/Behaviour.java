@@ -19,6 +19,12 @@ public class Behaviour {
 		this.name = name;
 	}
 	
+	public Behaviour(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+	
 	public Behaviour(int id, String name, Boolean isActivated) {
         this.id = id;
         this.name = name;

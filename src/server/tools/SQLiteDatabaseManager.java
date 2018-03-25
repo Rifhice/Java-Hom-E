@@ -119,6 +119,7 @@ public class SQLiteDatabaseManager {
         String createTableBehaviours = "CREATE TABLE IF NOT EXISTS behaviours (\n" 
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
+                + " description text, \n"
                 + " is_activated integer, \n"
                 + " fk_expression_id integer, \n"
                 + " FOREIGN KEY (fk_expression_id) REFERENCES expressions(id) \n"
@@ -421,9 +422,9 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertBehaviours() {
-        String insertBehaviour1 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (1,'Light presence kitchen', 1, 1);";
-        String insertBehaviour2 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (2,'So hot',0,2);";
-        String insertBehaviour3 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (3,'It''s cold : I want tea',1,3);";      
+        String insertBehaviour1 = "INSERT INTO behaviours ('id','name', 'description', 'is_activated', 'fk_expression_id') VALUES (1,'Light presence kitchen', 'Automatic light in kitchen', 1, 1);";
+        String insertBehaviour2 = "INSERT INTO behaviours ('id','name', 'description', 'is_activated', 'fk_expression_id') VALUES (2,'So hot','Cool the house when it''s really hot',0,2);";
+        String insertBehaviour3 = "INSERT INTO behaviours ('id','name', 'description', 'is_activated', 'fk_expression_id') VALUES (3,'It''s cold : I want tea', 'Make a tea if it''s cold',1,3);";      
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertBehaviour1);
             stmt.execute(insertBehaviour2);

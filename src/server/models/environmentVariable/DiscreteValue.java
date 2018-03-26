@@ -6,11 +6,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * A discrete environment is a string which is an information the actuator needs 
- * to perform an action or modify its state
+ * A discrete value is a string which is an information the actuator needs 
+ * to perform an action or modify its state.
  * @author Jade Hennebert
  */
-public class DiscreteEnvironmentVariable extends EnvironmentVariable {
+public class DiscreteValue extends Value {
 
     // ==================== //
     // ==== ATTRIBUTES ==== //
@@ -21,14 +21,8 @@ public class DiscreteEnvironmentVariable extends EnvironmentVariable {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public DiscreteEnvironmentVariable(String name, String description, String unit, ArrayList<String> values, String currentValue) {
-        super(name,description,unit);
-        this.possibleValues = values;
-        this.currentValue = currentValue;
-    }
-    
-    public DiscreteEnvironmentVariable(int id, String name, String description, String unit, ArrayList<String> values, String currentValue) {
-        super(id, name,description,unit);
+    public DiscreteValue(int id, ArrayList<String> values, String currentValue) {
+        super(id);
         this.possibleValues = values;
         this.currentValue = currentValue;
     }

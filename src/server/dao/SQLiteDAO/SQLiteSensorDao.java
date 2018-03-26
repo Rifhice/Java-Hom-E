@@ -12,8 +12,8 @@ import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
-import server.models.environmentVariable.ContinuousEnvironmentVariable;
-import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 
 public class SQLiteSensorDao extends SensorDAO{
@@ -84,13 +84,13 @@ public class SQLiteSensorDao extends SensorDAO{
               // Get the id generated for this object
               if(created > 0) {
                   variable.setId(SQLiteDAOTools.getLastId(connect));
-                  if(variable instanceof ContinuousEnvironmentVariable) {
-                	  if(!createContinuousVariable((ContinuousEnvironmentVariable)variable)) {
+                  if(variable instanceof ContinuousValue) {
+                	  if(!createContinuousVariable((ContinuousValue)variable)) {
                 		  return false;
                 	  }
                   }
-                  else if(variable instanceof DiscreteEnvironmentVariable) {
-                	  if(!createDiscreteVariable((DiscreteEnvironmentVariable)variable)) {
+                  else if(variable instanceof DiscreteValue) {
+                	  if(!createDiscreteVariable((DiscreteValue)variable)) {
                 		  return false;
                 	  }
                   }
@@ -105,7 +105,7 @@ public class SQLiteSensorDao extends SensorDAO{
           return true;
     }
     
-    private boolean createContinuousVariable(ContinuousEnvironmentVariable variable) {
+    private boolean createContinuousVariable(ContinuousValue variable) {
     	String sql = "INSERT INTO continuousEnvironmentVariables "
                 + "(fk_environmentVariable_id, value_min, value_max,current_value,precision) VALUES "
                 + "(?, ?, ?,?,?)";
@@ -134,7 +134,7 @@ public class SQLiteSensorDao extends SensorDAO{
           }
     }
     
-    private boolean createDiscreteVariable(DiscreteEnvironmentVariable variable) {
+    private boolean createDiscreteVariable(DiscreteValue variable) {
     	String sql = "INSERT INTO discreteEnvironmentVariables "
                 + "(fk_environmentVariable_id, current_value, possible_values) VALUES "
                 + "(?, ?, ?)";

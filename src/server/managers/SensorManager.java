@@ -9,8 +9,8 @@ import org.json.JSONObject;
 
 import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
-import server.models.environmentVariable.ContinuousEnvironmentVariable;
-import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 import ocsf.server.ConnectionToClient;
 
@@ -48,7 +48,7 @@ public class SensorManager extends Manager{
 			for (int i = 0; i < arr.length(); i++){
 				JSONObject object = arr.getJSONObject(i);
 				if(object.getString("type").equals("continuous")) {
-					variables.add(new ContinuousEnvironmentVariable(object.getString("name"), object.getString("description"), object.getString("unity"), object.getDouble("valuemin"), object.getDouble("valuemax"), object.getDouble("precision"), object.getDouble("currentvalue")));
+					variables.add(new ContinuousValue(object.getString("name"), object.getString("description"), object.getString("unity"), object.getDouble("valuemin"), object.getDouble("valuemax"), object.getDouble("precision"), object.getDouble("currentvalue")));
 				}
 				else if(arr.getJSONObject(i).getString("type").equals("discrete")){
 					ArrayList<String> values = new ArrayList<String>();
@@ -56,7 +56,7 @@ public class SensorManager extends Manager{
 					for (int j = 0; j < valuesArray.length(); j++) {
 						values.add(valuesArray.getString(j));
 					}
-					variables.add(new DiscreteEnvironmentVariable(object.getString("name"), object.getString("description"), object.getString("unity"), values, object.getString("currentvalue")));
+					variables.add(new DiscreteValue(object.getString("name"), object.getString("description"), object.getString("unity"), values, object.getString("currentvalue")));
 				}
 			}
 			return new Sensor(name, description, variables);

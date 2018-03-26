@@ -25,6 +25,7 @@ public abstract class EnvironmentVariable extends Observable{
 	
 	// Attributes from other tables
 	private Sensor sensor;
+	private Value value;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -50,6 +51,15 @@ public abstract class EnvironmentVariable extends Observable{
         this.unit = unit;
         this.description = description;
         this.sensor = sensor;
+    }
+	
+	public EnvironmentVariable(int id, String name, String description, String unit, Sensor sensor, Value value) {
+        this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.description = description;
+        this.sensor = sensor;
+        this.value = value;
     }
 
     // ================= //
@@ -87,7 +97,6 @@ public abstract class EnvironmentVariable extends Observable{
         this.description = description;
     }
     
-    
     public Sensor getSensor() {
         return sensor;
     }
@@ -96,8 +105,15 @@ public abstract class EnvironmentVariable extends Observable{
         this.sensor = sensor;
     }
     
-    // =================================================
+    public Value getValue() {
+        return value;
+    }
+
+    public void setValue(Value value) {
+        this.value = value;
+    }
     
+    // =================================================
     public String toString() {
         return id + ": " + name;
     }

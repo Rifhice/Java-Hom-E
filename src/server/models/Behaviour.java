@@ -147,9 +147,21 @@ public class Behaviour implements Observer {
     }
 	
 	public String toString() {
-		String res = "BEHAVIOUR #"+id+" "+expression;
+		String res = "BEHAVIOUR #"+id+" Expression= "+expression;
 		if(isActivated) { res += " Activated"; }
 		else { res+= " Deactivated"; }
+		res += "\nAtomicActions:";
+        if(atomicActions != null) {
+            for (AtomicAction atomic : atomicActions) {
+                res += "\n"+atomic;
+            }
+        }
+        res += "\nComplexActions:";
+        if(complexActions != null) {
+            for (ComplexAction complex : complexActions) {
+                res += "\n"+complex;
+            }
+        }
 		return res;
 	}
 	

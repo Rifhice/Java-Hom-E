@@ -409,7 +409,6 @@ public class AmbiencesContent extends Content {
 		}
 		System.out.println("Reinit");
 		reinitBehaviours();
-		System.out.println(ambience.getBehaviours());
 		for (Integer id : ambience.getBehaviours()) {
 			changeBehaviourState(id);
 		}

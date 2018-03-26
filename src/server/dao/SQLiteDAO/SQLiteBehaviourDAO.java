@@ -297,11 +297,15 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
                 + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
-                + "Bl.id AS Blid, Bl.operator AS Bloperator "
+                + "Bl.id AS Blid, Bl.operator AS Bloperator"
+                //+ ", VV.value AS VVvalue, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit  
                 + "FROM Behaviours AS B "
                 + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
                 + "JOIN IsPartOf AS IPO ON IPO.fk_expression_id = E.id "
                 + "JOIN Blocks AS Bl ON Bl.id = IPO.fk_block_id " 
+                //+ "JOIN VValue AS VV ON VValue.id = Bl._fk_vvalue_id "
+                //+ "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable.id "
+                //+ "JOIN VValue AS V ON V.id = EV.fk_vvalue.id "
                 + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
                 + "JOIN AtomicActions AS Ac ON Ac.id = L.fk_atomicAction_id "
                 + "LEFT JOIN Executes AS Ex ON Ex.fk_behaviour_id = B.id "
@@ -351,8 +355,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         behaviour.setDescription(rs.getString("description"));
                         behaviour.setActivated(rs.getBoolean("isActivated"));
 
-    					//System.out.println(rs.getString("Eoperators"));
-
                         try {
         					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
         					JSONArray array = JSON.getJSONArray("operators");
@@ -376,7 +378,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     
                     int blockId = rs.getInt("Blid");
                     String blockOperator = rs.getString("Bloperator");
-                    //Block block= new Block(blockId, blockOperator); 
+                    //EnvironmentVariable ev = new EnvironmentVariable(rs.getInt(EVid), rs.getString(EVname), rs.getString(EVdescription), rs.getString(EVunit));
+                    //Block block= new Block(blockId, ev, blockOperator); 
                              
                     
                     int complexId = rs.getInt("Caid");

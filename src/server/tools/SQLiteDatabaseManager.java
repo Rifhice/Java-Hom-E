@@ -140,7 +140,9 @@ public class SQLiteDatabaseManager {
                 + " key text NOT NULL, \n"
                 + " description text, \n"
                 + " fk_actuator_id integer, \n"
-                + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
+                + " fk_vvalue_id integer, \n"
+                + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id), \n"
+                + " FOREIGN KEY (fk_vvalue_id) REFERENCES vvalues(id) \n"
                 + ");";
         
         String createTableComplexActions = "CREATE TABLE IF NOT EXISTS complexActions (\n" 
@@ -191,6 +193,8 @@ public class SQLiteDatabaseManager {
                 + " description text, \n"
                 + " unit text, \n"
                 + " fk_sensor_id integer, \n"
+                + " fk_vvalue_id integer, \n"
+                + " FOREIGN KEY (fk_vvalue_id) REFERENCES vvalues(id), \n"
                 + " FOREIGN KEY (fk_sensor_id) REFERENCES sensors(id) \n"
                 + ");";
 
@@ -744,6 +748,31 @@ public class SQLiteDatabaseManager {
             System.out.println("ERROR inserting Ambiences : " + e.getMessage());
         }
     }
+    
+    private static void insertVValues() {
+        String insertVValue1 = "INSERT INTO vvalues ('id') VALUES (1);";
+        String insertVValue2 = "INSERT INTO vvalues ('id') VALUES (2);";
+        String insertVValue3 = "INSERT INTO vvalues ('id') VALUES (3);";
+        String insertVValue4 = "INSERT INTO vvalues ('id') VALUES (4);";
+        String insertVValue5 = "INSERT INTO vvalues ('id') VALUES (5);";
+        String insertVValue6 = "INSERT INTO vvalues ('id') VALUES (6);";
+        String insertVValue7 = "INSERT INTO vvalues ('id') VALUES (7);";
+        String insertVValue8 = "INSERT INTO vvalues ('id') VALUES (8);";
+        String insertVValue9 = "INSERT INTO vvalues ('id') VALUES (9);";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(insertVValue1);
+            stmt.execute(insertVValue2);
+            stmt.execute(insertVValue3);
+            stmt.execute(insertVValue4);
+            stmt.execute(insertVValue5);
+            stmt.execute(insertVValue6);
+            stmt.execute(insertVValue7);
+            stmt.execute(insertVValue8);
+            stmt.execute(insertVValue9);
+        } catch (SQLException e) {
+            System.out.println("ERROR inserting Values : " + e.getMessage());
+        }
+    }
 
     // ============== //
     // ==== MAIN ==== //
@@ -775,8 +804,9 @@ public class SQLiteDatabaseManager {
         insertBlocks();
         
         insertEnvironmentVariables();
-        insertDiscreteVValues();
-        insertContinuousVValues();
+        insertVValues();
+        //insertDiscreteVValues();
+        //insertContinuousVValues();
        
         insertExpressions();
         insertIsPartOf();

@@ -62,7 +62,7 @@ public class AccountContent extends Content {
 		
 		MyLabel newNameLabel = new MyLabel("Nom: ", newFamilyMemberNameLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
 		MyTextFieldFX newNameText = new MyTextFieldFX("Name", newFamilyMemberNameTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
-		MyLabel newFirstNameLabel = new MyLabel("Prénom: ", newFamilyMemberFirstNameLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
+		MyLabel newFirstNameLabel = new MyLabel("PrÃ©nom: ", newFamilyMemberFirstNameLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
 		MyTextFieldFX newFirstNameText = new MyTextFieldFX("First Name", newFamilyMemberFirstNameTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
 		MyLabel newPasswordLabel = new MyLabel("Mot de passe: ", newFamilyMemberPasswordLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
 		MyTextFieldFX newPasswordText = new MyTextFieldFX("Password", newFamilyMemberPasswordTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
@@ -121,7 +121,7 @@ public class AccountContent extends Content {
 		JSONObject getActuator = new JSONObject();
 		getActuator.put("recipient", recipient);
 		getActuator.put("action", "getAll");
-		System.out.println("\n Message envoyé au serveur :" + getActuator.toString());
+		System.out.println("\n Message envoyÃ© au serveur :" + getActuator.toString());
 		try {
 			ClientFX.client.sendToServer(getActuator.toString());
 		} catch (IOException e) {
@@ -141,7 +141,7 @@ public class AccountContent extends Content {
 	public void handleMessage(Object message) {
 		
 		if(message instanceof String) {
-			System.out.println("\n Message reçu du serveur :" + message);
+			System.out.println("\n Message reÃ§u du serveur :" + message);
 			try {
 				System.out.println(message.toString());
 				JSONObject json = new JSONObject((String)message);

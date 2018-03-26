@@ -252,7 +252,7 @@ public class SQLiteRoleDAO extends RoleDAO {
         
         // Test getAll()
         
-        System.out.println(" \n\n **Ici commence la requête getAll() ** \n\n");
+        System.out.println(" \n\n **Ici commence la requÃªte getAll() ** \n\n");
         System.out.println(test.getAll());
     }
 

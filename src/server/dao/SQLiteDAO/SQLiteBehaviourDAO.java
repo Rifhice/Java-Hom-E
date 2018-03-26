@@ -63,12 +63,12 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	        return behaviour;
 	}
 
-	/*@Override
+	@Override
 	public Behaviour getById(int id) throws DAOException {
 		Behaviour behaviour = null;
         String sql = "SELECT B.id AS id, B.name AS name, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators "
-                + "FROM Behaviour AS B "
+                + "FROM Behaviours AS B "
                 + "JOIN Expression AS E ON E.id = B.fk_expression_id "
                 + "WHERE E.id = ?;";
         
@@ -152,7 +152,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	            }
 	        }        
 	        return allAtomicActions;
-	    }*/
+	    }
 	 
 	 // TODO : missing Arraylist<ComplexAction>
 	 
@@ -297,7 +297,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
                 + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
-                + "Bl.id AS Blid, Bl.operator AS Bloperator"
+                + "Bl.id AS Blid, Bl.operator AS Bloperator "
                 //+ ", VV.value AS VVvalue, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit  
                 + "FROM Behaviours AS B "
                 + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
@@ -398,30 +398,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             throw new DAOException("DAOException : BehaviourDAO getAll() :" + e.getMessage(), e);
         }
         return behaviours;
-	}
-
-	@Override
-	public Behaviour getById(int id) throws DAOException {
-		Behaviour behaviour = null;
-        String sql = "SELECT * FROM Behaviours B " +
-        			 "WHERE B.id = ?";
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
-
-            if(rs.next()) {
-            	behaviour = new Behaviour();
-            	behaviour.setId(rs.getInt("id"));
-            	behaviour.setDescription(rs.getString("description"));
-            	behaviour.setName(rs.getString("name"));
-            	System.out.println("uubb" + rs.getInt("id"));
-            }
-
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : Behaviours getById(" + id + ") :" + e.getMessage(), e);
-        }
-        return behaviour;
 	}
 
 	// ============== //

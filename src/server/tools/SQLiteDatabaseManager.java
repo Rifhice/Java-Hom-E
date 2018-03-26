@@ -403,12 +403,12 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertAtomicActions() {
-        String insertAtomicAction1 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (1, 'Switch On','switchOn',1);";
-        String insertAtomicAction2 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (2, 'Switch Off','switchOff',1);";
-        String insertAtomicAction3 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (3, 'Set Temperature','setTemperature',2);";
-        String insertAtomicAction4 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (4, 'Set Temperature','setTemperature',3);";
-        String insertAtomicAction5 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (5, 'Make tea','makeTea',4);";
-        String insertAtomicAction6 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (6, 'Switch on','switchOn',5);";
+        String insertAtomicAction1 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (1, 'Switch On','switch on',1);";
+        String insertAtomicAction2 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (2, 'Switch Off','switch off',1);";
+        String insertAtomicAction3 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (3, 'Set Temperature 22','setTemperature 22',2);";
+        String insertAtomicAction4 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (4, 'Set Temperature 24','setTemperature 24',3);";
+        String insertAtomicAction5 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (5, 'Make tea','make tea',4);";
+        String insertAtomicAction6 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (6, 'Switch On','switch on',5);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertAtomicAction1);
             stmt.execute(insertAtomicAction2);

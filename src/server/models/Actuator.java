@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import ocsf.server.ConnectionToClient;
 import server.models.categories.ActuatorCategory;
 
 /**
@@ -20,12 +21,17 @@ public class Actuator extends ExternalActor{
     private ArrayList<Command> commands;    
     private ActuatorCategory actuatorCategory;
     private ArrayList<AtomicAction> atomicActions;
+    private ConnectionToClient client;
 
 
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Actuator() {}
+    
+    public Actuator(int id) {
+    	super(id);
+    }
     
     public Actuator(String name, String description) {
         super(name,description);
@@ -97,6 +103,18 @@ public class Actuator extends ExternalActor{
 
     public void setActuatorCategory(ActuatorCategory actuatorCategory) {
         this.actuatorCategory = actuatorCategory;
+    }
+    
+    public void setConnectionToClient(ConnectionToClient client) {
+    	this.client = client;
+    }
+    
+    public void execute(String executable) {
+    	try {
+			client.sendToClient(executable);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
     
     public String toString() {

@@ -102,6 +102,7 @@ public class ActuatorManager extends Manager {
 		
 		JSONObject result = new JSONObject();
 		if(create != null) {
+			create.setConnectionToClient(client);
 			actuators.add(actuator);
 			result.put("result", "success");
 			result.put("id", create.getId());
@@ -117,12 +118,24 @@ public class ActuatorManager extends Manager {
 		System.out.println(actuator + "\nAdded to the system !");
 	}
 	
+	public void execute(JSONObject json,ConnectionToClient client) {
+		System.out.println(json.getString("executable"));
+		for (int i = 0; i < actuators.size(); i++) {
+			if(actuators.get(i).getId() == json.getInt("id")) {
+				actuators.get(i).execute(json.getString("executable"));
+			}
+		}
+	}
+	
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String verb = json.getString("verb");
 		switch (verb) {
 		case "post":
 			registerActuatorToTheSystem(json,client);
+			break;
+		case "execute":
+			execute(json,client);
 			break;
 		default:
 			break;

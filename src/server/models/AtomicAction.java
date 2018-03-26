@@ -86,7 +86,7 @@ public class AtomicAction {
     	result.put("id", id);
     	result.put("name", name);
     	result.put("executable", executable);
-    	result.put("actuator", actuator);
+    	result.put("actuator", actuator.getId());
     	return result;
     }    
 

@@ -24,6 +24,10 @@ public class Actuator extends ExternalActor{
     // ====================== //
     public Actuator() {}
     
+    public Actuator(int id) {
+    	super(id);
+    }
+    
     public Actuator(String name, String description) {
         super(name,description);
     }

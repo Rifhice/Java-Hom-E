@@ -13,6 +13,7 @@ public class AtomicAction {
     private int id;
     private String name;
     private String executable;
+    private Actuator actuator;
     
     // Attributes from other tables
 

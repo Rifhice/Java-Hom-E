@@ -7,9 +7,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -17,6 +19,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import user.ClientFX;
+import user.models.Actuator;
 import user.models.ActuatorCategory;
 import user.models.AtomicAction;
 import user.models.Command;
@@ -100,6 +103,8 @@ public class ControlContent extends Content {
             @Override public void run() {
             	//Create commmands UI
                 for (int i = 0; i < commands.size(); i++) {
+                	Command currentCommand = commands.get(i);
+                	int currentLine = i + 1;
                     ColumnConstraints col1 = new ColumnConstraints();
                     col1.setPercentWidth(0.1f * bottomGridPane.getPrefWidth());
                     bottomGridPane.getColumnConstraints().addAll(col1);
@@ -108,22 +113,7 @@ public class ControlContent extends Content {
                 	for (j= 0; j < commands.get(i).getCommandValues().size(); j++) {
 						CommandValue argument = commands.get(i).getCommandValues().get(j);
 	                    if(argument instanceof DiscreteCommandValue) {
-	                    	DiscreteCommandValue argumentCasted = (DiscreteCommandValue)argument;
-	                    	/*if(argumentCasted.getPossibleValues().size() < 6) {
-	                    		for (int k = 0; k < argumentCasted.getPossibleValues().size(); k++) {
-	                    			String currentValue = argumentCasted.getPossibleValues().get(k);
-	                    			bottomGridPane.add(new MyButtonFX(commands.get(i).getKey() + " " currentValue, new EventHandler<ActionEvent>() {
-	            						
-	            						@Override
-	            						public void handle(ActionEvent arg0) {
-	            							//SEND ACTION
-	            						}
-	            					}),k + 1,i + 1);
-								}
-	                    	}
-	                    	else {
-	                    		
-	                    	}	*/     
+	                    	DiscreteCommandValue argumentCasted = (DiscreteCommandValue)argument;    
 	                    	bottomGridPane.add(new MyComboBox(argumentCasted.getPossibleValues()),j + 1, i + 1);
 	                    }
 	                    else {
@@ -135,7 +125,30 @@ public class ControlContent extends Content {
 						
 						@Override
 						public void handle(ActionEvent arg0) {
-							
+							String executable = currentCommand.getKey() + " ";
+						    ObservableList<Node> childrens = bottomGridPane.getChildren();
+						    for (Node node : childrens) {
+						        if(bottomGridPane.getRowIndex(node) == currentLine) {
+						            if(node instanceof MyComboBox) {
+						            	executable += ((MyComboBox)node).getValue() + " ";
+						            }
+						            else if(node instanceof MySlider) {
+						            	executable += ((MySlider)node).getValue() + " ";
+						            }
+						        }
+						    }
+						    JSONObject json = new JSONObject();
+						    json.put("recipient", "actuator");
+						    json.put("verb", "execute");
+						    json.put("id", currentCommand.getActuator().getId());
+						    json.put("executable", executable);
+					        try {
+					            ClientFX.client.sendToServer(json.toString());
+					        } catch (IOException e) {
+					            e.printStackTrace();
+					        }
+						    System.out.println(executable);
+							System.out.println(currentCommand.getActuator().getId());
 						}
 					}),j + 1,i + 1);
                 }
@@ -197,7 +210,7 @@ public class ControlContent extends Content {
 							catch(Exception e) {
 								System.out.println("Pas d'arguments pour cette commande !");
 							}
-                    		this.commands.add(new Command(currentCommand.getString("name"),currentCommand.getString("description"),currentCommand.getString("key"),arguments));
+                    		this.commands.add(new Command(currentCommand.getString("name"),currentCommand.getString("description"),currentCommand.getString("key"),arguments,new Actuator(currentCommand.getInt("actuator"))));
 						}
                     	
                     	//Parses the complex action

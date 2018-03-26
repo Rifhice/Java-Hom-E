@@ -10,6 +10,7 @@ import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.ComplexActionDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
+import server.models.Actuator;
 import server.models.AtomicAction;
 import server.models.Behaviour;
 import server.models.Command;
@@ -93,6 +94,7 @@ public class SQLiteComplexActionDAO extends ComplexActionDAO {
             	action.setName(rs.getString("name"));
             	action.setId(rs.getInt("id"));
             	action.setExecutable(rs.getString("executable"));
+            	action.setActuator(new Actuator(rs.getInt("fk_actuator_id")));
             	return action;
             }
         } catch (SQLException e) {

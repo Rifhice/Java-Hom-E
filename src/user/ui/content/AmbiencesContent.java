@@ -84,8 +84,6 @@ public class AmbiencesContent extends Content {
 
 	private static Image checkImage = new Image("file:asset/images/check.png");
 	private static Image removeImage = new Image("file:asset/images/remove.png");
-
-	AmbiencesContent context = this;
 	
 	private AmbiencesContent() {
 		newAmbiencePane = new MyPane(topAmbienceBounds.computeBounds(width, height));
@@ -109,7 +107,7 @@ public class AmbiencesContent extends Content {
 			public void handle(ActionEvent arg0) {
 				behavioursNotChosenScrollPane.changeBounds(behavioursNotChosenBounds.computeBounds(width, height));
 				behavioursChosenScrollPane.changeBounds(behavioursChosenBounds.computeBounds(width, height));
-				context.getChildren().remove(modifyAmbiencePane);
+				getChildren().remove(modifyAmbiencePane);
 			}
 			
 		});
@@ -410,8 +408,8 @@ public class AmbiencesContent extends Content {
 		behavioursNotChosenScrollPane.changeBounds(behavioursNotChosenBoundsModif.computeBounds(width, height));
 		behavioursChosenScrollPane.changeBounds(behavioursChosenBoundsModif.computeBounds(width, height));
 		modifyAmbienceLabel.setText(ambience.getName());
-		if(!this.getChildren().contains(modifyAmbiencePane)){
-			context.getChildren().add(modifyAmbiencePane);
+		if(!getChildren().contains(modifyAmbiencePane)){
+			getChildren().add(modifyAmbiencePane);
 		}
 	}
 

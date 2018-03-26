@@ -16,5 +16,9 @@ public class MyPane extends Pane{
 	public MyPane(double width, double height) {
 		setPrefWidth(width);
 		setPrefHeight(height);
+		this.setMinWidth(width);
+		this.setMinHeight(height);
+		this.setMaxWidth(width);
+		this.setMaxHeight(height);
 	}
 }

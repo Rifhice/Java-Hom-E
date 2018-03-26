@@ -59,9 +59,9 @@ public class BehavioursCommandsContent extends Content {
     // Buttons
     private float buttonWidth = (1.0f / 2.0f) - ((3.0f/2.0f)*MARGIN);
     
-    private MyRectangle activateButtonBounds = new MyRectangle(MARGIN, 0.7f, buttonWidth, 0.05f);
-    private MyRectangle deactivateButtonBounds = new MyRectangle(2*MARGIN + buttonWidth, 0.7f, buttonWidth, 0.05f);
+    private MyRectangle stateButtonBounds = new MyRectangle(MARGIN, 0.7f, buttonWidth, 0.05f);
     private MyRectangle modifyButtonBounds = new MyRectangle(MARGIN, 0.8f, buttonWidth, 0.05f);
+    private MyButtonFX stateButton;
     
     // Dynamic Values
     private MyLabel currentBehaviourName;
@@ -146,21 +146,14 @@ public class BehavioursCommandsContent extends Content {
         selectedBehaviourPane.getChildren().add(currentBehaviourCommand);
         
         // Buttons
-        MyButtonFX activateButton = new MyButtonFX("Activate", activateButtonBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
+        stateButton = new MyButtonFX("(De)Activate", stateButtonBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 // TODO Auto-generated method stub
                 
             }
         });
-        
-        MyButtonFX deactivateButton = new MyButtonFX("Deactivate", deactivateButtonBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                // TODO Auto-generated method stub
-                
-            }
-        });
+        stateButton.centerX(selectedBehaviourPane.getPrefWidth());
         
         MyButtonFX modifyButton = new MyButtonFX("Modify", modifyButtonBounds.computeBounds(selectedBehaviourPane.getPrefWidth(),selectedBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
             @Override
@@ -170,8 +163,7 @@ public class BehavioursCommandsContent extends Content {
             }
         });
         modifyButton.centerX(selectedBehaviourPane.getPrefWidth());
-        selectedBehaviourPane.getChildren().add(activateButton);
-        selectedBehaviourPane.getChildren().add(deactivateButton);
+        selectedBehaviourPane.getChildren().add(stateButton);
         selectedBehaviourPane.getChildren().add(modifyButton);
         
         // ==== Commands List (right)
@@ -280,12 +272,24 @@ public class BehavioursCommandsContent extends Content {
                                 currentBehaviourIndex = pressedButton;
                                 currentBehaviourName.setText(behaviours.get(currentBehaviourIndex).getName());
                                 currentBehaviourDescription.setText(behaviours.get(currentBehaviourIndex).getDescription());
+                                if(stateButton.getText() == "Activate") {
+                                    stateButton.setText("Deactivate");
+                                }
+                                else {
+                                    stateButton.setText("Activate");
+                                }
                             }
                         }),0,i);
                     }
                     Behaviour currentBehaviour = behaviours.get(currentBehaviourIndex);
                     currentBehaviourName.setText(currentBehaviour.getName());
                     currentBehaviourDescription.setText(currentBehaviour.getDescription());
+                    if(currentBehaviour.isActivated()) {
+                        stateButton.setText("Deactivate");
+                    }
+                    else {
+                        stateButton.setText("Activate");
+                    }
                 }
             });
         }

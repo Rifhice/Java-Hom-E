@@ -2,12 +2,10 @@
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
 
-package server.server;
+package sensor;
 
 import ocsf.server.*;
 import org.json.*;
-
-import server.managers.Manager;
 
 /**
  * This class overrides some of the methods in the abstract 
@@ -26,7 +24,6 @@ public class EchoServer extends AbstractServer
   /**
    * The default port to listen on.
    */
-  final Manager manager; 
   
   //Constructors ****************************************************
   
@@ -35,10 +32,9 @@ public class EchoServer extends AbstractServer
    *
    * @param port The port number to connect on.
    */
-  public EchoServer(int port,Manager manager) 
+  public EchoServer(int port) 
   {
     super(port);
-    this.manager = manager;
   }
 
   
@@ -54,9 +50,6 @@ public class EchoServer extends AbstractServer
     (Object msg, ConnectionToClient client)
   {
 	  System.out.println(msg);
-	  JSONObject jmsg = new JSONObject(msg.toString());
-	  System.out.println(jmsg);
-	  manager.handleMessage(jmsg,client);
   }
     
   /**

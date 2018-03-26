@@ -137,6 +137,7 @@ public class ControlContent extends Content {
 						            }
 						        }
 						    }
+						    executable = executable.substring(0,executable.length()-1);
 						    JSONObject json = new JSONObject();
 						    json.put("recipient", "actuator");
 						    json.put("verb", "execute");

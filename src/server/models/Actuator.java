@@ -110,8 +110,11 @@ public class Actuator extends ExternalActor{
     }
     
     public void execute(String executable) {
+    	JSONObject json = new JSONObject();
+    	json.put("verb","command");
+    	json.put("command", executable);
     	try {
-			client.sendToClient(executable);
+			client.sendToClient(json.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

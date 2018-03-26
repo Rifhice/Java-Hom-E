@@ -80,7 +80,9 @@ public class SensorManager extends Manager{
 		if(sensorCreated != null) {
 			sensors.add(sensor);
 			result.put("result", "success");
+			result.put("verb", "post");
 			result.put("id", sensorCreated.getId());
+			result.put("idEnv",sensorCreated.getEnvironmentVariable().get(0).getId());
 		}
 		else {
 			result.put("result", "failure");
@@ -105,8 +107,14 @@ public class SensorManager extends Manager{
 		return variables;
 	}
 	
-	public void valueChange(JSONObject json) {
-		
+	public void changeEnvironmentVariableValue(JSONObject json,ConnectionToClient client) {
+		Sensor sensor = getSensorById(json.getInt("id"));
+		if(sensor != null) {
+			sensor.changeValue(json.getInt("idVariable"), json.getString("value"));
+		}
+		else {
+			System.out.println("SENSOR UNKNOWN OR NOT CONNECTED");
+		}
 	}
 	
 	/**
@@ -114,9 +122,9 @@ public class SensorManager extends Manager{
 	 * @param id, the id of sensors searched
 	 * @return Sensor, the sensor corresponding the id given or null if there is none.
 	 */
-	public Sensor getSensorById(String id) {
+	public Sensor getSensorById(int id) {
 		for (int i = 0; i < sensors.size(); i++) {
-			if(Integer.toString(sensors.get(i).getId()).equals(id)) {
+			if(sensors.get(i).getId() == (id)) {
 				return sensors.get(i);
 			}
 		}
@@ -129,6 +137,9 @@ public class SensorManager extends Manager{
 		switch (verb) {
 		case "post":
 			registerSensorToTheSystem(json,client);
+			break;
+		case "changeValue":
+			changeEnvironmentVariableValue(json, client);
 			break;
 		default:
 			break;

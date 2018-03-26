@@ -28,6 +28,10 @@ public class DiscreteVariable extends Variable {
 		Sensor.updateVariable(this);
 	}
 
+	public String getCurrentValue() {
+		return currentValue;
+	}
+	
 	@Override
 	public JSONObject getJson() {
 		JSONObject result = new JSONObject();

@@ -26,6 +26,10 @@ public class ContinuousVariable extends Variable{
 		Sensor.updateVariable(this);
 	}
 	
+	public double getCurrentValue() {
+		return currentValue;
+	}
+	
 	@Override
 	public JSONObject getJson() {
 		JSONObject result = new JSONObject();

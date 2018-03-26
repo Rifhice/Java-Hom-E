@@ -100,13 +100,15 @@ public class Expression implements Evaluable {
         String res = "EXP #"+id;
         res += "(";
         int operatorCpt = 0;
-        for (int i = 0; i < evaluables.size(); i++) {
-            res += "[" + evaluables.get(i).toString() + "]";
-            if(operatorCpt < operators.size()) {
-                res += " " + operators.get(operatorCpt) + " ";
+        if(evaluables != null) {
+        	for (int i = 0; i < evaluables.size(); i++) {
+                res += "[" + evaluables.get(i).toString() + "]";
+                if(operatorCpt < operators.size()) {
+                    res += " " + operators.get(operatorCpt) + " ";
+                }
+                operatorCpt++;
             }
-            operatorCpt++;
-        }
+        }        
         return res + ")";
     }
 

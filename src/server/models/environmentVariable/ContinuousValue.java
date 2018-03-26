@@ -18,13 +18,6 @@ public class ContinuousValue extends Value {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public ContinuousValue(int id, String unit, double valueMin,double valueMax, double precision, double currentValue) {
-        super(id);
-        this.valueMax = valueMax;
-        this.valueMin = valueMin;
-        this.currentValue = currentValue;
-    }
-    
     public ContinuousValue(int id, double valueMin,double valueMax, double precision, double currentValue) {
         super(id);
         this.valueMax = valueMax;

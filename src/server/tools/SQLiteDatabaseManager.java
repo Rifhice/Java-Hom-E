@@ -562,7 +562,7 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertEnvironmentVariable2);
             stmt.execute(insertEnvironmentVariable3);
         } catch (SQLException e) {
-            System.out.println("ERROR inserting EnvironmentValues : " + e.getMessage());
+            System.out.println("ERROR inserting EnvironmentVariables : " + e.getMessage());
         }
     }
     
@@ -805,7 +805,7 @@ public class SQLiteDatabaseManager {
         
         insertEnvironmentVariables();
         insertVValues();
-        //insertDiscreteVValues();
+        insertDiscreteVValues();
         //insertContinuousVValues();
        
         insertExpressions();

@@ -35,6 +35,13 @@ public abstract class Value extends Observable {
         JSONObject result = new JSONObject();
         return result;
     }
+    
+    public abstract boolean isEqual(Object value);
+    public abstract boolean isNotEqual(Object value);
+    public abstract boolean isSuperior(Object value);
+    public abstract boolean isInferior(Object value);
+    public abstract boolean isSuperiorOrEqual(Object value);
+    public abstract boolean isInferiorOrEqual(Object value);
 
 
 }

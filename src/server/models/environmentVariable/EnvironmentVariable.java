@@ -13,7 +13,7 @@ import server.models.Sensor;
  * It allows the server to send the right action to the actuators.
  * @author Clm-Roig
  */
-public abstract class EnvironmentVariable extends Observable{
+public class EnvironmentVariable extends Observable{
     
     // ==================== //
     // ==== ATTRIBUTES ==== //
@@ -127,10 +127,4 @@ public abstract class EnvironmentVariable extends Observable{
     	return result;
     }
 
-    public abstract boolean isEqual(Object value);
-	public abstract boolean isNotEqual(Object value);
-	public abstract boolean isSuperior(Object value);
-	public abstract boolean isInferior(Object value);
-	public abstract boolean isSuperiorOrEqual(Object value);
-	public abstract boolean isInferiorOrEqual(Object value);
 }

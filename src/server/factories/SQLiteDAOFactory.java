@@ -10,6 +10,7 @@ import server.dao.SQLiteDAO.SQLiteAmbienceDAO;
 import server.dao.SQLiteDAO.SQLiteBehaviourDAO;
 import server.dao.SQLiteDAO.SQLiteCommandDAO;
 import server.dao.SQLiteDAO.SQLiteComplexActionDAO;
+import server.dao.SQLiteDAO.SQLiteRightDAO;
 import server.dao.SQLiteDAO.SQLiteRoleDAO;
 import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
 import server.dao.SQLiteDAO.SQLiteUserDAO;
@@ -18,6 +19,7 @@ import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.ComplexActionDAO;
+import server.dao.abstractDAO.RightDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
@@ -71,6 +73,12 @@ public class SQLiteDAOFactory extends AbstractDAOFactory{
 	@Override
 	public ComplexActionDAO getComplexActionDAO() {
 		return new SQLiteComplexActionDAO(connect);
+	}
+
+	@Override
+	public RightDAO getRightDAO() {
+		return new SQLiteRightDAO(connect);
+
 	}
     
 }

@@ -3,6 +3,7 @@ package server.managers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -11,10 +12,14 @@ import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import javafx.util.Pair;
+import server.models.Ambience;
+import server.models.Behaviour;
 import server.models.Role;
 import server.models.User;
+import server.models.Right;
 import ocsf.server.ConnectionToClient;
 import server.tools.Security;
+
 
 public class UserManager extends Manager{
     // ==================== //
@@ -82,6 +87,47 @@ public class UserManager extends Manager{
     	users.add(user);
     	return user;
     }
+    
+    public void getAllFamilyMembers(JSONObject json, ConnectionToClient client) {
+    	ArrayList<User> users = null;
+
+		try {
+			users = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO().getAll();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		result.put("recipient", "user");
+		result.put("action", "getAll");
+		for (int i = 0; i < users.size(); i++) {
+			User currentUser = users.get(i);
+			JSONObject user = new JSONObject();
+			if(currentUser.getRole().getId() != 1) {
+				user.put("id", currentUser.getId());
+				user.put("pseudo", currentUser.getPseudo());
+				System.out.println(user);
+				List<Right> rights = currentUser.getRights();
+				try {
+					for(int j = 0; j < rights.size(); j++) {
+						Right right = rights.get(j);
+						JSONObject rightJSON = new JSONObject();
+						rightJSON.put("id", right.getId());
+						rightJSON.put("denomination", right.getDenomination());
+						rightJSON.put("description", right.getDescription());
+						user.append("rights", rightJSON);
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				result.append("users", user);
+			}
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
 
     @Override
     public void handleMessage(JSONObject json, ConnectionToClient client) {
@@ -146,18 +192,8 @@ public class UserManager extends Manager{
                     e.printStackTrace();
                 }
 	        	break;
-	        case "getAll":
-	        	//TODO ici ce n'est qu'un test il faut renvoyer le code complet
-	        	System.out.println("le message est arrivé jusqu'ici");
-                JSONObject test = new JSONObject();
-                test.put("users",users);
-                test.put("action","getAll");
-                test.put("result","success");
-                try {
-                    client.sendToClient(test.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+	        case "getAll":  
+	        	getAllFamilyMembers(json,client);
 	        	break;
         }
     }

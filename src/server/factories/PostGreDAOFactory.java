@@ -10,6 +10,7 @@ import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.ComplexActionDAO;
+import server.dao.abstractDAO.RightDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
@@ -74,6 +75,12 @@ public class PostGreDAOFactory extends AbstractDAOFactory {
 
 	@Override
 	public ComplexActionDAO getComplexActionDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RightDAO getRightDAO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

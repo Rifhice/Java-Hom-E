@@ -8,6 +8,7 @@ import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.ComplexActionDAO;
+import server.dao.abstractDAO.RightDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorCategoriesDAO;
 import server.dao.abstractDAO.SensorDAO;
@@ -59,4 +60,5 @@ public abstract class AbstractDAOFactory {
     public abstract AmbienceDAO getAmbienceDAO();
     public abstract CommandDAO getCommandDAO();
     public abstract ComplexActionDAO getComplexActionDAO();
+    public abstract RightDAO getRightDAO();
 }

@@ -13,8 +13,10 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import user.ClientFX;
+import user.models.Behaviour;
 import user.models.Right;
 import user.models.User;
+import user.ui.componentJavaFX.BehaviourCell;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyButtonImage;
 import user.ui.componentJavaFX.MyLabel;
@@ -22,6 +24,7 @@ import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
 import user.ui.componentJavaFX.MyTextFieldFX;
+import user.ui.componentJavaFX.RightCell;
 import user.ui.componentJavaFX.UserCell;
 
 public class AccountContent extends Content {
@@ -31,13 +34,14 @@ public class AccountContent extends Content {
 	private MyRectangle allowedRightsBounds = new MyRectangle(0.75f, 0.15F, 0.25f, 0.85f);
 	private MyRectangle familyMembersBounds = new MyRectangle(0f, 0.15F, 0.5f, 0.60f);
 	
+	private List<UserCell> userCells = new ArrayList<UserCell>();
+	private List<RightCell> rightCells = new ArrayList<RightCell>();
+	
 	private MyRectangle newFamilyMemberBounds = new MyRectangle(0f, 0.75F, 0.5f, 0.25f);
-	private MyRectangle newFamilyMemberNameLabelBounds = new MyRectangle(0.1f, 0.15f, 0.20f, 0.25f);
-	private MyRectangle newFamilyMemberNameTextFieldBounds = new MyRectangle(0.35f, 0.20f, 0.25f, 0.2f);
-	private MyRectangle newFamilyMemberFirstNameLabelBounds = new MyRectangle(0.1f, 0.4f, 0.20f, 0.25f);
-	private MyRectangle newFamilyMemberFirstNameTextFieldBounds = new MyRectangle(0.35f, 0.45f, 0.25f, 0.2f);
-	private MyRectangle newFamilyMemberPasswordLabelBounds = new MyRectangle(0.1f, 0.65f, 0.20f, 0.25f);
-	private MyRectangle newFamilyMemberPasswordTextFieldBounds = new MyRectangle(0.35f, 0.7f, 0.25f, 0.2f);
+	private MyRectangle newFamilyMemberPseudoLabelBounds = new MyRectangle(0.1f, 0.25f, 0.20f, 0.25f);
+	private MyRectangle newFamilyMemberPseudoTextFieldBounds = new MyRectangle(0.35f, 0.30f, 0.25f, 0.2f);
+	private MyRectangle newFamilyMemberPasswordLabelBounds = new MyRectangle(0.1f, 0.50f, 0.20f, 0.25f);
+	private MyRectangle newFamilyMemberPasswordTextFieldBounds = new MyRectangle(0.35f, 0.55f, 0.25f, 0.2f);
 	private MyRectangle newFamilyMemberButtonBounds = new MyRectangle(0.80f, 0.4f,0.1f,0.1f);
 	
 	
@@ -50,6 +54,7 @@ public class AccountContent extends Content {
 	private List<User> familyMembers;
 	
 	private int NB_OF_FAMILYMEMBERS_DISPLAYED = 6;
+	private int NB_OF_RIGHTS_DISPLAYED = 10;
 
 	private static AccountContent content = null;
 
@@ -60,10 +65,8 @@ public class AccountContent extends Content {
 		
 		MyLabel accountLabel = new MyLabel("Family members account : ", AccountBounds.computeBounds(width,height));
 		
-		MyLabel newNameLabel = new MyLabel("Nom: ", newFamilyMemberNameLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
-		MyTextFieldFX newNameText = new MyTextFieldFX("Name", newFamilyMemberNameTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
-		MyLabel newFirstNameLabel = new MyLabel("Prénom: ", newFamilyMemberFirstNameLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
-		MyTextFieldFX newFirstNameText = new MyTextFieldFX("First Name", newFamilyMemberFirstNameTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
+		MyLabel newPseudoLabel = new MyLabel("Pseudo: ", newFamilyMemberPseudoLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
+		MyTextFieldFX newPseudoText = new MyTextFieldFX("Pseudo", newFamilyMemberPseudoTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
 		MyLabel newPasswordLabel = new MyLabel("Mot de passe: ", newFamilyMemberPasswordLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
 		MyTextFieldFX newPasswordText = new MyTextFieldFX("Password", newFamilyMemberPasswordTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
 		
@@ -88,10 +91,8 @@ public class AccountContent extends Content {
 		this.getChildren().add(accountPane);
 		accountPane.getChildren().add(accountLabel);
 		this.getChildren().add(newFamilyMemberPane);
-		newFamilyMemberPane.getChildren().add(newNameText);
-		newFamilyMemberPane.getChildren().add(newNameLabel);
-		newFamilyMemberPane.getChildren().add(newFirstNameText);
-		newFamilyMemberPane.getChildren().add(newFirstNameLabel);
+		newFamilyMemberPane.getChildren().add(newPseudoText);
+		newFamilyMemberPane.getChildren().add(newPseudoLabel);
 		newFamilyMemberPane.getChildren().add(newPasswordLabel);
 		newFamilyMemberPane.getChildren().add(newPasswordText);
 		newFamilyMemberPane.getChildren().add(newFamilyMemberButton);
@@ -156,7 +157,14 @@ public class AccountContent extends Content {
 						JSONArray arrArg = json.getJSONArray("users");
 						for (int j = 0; j < arrArg.length(); j++){
 							JSONObject current = arrArg.getJSONObject(j);
-							this.familyMembers.add(new User(current.getInt("id"), current.getString("name")));
+							User user = new User(current.getInt("id"), current.getString("pseudo"));
+							this.familyMembers.add(user);
+							this.userCells.add(new UserCell(user ,familyMembersList.getPrefWidth(),familyMembersList.getPrefHeight() / NB_OF_FAMILYMEMBERS_DISPLAYED, 
+	        						new EventHandler<ActionEvent>() {
+										@Override
+										public void handle(ActionEvent event) {
+											int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+										}}));
 						}
 						updateUsersUI();
 						break;
@@ -170,9 +178,30 @@ public class AccountContent extends Content {
 						JSONArray arrArg = json.getJSONArray("rights");
 						for (int j = 0; j < arrArg.length(); j++){
 							JSONObject current = arrArg.getJSONObject(j);
-							this.notAllowedRights.add(new Right(current.getInt("id"), current.getString("denomination"), current.getString("description")));
+							Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
+							this.notAllowedRights.add(right);
+							this.rightCells.add(new RightCell(right, notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+								}}));
 						}
-						//updateAmbienceUI();
+						updateUsersUI();
+						break;
+					case "getByUser":
+						this.allowedRights = new ArrayList<Right>();
+						JSONArray allRights = json.getJSONArray("rights");
+						for (int j = 0; j < allRights.length(); j++){
+							JSONObject current = allRights.getJSONObject(j);
+							Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
+							this.allowedRights.add(right);
+							this.rightCells.add(new RightCell(right, allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+								}}));
+						}
+						updateUsersUI();
 						break;
 					}
 					break;
@@ -184,6 +213,9 @@ public class AccountContent extends Content {
 		
 	}
 	
+
+	
+	//TODO � d�buguer !
 	
 	private void updateUsersUI() {
 		if(this.familyMembers.size() > 0) {
@@ -193,6 +225,17 @@ public class AccountContent extends Content {
                 	familyMembersList.getChildren().clear();
          			for (int i = 0; i < familyMembers.size(); i++) {
          				familyMembersList.add(new UserCell(familyMembers.get(i) ,familyMembersList.getPrefWidth(),familyMembersList.getPrefHeight() / NB_OF_FAMILYMEMBERS_DISPLAYED, 
+         						new EventHandler<ActionEvent>() {
+									@Override
+									public void handle(ActionEvent event) {
+										int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+										//changeBehaviourState(pressedButton);
+									}
+								} 
+         				),0,i);
+         			}
+         			for (int i = 0; i < notAllowedRights.size(); i++) {
+         				notAllowedRightsList.add(new RightCell(notAllowedRights.get(i) ,notAllowedRightsList.getPrefWidth(),notAllowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
          						new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent event) {

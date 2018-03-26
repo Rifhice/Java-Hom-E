@@ -26,6 +26,7 @@ public class SystemManager extends Manager{
 	private ActuatorCategorieManager actuatorCategorieManager;
 	private SensorCategorieManager sensorCategorieManager;
 	private CommandManager commandManager;
+	private RightManager rightManager;
 	
 	private static EchoServer userServer;
 	private static EchoServer sensorServer;
@@ -101,6 +102,9 @@ public class SystemManager extends Manager{
 			break;
 		case "command":
 			commandManager.handleMessage(json,client);
+			break;
+		case "right":
+			rightManager.handleMessage(json,client);
 			break;
 		default:
 			System.out.println("System manager: NOT FOUND");

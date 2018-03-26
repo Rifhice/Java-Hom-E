@@ -81,17 +81,17 @@ public class Block implements Evaluable {
     public boolean evaluate() {
         switch (operator) {
         case "==":
-            return environmentVariable.isEqual(value);
+            return environmentVariable.getValue().isEqual(value);
         case "!=":
-            return environmentVariable.isNotEqual(value);
+            return environmentVariable.getValue().isNotEqual(value);
         case "<=":
-            return environmentVariable.isInferiorOrEqual(value);
+            return environmentVariable.getValue().isInferiorOrEqual(value);
         case ">=":
-            return environmentVariable.isSuperiorOrEqual(value);
+            return environmentVariable.getValue().isSuperiorOrEqual(value);
         case "<":
-            return environmentVariable.isSuperior(value);
+            return environmentVariable.getValue().isSuperior(value);
         case ">":
-            return environmentVariable.isInferior(value);
+            return environmentVariable.getValue().isInferior(value);
         }
         return false;
     }

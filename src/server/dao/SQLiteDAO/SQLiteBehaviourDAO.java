@@ -376,7 +376,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     
                     int blockId = rs.getInt("Blid");
                     String blockOperator = rs.getString("Bloperator");
-                    Block block= new Block(blockId, blockOperator); 
+                    //Block block= new Block(blockId, blockOperator); 
                              
                     
                     int complexId = rs.getInt("Caid");

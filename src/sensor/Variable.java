@@ -20,5 +20,11 @@ public abstract class Variable {
 
 	public abstract void setValue(Object newValue);
 	public abstract JSONObject getJson();
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getId() {
+		return id;
+	}
 	
 }

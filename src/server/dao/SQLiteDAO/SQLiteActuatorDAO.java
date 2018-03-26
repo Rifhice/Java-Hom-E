@@ -34,7 +34,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     	int created = 0;
     	String sql = 
         		" INSERT INTO DiscreteCommandValues"
-        		+ "(possible_values, fk_environmentValue_id) VALUES"
+        		+ "(possible_values, fk_commandValue_id) VALUES"
         		+ "(?,?)";
     	
     	try {
@@ -62,7 +62,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     	
     	String sql = 
         		" INSERT INTO ContinuousCommandValues"
-        		+ "(min, max, precision, fk_environmentValue_id) VALUES"
+        		+ "(min, max, precision, fk_commandValue_id) VALUES"
         		+ "(?,?,?,?)";
     	
     	try {

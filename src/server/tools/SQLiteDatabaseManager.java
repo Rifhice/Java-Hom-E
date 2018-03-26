@@ -13,9 +13,8 @@ public class SQLiteDatabaseManager {
     // ================ //
     // ==== CREATE ==== //
     // ================ //
-    private static void createDatabase() {
-
-        // ==== DROP TABLES SQL
+    
+    private static void dropDatabase() {
         String dropActuators = "DROP TABLE IF EXISTS actuators;";
         String dropActuatorCategories = "DROP TABLE IF EXISTS actuatorCategories;";
         String dropAmbiences = "DROP TABLE IF EXISTS ambiences;";
@@ -24,9 +23,9 @@ public class SQLiteDatabaseManager {
         String dropBlocks = "DROP TABLE IF EXISTS blocks;";
         String dropCommands = "DROP TABLE IF EXISTS commands;";
         String dropComplexActions = "DROP TABLE IF EXISTS complexActions;";
-        String dropContinuousEnvironmentVariables = "DROP TABLE IF EXISTS continuousEnvironmentVariables;";
+        String dropContinuousEnvironmentVariables = "DROP TABLE IF EXISTS continuousVValues;";
         String dropContinuousCommandValues = "DROP TABLE IF EXISTS continuousCommandValues;";
-        String dropDiscreteEnvironmentVariables = "DROP TABLE IF EXISTS discreteEnvironmentVariables;";
+        String dropDiscreteEnvironmentVariables = "DROP TABLE IF EXISTS discreteVValues;";
         String dropDiscreteCommandValues = "DROP TABLE IF EXISTS discreteCommandValues;";
         String dropCommandValues = "DROP TABLE IF EXISTS commandValues;";
         String dropEnvironmentVariables = "DROP TABLE IF EXISTS environmentVariables;";
@@ -88,8 +87,9 @@ public class SQLiteDatabaseManager {
         } catch (SQLException e) {
             System.out.println("ERROR dropping tables : " + e.getMessage());
         }
-
-        // ==== CREATE TABLES SQL        
+    }
+    
+    private static void createDatabase() {       
         String createTableActuators = "CREATE TABLE IF NOT EXISTS actuators (\n" 
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
@@ -140,9 +140,7 @@ public class SQLiteDatabaseManager {
                 + " key text NOT NULL, \n"
                 + " description text, \n"
                 + " fk_actuator_id integer, \n"
-                + " fk_vvalue_id integer, \n"
-                + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id), \n"
-                + " FOREIGN KEY (fk_vvalue_id) REFERENCES vvalues(id) \n"
+                + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
                 + ");";
         
         String createTableComplexActions = "CREATE TABLE IF NOT EXISTS complexActions (\n" 
@@ -770,7 +768,7 @@ public class SQLiteDatabaseManager {
             stmt.execute(insertVValue8);
             stmt.execute(insertVValue9);
         } catch (SQLException e) {
-            System.out.println("ERROR inserting Values : " + e.getMessage());
+            System.out.println("ERROR inserting VValues : " + e.getMessage());
         }
     }
 
@@ -778,7 +776,8 @@ public class SQLiteDatabaseManager {
     // ==== MAIN ==== //
     // ============== //
     public static void main(String args[]) {
-
+        dropDatabase();
+       
         // Creation
         System.out.print("Init DB... ");
         createDatabase();
@@ -786,28 +785,31 @@ public class SQLiteDatabaseManager {
 
         // Seeders
         System.out.print("Inserting data... ");
+        
         insertHistories();
+        
         // Users
         insertRoles();
         insertRights();
         insertUsers();
         insertOwnsByDefault();
         insertOwns();        
-        
+                
+        // Commands
         insertCommands();
         insertRequires();
-        
         insertCommandValues();
         insertDiscreteCommandValues();
         insertContinuousCommandValues();
         
-        insertBlocks();
-        
+        // Values and Env Variables
         insertEnvironmentVariables();
+        insertBlocks();
         insertVValues();
         insertDiscreteVValues();
-        //insertContinuousVValues();
+        insertContinuousVValues();
        
+        // Behaviours
         insertExpressions();
         insertIsPartOf();
         insertBehaviours();
@@ -816,16 +818,19 @@ public class SQLiteDatabaseManager {
         insertActuatorCategories();
         insertActuators();
         
+        // Actions
+        insertComplexAction();
         insertAtomicActions();
+        insertGathers();
         insertLaunches();
         
+        // Sensors
         insertSensorCategories();
         insertSensors();
         
-        insertComplexAction();
-        insertGathers();
         
         System.out.println("Data inserted.");
         System.out.println("**** Process complete ! ****");
+       
     }
 }

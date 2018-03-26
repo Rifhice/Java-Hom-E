@@ -119,6 +119,7 @@ public class SQLiteDatabaseManager {
         String createTableBehaviours = "CREATE TABLE IF NOT EXISTS behaviours (\n" 
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
+                + " description text, \n"
                 + " is_activated integer, \n"
                 + " fk_expression_id integer, \n"
                 + " FOREIGN KEY (fk_expression_id) REFERENCES expressions(id) \n"
@@ -421,9 +422,9 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertBehaviours() {
-        String insertBehaviour1 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (1,'Light presence kitchen', 1, 1);";
-        String insertBehaviour2 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (2,'So hot',0,2);";
-        String insertBehaviour3 = "INSERT INTO behaviours ('id','name','is_activated', 'fk_expression_id') VALUES (3,'It''s cold : I want tea',1,3);";      
+        String insertBehaviour1 = "INSERT INTO behaviours ('id','name', 'description', 'is_activated', 'fk_expression_id') VALUES (1,'Light presence kitchen', 'Automatic light in kitchen', 1, 1);";
+        String insertBehaviour2 = "INSERT INTO behaviours ('id','name', 'description', 'is_activated', 'fk_expression_id') VALUES (2,'So hot','Cool the house when it''s really hot',0,2);";
+        String insertBehaviour3 = "INSERT INTO behaviours ('id','name', 'description', 'is_activated', 'fk_expression_id') VALUES (3,'It''s cold : I want tea', 'Make a tea if it''s cold',1,3);";      
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertBehaviour1);
             stmt.execute(insertBehaviour2);
@@ -534,7 +535,7 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertDiscreteEnvironmentVariables() {
-        String insertDiscreteEnvironmentVariable1 = "INSERT INTO discreteEnvironmentVariables ('possible_values', 'current_value', 'fk_environmentVariable_id') VALUES ('{\"true\",\"false\"}', 'true', 2);";
+        String insertDiscreteEnvironmentVariable1 = "INSERT INTO discreteEnvironmentVariables ('possible_values', 'current_value', 'fk_environmentVariable_id') VALUES ('{possibleValues : [\"true\", \"false\"]}', 'true', 2);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertDiscreteEnvironmentVariable1);
          
@@ -557,9 +558,9 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertExpressions() {
-        String insertExpression1 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (1,'{\"<\",\"==\"}',1);";
-        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{\"<\"}',2);";
-        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{\"!=\"}',3);";
+        String insertExpression1 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (1,'{operators: [\"<\",\"==\"]}',1);";
+        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{operators: [\"<\"]}',2);";
+        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{operators: [\"!=\"]}',3);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertExpression1);
             stmt.execute(insertExpression2);

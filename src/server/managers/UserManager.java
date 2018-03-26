@@ -148,7 +148,7 @@ public class UserManager extends Manager{
 	        	break;
 	        case "getAll":
 	        	//TODO ici ce n'est qu'un test il faut renvoyer le code complet
-	        	System.out.println("le message est arrivé jusqu'ici");
+	        	System.out.println("le message est arrivÃ© jusqu'ici");
                 JSONObject test = new JSONObject();
                 test.put("users",users);
                 test.put("action","getAll");

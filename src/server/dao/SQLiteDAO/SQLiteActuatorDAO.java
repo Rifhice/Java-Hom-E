@@ -182,7 +182,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 prepStat.setInt(3, obj.getActuatorCategory().getId());
             }
             created = prepStat.executeUpdate();
-            System.out.println("\n\nIci != 0 si l'actuator a bien été créé:" + created);
+            System.out.println("\n\nIci != 0 si l'actuator a bien Ã©tÃ© crÃ©Ã©:" + created);
             // Get the id generated for this object
             if(created > 0) {
             	actuator.setId(SQLiteDAOTools.getLastId(connect));

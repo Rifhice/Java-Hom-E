@@ -11,11 +11,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
+import server.dao.abstractDAO.UserDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.AtomicAction;
 import server.models.Behaviour;
 import server.models.ComplexAction;
+import server.models.evaluable.Block;
 import server.models.evaluable.Expression;
 
 public class SQLiteBehaviourDAO extends BehaviourDAO{
@@ -294,9 +296,16 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         ArrayList<Behaviour> behaviours = new ArrayList<Behaviour>();
         String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
-                + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid "
+                + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
+                + "Bl.id AS Blid, Bl.operator AS Bloperator"
+                //+ ", VV.value AS VVvalue, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit  
                 + "FROM Behaviours AS B "
                 + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
+                + "JOIN IsPartOf AS IPO ON IPO.fk_expression_id = E.id "
+                + "JOIN Blocks AS Bl ON Bl.id = IPO.fk_block_id " 
+                //+ "JOIN VValue AS VV ON VValue.id = Bl._fk_vvalue_id "
+                //+ "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable.id "
+                //+ "JOIN VValue AS V ON V.id = EV.fk_vvalue.id "
                 + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
                 + "JOIN AtomicActions AS Ac ON Ac.id = L.fk_atomicAction_id "
                 + "LEFT JOIN Executes AS Ex ON Ex.fk_behaviour_id = B.id "
@@ -323,6 +332,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 int previousId = 0;
                 ArrayList<AtomicAction> atomics = new ArrayList<AtomicAction>();
                 ArrayList<ComplexAction> complexs = new ArrayList<ComplexAction>();
+                ArrayList<Block> blocks = new ArrayList<Block>();
 
                 Behaviour behaviour = new Behaviour();
                 do {
@@ -335,6 +345,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                             
                             complexs= new ArrayList<ComplexAction>();
                             atomics = new ArrayList<AtomicAction>();
+                            blocks = new ArrayList<Block>();
                             behaviour = new Behaviour();  
                         }   
 
@@ -344,15 +355,14 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         behaviour.setDescription(rs.getString("description"));
                         behaviour.setActivated(rs.getBoolean("isActivated"));
 
-    					System.out.println(rs.getString("Eoperators"));
-
                         try {
         					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
         					JSONArray array = JSON.getJSONArray("operators");
         					ArrayList<String> arrayl = new ArrayList(array.toList());
-
-
+        					
         					behaviour.setExpression(new Expression(rs.getInt("Eid"), arrayl));
+        					//System.out.println(arrayl);
+        					//System.out.println(behaviour.getExpression());
         				} catch (Exception e) {
         					
         				}
@@ -366,16 +376,22 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
                     atomics.add(atomic);
                     
+                    int blockId = rs.getInt("Blid");
+                    String blockOperator = rs.getString("Bloperator");
+                    //EnvironmentVariable ev = new EnvironmentVariable(rs.getInt(EVid), rs.getString(EVname), rs.getString(EVdescription), rs.getString(EVunit));
+                    //Block block= new Block(blockId, ev, blockOperator); 
+                             
+                    
                     int complexId = rs.getInt("Caid");
                     String complexName = rs.getString("Caname");
                     ComplexAction complex = new ComplexAction(complexId, complexName);
                     complexs.add(complex);
-
                 } while (rs.next());
-                // Push the last user
+                // Push the last behaviour
                 behaviour.setAtomicActions(atomics);
                 behaviour.setComplexActions(complexs);
-                behaviours.add(behaviour);
+                behaviours.add(behaviour); 
+                
             }
 
         } catch (SQLException e) {
@@ -408,5 +424,12 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return behaviour;
 	}
 
-	
+	// ============== //
+    // ==== MAIN ==== //
+    // ============== // 
+    public static void main (String args[]) {
+        BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
+        System.out.println(test.getAll());
+        //test.getAll();
+    }
 }

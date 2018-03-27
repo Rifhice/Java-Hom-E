@@ -2,7 +2,7 @@ package sensor;
 
 import org.json.JSONObject;
 
-public class ContinuousVariable extends Variable{
+public class ContinuousValue extends Variable{
 	
 	private double valueMin;
     private double valueMax;
@@ -12,7 +12,7 @@ public class ContinuousVariable extends Variable{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public ContinuousVariable(String name, String description, String unity, double valueMin,double valueMax, double precision, double currentValue) {
+    public ContinuousValue(String name, String description, String unity, double valueMin,double valueMax, double precision, double currentValue) {
         super(name, description, unity);
         this.valueMax = valueMax;
         this.valueMin = valueMin;

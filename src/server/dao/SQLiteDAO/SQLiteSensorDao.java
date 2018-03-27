@@ -48,7 +48,6 @@ public class SQLiteSensorDao extends SensorDAO{
               }
               created = prepStat.executeUpdate();
               
-              // Get the id generated for this object
               if(created > 0) {
                   sensor.setId(SQLiteDAOTools.getLastId(connect));
                   for (int i = 0; i < sensor.getEnvironmentVariable().size(); i++) {
@@ -112,18 +111,27 @@ public class SQLiteSensorDao extends SensorDAO{
      * @return boolean, true if created else false
      */
     private boolean createValue(Value value) {
-        String sql = "INSERT INTO VValues "
-                + "(id) VALUES "
-                + "(?)";
+        String sql = "";
+        if(value.getId() != 0) {
+            sql = "INSERT INTO VValues "
+                    + "(id) VALUES "
+                    + "(?)";
+        }
+        else {
+            sql = "INSERT INTO VValues DEFAULT VALUES;";
+        }
         
         // Insert the object
         int created = 0;
           try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
-              prepStat.setInt(1, value.getId());   
+              if(value.getId() != 0) {
+                  prepStat.setInt(1, value.getId());   
+              }
               created = prepStat.executeUpdate();
               
               if(created > 0) {
+                  value.setId(SQLiteDAOTools.getLastId(connect));
                   if(value instanceof ContinuousValue) {
                       if(!createContinuousValue((ContinuousValue)value)) {
                           return false;

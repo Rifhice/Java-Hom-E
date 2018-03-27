@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-public class DiscreteVariable extends Variable {
+public class DiscreteValue extends Variable {
 
     // ==================== //
     // ==== ATTRIBUTES ==== //
@@ -15,7 +15,7 @@ public class DiscreteVariable extends Variable {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public DiscreteVariable(String name, String description, String unity, ArrayList<String> values, String currentValue) {
+    public DiscreteValue(String name, String description, String unity, ArrayList<String> values, String currentValue) {
         super(name,description,unity);
         this.possibleValues = values;
         this.currentValue = currentValue;

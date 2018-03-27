@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyComboBox;
 import user.ui.componentJavaFX.MyGridPane;
+import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
 
@@ -24,13 +25,17 @@ public class BehavioursContent extends Content {
 	MyRectangle rightEvaluableBounds = new MyRectangle(0.35f, 0.2f, 0.1f, 0.05f);
 	MyRectangle expressionBounds = new MyRectangle(0.5f, 0.2f, 0.1f, 0.05f);
 
-	MyRectangle finalExpressionLabelBounds = new MyRectangle(0f, 0f, 0f, 0f);
-	MyRectangle finalExpressionComboBounds = new MyRectangle(0f, 0f, 0f, 0f);
-	MyRectangle commandsLabelBounds = new MyRectangle(0f, 0f, 0f, 0f);
-	MyRectangle commandComboBounds = new MyRectangle(0f, 0f, 0f, 0f);
+	MyRectangle finalExpressionLabelBounds = new MyRectangle(0.05f, 0.4f, 0.1f, 0.05f);
+	MyRectangle finalExpressionComboBounds = new MyRectangle(0.17f, 0.4f, 0.15f, 0.05f);
+	MyRectangle commandsLabelBounds = new MyRectangle(0.05f, 0.5f, 0.15f, 0.05f);
+	MyRectangle commandComboBounds = new MyRectangle(0.17f, 0.5f, 0.1f, 0.05f);
+	MyRectangle argsLabelBounds = new MyRectangle(0.3f, 0.5f, 0.1f, 0.05f);
+	MyRectangle argsGridBounds = new MyRectangle(0.35f, 0.5f, 0.32f, 0.2f);
 	
-	MyRectangle validateButtonBounds = new MyRectangle(0f, 0f, 0f, 0f);
-	MyRectangle cancelButtonBounds = new MyRectangle(0f, 0f, 0f, 0f);
+	MyRectangle validateButtonBounds = new MyRectangle(0.2f, 0.85f, 0.1f, 0.05f);
+	MyRectangle cancelButtonBounds = new MyRectangle(0.4f, 0.85f, 0.1f, 0.05f);
+	
+	MyRectangle evaluablesBounds = new MyRectangle(0.7f, 0.1f, 0.25f, 0.8f);
 	
 	MyComboBox variablesComboBox;
 	MyComboBox operatorTopComboBox;
@@ -42,13 +47,20 @@ public class BehavioursContent extends Content {
 	MyComboBox evaluableLeftComboBox;
 	MyButtonFX validateExpressionButton;
 	
+	MyLabel finalExpressionLabel;
 	MyComboBox finalExpressionComboBox;
 	
+	MyLabel commandLabel;
 	MyComboBox commandKeyComboBox;
-	MyGridPane commandGridPane;
+	MyLabel argsLabel;
+	MyScrollPane argsScrollPane;
+	MyGridPane argsGridPane;
 	
 	MyScrollPane evaluableScrollPane;
 	MyGridPane evaluableGridPane;
+	
+	MyButtonFX valideButton;
+	MyButtonFX cancelButton;
 	
 	private BehavioursContent() {
 		variablesComboBox = new MyComboBox(variableBounds.computeBounds(width, height),new ArrayList<String>());
@@ -60,13 +72,71 @@ public class BehavioursContent extends Content {
 				
 			}
 		});
-		
-		
 
+		evaluableRightComboBox = new MyComboBox(leftEvaluableBounds.computeBounds(width, height),new ArrayList<String>());
+		operatorBottomComboBox = new MyComboBox(operatorBoundsBottom.computeBounds(width, height),new ArrayList<String>());
+		evaluableLeftComboBox = new MyComboBox(rightEvaluableBounds.computeBounds(width, height),new ArrayList<String>());
+		validateExpressionButton = new MyButtonFX("Validate", expressionBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				
+			}
+		});
+		
+		evaluableGridPane = new MyGridPane(evaluablesBounds.computeBounds(width, height));
+		evaluableGridPane.add(new MyLabel("Evaluable"), 0, 0);
+		evaluableScrollPane = new MyScrollPane(evaluablesBounds.computeBounds(width, height));
+		evaluableScrollPane.setContent(evaluableGridPane);
+		
+		finalExpressionLabel = new MyLabel("Final Expression", finalExpressionLabelBounds.computeBounds(width, height));
+		finalExpressionComboBox = new MyComboBox(finalExpressionComboBounds.computeBounds(width, height),new ArrayList<String>());
+		
+		commandLabel = new MyLabel("Output command", commandsLabelBounds.computeBounds(width, height));
+		commandKeyComboBox = new MyComboBox(commandComboBounds.computeBounds(width, height),new ArrayList<String>());
+		argsLabel = new MyLabel("Args",argsLabelBounds.computeBounds(width, height));
+		
+		argsGridPane = new MyGridPane(argsGridBounds.computeBounds(width, height));
+		argsGridPane.add(new MyLabel("args test"), 0, 0);
+		argsScrollPane = new MyScrollPane(argsGridBounds.computeBounds(width, height));
+		argsScrollPane.setContent(argsGridPane);
+		
+		valideButton = new MyButtonFX("Validate", validateButtonBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+
+			}
+		});
+		
+		cancelButton = new MyButtonFX("Cancel", cancelButtonBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+
+			}
+		});
+		
         this.getChildren().add(variablesComboBox);
         this.getChildren().add(operatorTopComboBox);
         this.getChildren().add(valueComboBox);
         this.getChildren().add(validateBlockButton);
+        
+        this.getChildren().add(evaluableRightComboBox);
+        this.getChildren().add(operatorBottomComboBox);
+        this.getChildren().add(evaluableLeftComboBox);
+        this.getChildren().add(validateExpressionButton);
+        
+        this.getChildren().add(evaluableScrollPane);
+        
+        this.getChildren().add(finalExpressionLabel);
+        this.getChildren().add(finalExpressionComboBox);
+        
+        this.getChildren().add(commandLabel);
+        this.getChildren().add(commandKeyComboBox);
+        this.getChildren().add(argsLabel);
+        this.getChildren().add(argsScrollPane);
+        
+        this.getChildren().add(valideButton);
+        this.getChildren().add(cancelButton);
+        
 		UpdateData();
 	}
 	

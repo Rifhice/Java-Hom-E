@@ -13,13 +13,10 @@ public abstract class Value extends Observable {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-<<<<<<< refs/remotes/origin/Values
-    public Value() {
-        
     }
+        
+    public Value() {
     
-=======
->>>>>>> Values changes
     public Value(int id) {
         this.id = id;
     }

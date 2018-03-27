@@ -20,7 +20,7 @@ public class Sensor extends ExternalActor{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	private ArrayList<EnvironmentVariable> environmentVariable;
+	private ArrayList<EnvironmentVariable> environmentVariables;
 	
 	// Attributes from others tables
     private SensorCategory sensorCategory;
@@ -34,24 +34,24 @@ public class Sensor extends ExternalActor{
     	super(name,description);
     }
     
-    public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
+    public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariables) {
         super(name, description);
-        this.environmentVariable = environmentVariable;
-        for (int i = 0; i < environmentVariable.size(); i++) {
-			environmentVariable.get(i).setSensor(this);
+        this.environmentVariables = environmentVariables;
+        for (int i = 0; i < environmentVariables.size(); i++) {
+            environmentVariables.get(i).setSensor(this);
 			
 		}
     }
     
-	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
+	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariables) {
 		super(id, name, description);
-		this.environmentVariable = environmentVariable;
+		this.environmentVariables = environmentVariables;
 	}
 	
 	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariables, 
 	        SensorCategory sensorCategory) {
         super(id, name, description);
-        this.environmentVariable = environmentVariables;
+        this.environmentVariables = environmentVariables;
         this.sensorCategory = sensorCategory;
     }
 
@@ -63,25 +63,25 @@ public class Sensor extends ExternalActor{
 	}
 	
 	public void changeValue(int idVariable, String value) {
-		for (int i = 0; i < environmentVariable.size(); i++) {
-			if(environmentVariable.get(i).getId() == idVariable) {
-				if(environmentVariable.get(i).getValue() instanceof ContinuousValue) {
+		for (int i = 0; i < environmentVariables.size(); i++) {
+			if(environmentVariables.get(i).getId() == idVariable) {
+				if(environmentVariables.get(i).getValue() instanceof ContinuousValue) {
 					double valueDouble = Double.parseDouble(value);
-					((ContinuousValue)environmentVariable.get(i).getValue()).setCurrentValue(valueDouble);
+					((ContinuousValue)environmentVariables.get(i).getValue()).setCurrentValue(valueDouble);
 				}
 				else {
-					((DiscreteValue)environmentVariable.get(i).getValue()).setCurrentValue(value);
+					((DiscreteValue)environmentVariables.get(i).getValue()).setCurrentValue(value);
 				}
 			}
 		}
 	}
 	
-	public ArrayList<EnvironmentVariable> getEnvironmentVariable() {
-        return environmentVariable;
+	public ArrayList<EnvironmentVariable> getEnvironmentVariables() {
+        return environmentVariables;
     }
 
-    public void setEnvironmentVariable(ArrayList<EnvironmentVariable> environmentVariable) {
-        this.environmentVariable = environmentVariable;
+    public void setEnvironmentVariable(ArrayList<EnvironmentVariable> environmentVariables) {
+        this.environmentVariables = environmentVariables;
     }
     
     public SensorCategory getSensorCategory() {
@@ -96,9 +96,9 @@ public class Sensor extends ExternalActor{
 
     public String toString() {
 		String res = "SENSOR #" + id + " " + this.name + "\n" + this.sensorCategory + "\n"+ this.description + "\nVARIABLES";
-		if(environmentVariable != null) {
-			for (int i = 0; i < environmentVariable.size(); i++) {
-				res += "\n" + environmentVariable.get(i);
+		if(environmentVariables != null) {
+			for (int i = 0; i < environmentVariables.size(); i++) {
+				res += "\n" + environmentVariables.get(i);
 			}
 		}
 		return res;
@@ -106,8 +106,8 @@ public class Sensor extends ExternalActor{
     
     public JSONObject toJson() {
     	JSONObject result = super.toJson();
-        for (int i = 0; i < environmentVariable.size(); i++) {
-			result.append("environmentVariable", environmentVariable.get(i).toJson());
+        for (int i = 0; i < environmentVariables.size(); i++) {
+			result.append("environmentVariable", environmentVariables.get(i).toJson());
 		}
         result.put("category", sensorCategory);
         return result;

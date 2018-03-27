@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
 import server.models.environmentVariable.ContinuousValue;
@@ -20,6 +21,7 @@ public class SensorManager extends Manager{
     // ==== ATTRIBUTES ==== //
     // ==================== //
 	private ArrayList<Sensor> sensors;
+	private SensorDAO sensorDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorDAO();
 	
 	private static SensorManager manager = null;
 	
@@ -104,7 +106,7 @@ public class SensorManager extends Manager{
 		Sensor sensor = getSensorFromJson(json); //Create the new Sensor object
 		Sensor sensorCreated = null;
 		try {
-			sensorCreated = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
+			sensorCreated = sensorDAO.create(sensor);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -114,7 +116,9 @@ public class SensorManager extends Manager{
 			result.put("result", "success");
 			result.put("verb", "post");
 			result.put("id", sensorCreated.getId());
-			result.put("idEnv",sensorCreated.getEnvironmentVariable().get(0).getId());
+			// TODO : temporarily, we just return the 1rst environmentVariable.
+			result.put("idEnv",sensorCreated.getEnvironmentVariables().get(0).getId());
+	        result.put("idValue",sensorCreated.getEnvironmentVariables().get(0).getValue().getId());
 		}
 		else {
 			result.put("result", "failure");
@@ -134,7 +138,7 @@ public class SensorManager extends Manager{
 	public ArrayList<EnvironmentVariable> getEnvironmentVariables(){
 		ArrayList<EnvironmentVariable> variables = new ArrayList<EnvironmentVariable>();
 		for (int i = 0; i < sensors.size(); i++) {
-			variables.addAll(sensors.get(i).getEnvironmentVariable());
+			variables.addAll(sensors.get(i).getEnvironmentVariables());
 		}
 		return variables;
 	}
@@ -173,6 +177,9 @@ public class SensorManager extends Manager{
 		case "changeValue":
 			changeEnvironmentVariableValue(json, client);
 			break;
+		case "getEnvironmentsVariables": 
+		    
+		    break;
 		default:
 			break;
 		}

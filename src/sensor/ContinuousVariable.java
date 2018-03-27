@@ -37,7 +37,7 @@ public class ContinuousVariable extends Variable{
 		result.put("type", "continuous");
 		result.put("name", name);
 		result.put("description", description);
-		result.put("unity", unit);
+		result.put("unit", unit);
 		result.put("valuemin", valueMin);
 		result.put("valuemax", valueMax);
 		result.put("precision", precision);

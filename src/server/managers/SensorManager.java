@@ -64,24 +64,24 @@ public class SensorManager extends Manager{
                 
                 Value value;
                 // Value Continuous
-                if(object.getString("valueType").equals("continuous")) {
+                if(object.getString("type").equals("continuous")) {
                     value = new ContinuousValue();
                     ((ContinuousValue) value).setValueMin(object.getDouble("valueMin"));
                     ((ContinuousValue) value).setValueMax(object.getDouble("valueMax"));
-                    ((ContinuousValue) value).setCurrentValue(object.getDouble("currentValue"));
+                    ((ContinuousValue) value).setCurrentValue(object.getDouble("currentvalue"));
                     ((ContinuousValue) value).setPrecision(object.getDouble("precision"));
                     
                     ev.setValue(value);
                 }
                 
                 // Value Discrete
-                else if(object.getString("valueType").equals("discrete")) {
+                else if(object.getString("type").equals("discrete")) {
                     value = new DiscreteValue();
-                    ((DiscreteValue) value).setCurrentValue(object.getString("currentValue"));
+                    ((DiscreteValue) value).setCurrentValue(object.getString("currentvalue"));
                     
                     // Get the possible values
                     ArrayList<String> possibleValuesArray = new ArrayList<String>();
-                    JSONArray valuesArray = object.getJSONArray("possibleValues");
+                    JSONArray valuesArray = object.getJSONArray("possiblevalues");
                     for (int j = 0; j < valuesArray.length(); j++) {
                         possibleValuesArray.add(valuesArray.getString(j));
                     }

@@ -13,6 +13,10 @@ public abstract class Value extends Observable {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    public Value() {
+        
+    }
+    
     public Value(int id) {
         this.id = id;
     }

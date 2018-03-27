@@ -21,6 +21,10 @@ public class DiscreteValue extends Value {
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    public DiscreteValue() {
+        super();
+    }
+    
     public DiscreteValue(int id, ArrayList<String> values, String currentValue) {
         super(id);
         this.possibleValues = values;

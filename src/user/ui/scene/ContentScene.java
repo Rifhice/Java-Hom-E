@@ -17,6 +17,7 @@ import user.ui.content.AccountContent;
 import user.ui.content.ActuatorContent;
 import user.ui.content.AmbiencesContent;
 import user.ui.content.BehavioursCommandsContent;
+import user.ui.content.BehavioursContent;
 import user.ui.content.CategoriesContent;
 import user.ui.content.Content;
 import user.ui.content.ControlContent;
@@ -40,10 +41,12 @@ public class ContentScene extends MyScene implements MenuDelegate {
 	public final static double contentWidthRatio = 0.8;
 	public final static double contentHeightRatio = 0.9;
 	
+	private static ContentScene instance = null;
+	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-	public ContentScene(Group root, double width, double height) {
+	private ContentScene(Group root, double width, double height) {
 		super(root, width, height, ClientFX.BACKGROUND_COLOR);
 		scenePane = new BorderPane();
 		scenePane.setMinSize(ClientFX.width, ClientFX.height);
@@ -51,7 +54,7 @@ public class ContentScene extends MyScene implements MenuDelegate {
 		this.infoBar = new InfoBar();
 		this.infoBar.setBackground(new Background(new BackgroundFill(Color.web(GraphicalCharter.LIGHT_BLUE), CornerRadii.EMPTY, Insets.EMPTY)));
 		
-		this.menu = new Menu(this);
+		this.menu = Menu.getInstance(this);
 		this.menu.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
 		
 		this.content = HomeContent.getInstance();
@@ -72,6 +75,17 @@ public class ContentScene extends MyScene implements MenuDelegate {
 		this.content.handleMessage(msg);
 	}
 
+	public static ContentScene instanciate(Group root, double width, double height) {
+		if(instance == null) {
+			instance = new ContentScene(root, width, height);
+		}
+		return instance;
+	}
+	
+	public static ContentScene getInstance() {
+		return instance;
+	}
+	
 	@Override
 	public void display(String message) {
 		System.out.println(message);
@@ -109,9 +123,11 @@ public class ContentScene extends MyScene implements MenuDelegate {
 		}
 	}
 	
-	private void changeContent(Content content) {
+	public void changeContent(Content content) {
 		this.content = content;
 		scenePane.setCenter(this.content);
 	}
+	
+	
 	
 }

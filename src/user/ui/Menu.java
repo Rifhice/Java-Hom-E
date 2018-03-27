@@ -3,6 +3,7 @@ package user.ui;
 
 import user.ClientFX;
 import user.ui.componentJavaFX.MyButtonFX;
+import user.ui.content.Content;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
@@ -12,12 +13,14 @@ import user.ui.scene.ContentScene;
 
 public class Menu extends GridPane {
 	
+	private static Menu instance = null;
+	
 	private MenuDelegate menuDelegate;
 	
 	private double width;
 	private double height;
 	
-	public Menu(MenuDelegate menuDelegate) {
+	private Menu(MenuDelegate menuDelegate) {
 		this.width = ContentScene.menuWidthRatio * ClientFX.width;
 		this.height = ContentScene.menuHeightRatio * ClientFX.height;
 		
@@ -38,6 +41,19 @@ public class Menu extends GridPane {
 				
 			}), 0, i);
 		}
+	}
+	
+	public void changeCurrentContent(CONTENT current) {
+		menuDelegate.chanteCurrentContent(current);
+	}
+	
+	public static Menu getInstance(MenuDelegate delegate) {
+		if(instance == null) {
+			if(delegate != null) {
+				instance = new Menu(delegate);
+			}
+		}
+		return instance;
 	}
 	
 }

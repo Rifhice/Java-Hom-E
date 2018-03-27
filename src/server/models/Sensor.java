@@ -72,7 +72,6 @@ public class Sensor extends ExternalActor{
 				else {
 					((DiscreteEnvironmentVariable)environmentVariable.get(i)).setCurrentValue(value);
 				}
-				System.out.println("OMG");
 			}
 		}
 	}

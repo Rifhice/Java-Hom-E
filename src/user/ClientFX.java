@@ -26,7 +26,7 @@ public class ClientFX extends Application{
 	public static String token;
 	
 	public static UserClient client;
-	private static Stage primaryStage;
+	public static Stage primaryStage;
 	
 	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public static Color BACKGROUND_COLOR = Color.web(GraphicalCharter.LIGHT_GREEN);
@@ -63,8 +63,8 @@ public class ClientFX extends Application{
 		width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
 		height = (int)(ClientFX.screenSize.getHeight()* heightRatio);
 		
-		LoginScene firstScene = new LoginScene(new Group(),this.width,this.height);
-		ContentScene contentScene = new ContentScene(new Group(),this.width,this.height);
+		//LoginScene firstScene = new LoginScene(new Group(),this.width,this.height);
+		ContentScene contentScene = ContentScene.instanciate(new Group(),this.width,this.height);
 		
 		try {
 			client = new UserClient(DEFAULT_HOST,DEFAULT_PORT,contentScene);	

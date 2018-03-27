@@ -1,10 +1,7 @@
 package user.ui.content;
 
 import java.io.IOException;
-import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
-
-import javax.swing.plaf.RootPaneUI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,7 +20,7 @@ import user.ui.componentJavaFX.MyPane;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
 import user.ui.componentJavaFX.MyTextArea;
-import user.ui.componentJavaFX.MyTextFieldFX;
+import user.ui.scene.ContentScene;
 
 public class BehavioursCommandsContent extends Content {
 
@@ -91,7 +88,7 @@ public class BehavioursCommandsContent extends Content {
         MyButtonFX addBehaviourButton = new MyButtonFX("Add behaviour",addBehaviourButtonBounds.computeBounds(addBehaviourPane.getPrefWidth(),addBehaviourPane.getPrefHeight()), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO : open add-Behaviour pop-up
+                ContentScene.getInstance().changeContent(BehavioursContent.getInstance());
             }
         });
         

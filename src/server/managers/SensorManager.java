@@ -9,9 +9,10 @@ import org.json.JSONObject;
 
 import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
-import server.models.environmentVariable.ContinuousEnvironmentVariable;
-import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
+import server.models.environmentVariable.Value;
 import ocsf.server.ConnectionToClient;
 
 public class SensorManager extends Manager{
@@ -39,25 +40,56 @@ public class SensorManager extends Manager{
     // ==== METHODS ==== //
     // ================= // 
 	
+	/**
+	 * Create a sensor from a JSON. 
+	 * @param jsonToParse
+	 * @return
+	 */
 	public static Sensor getSensorFromJson(JSONObject jsonToParse) {
 		try {
 			String name = jsonToParse.getString("name");
 			String description = jsonToParse.getString("description");
+			
 			ArrayList<EnvironmentVariable> variables = new ArrayList<EnvironmentVariable>();
 			JSONArray arr = jsonToParse.getJSONArray("variables");
+			
 			for (int i = 0; i < arr.length(); i++){
+			    
+			    // Set the environment variable
 				JSONObject object = arr.getJSONObject(i);
-				if(object.getString("type").equals("continuous")) {
-					variables.add(new ContinuousEnvironmentVariable(object.getString("name"), object.getString("description"), object.getString("unity"), object.getDouble("valuemin"), object.getDouble("valuemax"), object.getDouble("precision"), object.getDouble("currentvalue")));
-				}
-				else if(arr.getJSONObject(i).getString("type").equals("discrete")){
-					ArrayList<String> values = new ArrayList<String>();
-					JSONArray valuesArray = object.getJSONArray("values");
-					for (int j = 0; j < valuesArray.length(); j++) {
-						values.add(valuesArray.getString(j));
-					}
-					variables.add(new DiscreteEnvironmentVariable(object.getString("name"), object.getString("description"), object.getString("unity"), values, object.getString("currentvalue")));
-				}
+				EnvironmentVariable ev = new EnvironmentVariable();
+				ev.setName(object.getString("name"));
+                ev.setName(object.getString("description"));
+                ev.setName(object.getString("unit"));	
+                
+                Value value;
+                // Value Continuous
+                if(object.getString("type").equals("continuous")) {
+                    value = new ContinuousValue();
+                    ((ContinuousValue) value).setValueMin(object.getDouble("valueMin"));
+                    ((ContinuousValue) value).setValueMax(object.getDouble("valueMax"));
+                    ((ContinuousValue) value).setCurrentValue(object.getDouble("currentvalue"));
+                    ((ContinuousValue) value).setPrecision(object.getDouble("precision"));
+                    
+                    ev.setValue(value);
+                }
+                
+                // Value Discrete
+                else if(object.getString("type").equals("discrete")) {
+                    value = new DiscreteValue();
+                    ((DiscreteValue) value).setCurrentValue(object.getString("currentvalue"));
+                    
+                    // Get the possible values
+                    ArrayList<String> possibleValuesArray = new ArrayList<String>();
+                    JSONArray valuesArray = object.getJSONArray("possiblevalues");
+                    for (int j = 0; j < valuesArray.length(); j++) {
+                        possibleValuesArray.add(valuesArray.getString(j));
+                    }
+                    ((DiscreteValue) value).setPossibleValues(possibleValuesArray);        
+                    ev.setValue(value);
+                }
+                
+                variables.add(ev);			
 			}
 			return new Sensor(name, description, variables);
 		}

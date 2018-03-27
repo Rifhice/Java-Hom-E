@@ -56,11 +56,11 @@ public class Sensor {
 		json.put("verb", "changeValue");
 		json.put("id", id);
 		String value = "";
-		if(variable instanceof ContinuousVariable) {
-			value = ((ContinuousVariable) variable).getCurrentValue() + "";
+		if(variable instanceof ContinuousValue) {
+			value = ((ContinuousValue) variable).getCurrentValue() + "";
 		}
 		else {
-			value = ((DiscreteVariable) variable).getCurrentValue() + "";
+			value = ((DiscreteValue) variable).getCurrentValue() + "";
 		}
 		json.put("idVariable", variable.getId());
 		json.put("value", value);

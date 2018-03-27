@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import server.models.categories.SensorCategory;
-import server.models.environmentVariable.ContinuousEnvironmentVariable;
-import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 
 /**
@@ -62,15 +62,15 @@ public class Sensor extends ExternalActor{
 		this.id = id;
 	}
 	
-	public void changeValue(int idVariable,String value) {
+	public void changeValue(int idVariable, String value) {
 		for (int i = 0; i < environmentVariable.size(); i++) {
 			if(environmentVariable.get(i).getId() == idVariable) {
-				if(environmentVariable.get(i) instanceof ContinuousEnvironmentVariable) {
+				if(environmentVariable.get(i).getValue() instanceof ContinuousValue) {
 					double valueDouble = Double.parseDouble(value);
-					((ContinuousEnvironmentVariable)environmentVariable.get(i)).setCurrentValue(valueDouble);
+					((ContinuousValue)environmentVariable.get(i).getValue()).setCurrentValue(valueDouble);
 				}
 				else {
-					((DiscreteEnvironmentVariable)environmentVariable.get(i)).setCurrentValue(value);
+					((DiscreteValue)environmentVariable.get(i).getValue()).setCurrentValue(value);
 				}
 			}
 		}

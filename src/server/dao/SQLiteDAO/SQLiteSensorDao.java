@@ -12,9 +12,10 @@ import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
-import server.models.environmentVariable.ContinuousEnvironmentVariable;
-import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
+import server.models.environmentVariable.Value;
 
 public class SQLiteSensorDao extends SensorDAO{
 	
@@ -47,7 +48,6 @@ public class SQLiteSensorDao extends SensorDAO{
               }
               created = prepStat.executeUpdate();
               
-              // Get the id generated for this object
               if(created > 0) {
                   sensor.setId(SQLiteDAOTools.getLastId(connect));
                   for (int i = 0; i < sensor.getEnvironmentVariable().size(); i++) {
@@ -84,13 +84,13 @@ public class SQLiteSensorDao extends SensorDAO{
               // Get the id generated for this object
               if(created > 0) {
                   variable.setId(SQLiteDAOTools.getLastId(connect));
-                  if(variable instanceof ContinuousEnvironmentVariable) {
-                	  if(!createContinuousVariable((ContinuousEnvironmentVariable)variable)) {
+                  if(variable.getValue() instanceof ContinuousValue) {
+                	  if(!createValue((ContinuousValue)variable.getValue())) {
                 		  return false;
                 	  }
                   }
-                  else if(variable instanceof DiscreteEnvironmentVariable) {
-                	  if(!createDiscreteVariable((DiscreteEnvironmentVariable)variable)) {
+                  else if(variable.getValue() instanceof DiscreteValue) {
+                	  if(!createValue((DiscreteValue)variable.getValue())) {
                 		  return false;
                 	  }
                   }
@@ -105,20 +105,69 @@ public class SQLiteSensorDao extends SensorDAO{
           return true;
     }
     
-    private boolean createContinuousVariable(ContinuousEnvironmentVariable variable) {
-    	String sql = "INSERT INTO continuousEnvironmentVariables "
-                + "(fk_environmentVariable_id, value_min, value_max,current_value,precision) VALUES "
+    /**
+     * Create a value object in the database
+     * @param value
+     * @return boolean, true if created else false
+     */
+    private boolean createValue(Value value) {
+        String sql = "";
+        if(value.getId() != 0) {
+            sql = "INSERT INTO VValues "
+                    + "(id) VALUES "
+                    + "(?)";
+        }
+        else {
+            sql = "INSERT INTO VValues DEFAULT VALUES;";
+        }
+        
+        // Insert the object
+        int created = 0;
+          try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              if(value.getId() != 0) {
+                  prepStat.setInt(1, value.getId());   
+              }
+              created = prepStat.executeUpdate();
+              
+              if(created > 0) {
+                  value.setId(SQLiteDAOTools.getLastId(connect));
+                  if(value instanceof ContinuousValue) {
+                      if(!createContinuousValue((ContinuousValue)value)) {
+                          return false;
+                      }
+                  }
+                  else if(value instanceof DiscreteValue) {
+                      if(!createDiscreteValue((DiscreteValue)value)) {
+                          return false;
+                      }
+                  }
+              }
+              else {
+                  return false;
+              }
+              
+          } catch (SQLException e) {
+              throw new DAOException("DAOException : SensorDAO createValue(" + value.getId() + ") :" + e.getMessage(), e); 
+          }
+          return true;
+    }
+    
+    
+    private boolean createContinuousValue(ContinuousValue value) {
+    	String sql = "INSERT INTO continuousVValues "
+                + "(fk_vvalue_id, value_min, value_max,current_value,precision) VALUES "
                 + "(?, ?, ?,?,?)";
         
         // Insert the object
         int created = 0;
           try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
-              prepStat.setInt(1, variable.getId());
-              prepStat.setFloat(2,(float) variable.getValueMin());
-              prepStat.setFloat(3, (float)variable.getValueMax());
-              prepStat.setFloat(4,(float) variable.getCurrentValue());
-              prepStat.setFloat(5, (float)variable.getPrecision());          
+              prepStat.setInt(1, value.getId());
+              prepStat.setFloat(2,(float) value.getValueMin());
+              prepStat.setFloat(3, (float)value.getValueMax());
+              prepStat.setFloat(4,(float) value.getCurrentValue());
+              prepStat.setFloat(5, (float)value.getPrecision());          
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
@@ -130,24 +179,24 @@ public class SQLiteSensorDao extends SensorDAO{
               }
               
           } catch (SQLException e) {
-              throw new DAOException("DAOException : SensorDAO create(" + variable.getId() + ") :" + e.getMessage(), e); 
+              throw new DAOException("DAOException : SensorDAO createContinuousValue(" + value.getId() + ") :" + e.getMessage(), e); 
           }
     }
     
-    private boolean createDiscreteVariable(DiscreteEnvironmentVariable variable) {
-    	String sql = "INSERT INTO discreteEnvironmentVariables "
-                + "(fk_environmentVariable_id, current_value, possible_values) VALUES "
+    private boolean createDiscreteValue(DiscreteValue value) {
+    	String sql = "INSERT INTO discreteVValues "
+                + "(fk_vvalue_id, current_value, possible_values) VALUES "
                 + "(?, ?, ?)";
         
         // Insert the object
         int created = 0;
           try {
               PreparedStatement prepStat = this.connect.prepareStatement(sql);
-              prepStat.setInt(1, variable.getId());
-              prepStat.setString(2,variable.getCurrentValue());
+              prepStat.setInt(1, value.getId());
+              prepStat.setString(2,value.getCurrentValue());
               JSONObject json = new JSONObject();
-              for (int i = 0; i < variable.getPossibleValues().size(); i++) {
-				json.append("possibleValues", variable.getPossibleValues().get(i));
+              for (int i = 0; i < value.getPossibleValues().size(); i++) {
+				json.append("possibleValues", value.getPossibleValues().get(i));
               }
               prepStat.setString(3, json.toString());       
               created = prepStat.executeUpdate();
@@ -161,7 +210,7 @@ public class SQLiteSensorDao extends SensorDAO{
               }
               
           } catch (SQLException e) {
-              throw new DAOException("DAOException : SensorDAO create(" + variable.getId() + ") :" + e.getMessage(), e); 
+              throw new DAOException("DAOException : SensorDAO createDiscreteValue(" + value.getId() + ") :" + e.getMessage(), e); 
           }
     }
     
@@ -235,7 +284,14 @@ public class SQLiteSensorDao extends SensorDAO{
     // ============== // 
     public static void main (String args[]) {
         SensorDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO();
-        System.out.println(test.create(new Sensor("test","qsd")));
+       
+        Value value = new ContinuousValue(45, -50.0, 50.0, 0.5, 20);
+        EnvironmentVariable ev = new EnvironmentVariable(44,"Temperature","C'est la température.","C",new Sensor(),value);
+        ArrayList<EnvironmentVariable> list = new ArrayList<EnvironmentVariable>();
+        list.add(ev);        
+        
+        Sensor sensor = new Sensor("thermomètre", "il mesure bien la chaleur", list);    
+        System.out.println(test.create(sensor));
         System.out.println(test.getAll());
     }
 }

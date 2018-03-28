@@ -127,6 +127,8 @@ public class AccountContent extends Content {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public static Content getInstance() {
 		// TODO Auto-generated method stub
@@ -136,35 +138,81 @@ public class AccountContent extends Content {
 		return content;
 	}
 	
+	public void getAllFamilyMembers(JSONObject json) {
+		this.familyMembers = new ArrayList<User>();
+		JSONArray arrArg = json.getJSONArray("users");
+		System.out.println("Ca va dans la boucle \n");
+		for (int j = 0; j < arrArg.length(); j++){
+			JSONObject current = arrArg.getJSONObject(j);
+			User user = new User(current.getInt("id"), current.getString("pseudo"));
+			System.out.println("id :" + current.getInt("id")+ "pseudo" + current.getString("pseudo"));
+			this.familyMembers.add(user);
+			this.userCells.add(new UserCell(user ,familyMembersList.getPrefWidth(),familyMembersList.getPrefHeight() / NB_OF_FAMILYMEMBERS_DISPLAYED, 
+					new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+							
+						}}));
+		}
+		System.out.println("Je sors de la boucle");
+		updateUsersUI();
+		
+	}
+	
+	public void getAllRights(JSONObject json) {
+		this.notAllowedRights = new ArrayList<Right>();
+		JSONArray arrArg = json.getJSONArray("rights");
+		for (int j = 0; j < arrArg.length(); j++){
+			JSONObject current = arrArg.getJSONObject(j);
+			Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
+			this.notAllowedRights.add(right);
+			this.rightCells.add(new RightCell(right, notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+				}}));
+		}
+		updateRightsUI();
+	}
+	
+	public void getRightsByUser(JSONObject json) {
+		this.allowedRights = new ArrayList<Right>();
+		JSONArray allRights = json.getJSONArray("rights");
+		for (int j = 0; j < allRights.length(); j++){
+			JSONObject current = allRights.getJSONObject(j);
+			Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
+			this.allowedRights.add(right);
+			this.rightCells.add(new RightCell(right, allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+				}}));
+		}
+		
+	}
+	
 	@Override
 	public void handleMessage(Object message) {
 		
 		if(message instanceof String) {
-			System.out.println("\n Message reÃ§u du serveur :" + message);
+			System.out.println("\n Message recu du serveur :" + message + "\n");
 			try {
-				System.out.println(message.toString());
-				JSONObject json = new JSONObject((String)message);
+				System.out.println("Je rentre dans le try \n");
+				JSONObject json = new JSONObject(message.toString());
+				System.out.println("nouvel objet Json crée \n");
 				String recipient = json.getString("recipient");
+				
 				String action;
+				System.out.println("Je dois rentrer dans le switch :" + recipient );
 				switch(recipient) {
 				case "user":
 					action = json.getString("action");
 					switch (action) {
+					
 					case "getAll":
-						this.familyMembers = new ArrayList<User>();
-						JSONArray arrArg = json.getJSONArray("users");
-						for (int j = 0; j < arrArg.length(); j++){
-							JSONObject current = arrArg.getJSONObject(j);
-							User user = new User(current.getInt("id"), current.getString("pseudo"));
-							this.familyMembers.add(user);
-							this.userCells.add(new UserCell(user ,familyMembersList.getPrefWidth(),familyMembersList.getPrefHeight() / NB_OF_FAMILYMEMBERS_DISPLAYED, 
-	        						new EventHandler<ActionEvent>() {
-										@Override
-										public void handle(ActionEvent event) {
-											int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
-										}}));
-						}
-						updateUsersUI();
+						System.out.println("Je suis dans le bon cas \n");
+						getAllFamilyMembers(json);
 						break;
 					}
 					break;
@@ -172,34 +220,10 @@ public class AccountContent extends Content {
 					action = json.getString("action");
 					switch (action) {
 					case "getAll":
-						this.notAllowedRights = new ArrayList<Right>();
-						JSONArray arrArg = json.getJSONArray("rights");
-						for (int j = 0; j < arrArg.length(); j++){
-							JSONObject current = arrArg.getJSONObject(j);
-							Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
-							this.notAllowedRights.add(right);
-							this.rightCells.add(new RightCell(right, notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent event) {
-									int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
-								}}));
-						}
-						updateUsersUI();
+						getAllRights(json);
 						break;
 					case "getByUser":
-						this.allowedRights = new ArrayList<Right>();
-						JSONArray allRights = json.getJSONArray("rights");
-						for (int j = 0; j < allRights.length(); j++){
-							JSONObject current = allRights.getJSONObject(j);
-							Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
-							this.allowedRights.add(right);
-							this.rightCells.add(new RightCell(right, allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent event) {
-									int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
-								}}));
-						}
-						updateUsersUI();
+						getRightsByUser(json);
 						break;
 					}
 					break;
@@ -213,7 +237,7 @@ public class AccountContent extends Content {
 	
 
 	
-	//TODO ï¿½ dï¿½buguer !
+
 	
 	private void updateUsersUI() {
 		if(this.familyMembers.size() > 0) {
@@ -232,19 +256,56 @@ public class AccountContent extends Content {
 								} 
          				),0,i);
          			}
-         			for (int i = 0; i < notAllowedRights.size(); i++) {
-         				notAllowedRightsList.add(new RightCell(notAllowedRights.get(i) ,notAllowedRightsList.getPrefWidth(),notAllowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
-         						new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent event) {
-										int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-										//changeBehaviourState(pressedButton);
-									}
-								} 
-         				),0,i);
-         			}
+
                  }
              });
 		}
 	}
+	
+	
+	private void updateRightsUI() {
+		System.out.println("j'update  utilisateurs");
+		Platform.runLater(new Runnable() {
+            @Override public void run() {
+				if(notAllowedRights.size() > 0) {
+					
+		                	notAllowedRightsList.getChildren().clear();
+		         			for (int i = 0; i < notAllowedRights.size(); i++) {
+		         				notAllowedRightsList.add(new RightCell(notAllowedRights.get(i) ,notAllowedRightsList.getPrefWidth(),notAllowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
+		         						new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent event) {
+												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+												//changeBehaviourState(pressedButton);
+											}
+										} 
+		         				),0,i);
+		         			
+		
+		                 
+		             };
+				}
+				else if(allowedRights != null) {
+					System.out.println("l'update s'est bien déroulé" );
+		
+			           	allowedRightsList.getChildren().clear();
+			           	System.out.println(allowedRights);
+			    			for (int i = 0; i < allowedRights.size(); i++) {
+			    				allowedRightsList.add(new RightCell(allowedRights.get(i) ,allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
+			    						new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent event) {
+												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+												//changeBehaviourState(pressedButton);
+											}
+										} 
+			    				),0,i);
+			    			
+			
+			            
+			        };
+		       };
+            }});
+			
+		}
 }

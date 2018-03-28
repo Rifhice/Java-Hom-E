@@ -50,6 +50,7 @@ public class SystemManager extends Manager{
 		actuatorCategorieManager = ActuatorCategorieManager.getManager();
 		sensorCategorieManager = SensorCategorieManager.getManager();
 		commandManager = CommandManager.getManager();
+		rightManager = RightManager.getManager();
 		
 		userServer = new EchoServer(USER_SERVER_PORT,this);
 		sensorServer = new EchoServer(SENSOR_SERVER_PORT,sensorManager);
@@ -110,6 +111,7 @@ public class SystemManager extends Manager{
             commandManager.handleMessage(json,client);
             break;
         case "right":
+			System.out.println("Le SystemManager envoie au rightManager \n");
             rightManager.handleMessage(json,client);
             break;
 		case "sensor":

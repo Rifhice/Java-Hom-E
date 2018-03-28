@@ -12,13 +12,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.StringConverter;
 import user.ClientFX;
-import user.models.CommandValue;
-import user.models.ContinuousCommandValue;
-import user.models.DiscreteCommandValue;
 import user.models.environmentVariable.ContinuousValue;
 import user.models.environmentVariable.DiscreteValue;
 import user.models.environmentVariable.EnvironmentVariable;
 import user.models.environmentVariable.Value;
+import user.models.evaluable.Block;
+import user.models.evaluable.Evaluable;
+import user.models.evaluable.Expression;
 import user.tools.ARITHMETICOPERATOR;
 import user.tools.BOOLEANOPERATOR;
 import user.ui.componentJavaFX.MyButtonFX;
@@ -66,13 +66,13 @@ public class BehavioursContent extends Content {
 	
 	boolean type = false;
 	
-	MyComboBox<String> evaluableRightComboBox;
+	MyComboBox<Evaluable> evaluableRightComboBox;
 	MyComboBox<String> operatorBottomComboBox;
-	MyComboBox<String> evaluableLeftComboBox;
+	MyComboBox<Evaluable> evaluableLeftComboBox;
 	MyButtonFX validateExpressionButton;
 	
 	MyLabel finalExpressionLabel;
-	MyComboBox<String> finalExpressionComboBox;
+	MyComboBox<Evaluable> finalExpressionComboBox;
 	
 	MyLabel commandLabel;
 	MyComboBox<String> commandKeyComboBox;
@@ -90,7 +90,7 @@ public class BehavioursContent extends Content {
 	
 	// ========= ATTRIBUTES ========= //
 	private ArrayList<EnvironmentVariable> environmentVariables = new ArrayList<EnvironmentVariable>();
-	private ArrayList<String> evaluables = new ArrayList<String>();
+	private ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
 	private int nbBlocks = 0, nbExpressions = 0;
 	
 	private BehavioursContent() {		
@@ -107,6 +107,20 @@ public class BehavioursContent extends Content {
 		}
 		
 		variablesComboBox = new MyComboBox<EnvironmentVariable>(variableBounds.computeBounds(width, height), environmentVariables);
+		variablesComboBox.setConverter(new StringConverter<EnvironmentVariable>() {
+
+			@Override
+			public EnvironmentVariable fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String toString(EnvironmentVariable arg0) {
+				// TODO Auto-generated method stub
+				return arg0 == null ? "" : arg0.getName();
+			}
+        });
 		variablesComboBox.valueProperty().addListener(new ChangeListener<EnvironmentVariable>() {
 
 			@Override
@@ -140,6 +154,8 @@ public class BehavioursContent extends Content {
 		operatorTopComboBox.getSelectionModel().selectFirst();
 		valueComboBox = new MyComboBox<String>(valueBounds.computeBounds(width, height), null);
 		valueSlider = new MySlider(valueBounds.computeBounds(width, height), 0, 1, 0.1);
+		
+		
 		validateBlockButton = new MyButtonFX("Validate", newBlockBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -149,38 +165,77 @@ public class BehavioursContent extends Content {
 				} else {
 					value = valueComboBox.getValue();
 				}
-				String evaluable = ((EnvironmentVariable)(variablesComboBox.getValue())).getName() + " " + operatorTopComboBox.getValue() + " " + value;
-				
-				MyLabel label = new MyLabel(evaluable);
+				EnvironmentVariable ev = ((EnvironmentVariable)(variablesComboBox.getValue()));
+				Block block = new Block(ev, value, operatorTopComboBox.getValue());
+				evaluables.add(block);
+				MyLabel label = new MyLabel(block.toString());
 				label.setPrefWidth(blocksScrollPane.getPrefWidth());
 				nbBlocks++;
 				if(nbBlocks % 2 == 0) {
 					label.setStyle("-fx-background-color: #FFFFFF;");
 				}
 				blocksGridPane.add(label, 0, nbBlocks);
-				evaluables.add(evaluable);
-				evaluableRightComboBox.getItems().add(evaluable);
-				evaluableLeftComboBox.getItems().add(evaluable);
+				finalExpressionComboBox.getItems().add(block);
+				evaluableRightComboBox.getItems().add(block);
+				evaluableLeftComboBox.getItems().add(block);
 			}
 		});
 
-		evaluableRightComboBox = new MyComboBox<String>(leftEvaluableBounds.computeBounds(width, height), evaluables);
+		
+		evaluableRightComboBox = new MyComboBox<Evaluable>(leftEvaluableBounds.computeBounds(width, height), evaluables);
+		
+		evaluableRightComboBox.setConverter(new StringConverter<Evaluable>() {
+
+			@Override
+			public Evaluable fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String toString(Evaluable arg0) {
+				// TODO Auto-generated method stub
+				return arg0 == null ? "" : arg0.toString();
+			}
+        });
+		
 		operatorBottomComboBox = new MyComboBox<String>(operatorBoundsBottom.computeBounds(width, height), boolOperators);
 		operatorBottomComboBox.getSelectionModel().selectFirst();
-		evaluableLeftComboBox = new MyComboBox<String>(rightEvaluableBounds.computeBounds(width, height), evaluables);
+		evaluableLeftComboBox = new MyComboBox<Evaluable>(rightEvaluableBounds.computeBounds(width, height), evaluables);
+		
+		evaluableLeftComboBox.setConverter(new StringConverter<Evaluable>() {
+
+			@Override
+			public Evaluable fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String toString(Evaluable arg0) {
+				// TODO Auto-generated method stub
+				return arg0 == null ? "" : arg0.toString();
+			}
+        });
+		
 		validateExpressionButton = new MyButtonFX("Validate", expressionBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				String evaluable = evaluableLeftComboBox.getValue() + " " + operatorBottomComboBox.getValue() + " " + evaluableRightComboBox.getValue();
-				MyLabel label = new MyLabel(evaluable);
+				ArrayList<Evaluable> eval = new ArrayList<Evaluable>();
+				eval.add(evaluableLeftComboBox.getValue());
+				eval.add(evaluableRightComboBox.getValue());
+				Expression expression = new Expression(eval, operatorBottomComboBox.getValue());
+				MyLabel label = new MyLabel(expression.toString());
 				label.setPrefWidth(blocksScrollPane.getPrefWidth());
 				nbExpressions++;
 				if(nbExpressions % 2 == 0) {
 					label.setStyle("-fx-background-color: #FFFFFF;");
 				}
 				expressionsGridPane.add(label, 0, nbExpressions);
-				evaluables.add(evaluable);
-				finalExpressionComboBox.getItems().add(evaluable);
+				evaluables.add(expression);
+				finalExpressionComboBox.getItems().add(expression);
+				evaluableRightComboBox.getItems().add(expression);
+				evaluableLeftComboBox.getItems().add(expression);
 			}
 		});
 		
@@ -192,8 +247,21 @@ public class BehavioursContent extends Content {
 		expressionsScrollPane.setContent(expressionsGridPane);
 		
 		finalExpressionLabel = new MyLabel("Final Expression", finalExpressionLabelBounds.computeBounds(width, height));
-		finalExpressionComboBox = new MyComboBox<String>(finalExpressionComboBounds.computeBounds(width, height),new ArrayList<String>());
-		
+		finalExpressionComboBox = new MyComboBox<Evaluable>(finalExpressionComboBounds.computeBounds(width, height),new ArrayList<Evaluable>());
+		finalExpressionComboBox.setConverter(new StringConverter<Evaluable>() {
+
+			@Override
+			public Evaluable fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String toString(Evaluable arg0) {
+				// TODO Auto-generated method stub
+				return arg0 == null ? "" : arg0.toString();
+			}
+        });
 		commandLabel = new MyLabel("Output command", commandsLabelBounds.computeBounds(width, height));
 		commandKeyComboBox = new MyComboBox<String>(commandComboBounds.computeBounds(width, height),new ArrayList<String>());
 		argsLabel = new MyLabel("Args",argsLabelBounds.computeBounds(width, height));
@@ -322,22 +390,7 @@ public class BehavioursContent extends Content {
 		variablesComboBox.getItems().clear();
 		for(int i = 0; i < environmentVariables.size(); i++) {
 			variablesComboBox.getItems().add(environmentVariables.get(i));
-		}
-		variablesComboBox.setConverter(new StringConverter<EnvironmentVariable>() {
-
-			@Override
-			public EnvironmentVariable fromString(String arg0) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public String toString(EnvironmentVariable arg0) {
-				// TODO Auto-generated method stub
-				return arg0 == null ? "" : arg0.getName();
-			}
-        });
-		
+		}		
 	}
 
 	public void updateUI() {

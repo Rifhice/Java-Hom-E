@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import server.models.environmentVariable.EnvironmentVariable;
+import user.models.environmentVariable.EnvironmentVariable;
 
 /**
  * An expression is composed by others expressions and / or blocks (i.e. evaluables).  
@@ -26,40 +26,21 @@ public class Expression implements Evaluable {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-    private int id;
     private ArrayList<Evaluable> evaluables;
-    private ArrayList<String> operators;
+    private String operator;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Expression() {}
 
-    public Expression(ArrayList<Evaluable> evaluables, ArrayList<String> operators) {
+    public Expression(ArrayList<Evaluable> evaluables, String operator) {
         this.evaluables = evaluables;
-        this.operators = operators;
-    }
-
-    public Expression(int id, ArrayList<Evaluable> evaluables, ArrayList<String> operators) {
-        this.id = id;
-        this.evaluables = evaluables;
-        this.operators = operators;
-    }
-    
-    public Expression(int id, ArrayList<String> operators) {
-        this.id = id;
-        this.operators = operators;
+        this.operator = operator;
     }
     // ================= //
     // ==== METHODS ==== //
     // ================= //
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public ArrayList<Evaluable> getEvaluables() {
         return evaluables;
@@ -69,59 +50,33 @@ public class Expression implements Evaluable {
         this.evaluables = evaluables;
     }
 
-    public ArrayList<String> getOperators() {
-        return operators;
+    public String getOperator() {
+        return operator;
     }
 
-    public void setOperators(ArrayList<String> operators) {
-        this.operators = operators;
+    public void setOperators(String operator) {
+        this.operator = operator;
     }
 
     // ==========================================
 
-    public boolean evaluate() {
-        int operatorCpt = 0;
-        boolean leftValue = evaluables.get(0).evaluate();
-        if(evaluables.size() > 1) {
-            for (int i = 1; i < evaluables.size(); i++) {
-                if(operators.get(operatorCpt).equals("&&")) {
-                    leftValue = leftValue && evaluables.get(i).evaluate();
-                }
-                else {
-                    leftValue = leftValue || evaluables.get(i).evaluate();
-                }		
-                operatorCpt++;
-            }
-        }
-        return leftValue;
-    }
-
     public String toString() {
-        String res = "EXP #"+id;
-        res += "(";
-        int operatorCpt = 0;
+        String res = "(";
         if(evaluables != null) {
-        	for (int i = 0; i < evaluables.size(); i++) {
-                res += "\n[" + evaluables.get(i).toString() + "]\n";
-                if(operatorCpt < operators.size()) {
-                    res += " " + operators.get(operatorCpt) + " ";
-                }
-                operatorCpt++;
-            }
+            res += " [" + evaluables.get(0).toString() + "] ";
+            res += " " + operator + " ";
+            res += " [" + evaluables.get(1).toString() + "] ";
         }        
         return res + ")";
     }
 
     public JSONObject toJson() {
     	JSONObject result = new JSONObject();
-        result.put("id", id);
         result.put("type", "expression");
         for (int i = 0; i < evaluables.size(); i++) {
 			result.append("evaluable",evaluables.get(i).toJson());
 		}
-        for (int i = 0; i < operators.size(); i++) {
-			result.append("operators", operators.get(i));
-		}
+		result.append("operators", operator);
         return result;
     }
     
@@ -136,28 +91,6 @@ public class Expression implements Evaluable {
             }
         }
         return result;
-    }
-
-    // TODO : To move in a Manager
-    public static Expression createExpressionFromJson(JSONObject json) {
-        ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
-        ArrayList<String> operators = new ArrayList<String>();
-        JSONArray arr = json.getJSONArray("evaluables");
-        for (int i = 0; i < arr.length(); i++){
-            JSONObject object = arr.getJSONObject(i);
-            if(object.getString("type").equals("block")) {
-                // TODO : fix function below
-                // evaluables.add(createBlockFromJson(object));
-            }
-            else {
-                evaluables.add(createExpressionFromJson(object));
-            }
-        }
-        arr = json.getJSONArray("operators");
-        for (int i = 0; i < arr.length(); i++) {
-            operators.add((String) arr.get(i));
-        }
-        return new Expression(evaluables, operators);
     }
 
     // TODO : To move in a Manager

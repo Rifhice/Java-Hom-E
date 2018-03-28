@@ -104,7 +104,6 @@ public class AmbienceManager extends Manager{
 			else {
 				result.put("ambience", ambience.toJSON());
 				result.put("result", "success");
-				System.out.println(result.toString());
 				SystemManager.sendToAllClient(result.toString());
 			}
 		} catch (Exception e) {
@@ -150,7 +149,6 @@ public class AmbienceManager extends Manager{
 		        	for(int i = 0; i < behavioursJSON.length(); i++) {
 		        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
 		        	}
-		        	System.out.println(behaviours);
 		        	Ambience ambience = new Ambience();
 		        	ambience.setName(json.getString("name"));
 		        	ambience.setBehaviours(behaviours);

@@ -55,47 +55,42 @@ public class SensorManager extends Manager{
 			String description = jsonToParse.getString("description");
 			
 			ArrayList<EnvironmentVariable> variables = new ArrayList<EnvironmentVariable>();
-			JSONArray arr = jsonToParse.getJSONArray("variables");
-			
-			for (int i = 0; i < arr.length(); i++){
-			    
-			    // Set the environment variable
-				JSONObject object = arr.getJSONObject(i);
-				EnvironmentVariable ev = new EnvironmentVariable();
-				ev.setName(object.getString("name"));
-                ev.setName(object.getString("description"));
-                ev.setName(object.getString("unit"));	
+			JSONObject object = jsonToParse.getJSONObject("variables");
+
+			EnvironmentVariable ev = new EnvironmentVariable();
+			ev.setName(object.getString("name"));
+            ev.setDescription(object.getString("description"));
+            ev.setUnit(object.getString("unit"));	
+            
+            Value value;
+            JSONObject valueJ = object.getJSONObject("value");
+            // Value Continuous
+            if(valueJ.getString("type").equals("continuous")) {
+                value = new ContinuousValue();
+                ((ContinuousValue) value).setValueMin(valueJ.getDouble("valueMin"));
+                ((ContinuousValue) value).setValueMax(valueJ.getDouble("valueMax"));
+                ((ContinuousValue) value).setCurrentValue(valueJ.getDouble("currentValue"));
+                ((ContinuousValue) value).setPrecision(valueJ.getDouble("precision"));
                 
-                Value value;
-                // Value Continuous
-                if(object.getString("type").equals("continuous")) {
-                    value = new ContinuousValue();
-                    ((ContinuousValue) value).setValueMin(object.getDouble("valueMin"));
-                    ((ContinuousValue) value).setValueMax(object.getDouble("valueMax"));
-                    ((ContinuousValue) value).setCurrentValue(object.getDouble("currentvalue"));
-                    ((ContinuousValue) value).setPrecision(object.getDouble("precision"));
-                    
-                    ev.setValue(value);
+                ev.setValue(value);
+            }
+            
+            // Value Discrete
+            else if(valueJ.getString("type").equals("discrete")) {
+                value = new DiscreteValue();
+                ((DiscreteValue) value).setCurrentValue(valueJ.getString("currentValue"));
+                
+                // Get the possible values
+                ArrayList<String> possibleValuesArray = new ArrayList<String>();
+                JSONArray valuesArray = valueJ.getJSONArray("possibleValues");
+                for (int j = 0; j < valuesArray.length(); j++) {
+                    possibleValuesArray.add(valuesArray.getString(j));
                 }
-                
-                // Value Discrete
-                else if(object.getString("type").equals("discrete")) {
-                    value = new DiscreteValue();
-                    ((DiscreteValue) value).setCurrentValue(object.getString("currentvalue"));
-                    
-                    // Get the possible values
-                    ArrayList<String> possibleValuesArray = new ArrayList<String>();
-                    JSONArray valuesArray = object.getJSONArray("possiblevalues");
-                    for (int j = 0; j < valuesArray.length(); j++) {
-                        possibleValuesArray.add(valuesArray.getString(j));
-                    }
-                    ((DiscreteValue) value).setPossibleValues(possibleValuesArray);        
-                    ev.setValue(value);
-                }
-                
-                variables.add(ev);			
-			}
-			return new Sensor(name, description, variables.get(0));
+                ((DiscreteValue) value).setPossibleValues(possibleValuesArray);        
+                ev.setValue(value);
+            }
+            	
+			return new Sensor(name, description, ev);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -146,7 +141,17 @@ public class SensorManager extends Manager{
 	public void changeEnvironmentVariableValue(JSONObject json,ConnectionToClient client) {
 		Sensor sensor = getSensorById(json.getInt("id"));
 		if(sensor != null) {
-			sensor.changeValue(json.getInt("idVariable"), json.getString("value"));
+			sensor.changeValue(json.getString("value"));
+			JSONObject result = new JSONObject();
+			result.put("recipient", "sensor");
+			result.put("action", "changeValue");
+			result.put("idSensor", json.getInt("id"));
+			result.put("value", json.getString("value"));
+			try {
+				SystemManager.sendToAllClient(result.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		else {
 			System.out.println("SENSOR UNKNOWN OR NOT CONNECTED");

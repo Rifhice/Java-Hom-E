@@ -109,17 +109,11 @@ public class SensorConsole implements ChatIF
 	  */
 	  SensorConsole server = new SensorConsole(DEFAULT_HOST, DEFAULT_PORT);
 	  //ContinuousVariable v1 = new ContinuousVariable("Temperature", "La temperature", "°C", 0, 20, 1, 15);
-	  DiscreteValue v2 = new DiscreteValue("Presence", "Presence de quelqu'un dans la piece", "N/A", new ArrayList<String>(Arrays.asList("true","false")), "false");
-	  server.client.setSensor(new Sensor(server.getClient(), "zpfzef", "dzeezhfhzfh", new ArrayList<Variable>(Arrays.asList(v2))));
+	  DiscreteValue v2 = new DiscreteValue(new ArrayList<String>(Arrays.asList("true","false")), "false");
+	  EnvironmentVariable ev = new EnvironmentVariable("Presence", "Presence de quelqu'un dans la piece", "N/A",v2);
+	  System.out.println(ev);
+	  server.client.setSensor(new Sensor(server.getClient(), "Presence", "Putain ca marche !", ev));
 	  new ServerSensor(1114,server.client);
-	  try {
-		Thread.sleep(1000);
-		 v2.setValue("true");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-
-	  
-		}
   }
 }
 //End of ConsoleChat class

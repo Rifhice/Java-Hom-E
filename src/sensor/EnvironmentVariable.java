@@ -1,16 +1,17 @@
-package user.models;
+package sensor;
 
 
 import java.util.Observable;
 
 import org.json.JSONObject;
 
+
 /**
  * An environment variable is an interesting value  for the server, related to the environment. 
  * It allows the server to send the right action to the actuators.
  * @author Clm-Roig
  */
-public class EnvironmentVariable extends Observable{ 
+public class EnvironmentVariable extends Observable{
     
     // ==================== //
     // ==== ATTRIBUTES ==== //
@@ -52,6 +53,13 @@ public class EnvironmentVariable extends Observable{
 	
 	public EnvironmentVariable(int id, String name, String description, String unit, Value value) {
         this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.description = description;
+        this.value = value;
+    }
+	
+	public EnvironmentVariable(String name, String description, String unit, Value value) {
         this.name = name;
         this.unit = unit;
         this.description = description;
@@ -121,15 +129,17 @@ public class EnvironmentVariable extends Observable{
     public void changeValue(String val) {
     	if(value instanceof ContinuousValue) {
     		((ContinuousValue) value).setCurrentValue(Double.parseDouble(val));
+    		Sensor.updateVariable(this);
     	}
     	else {
     		((DiscreteValue) value).setCurrentValue(val);
+    		Sensor.updateVariable(this);
     	}
     }
     
     // =================================================
     public String toString() {
-        return id + ": " + name;
+        return id + ": " + name + description;
     }
     
     public JSONObject toJson() {
@@ -138,6 +148,9 @@ public class EnvironmentVariable extends Observable{
     	result.put("name", name);
     	result.put("unit", unit);
     	result.put("description", description);
+    	if(value != null) {
+    		result.put("value", value.toJson());
+    	}
     	return result;
     }
 

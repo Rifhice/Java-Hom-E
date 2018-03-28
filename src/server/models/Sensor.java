@@ -57,15 +57,13 @@ public class Sensor extends ExternalActor{
 		this.id = id;
 	}
 	
-	public void changeValue(int idVariable, String value) {
-		if(environmentVariables.getId() == idVariable) {
-			if(environmentVariables.getValue() instanceof ContinuousValue) {
-				double valueDouble = Double.parseDouble(value);
-				((ContinuousValue)environmentVariables.getValue()).setCurrentValue(valueDouble);
-			}
-			else {
-				((DiscreteValue)environmentVariables.getValue()).setCurrentValue(value);
-			}
+	public void changeValue(String value) {
+		if(environmentVariables.getValue() instanceof ContinuousValue) {
+			double valueDouble = Double.parseDouble(value);
+			((ContinuousValue)environmentVariables.getValue()).setCurrentValue(valueDouble);
+		}
+		else {
+			((DiscreteValue)environmentVariables.getValue()).setCurrentValue(value);
 		}
 	}
 	

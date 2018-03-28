@@ -203,6 +203,13 @@ public class SensorContent extends Content {
 					}
 					updateUI();
 					break;
+				case "changeValue":
+					for (int i = 0; i < sensors.size(); i++) {
+						if(sensors.get(i).getId() == json.getInt("idSensor")) {
+							sensors.get(i).changeValue(json.getString("value"));
+						}
+					}
+					break;
 				default:
 					break;
 				}

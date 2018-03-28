@@ -65,9 +65,12 @@ public class SQLiteSensorDao extends SensorDAO{
     }
 
     private boolean createEnvironmentVariable(EnvironmentVariable variable) {
+	  	  if(!createValue(variable.getValue())) {
+			  return false;
+	      }
     	String sql = "INSERT INTO environmentVariables "
-                + "(name, description,unit, fk_sensor_id) VALUES "
-                + "(?, ?, ?,?)";
+                + "(name, description,unit, fk_sensor_id,fk_vvalue_id) VALUES "
+                + "(?, ?, ?,?,?)";
         
         // Insert the object
         int created = 0;
@@ -78,20 +81,11 @@ public class SQLiteSensorDao extends SensorDAO{
               prepStat.setString(2, variable.getDescription());
               prepStat.setString(3, variable.getUnit());
               prepStat.setInt(4, variable.getSensor().getId());
+              prepStat.setInt(5, SQLiteDAOTools.getLastId(connect));
               created = prepStat.executeUpdate();
               // Get the id generated for this object
               if(created > 0) {
                   variable.setId(SQLiteDAOTools.getLastId(connect));
-                  if(variable.getValue() instanceof ContinuousValue) {
-                	  if(!createValue((ContinuousValue)variable.getValue())) {
-                		  return false;
-                	  }
-                  }
-                  else if(variable.getValue() instanceof DiscreteValue) {
-                	  if(!createValue((DiscreteValue)variable.getValue())) {
-                		  return false;
-                	  }
-                  }
               }
               else {
                   return false;
@@ -165,7 +159,7 @@ public class SQLiteSensorDao extends SensorDAO{
               prepStat.setFloat(2,(float) value.getValueMin());
               prepStat.setFloat(3, (float)value.getValueMax());
               prepStat.setFloat(4,(float) value.getCurrentValue());
-              prepStat.setFloat(5, (float)value.getPrecision());          
+              prepStat.setFloat(5, (float)value.getPrecision());  
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
@@ -196,7 +190,7 @@ public class SQLiteSensorDao extends SensorDAO{
               for (int i = 0; i < value.getPossibleValues().size(); i++) {
 				json.append("possibleValues", value.getPossibleValues().get(i));
               }
-              prepStat.setString(3, json.toString());       
+              prepStat.setString(3, json.toString());   
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
@@ -289,9 +283,9 @@ public class SQLiteSensorDao extends SensorDAO{
             	variable.setName(rs.getString("name"));
             	variable.setDescription(rs.getString("description"));
             	variable.setUnit(rs.getString("unit"));
-            	DiscreteValue dvalue = getDiscreteValue(variable.getId());
+            	DiscreteValue dvalue = getDiscreteValue(rs.getInt("fk_vvalue_id"));
             	if(dvalue == null) {
-            		ContinuousValue cvalue = getContinuousValue(variable.getId());
+            		ContinuousValue cvalue = getContinuousValue(rs.getInt("fk_vvalue_id"));
             		if(cvalue == null) {
             			System.out.println("AUCUNE VALUE TROUVE");
             		}

@@ -5,15 +5,22 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.BehaviourDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Behaviour;
-import server.models.categories.SensorCategory;
 import ocsf.server.ConnectionToClient;
 
 public class BehaviourManager extends Manager{
 
+    private BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
 	private static BehaviourManager manager = null;
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
 	private BehaviourManager() {
 	}
 	
@@ -23,14 +30,23 @@ public class BehaviourManager extends Manager{
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public void createBehaviour(JSONObject json) {
+	    
 	}
 	
+	/**
+     * Get all the behaviours in DB. Send to the client a JSONObject.    
+     * @param json
+     * @param client
+     */
 	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
 		ArrayList<Behaviour> behaviours = null;
 
 		try {
-			behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+			behaviours = behaviourDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -75,6 +91,15 @@ public class BehaviourManager extends Manager{
 		behaviour.setActivated(false);
 	}
 
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>getAll</li>
+     * <li>create</li>
+     * <li>delete</li>
+     * <li>update</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");

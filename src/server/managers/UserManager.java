@@ -12,8 +12,6 @@ import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import javafx.util.Pair;
-import server.models.Ambience;
-import server.models.Behaviour;
 import server.models.Role;
 import server.models.User;
 import server.models.Right;
@@ -33,6 +31,9 @@ public class UserManager extends Manager{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    /**
+     *  Singleton pattern
+     */
     private UserManager() {
         users = new ArrayList<User>();
     }
@@ -46,7 +47,6 @@ public class UserManager extends Manager{
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-
     /**
      * Return a pair with the user and a code defining success or failure : 
      * 0 = success, 
@@ -92,7 +92,7 @@ public class UserManager extends Manager{
     	ArrayList<User> users = null;
 
 		try {
-			users = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO().getAll();
+			users = userDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -128,7 +128,15 @@ public class UserManager extends Manager{
 			e.printStackTrace();
 		}
     }
-
+    
+    /**
+     * Possible values for key "action":
+     * <ul>
+     * <li>login</li>
+     * <li>loginAsGuest</li>
+     * <li>getAll</li>
+     * </ul>
+     */
     @Override
     public void handleMessage(JSONObject json, ConnectionToClient client) {
         String action = json.getString("action");

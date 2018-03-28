@@ -3,7 +3,6 @@ package user.models;
 
 import java.util.Observable;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**

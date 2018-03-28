@@ -1,7 +1,5 @@
 package actuator;
 
-import java.util.ArrayList;
-
 import org.json.JSONObject;
 
 public abstract class Argument {

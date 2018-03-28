@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
-import org.postgresql.shaded.com.ongres.scram.common.message.ClientFinalMessage;
-
-import server.models.environmentVariable.EnvironmentVariable;
 
 public class Sensor {
 

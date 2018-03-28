@@ -1,8 +1,6 @@
 package server.models;
 
 
-import java.util.ArrayList;
-
 import org.json.JSONObject;
 
 import server.models.categories.SensorCategory;

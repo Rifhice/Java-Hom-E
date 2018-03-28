@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorDAO;
-import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;

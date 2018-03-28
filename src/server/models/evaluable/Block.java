@@ -2,7 +2,6 @@ package server.models.evaluable;
 
 import org.json.JSONObject;
 
-import server.models.commandValue.CommandValue;
 import server.models.environmentVariable.EnvironmentVariable;
 import server.models.environmentVariable.Value;
 

@@ -15,7 +15,6 @@ import server.dao.abstractDAO.RightDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
-import server.models.ComplexAction;
 
 public class PostGreDAOFactory extends AbstractDAOFactory {
     protected Connection connect = DriverConnection.getInstance(DriverConnection.POSTGRESQL_DRIVER); 

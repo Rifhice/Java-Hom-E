@@ -1,19 +1,13 @@
 package server.managers;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONObject;
 
-import javafx.util.Pair;
 import ocsf.server.ConnectionToClient;
 import server.dao.abstractDAO.RightDAO;
-import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Right;
 import server.models.User;
-import server.tools.Security;
 
 
 public class RightManager extends Manager {
@@ -25,19 +19,38 @@ public class RightManager extends Manager {
     private RightDAO rightDAO = AbstractDAOFactory.getFactory(SystemManager.db).getRightDAO();
     private static RightManager manager = null;
     
+    
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
+    private RightManager() {
+        
+    }
+    
+    public static RightManager getManager() {
+        if(manager == null) 
+            manager = new RightManager();
+        return manager;
+    }
+    
     // ================= //
     // ==== METHODS ==== //
-    // ================= // 
-    
-  
-    
+    // ================= //
+    /**
+     * Get an user in DB by his id.
+     * @param json
+     * @param client
+     */
     public void getByUser(JSONObject json, ConnectionToClient client) {
     	ArrayList<Right> rights = null;
     	int id = json.getInt("id");
     	User user = new User();
 		try {
 			user = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO().getById(id);
-			rights = AbstractDAOFactory.getFactory(SystemManager.db).getRightDAO().getByUser(user);
+			rights = rightDAO.getByUser(user);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -56,7 +69,7 @@ public class RightManager extends Manager {
     public void getAll(JSONObject json, ConnectionToClient client) {
     	ArrayList<Right> rights = null;
 		try {
-			rights = AbstractDAOFactory.getFactory(SystemManager.db).getRightDAO().getAll();
+			rights = rightDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -72,13 +85,16 @@ public class RightManager extends Manager {
     	
     }
 		
-		
-
+    /**
+     * Possible values for key "action":
+     * <ul>
+     * <li>getByUser</li>
+     * <li>getAll</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");
-        System.out.println(action);
-        String user;
         switch(action) {
 	        case "getByUser":
 	            getByUser(json,client);

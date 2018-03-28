@@ -28,6 +28,9 @@ public class SensorManager extends Manager{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+	/**
+	 *  Singleton pattern
+	 */
 	private SensorManager() {
 		sensors = new ArrayList<Sensor>();
 	}
@@ -41,7 +44,6 @@ public class SensorManager extends Manager{
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-	
 	/**
 	 * Create a sensor from a JSON. 
 	 * @param jsonToParse
@@ -210,6 +212,15 @@ public class SensorManager extends Manager{
         }
 	}
 	
+    /**
+     * Possible values for key "action":
+     * <ul>
+     * <li>post</li>
+     * <li>changeValue</li>
+     * <li>getEnvironmentVariables</li>
+     * <li>getAll</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");

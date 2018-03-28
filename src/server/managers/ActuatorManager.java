@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.ActuatorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Command;
@@ -17,10 +18,17 @@ import ocsf.server.ConnectionToClient;
 
 public class ActuatorManager extends Manager {
 	
+    private ActuatorDAO actuatorDAO = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
 	private ArrayList<Actuator> actuators;
 	
 	private static ActuatorManager manager = null;
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+	/**
+	 *  Singleton pattern
+	 */
 	private ActuatorManager() {
 		actuators = new ArrayList<Actuator>();
 	}
@@ -31,6 +39,9 @@ public class ActuatorManager extends Manager {
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //	
 	public void registerActuatorToTheSystem(JSONObject json) {
 		// TODO
 	}
@@ -94,7 +105,7 @@ public class ActuatorManager extends Manager {
 		Actuator actuator = getActuatorFromJson(json);
 		Actuator create = null;
 		try {
-		 create = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO().create(actuator);
+		 create = actuatorDAO.create(actuator);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -130,6 +141,13 @@ public class ActuatorManager extends Manager {
 		}
 	}
 	
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>post</li>
+     * <li>execute</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String verb = json.getString("verb");

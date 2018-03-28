@@ -545,7 +545,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             ResultSet rs = prepStat.executeQuery();
 
             if(rs.next()) {                
-                if(rs.getInt("DVpossible_values") != 0) {
+                if(rs.getString("DVpossible_values") != null) {
                     value = new DiscreteValue();
                     ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
                     
@@ -624,6 +624,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         EnvironmentVariable ev = new EnvironmentVariable();
         ev.setId(1);
         
-        System.out.println(test.getAll());
+        for(Behaviour beh : test.getAll()){
+            System.out.println("\n"+beh);
+        }
     }
 }

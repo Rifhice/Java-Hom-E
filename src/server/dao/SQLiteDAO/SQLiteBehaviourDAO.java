@@ -30,7 +30,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         super(connectionDriver);
         // TODO Auto-generated constructor stub
     }
-    
+
 
     @Override
     public Behaviour getById(int id) throws DAOException {
@@ -527,7 +527,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 JSONArray array = JSON.getJSONArray("operators");
                 ArrayList<String> arrayl = new ArrayList(array.toList());
                 exp.setOperators(arrayl);
-                
+
                 // Get Evaluables (blocks only for now
                 // TODO : get Expressions recursively 
                 ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
@@ -540,7 +540,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         }
         return exp;
     }
-    
+
     /**
      * Return the list of Evaluables of an Expression. If none, return an empty list.
      * @param exp
@@ -549,12 +549,32 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public ArrayList<Evaluable> getEvaluables(Expression exp) throws DAOException {
         ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
-        
-        // TODO
-        
+        String sql = "SELECT B.id AS Bid, B.operator AS Boperator "
+                + "FROM isPartOf AS IPO "
+                + "LEFT JOIN Blocks AS B ON B.id = IPO.fk_block_id "
+                + "WHERE IPO.fk_expression_id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, exp.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                do {
+                    Block b = new Block();
+                    b.setId(rs.getInt("Bid"));
+                    b.setOperator(rs.getString("Boperator"));
+                    b.setValue(getValue(b));
+                    b.setEnvironmentVariable(getEnvironmentVariable(b));                    
+                    evaluables.add(b);                   
+                } while(rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getEvaluables("+ exp.getId()+") :" + e.getMessage(), e);
+        }
         return evaluables;
     }
-    
+
     /**
      * Return the EnvironmentVariable of a block. If none, return null.
      * @param environmentVariable
@@ -563,12 +583,30 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public EnvironmentVariable getEnvironmentVariable(Block block) throws DAOException {
         EnvironmentVariable ev = null;
-        
-        // TODO 
-         
+        String sql = "SELECT EV.id AS id, EV.name AS name, EV.description AS description, EV.unit AS unit "
+                + "FROM Blocks AS B "
+                + "JOIN EnvironmentVariables AS EV ON EV.id = B.fk_environmentVariable_id "
+                + "WHERE B.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, block.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                ev = new EnvironmentVariable();
+                ev.setId(rs.getInt("id"));
+                ev.setName(rs.getString("name"));
+                ev.setDescription(rs.getString("description"));
+                ev.setUnit(rs.getString("unit"));
+                ev.setValue(getValue(ev));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getEnvironmentVariable("+ block.getId()+") :" + e.getMessage(), e);
+        }
         return ev; 
     }
-    
+
     /**
      * Return the Value of an EnvironmentVariable. If none, return null.
      * @param ev
@@ -579,10 +617,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         Value value = null;
         
         // TODO 
-        
+
         return value;
     }
-    
+
     /**
      * Return the value of a block. If none, return null.
      * @param block
@@ -591,9 +629,9 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public Value getValue(Block block) throws DAOException {
         Value value = null;
-        
+
         // TODO 
-        
+
         return value;
     }
 
@@ -605,6 +643,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         // System.out.println(test.getAll());
         Behaviour b = new Behaviour();
         b = test.getById(1);
-        System.out.println(((SQLiteBehaviourDAO)test).getExpression(b));
+        Expression e = new Expression();
+        e.setId(1);
+        Block bl = new Block();
+        bl.setId(1);
+        System.out.println(((SQLiteBehaviourDAO)test).getEnvironmentVariable(bl));
     }
 }

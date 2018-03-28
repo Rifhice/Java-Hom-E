@@ -102,7 +102,9 @@ public class Block implements Evaluable {
     }
 
     public String toString() {
-        return environmentVariable + " " + operator + " " + value;
+        String res = "#" + environmentVariable.getId() + " " + environmentVariable.getName();
+        res += " " + operator + " " + value;
+        return res;
     }
 
     public JSONObject toJson() {

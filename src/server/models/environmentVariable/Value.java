@@ -48,7 +48,7 @@ public abstract class Value extends Observable {
     public abstract boolean isInferiorOrEqual(Object value);
     
     public String toString() {
-        String res = "VALUE #" + getId();
+        String res = "#" + getId();
         return res;
     }
 }

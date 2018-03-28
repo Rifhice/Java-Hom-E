@@ -10,8 +10,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.util.StringConverter;
 import user.ClientFX;
+import user.models.Actuator;
+import user.models.Command;
+import user.models.CommandValue;
+import user.models.ContinuousCommandValue;
+import user.models.DiscreteCommandValue;
 import user.models.environmentVariable.ContinuousValue;
 import user.models.environmentVariable.DiscreteValue;
 import user.models.environmentVariable.EnvironmentVariable;
@@ -75,8 +81,7 @@ public class BehavioursContent extends Content {
 	MyComboBox<Evaluable> finalExpressionComboBox;
 	
 	MyLabel commandLabel;
-	MyComboBox<String> commandKeyComboBox;
-	MyLabel argsLabel;
+	MyComboBox<Command> commandKeyComboBox;
 	MyScrollPane argsScrollPane;
 	MyGridPane argsGridPane;
 	
@@ -91,6 +96,7 @@ public class BehavioursContent extends Content {
 	// ========= ATTRIBUTES ========= //
 	private ArrayList<EnvironmentVariable> environmentVariables = new ArrayList<EnvironmentVariable>();
 	private ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
+	private ArrayList<Command> commands = new ArrayList<Command>();
 	private int nbBlocks = 0, nbExpressions = 0;
 	
 	private BehavioursContent() {		
@@ -263,11 +269,46 @@ public class BehavioursContent extends Content {
 			}
         });
 		commandLabel = new MyLabel("Output command", commandsLabelBounds.computeBounds(width, height));
-		commandKeyComboBox = new MyComboBox<String>(commandComboBounds.computeBounds(width, height),new ArrayList<String>());
-		argsLabel = new MyLabel("Args",argsLabelBounds.computeBounds(width, height));
+		commandKeyComboBox = new MyComboBox<Command>(commandComboBounds.computeBounds(width, height),new ArrayList<Command>());
+		commandKeyComboBox.setConverter(new StringConverter<Command>() {
+
+			@Override
+			public Command fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String toString(Command arg0) {
+				// TODO Auto-generated method stub
+				return arg0 == null ? "" : arg0.getKey();
+			}
+        });
+		commandKeyComboBox.valueProperty().addListener(new ChangeListener<Command>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Command> observable, Command oldValue, Command newValue) {
+				argsGridPane.getChildren().clear();
+				Command currentCommand = newValue;
+            	int j;
+            	for (j= 0; j < currentCommand.getCommandValues().size(); j++) {
+					CommandValue argument = currentCommand.getCommandValues().get(j);
+                    if(argument instanceof DiscreteCommandValue) {
+                    	DiscreteCommandValue argumentCasted = (DiscreteCommandValue)argument;    
+                    	argsGridPane.add(new MyComboBox<String>(argumentCasted.getPossibleValues()), 0, j + 1);
+                    }
+                    else {
+                    	ContinuousCommandValue argumentCasted = (ContinuousCommandValue)argument;
+                    	argsGridPane.add(new MySlider(argumentCasted.getValueMin(), argumentCasted.getValueMax(), argumentCasted.getPrecision()), 0, j+1);
+                    }
+				}
+			}
+		});
+		
+		
+		
 		
 		argsGridPane = new MyGridPane(argsGridBounds.computeBounds(width, height));
-		argsGridPane.add(new MyLabel("args test"), 0, 0);
 		argsScrollPane = new MyScrollPane(argsGridBounds.computeBounds(width, height));
 		argsScrollPane.setContent(argsGridPane);
 		
@@ -303,7 +344,6 @@ public class BehavioursContent extends Content {
         
         this.getChildren().add(commandLabel);
         this.getChildren().add(commandKeyComboBox);
-        this.getChildren().add(argsLabel);
         this.getChildren().add(argsScrollPane);
         
         this.getChildren().add(valideButton);
@@ -314,6 +354,7 @@ public class BehavioursContent extends Content {
 	
 	public void updateData() {
 	    updateEnvironmentVariables();
+	    updateCommands();
 	}
 	
 	/**
@@ -329,6 +370,17 @@ public class BehavioursContent extends Content {
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	public void updateCommands() {
+		JSONObject getCommands = new JSONObject();
+        getCommands.put("recipient", "command");
+        getCommands.put("action", "getAll");
+        try {
+            ClientFX.client.sendToServer(getCommands.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+	    }
 	}
 	
 	public static Content getInstance() {
@@ -373,9 +425,52 @@ public class BehavioursContent extends Content {
                             // TODO : decomment 1rst line and delete 2nd one when getAll() functional
                             // behaviours.add(new Behaviour(current.getInt("id"), current.getString("name"), current.getBoolean("isActivated")));
                         }
-                        updateCommandValuesUI();
+                        updateEnvironmentVariablesUI();
 						break;
 					}
+					break;
+				case "command":
+	                    switch (action) {
+	                    case "getAll":
+	                    	//Parses the commands
+	                    	JSONArray commands = json.getJSONArray("commands");
+	                    	for (int i = 0; i < commands.length(); i++) {
+	                    		JSONObject currentCommand = commands.getJSONObject(i);
+								ArrayList<CommandValue> arguments = new ArrayList<CommandValue>();
+								try {
+		                    		for (int j = 0; j < currentCommand.getJSONArray("commandValue").length(); j++) {
+										JSONObject currentArgument = currentCommand.getJSONArray("commandValue").getJSONObject(j);
+										if(currentArgument.getString("type").equals("discrete")) {
+											ArrayList<String> possibleValues = new ArrayList<String>();
+											for (int k = 0; k < currentArgument.getJSONArray("possibleValues").length(); k++) {
+												possibleValues.add(currentArgument.getJSONArray("possibleValues").getString(k));
+											}
+											arguments.add(new DiscreteCommandValue(possibleValues));
+										}
+										else {
+											arguments.add(new ContinuousCommandValue(currentArgument.getFloat("valueMin"),currentArgument.getFloat("valueMax"),currentArgument.getFloat("precision")));
+										}
+									}
+								}
+								catch(Exception e) {
+									System.out.println("Pas d'arguments pour cette commande !");
+								}
+	                    		this.commands.add(new Command(currentCommand.getString("name"),currentCommand.getString("description"),currentCommand.getString("key"),arguments,new Actuator(currentCommand.getInt("actuator"))));
+							}
+	                    	updateCommandUI();
+	                        break;
+	                    case "create":
+	                        
+	                        break;
+	                    case "update":
+	                        
+	                        break;
+	                    case "delete":
+	                       
+	                        break;
+	                    default:
+	                        break;
+	                    }
 					break;
 				default:
 					break;
@@ -386,14 +481,18 @@ public class BehavioursContent extends Content {
 		}
 	}
 
-	private void updateCommandValuesUI() {
+	private void updateEnvironmentVariablesUI() {
 		variablesComboBox.getItems().clear();
 		for(int i = 0; i < environmentVariables.size(); i++) {
 			variablesComboBox.getItems().add(environmentVariables.get(i));
 		}		
 	}
-
-	public void updateUI() {
+	
+	private void updateCommandUI() {
+		commandKeyComboBox.getItems().clear();
+		for(int i = 0; i < commands.size(); i++) {
+			commandKeyComboBox.getItems().add(commands.get(i));
+		}
 	}
 	
 

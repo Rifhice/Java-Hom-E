@@ -17,6 +17,10 @@ import server.factories.AbstractDAOFactory;
 import server.models.AtomicAction;
 import server.models.Behaviour;
 import server.models.ComplexAction;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
+import server.models.environmentVariable.EnvironmentVariable;
+import server.models.environmentVariable.Value;
 import server.models.evaluable.Block;
 import server.models.evaluable.Expression;
 
@@ -299,8 +303,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
                 + "Bl.id AS Blid, Bl.operator AS Bloperator, "
                 + "VV.id AS VVid, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit, "
-                + "EV.id AS EVid, CVV.value_min, CVV.value_max, CVV.current_value, CVV.precision, "
-                + "DVV.current_value, DVV.possible_values "
+                + "EV.id AS EVid, CVV.value_min AS CVVvalue_min, CVV.value_max AS CVVvalue_max, CVV.current_value AS CVVcurrent_value, CVV.precision AS CVVprecision, "
+                + "V.id AS Vid, CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
+                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values, "
+                + "DVV.current_value AS DVVcurrent_value, DVV.possible_values AS DVVpossible_values "
                 + "FROM Behaviours AS B "
                 + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
                 + "JOIN IsPartOf AS IPO ON IPO.fk_expression_id = E.id "
@@ -308,8 +314,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 + "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable_id "
                 + "JOIN VValues AS VV ON VV.id = EV.fk_vvalue_id "
                 + "JOIN VValues AS V ON V.id = Bl.fk_vvalue_id "
-                + "JOIN DiscreteVValues AS DVV ON DVV.fk_vvalue_id = VV.id "
-                + "JOIN ContinuousVValues AS CVV ON CVV.fk_vvalue_id = VV.id "
+                + "LEFT JOIN DiscreteVValues AS DVV ON DVV.fk_vvalue_id = VV.id "
+                + "LEFT JOIN ContinuousVValues AS CVV ON CVV.fk_vvalue_id = VV.id "
+                + "LEFT JOIN DiscreteVValues AS DV ON DV.fk_vvalue_id = V.id "
+                + "LEFT JOIN ContinuousVValues AS CV ON CV.fk_vvalue_id = V.id "
                 + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
                 + "JOIN AtomicActions AS Ac ON Ac.id = L.fk_atomicAction_id "
                 + "LEFT JOIN Executes AS Ex ON Ex.fk_behaviour_id = B.id "
@@ -380,9 +388,51 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
                     atomics.add(atomic);
                     
+                    int value1id = rs.getInt("VVid");
+                    int value2id = rs.getInt("Vid"); 
+                    
+                    if (rs.getString("DVpossible_values") != null) {
+                    	DiscreteValue DV = new DiscreteValue();
+                    	try {
+        					JSONObject JSON = new JSONObject(rs.getString("DVpossible_values"));
+        					JSONArray array = JSON.getJSONArray("possible_values");
+        					ArrayList<String> arrayl = new ArrayList(array.toList());
+        					DV.setPossibleValues(arrayl);
+
+        				} catch (Exception e) {
+        					
+        				}
+                    	DV.setCurrentValue(rs.getString("DVcurrent_value"));
+                    	DV.setId(value2id);
+                    } else {
+                    	ContinuousValue CV = new ContinuousValue(value2id, rs.getInt("CVvalue_min"), rs.getInt("CVvalue_max"), rs.getInt("CVprecision"), rs.getInt("CVcurrent_value"));
+                    }
+                    
+                    if (rs.getString("DVVpossible_values") != null) {
+                    	DiscreteValue DVV = new DiscreteValue();
+                    	try {
+        					JSONObject JSON2 = new JSONObject(rs.getString("DVVpossible_values"));
+        					JSONArray array = JSON2.getJSONArray("possible_values");
+        					ArrayList<String> arrayl = new ArrayList(array.toList());
+        					DVV.setPossibleValues(arrayl);
+
+        				} catch (Exception e) {
+        					
+        				}
+                    	DVV.setCurrentValue(rs.getString("DVcurrent_value"));
+                    	DVV.setId(value1id);
+                    } else {
+                    	ContinuousValue CVV = new ContinuousValue(value1id, rs.getInt("CVVvalue_min"), rs.getInt("CVVvalue_max"), rs.getInt("CVVprecision"), rs.getInt("CVVcurrent_value"));
+                    }
+                    
+                    //Faire Environnement variable avec Continuous ou Discrete
+                    
+                    
+                    
+                    
                     int blockId = rs.getInt("Blid");
                     String blockOperator = rs.getString("Bloperator");
-                    //EnvironmentVariable ev = new EnvironmentVariable(rs.getInt(EVid), rs.getString(EVname), rs.getString(EVdescription), rs.getString(EVunit));
+                    EnvironmentVariable ev = new EnvironmentVariable(rs.getInt("EVid"), rs.getString("EVname"), rs.getString("EVdescription"), rs.getString("EVunit"));
                     //Block block= new Block(blockId, ev, blockOperator); 
                              
                     

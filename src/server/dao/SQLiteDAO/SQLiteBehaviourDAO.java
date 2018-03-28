@@ -317,192 +317,54 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return deletedBehaviour + deletedLaunches + deletedExecutes;
     }
 
+    /**
+     * Returns the list of all the behaviours. If none, returns.
+     * Included with the behaviour : 
+     * <ul>
+     * <li>AtomicActions</li>
+     * <li>Expression (non-recursive, only blocks)</li>
+     * <li>Blocks</li>
+     * <li>EnvironmentVariable</li>
+     * <li>Values (Block and EV ones)</li>
+     * <ul>     * 
+     * @throws DAOException
+     */
     @Override
     public ArrayList<Behaviour> getAll() throws DAOException {
         ArrayList<Behaviour> behaviours = new ArrayList<Behaviour>();
-        String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
-                + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
-                + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
-                + "Bl.id AS Blid, Bl.operator AS Bloperator, "
-                + "VV.id AS VVid, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit, "
-                + "EV.id AS EVid, CVV.value_min AS CVVvalue_min, CVV.value_max AS CVVvalue_max, CVV.current_value AS CVVcurrent_value, CVV.precision AS CVVprecision, "
-                + "V.id AS Vid, CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
-                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values, "
-                + "DVV.current_value AS DVVcurrent_value, DVV.possible_values AS DVVpossible_values "
+        String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated "
                 + "FROM Behaviours AS B "
-                + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
-                + "JOIN IsPartOf AS IPO ON IPO.fk_expression_id = E.id "
-                + "JOIN Blocks AS Bl ON Bl.id = IPO.fk_block_id " 
-                + "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable_id "
-                + "JOIN VValues AS VV ON VV.id = EV.fk_vvalue_id "
-                + "JOIN VValues AS V ON V.id = Bl.fk_vvalue_id "
-                + "LEFT JOIN DiscreteVValues AS DVV ON DVV.fk_vvalue_id = VV.id "
-                + "LEFT JOIN ContinuousVValues AS CVV ON CVV.fk_vvalue_id = VV.id "
-                + "LEFT JOIN DiscreteVValues AS DV ON DV.fk_vvalue_id = V.id "
-                + "LEFT JOIN ContinuousVValues AS CV ON CV.fk_vvalue_id = V.id "
-                + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
-                + "JOIN AtomicActions AS Ac ON Ac.id = L.fk_atomicAction_id "
-                + "LEFT JOIN Executes AS Ex ON Ex.fk_behaviour_id = B.id "
-                + "LEFT JOIN ComplexActions AS Ca ON Ca.id = Ex.fk_complexAction_id "
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             ResultSet rs = prepStat.executeQuery();
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            // Print rs
-
-            //while (rs.next()) {
-            //    for (int i = 1; i <= columnsNumber; i++) {
-            //        if (i > 1) System.out.print(" | ");
-            //        System.out.print(rs.getString(i));
-            //    }
-            //    System.out.println("");
-            //}
-
             if(rs.next()) {
-                // Know if the behaviour manipulated changed.
-                int previousId = 0;
-                ArrayList<AtomicAction> atomics = new ArrayList<AtomicAction>();
-                ArrayList<ComplexAction> complexs = new ArrayList<ComplexAction>();
-                ArrayList<Evaluable> blocks = new ArrayList<Evaluable>();
-
-                Behaviour behaviour = new Behaviour();
-                Expression E = null;
                 do {
-                    if(previousId != rs.getInt("id")) {
-                        // Not first behaviour : push the previous behaviour
-                        if(previousId != 0) {
-                            behaviour.setAtomicActions(atomics);
-                            behaviour.setComplexActions(complexs);
-                            behaviours.add(behaviour);   
-
-                            complexs= new ArrayList<ComplexAction>();
-                            atomics = new ArrayList<AtomicAction>();
-                            //blocks = new ArrayList<Evaluable>();
-                            behaviour = new Behaviour();  
-
-                        }   
-
-
-                        behaviour.setId(rs.getInt("id"));
-                        behaviour.setName(rs.getString("name"));
-                        behaviour.setDescription(rs.getString("description"));
-                        behaviour.setActivated(rs.getBoolean("isActivated"));
-
-                        try {
-                            JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
-                            JSONArray array = JSON.getJSONArray("operators");
-                            ArrayList<String> arrayl = new ArrayList(array.toList());
-                            E = new Expression(rs.getInt("Eid"), arrayl);
-                            E.setEvaluables(blocks);
-                            behaviour.setExpression(E);
-
-                        } catch (Exception e) {
-
-                        }
-                        previousId = rs.getInt("id");                      
-                    }
-
-                    // Same behaviour as previous one, we add the next atomicAction
-                    if (rs.getInt("Acid") != 0 ) {
-                        int atomicId = rs.getInt("Acid");
-                        String atomicExecutable = rs.getString("Acexecutable");
-                        String atomicName = rs.getString("Acname");
-                        AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
-                        atomics.add(atomic);
-                    }
-
-                    if( rs.getInt("Caid") != 0 ) {
-                        int complexId = rs.getInt("Caid");
-                        String complexName = rs.getString("Caname");
-                        ComplexAction complex = new ComplexAction(complexId, complexName);
-                        complexs.add(complex);
-                    }
-
-
-                    EnvironmentVariable ev = new EnvironmentVariable(rs.getInt("EVid"), rs.getString("EVname"), rs.getString("EVdescription"), rs.getString("EVunit"));
-
-
-                    int value1id = rs.getInt("VVid");
-                    int value2id = rs.getInt("Vid"); 
-
-                    Value vv; 
-
-                    if (rs.getString("DVVpossible_values") != null) {
-                        DiscreteValue DVV = new DiscreteValue();
-                        try {
-                            JSONObject JSON2 = new JSONObject(rs.getString("DVVpossible_values"));
-                            JSONArray array = JSON2.getJSONArray("possibleValues");
-                            ArrayList<String> arrayl = new ArrayList(array.toList());
-                            DVV.setPossibleValues(arrayl);
-
-                        } catch (Exception e) {
-
-                        }
-                        DVV.setCurrentValue(rs.getString("DVcurrent_value"));
-                        DVV.setId(value1id);
-                        vv = DVV; 
-
-                    } else {
-                        ContinuousValue CVV = new ContinuousValue(value1id, rs.getInt("CVVvalue_min"), rs.getInt("CVVvalue_max"), rs.getInt("CVVprecision"), rs.getInt("CVVcurrent_value"));
-                        vv = CVV; 
-
-                    }
-
-                    ev.setValue(vv);
-
-
-                    int blockId = rs.getInt("Blid");
-                    String blockOperator = rs.getString("Bloperator");
-                    Block block= new Block(blockId, ev, blockOperator);
-                    Value v; 
-
-                    if (rs.getString("DVpossible_values") != null) {
-                        DiscreteValue DV = new DiscreteValue();
-                        try {
-                            JSONObject JSON = new JSONObject(rs.getString("DVpossible_values"));
-                            JSONArray array = JSON.getJSONArray("possible_values");
-                            ArrayList<String> arrayl = new ArrayList(array.toList());
-                            DV.setPossibleValues(arrayl);
-
-
-                        } catch (Exception e) {
-
-                        }
-                        DV.setCurrentValue(rs.getString("DVcurrent_value"));
-                        DV.setId(value2id);
-                        v = DV; 
-
-
-                    } else {
-                        ContinuousValue CV = new ContinuousValue(value2id, rs.getInt("CVvalue_min"), rs.getInt("CVvalue_max"), rs.getInt("CVprecision"), rs.getInt("CVcurrent_value"));
-                        v = CV;
-                    }
-
-                    block.setValue(v);
-                    //System.out.println(block+" id:"+block.getId()+"\n");
-                    blocks.add(block);
-
-
-
-                } while (rs.next());
-                // Push the last behaviour
-
-                behaviour.setAtomicActions(atomics);
-                behaviour.setComplexActions(complexs);
-                behaviours.add(behaviour); 
-
+                    Behaviour behaviour = new Behaviour();
+                    behaviour.setId(rs.getInt("id"));
+                    behaviour.setName(rs.getString("name"));
+                    behaviour.setDescription(rs.getString("description"));
+                    behaviour.setActivated(rs.getBoolean("isActivated"));
+                                   
+                    behaviour.setAtomicActions(getAtomicActions(behaviour));
+                    behaviour.setExpression(getExpression(behaviour));
+                    
+                    behaviours.add(behaviour);
+                } while(rs.next());
             }
-
+            
         } catch (SQLException e) {
             throw new DAOException("DAOException : BehaviourDAO getAll() :" + e.getMessage(), e);
         }
         return behaviours;
     }
 
+    
+    // ================================= //
+    // ======== HELPERS METHODS ======== //
+    // ================================= //
     /**
-     * Return the expression associated to a Behaviour. If none, return null. 
+     * Returns the expression associated to a Behaviour. If none, return null. 
      * By now, does not support the "recursive" expressions.
      * 
      * TODO : support "recursive" expressions
@@ -529,7 +391,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 ArrayList<String> arrayl = new ArrayList(array.toList());
                 exp.setOperators(arrayl);
 
-                // Get Evaluables (blocks only for now
+                // Get Evaluables (blocks only for now)
                 // TODO : get Expressions recursively 
                 ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
                 evaluables = getEvaluables(exp);
@@ -541,9 +403,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         }
         return exp;
     }
-
+    
     /**
-     * Return the list of Evaluables of an Expression. If none, return an empty list.
+     * Returns the list of Evaluables of an Expression. If none, returns an empty list.
+     * Returns only blocks. TODO : return recursive Expression too.
      * @param exp
      * @return
      * @throws DAOException
@@ -577,7 +440,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     }
 
     /**
-     * Return the EnvironmentVariable of a block. If none, return null.
+     * Returns the EnvironmentVariable of a block. If none, returns null.
      * @param environmentVariable
      * @return
      * @throws DAOException
@@ -609,7 +472,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     }
 
     /**
-     * Return the Value of an EnvironmentVariable. If none, return null.
+     * Returns the Value of an EnvironmentVariable. If none, returns null.
      * @param ev
      * @return
      * @throws DAOException
@@ -658,7 +521,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     }
 
     /**
-     * Return the value of a block. If none, return null.
+     * Returns the value of a block. If none, returns null.
      * @param block
      * @return
      * @throws DAOException
@@ -709,7 +572,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     }
     
     /**
-     * Return the list of atomic actions triggered by a behaviour. If none, returns an empty list.
+     * Returns the list of atomic actions triggered by a behaviour. If none, returns an empty list.
      * @param behaviour
      * @return 
      * @throws DAOException
@@ -761,6 +624,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         EnvironmentVariable ev = new EnvironmentVariable();
         ev.setId(1);
         
-        System.out.println(((SQLiteBehaviourDAO)test).getAtomicActions(b));
+        System.out.println(test.getAll());
     }
 }

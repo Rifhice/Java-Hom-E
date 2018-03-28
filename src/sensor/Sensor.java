@@ -27,7 +27,7 @@ public class Sensor {
 	public void registerToSystem() {
 		JSONObject registration = new JSONObject();
 		registration.put("recipient", "sensor");
-		registration.put("verb", "post");
+		registration.put("action", "post");
 		registration.put("id", "null");
 		registration.put("name", name);
 		registration.put("description", description);
@@ -53,7 +53,7 @@ public class Sensor {
 	public static void updateVariable(Variable variable) {
 		JSONObject json = new JSONObject();
 		json.put("recipient", "sensor");
-		json.put("verb", "changeValue");
+		json.put("action", "changeValue");
 		json.put("id", id);
 		String value = "";
 		if(variable instanceof ContinuousValue) {

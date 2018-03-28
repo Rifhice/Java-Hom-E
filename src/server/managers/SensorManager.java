@@ -169,8 +169,8 @@ public class SensorManager extends Manager{
 
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		String verb = json.getString("verb");
-		switch (verb) {
+		String action = json.getString("action");
+		switch (action) {
 		case "post":
 			registerSensorToTheSystem(json,client);
 			break;

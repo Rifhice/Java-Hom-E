@@ -63,12 +63,12 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	        return behaviour;
 	}
 
-	@Override
+	/*@Override
 	public Behaviour getById(int id) throws DAOException {
 		Behaviour behaviour = null;
         String sql = "SELECT B.id AS id, B.name AS name, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators "
-                + "FROM Behaviours AS B "
+                + "FROM Behaviour AS B "
                 + "JOIN Expression AS E ON E.id = B.fk_expression_id "
                 + "WHERE E.id = ?;";
         
@@ -152,7 +152,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	            }
 	        }        
 	        return allAtomicActions;
-	    }
+	    }*/
 	 
 	 // TODO : missing Arraylist<ComplexAction>
 	 
@@ -297,15 +297,19 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
                 + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
-                + "Bl.id AS Blid, Bl.operator AS Bloperator "
-                //+ ", VV.value AS VVvalue, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit  
+                + "Bl.id AS Blid, Bl.operator AS Bloperator, "
+                + "VV.id AS VVid, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit, "
+                + "EV.id AS EVid, CVV.value_min, CVV.value_max, CVV.current_value, CVV.precision, "
+                + "DVV.current_value, DVV.possible_values "
                 + "FROM Behaviours AS B "
                 + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
                 + "JOIN IsPartOf AS IPO ON IPO.fk_expression_id = E.id "
                 + "JOIN Blocks AS Bl ON Bl.id = IPO.fk_block_id " 
-                //+ "JOIN VValue AS VV ON VValue.id = Bl._fk_vvalue_id "
-                //+ "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable.id "
-                //+ "JOIN VValue AS V ON V.id = EV.fk_vvalue.id "
+                + "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable_id "
+                + "JOIN VValues AS VV ON VV.id = EV.fk_vvalue_id "
+                + "JOIN VValues AS V ON V.id = Bl.fk_vvalue_id "
+                + "JOIN DiscreteVValues AS DVV ON DVV.fk_vvalue_id = VV.id "
+                + "JOIN ContinuousVValues AS CVV ON CVV.fk_vvalue_id = VV.id "
                 + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
                 + "JOIN AtomicActions AS Ac ON Ac.id = L.fk_atomicAction_id "
                 + "LEFT JOIN Executes AS Ex ON Ex.fk_behaviour_id = B.id "
@@ -369,7 +373,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         previousId = rs.getInt("id");                      
                     }
 
-                    // Same behaviour as previous one, we add the next right
+                    // Same behaviour as previous one, we add the next atomicAction
                     int atomicId = rs.getInt("Acid");
                     String atomicExecutable = rs.getString("Acexecutable");
                     String atomicName = rs.getString("Acname");
@@ -398,6 +402,30 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             throw new DAOException("DAOException : BehaviourDAO getAll() :" + e.getMessage(), e);
         }
         return behaviours;
+	}
+
+	@Override
+	public Behaviour getById(int id) throws DAOException {
+		Behaviour behaviour = null;
+        String sql = "SELECT * FROM Behaviours B " +
+        			 "WHERE B.id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+            	behaviour = new Behaviour();
+            	behaviour.setId(rs.getInt("id"));
+            	behaviour.setDescription(rs.getString("description"));
+            	behaviour.setName(rs.getString("name"));
+            	System.out.println("uubb" + rs.getInt("id"));
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getById(" + id + ") :" + e.getMessage(), e);
+        }
+        return behaviour;
 	}
 
 	// ============== //

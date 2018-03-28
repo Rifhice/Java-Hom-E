@@ -131,7 +131,9 @@ public class SQLiteDatabaseManager {
                 + " id integer PRIMARY KEY, \n"
                 + " operator text NOT NULL, \n"
                 + " fk_environmentVariable_id integer, \n"
+                + " fk_vvalue_id integer, \n"
                 + " FOREIGN KEY (fk_environmentVariable_id) REFERENCES environmentVariables(id) \n"
+                + " FOREIGN KEY (fk_vvalue_id) REFERENCES vvalues(id) \n"
                 + ");";
         
         String createTableCommands = "CREATE TABLE IF NOT EXISTS commands (\n" 
@@ -442,11 +444,11 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertBlocks() {
-        String insertBlock1 = "INSERT INTO blocks ('id','operator') VALUES (1,'<');";
-        String insertBlock2 = "INSERT INTO blocks ('id','operator') VALUES (2,'==');";
-        String insertBlock3 = "INSERT INTO blocks ('id','operator') VALUES (3,'>=');";
-        String insertBlock4 = "INSERT INTO blocks ('id','operator') VALUES (4,'>');";
-        String insertBlock5 = "INSERT INTO blocks ('id','operator') VALUES (5,'!=');";        
+        String insertBlock1 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (1,'<', 1, 1);";
+        String insertBlock2 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (2,'==', 2, 2);";
+        String insertBlock3 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (3,'>=', 3, 3);";
+        String insertBlock4 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (4,'>', 1, 1);";
+        String insertBlock5 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (5,'!=', 2, 2);";        
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertBlock1);
             stmt.execute(insertBlock2);
@@ -552,9 +554,9 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertEnvironmentVariables() {
-        String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (1,'temperature','Variable temperature', 'Â°C');";
-        String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (2,'presence','Is anybody in there ?', '');";
-        String insertEnvironmentVariable3 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit') VALUES (3,'light','Measure the light intensity', 'L');";
+        String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit', 'fk_sensor_id', 'fk_vvalue_id') VALUES (1,'temperature','Variable temperature', '°C', '3', 1);";
+        String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit', 'fk_sensor_id', 'fk_vvalue_id') VALUES (2,'presence','Is anybody in there ?', '', '1', '2');";
+        String insertEnvironmentVariable3 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit', 'fk_sensor_id', 'fk_vvalue_id') VALUES (3,'light','Measure the light intensity', 'L', '2', '3');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertEnvironmentVariable1);
             stmt.execute(insertEnvironmentVariable2);

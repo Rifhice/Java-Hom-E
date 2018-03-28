@@ -50,8 +50,8 @@ public class SQLiteSensorDao extends SensorDAO{
               
               if(created > 0) {
                   sensor.setId(SQLiteDAOTools.getLastId(connect));
-                  for (int i = 0; i < sensor.getEnvironmentVariable().size(); i++) {
-                	boolean tmp = createEnvironmentVariable(sensor.getEnvironmentVariable().get(i));
+                  for (int i = 0; i < sensor.getEnvironmentVariables().size(); i++) {
+                	boolean tmp = createEnvironmentVariable(sensor.getEnvironmentVariables().get(i));
                 	if(!tmp) {
 						return null;
 					}

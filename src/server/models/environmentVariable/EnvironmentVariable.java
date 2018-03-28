@@ -132,6 +132,7 @@ public class EnvironmentVariable extends Observable{
     	result.put("name", name);
     	result.put("unit", unit);
     	result.put("description", description);
+    	result.put("value", value);
     	return result;
     }
 

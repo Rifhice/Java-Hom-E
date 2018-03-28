@@ -16,6 +16,7 @@ import server.models.Behaviour;
 
 public class AmbienceManager extends Manager{
 
+    private AmbienceDAO ambienceDAO = AbstractDAOFactory.getFactory(SystemManager.db).getAmbienceDAO();
 	private static AmbienceManager manager = null;
 	
 	// ====================== //
@@ -40,7 +41,7 @@ public class AmbienceManager extends Manager{
 		ArrayList<Ambience> ambiences = null;
 
 		try {
-			ambiences = AbstractDAOFactory.getFactory(SystemManager.db).getAmbienceDAO().getAll();
+			ambiences = ambienceDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -79,7 +80,6 @@ public class AmbienceManager extends Manager{
 		result.put("recipient", "ambience");
 		result.put("action", "create");
 		try {
-        	AmbienceDAO ambienceDAO = AbstractDAOFactory.getFactory(SystemManager.db).getAmbienceDAO();
 			if(ambienceDAO.create(ambience) == null) {
 				result.put("result", "failure");
 				client.sendToClient(result.toString());

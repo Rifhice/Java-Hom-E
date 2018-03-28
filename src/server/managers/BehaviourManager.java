@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.BehaviourDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Behaviour;
 import ocsf.server.ConnectionToClient;
 
 public class BehaviourManager extends Manager{
 
+    private BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
 	private static BehaviourManager manager = null;
 	
 	// ====================== //
@@ -38,7 +40,7 @@ public class BehaviourManager extends Manager{
 		ArrayList<Behaviour> behaviours = null;
 
 		try {
-			behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+			behaviours = behaviourDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

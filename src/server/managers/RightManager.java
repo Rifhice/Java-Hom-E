@@ -45,7 +45,7 @@ public class RightManager extends Manager {
     	User user = new User();
 		try {
 			user = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO().getById(id);
-			rights = AbstractDAOFactory.getFactory(SystemManager.db).getRightDAO().getByUser(user);
+			rights = rightDAO.getByUser(user);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -64,7 +64,7 @@ public class RightManager extends Manager {
     public void getAll(JSONObject json, ConnectionToClient client) {
     	ArrayList<Right> rights = null;
 		try {
-			rights = AbstractDAOFactory.getFactory(SystemManager.db).getRightDAO().getAll();
+			rights = rightDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

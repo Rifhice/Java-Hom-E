@@ -12,9 +12,9 @@ import server.models.categories.SensorCategory;
 import ocsf.server.ConnectionToClient;
 
 public class SensorCategorieManager extends Manager{
-
+    
+    private SensorCategoriesDAO sensorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorCategoriesDAO();
 	private static SensorCategorieManager manager = null;
-	private SensorCategoriesDAO sensorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorCategoriesDAO();
 	
 	// ====================== //
     // ==== CONSTRUCTORS ==== //

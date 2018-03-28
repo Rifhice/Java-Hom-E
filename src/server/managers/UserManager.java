@@ -92,7 +92,7 @@ public class UserManager extends Manager{
     	ArrayList<User> users = null;
 
 		try {
-			users = AbstractDAOFactory.getFactory(SystemManager.db).getUserDAO().getAll();
+			users = userDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

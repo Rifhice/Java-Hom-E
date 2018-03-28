@@ -13,7 +13,6 @@ import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
-import server.models.Behaviour;
 import server.models.Command;
 import server.models.commandValue.CommandValue;
 import server.models.commandValue.ContinuousCommandValue;

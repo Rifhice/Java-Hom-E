@@ -11,7 +11,6 @@ import server.dao.abstractDAO.RoleDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Right;
 import server.models.Role;
-import server.models.User;
 
 public class SQLiteRoleDAO extends RoleDAO {
 	

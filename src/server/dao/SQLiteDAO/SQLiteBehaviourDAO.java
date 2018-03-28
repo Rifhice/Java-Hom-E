@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
-import server.dao.abstractDAO.UserDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.AtomicAction;
@@ -162,7 +161,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	 // TODO : missing Arraylist<ComplexAction>
 	 
 	 public ArrayList<ComplexAction> getComplexActions(int id) throws DAOException {
-	        Behaviour Behaviour = null;
 	        // Get complex actions
 	        String sql = "SELECT Ca.name AS Caname "
 	                + "Ca.id AS Caid "

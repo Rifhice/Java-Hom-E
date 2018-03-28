@@ -8,9 +8,7 @@ import java.util.ArrayList;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.RightDAO;
-import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
-import server.models.Role;
 import server.models.User;
 import server.models.Right;
 
@@ -140,15 +138,7 @@ public class SQLiteRightDAO extends RightDAO{
 	}
 	
 	public static void main(String args[]) {
-		try {
-			RightDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getRightDAO();
-			User user = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getUserDAO().getById(2);
-	        //System.out.println("Les droits de Kevin : \n" + test.getByUser(user));
-	        //System.out.println("\n Tous les droits : \n" +  test.getAll());
-		}
-		catch (DAOException e) {
-			e.printStackTrace();
-		}
+
 		
 	}
 

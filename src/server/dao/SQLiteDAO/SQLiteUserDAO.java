@@ -2,9 +2,6 @@ package server.dao.SQLiteDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.UserDAO;
@@ -279,7 +276,6 @@ public class SQLiteUserDAO extends UserDAO {
     }
     
     public ArrayList<Right> getRights(int id) throws DAOException {
-        User user = null;
         // Get owns rights
         String sql = "SELECT Ri.denomination AS Ridenomination, "
                 + "Ri.description AS Ridescription, Ri.id AS Riid "

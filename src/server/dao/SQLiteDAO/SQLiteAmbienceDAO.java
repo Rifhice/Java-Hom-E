@@ -7,7 +7,6 @@ import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.DAOException;
 import server.models.Ambience;
 import server.models.Behaviour;
-import server.models.Right;
 
 public class SQLiteAmbienceDAO extends AmbienceDAO {
 

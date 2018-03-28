@@ -44,7 +44,9 @@ public abstract class Value extends Observable {
     public abstract boolean isSuperiorOrEqual(Object value);
     public abstract boolean isInferiorOrEqual(Object value);
     
-
-
+    public String toString() {
+        String res = "VALUE #" + getId();
+        return res;
+    }
 }
 

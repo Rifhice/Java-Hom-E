@@ -71,7 +71,14 @@ public class DiscreteValue extends Value {
     }
 
     public String toString() {
-        return super.toString() + ":" + currentValue;
+        String res = super.toString() + ":" + currentValue;
+        if(possibleValues != null) {
+            res += "\nPossibles values: ";
+            for (String possibleValue : possibleValues) {
+                res += possibleValue;
+            }
+        }
+        return res;
     }
 
     public boolean isNotEqual(Object value) {

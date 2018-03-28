@@ -86,7 +86,11 @@ public class ContinuousValue extends Value {
     }
 
     public String toString() {
-        return super.toString() + ":" + currentValue;
+        String res = super.toString() + ":" + currentValue;
+        res += "\nMin: " + valueMin;         
+        res += "\nMax: " + valueMax;
+        res += "\nPrecision: " + precision;
+        return res;
     }
 
     public boolean isNotEqual(Object value) {

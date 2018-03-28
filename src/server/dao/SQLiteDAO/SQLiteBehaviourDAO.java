@@ -26,11 +26,33 @@ import server.models.evaluable.Expression;
 
 public class SQLiteBehaviourDAO extends BehaviourDAO{
 
-
-
     public SQLiteBehaviourDAO(Connection connectionDriver) {
         super(connectionDriver);
         // TODO Auto-generated constructor stub
+    }
+    
+
+    @Override
+    public Behaviour getById(int id) throws DAOException {
+        Behaviour behaviour = null;
+        String sql = "SELECT * FROM Behaviours B " +
+                "WHERE B.id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                behaviour = new Behaviour();
+                behaviour.setId(rs.getInt("id"));
+                behaviour.setDescription(rs.getString("description"));
+                behaviour.setName(rs.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getById(" + id + ") :" + e.getMessage(), e);
+        }
+        return behaviour;
     }
 
     @Override
@@ -490,7 +512,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public Expression getExpression(Behaviour behaviour) throws DAOException{
         Expression exp = null;
-        String sql = "SELECT * "
+        String sql = "SELECT E.id AS id, E.operators AS operators "
                 + "FROM Expressions AS E " 
                 + "WHERE E.fk_behaviour_id = ?";
         try {
@@ -500,7 +522,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
             if(rs.next()) {
                 exp = new Expression();
-                behaviour.setId(rs.getInt("id"));
+                exp.setId(rs.getInt("id"));
                 JSONObject JSON = new JSONObject(rs.getString("operators"));
                 JSONArray array = JSON.getJSONArray("operators");
                 ArrayList<String> arrayl = new ArrayList(array.toList());
@@ -575,36 +597,14 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return value;
     }
 
-    @Override
-    public Behaviour getById(int id) throws DAOException {
-        Behaviour behaviour = null;
-        String sql = "SELECT * FROM Behaviours B " +
-                "WHERE B.id = ?";
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
-
-            if(rs.next()) {
-                behaviour = new Behaviour();
-                behaviour.setId(rs.getInt("id"));
-                behaviour.setDescription(rs.getString("description"));
-                behaviour.setName(rs.getString("name"));
-                System.out.println("uubb" + rs.getInt("id"));
-            }
-
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : Behaviours getById(" + id + ") :" + e.getMessage(), e);
-        }
-        return behaviour;
-    }
-
     // ============== //
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
         BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
-        System.out.println(test.getAll());
-        test.getAll();
+        // System.out.println(test.getAll());
+        Behaviour b = new Behaviour();
+        b = test.getById(1);
+        System.out.println(((SQLiteBehaviourDAO)test).getExpression(b));
     }
 }

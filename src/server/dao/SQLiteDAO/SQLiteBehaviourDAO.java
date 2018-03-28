@@ -478,6 +478,16 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return behaviours;
     }
 
+    /**
+     * Return the expression associated to a Behaviour. If none, return null. 
+     * By now, does not support the "recursive" expressions.
+     * 
+     * TODO : support "recursive" expressions
+     * 
+     * @param behaviour
+     * @return
+     * @throws DAOException
+     */
     public Expression getExpression(Behaviour behaviour) throws DAOException{
         Expression exp = null;
         String sql = "SELECT * "

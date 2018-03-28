@@ -3,10 +3,10 @@ package server.models.environmentVariable;
 import org.json.JSONObject;
 
 /**
- * A continous environment variable is a variable which current value is a decimal number.
+ * A continuous value is a value which is a decimal number.
  * @author Clm-Roig
  */
-public class ContinuousEnvironmentVariable extends EnvironmentVariable{
+public class ContinuousValue extends Value {
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
@@ -18,15 +18,12 @@ public class ContinuousEnvironmentVariable extends EnvironmentVariable{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public ContinuousEnvironmentVariable(String name, String description, String unit, double valueMin,double valueMax, double precision, double currentValue) {
-        super(name, description, unit);
-        this.valueMax = valueMax;
-        this.valueMin = valueMin;
-        this.currentValue = currentValue;
-    }
+    public ContinuousValue() {
+        super();
+    };
     
-    public ContinuousEnvironmentVariable(int id, String name, String description, String unit, double valueMin,double valueMax, double precision, double currentValue) {
-        super(id, name, description, unit);
+    public ContinuousValue(int id, double valueMin,double valueMax, double precision, double currentValue) {
+        super(id);
         this.valueMax = valueMax;
         this.valueMin = valueMin;
         this.currentValue = currentValue;

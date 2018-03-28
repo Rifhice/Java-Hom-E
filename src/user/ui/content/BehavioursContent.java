@@ -1,9 +1,14 @@
 package user.ui.content;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.JSONObject;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import server.models.environmentVariable.EnvironmentVariable;
+import user.ClientFX;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyComboBox;
 import user.ui.componentJavaFX.MyGridPane;
@@ -14,6 +19,7 @@ import user.ui.scene.ContentScene;
 
 public class BehavioursContent extends Content {
 
+    // =========== UI =========== //
 	private static BehavioursContent content = null;
 	
 	MyRectangle variableBounds = new MyRectangle(0.05f, 0.1f, 0.1f, 0.05f);
@@ -62,6 +68,9 @@ public class BehavioursContent extends Content {
 	
 	MyButtonFX valideButton;
 	MyButtonFX cancelButton;
+	
+	// ========= ATTRIBUTES ========= //
+	private ArrayList<EnvironmentVariable> environmentVariables = new ArrayList<EnvironmentVariable>();
 	
 	private BehavioursContent() {
 		variablesComboBox = new MyComboBox(variableBounds.computeBounds(width, height),new ArrayList<String>());
@@ -138,11 +147,26 @@ public class BehavioursContent extends Content {
         this.getChildren().add(valideButton);
         this.getChildren().add(cancelButton);
         
-		UpdateData();
+		updateData();
 	}
 	
-	public void UpdateData() {
-		
+	public void updateData() {
+	    updateEnvironmentVariables();
+	}
+	
+	/**
+	 * Ask the server to get all the environment variables.
+     * TODO : not sure of the action syntax... (to implement in server.SensorManager)
+	 */
+	public void updateEnvironmentVariables() {
+	    JSONObject getEnvironmentVariables = new JSONObject();
+	    getEnvironmentVariables.put("recipient", "sensor");
+	    getEnvironmentVariables.put("action", "getEnvironmentVariables");
+        try {
+            ClientFX.client.sendToServer(getEnvironmentVariables.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	public static Content getInstance() {

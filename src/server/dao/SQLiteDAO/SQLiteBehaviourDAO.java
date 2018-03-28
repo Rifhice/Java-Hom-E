@@ -17,6 +17,10 @@ import server.factories.AbstractDAOFactory;
 import server.models.AtomicAction;
 import server.models.Behaviour;
 import server.models.ComplexAction;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
+import server.models.environmentVariable.EnvironmentVariable;
+import server.models.environmentVariable.Value;
 import server.models.evaluable.Block;
 import server.models.evaluable.Expression;
 
@@ -63,12 +67,12 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	        return behaviour;
 	}
 
-	@Override
+	/*@Override
 	public Behaviour getById(int id) throws DAOException {
 		Behaviour behaviour = null;
         String sql = "SELECT B.id AS id, B.name AS name, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators "
-                + "FROM Behaviours AS B "
+                + "FROM Behaviour AS B "
                 + "JOIN Expression AS E ON E.id = B.fk_expression_id "
                 + "WHERE E.id = ?;";
         
@@ -152,7 +156,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 	            }
 	        }        
 	        return allAtomicActions;
-	    }
+	    }*/
 	 
 	 // TODO : missing Arraylist<ComplexAction>
 	 
@@ -297,15 +301,23 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
                 + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
                 + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
-                + "Bl.id AS Blid, Bl.operator AS Bloperator "
-                //+ ", VV.value AS VVvalue, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit  
+                + "Bl.id AS Blid, Bl.operator AS Bloperator, "
+                + "VV.id AS VVid, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit, "
+                + "EV.id AS EVid, CVV.value_min AS CVVvalue_min, CVV.value_max AS CVVvalue_max, CVV.current_value AS CVVcurrent_value, CVV.precision AS CVVprecision, "
+                + "V.id AS Vid, CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
+                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values, "
+                + "DVV.current_value AS DVVcurrent_value, DVV.possible_values AS DVVpossible_values "
                 + "FROM Behaviours AS B "
                 + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
                 + "JOIN IsPartOf AS IPO ON IPO.fk_expression_id = E.id "
                 + "JOIN Blocks AS Bl ON Bl.id = IPO.fk_block_id " 
-                //+ "JOIN VValue AS VV ON VValue.id = Bl._fk_vvalue_id "
-                //+ "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable.id "
-                //+ "JOIN VValue AS V ON V.id = EV.fk_vvalue.id "
+                + "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable_id "
+                + "JOIN VValues AS VV ON VV.id = EV.fk_vvalue_id "
+                + "JOIN VValues AS V ON V.id = Bl.fk_vvalue_id "
+                + "LEFT JOIN DiscreteVValues AS DVV ON DVV.fk_vvalue_id = VV.id "
+                + "LEFT JOIN ContinuousVValues AS CVV ON CVV.fk_vvalue_id = VV.id "
+                + "LEFT JOIN DiscreteVValues AS DV ON DV.fk_vvalue_id = V.id "
+                + "LEFT JOIN ContinuousVValues AS CV ON CV.fk_vvalue_id = V.id "
                 + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
                 + "JOIN AtomicActions AS Ac ON Ac.id = L.fk_atomicAction_id "
                 + "LEFT JOIN Executes AS Ex ON Ex.fk_behaviour_id = B.id "
@@ -369,16 +381,58 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         previousId = rs.getInt("id");                      
                     }
 
-                    // Same behaviour as previous one, we add the next right
+                    // Same behaviour as previous one, we add the next atomicAction
                     int atomicId = rs.getInt("Acid");
                     String atomicExecutable = rs.getString("Acexecutable");
                     String atomicName = rs.getString("Acname");
                     AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
                     atomics.add(atomic);
                     
+                    int value1id = rs.getInt("VVid");
+                    int value2id = rs.getInt("Vid"); 
+                    
+                    if (rs.getString("DVpossible_values") != null) {
+                    	DiscreteValue DV = new DiscreteValue();
+                    	try {
+        					JSONObject JSON = new JSONObject(rs.getString("DVpossible_values"));
+        					JSONArray array = JSON.getJSONArray("possible_values");
+        					ArrayList<String> arrayl = new ArrayList(array.toList());
+        					DV.setPossibleValues(arrayl);
+
+        				} catch (Exception e) {
+        					
+        				}
+                    	DV.setCurrentValue(rs.getString("DVcurrent_value"));
+                    	DV.setId(value2id);
+                    } else {
+                    	ContinuousValue CV = new ContinuousValue(value2id, rs.getInt("CVvalue_min"), rs.getInt("CVvalue_max"), rs.getInt("CVprecision"), rs.getInt("CVcurrent_value"));
+                    }
+                    
+                    if (rs.getString("DVVpossible_values") != null) {
+                    	DiscreteValue DVV = new DiscreteValue();
+                    	try {
+        					JSONObject JSON2 = new JSONObject(rs.getString("DVVpossible_values"));
+        					JSONArray array = JSON2.getJSONArray("possible_values");
+        					ArrayList<String> arrayl = new ArrayList(array.toList());
+        					DVV.setPossibleValues(arrayl);
+
+        				} catch (Exception e) {
+        					
+        				}
+                    	DVV.setCurrentValue(rs.getString("DVcurrent_value"));
+                    	DVV.setId(value1id);
+                    } else {
+                    	ContinuousValue CVV = new ContinuousValue(value1id, rs.getInt("CVVvalue_min"), rs.getInt("CVVvalue_max"), rs.getInt("CVVprecision"), rs.getInt("CVVcurrent_value"));
+                    }
+                    
+                    //Faire Environnement variable avec Continuous ou Discrete
+                    
+                    
+                    
+                    
                     int blockId = rs.getInt("Blid");
                     String blockOperator = rs.getString("Bloperator");
-                    //EnvironmentVariable ev = new EnvironmentVariable(rs.getInt(EVid), rs.getString(EVname), rs.getString(EVdescription), rs.getString(EVunit));
+                    EnvironmentVariable ev = new EnvironmentVariable(rs.getInt("EVid"), rs.getString("EVname"), rs.getString("EVdescription"), rs.getString("EVunit"));
                     //Block block= new Block(blockId, ev, blockOperator); 
                              
                     
@@ -398,6 +452,30 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             throw new DAOException("DAOException : BehaviourDAO getAll() :" + e.getMessage(), e);
         }
         return behaviours;
+	}
+
+	@Override
+	public Behaviour getById(int id) throws DAOException {
+		Behaviour behaviour = null;
+        String sql = "SELECT * FROM Behaviours B " +
+        			 "WHERE B.id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+            	behaviour = new Behaviour();
+            	behaviour.setId(rs.getInt("id"));
+            	behaviour.setDescription(rs.getString("description"));
+            	behaviour.setName(rs.getString("name"));
+            	System.out.println("uubb" + rs.getInt("id"));
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getById(" + id + ") :" + e.getMessage(), e);
+        }
+        return behaviour;
 	}
 
 	// ============== //

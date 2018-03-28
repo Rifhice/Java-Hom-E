@@ -46,7 +46,7 @@ public class CommandManager extends Manager{
 	public void updateComplexCommand(JSONObject json,ConnectionToClient client) {
 		
 	}
-	
+
 	public void getAllAtomicCommand(JSONObject json,ConnectionToClient client) {
 		ArrayList<Command> command = commandDAO.getAll();
 		JSONObject result = new JSONObject();

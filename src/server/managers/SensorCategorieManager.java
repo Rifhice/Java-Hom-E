@@ -34,7 +34,12 @@ public class SensorCategorieManager extends Manager{
 	
 	// ================= //
     // ==== METHODS ==== //
-    // ================= // 
+    // ================= //
+	/**
+	 * Create a sensor category in DB and send to all the clients.
+	 * @param obj
+	 * @param client
+	 */
 	public void createSensorCategorie(SensorCategory obj, ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "sensorCategories");

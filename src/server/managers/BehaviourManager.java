@@ -32,10 +32,16 @@ public class BehaviourManager extends Manager{
 	
 	// ================= //
     // ==== METHODS ==== //
-    // ================= // 
+    // ================= //
 	public void createBehaviour(JSONObject json) {
+	    
 	}
 	
+	/**
+     * Get all the behaviours in DB. Send to the client a JSONObject.    
+     * @param json
+     * @param client
+     */
 	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
 		ArrayList<Behaviour> behaviours = null;
 

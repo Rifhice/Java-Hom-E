@@ -37,7 +37,12 @@ public class AmbienceManager extends Manager{
 	// ================= //
     // ==== METHODS ==== //
     // ================= // 
-	public void getAllAmbience(JSONObject json, ConnectionToClient client){
+	/**
+	 * Get all the ambiences in DB. Send to the client a JSONObject.	
+	 * @param json
+	 * @param client
+	 */
+	public void getAllAmbiences(JSONObject json, ConnectionToClient client){
 		ArrayList<Ambience> ambiences = null;
 
 		try {
@@ -74,8 +79,20 @@ public class AmbienceManager extends Manager{
 		}
 	}
 	
+	/**
+	 * Create an Ambience in DB. Send to the client a JSONObject : 
+	 * {
+	 *     recipient: ambience,
+	 *     action: create,     
+	 *     result: success
+	 *     ambience: ambience converted toJSON
+	 * }
+	 * In case of fail, result is set to failure and there is no key/value "ambience"	 * 
+	 * @param ambience
+	 * @param client
+	 * @see AmbienceDAO#create(Ambience)
+	 */
 	public void createAmbience(Ambience ambience, ConnectionToClient client) {
-		
 		JSONObject result = new JSONObject();
 		result.put("recipient", "ambience");
 		result.put("action", "create");
@@ -123,7 +140,7 @@ public class AmbienceManager extends Manager{
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
-	        	getAllAmbience(json,client);
+	        	getAllAmbiences(json,client);
 	            break;
 	        case "create":
 	        	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();

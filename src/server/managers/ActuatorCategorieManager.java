@@ -11,6 +11,11 @@ import server.factories.AbstractDAOFactory;
 import server.models.categories.ActuatorCategory;
 import ocsf.server.ConnectionToClient;
 
+/**
+ * 
+ * @author Clm-Roig
+ *
+ */
 public class ActuatorCategorieManager extends Manager{
 
     // ==================== //

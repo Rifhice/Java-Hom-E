@@ -38,7 +38,12 @@ public class RightManager extends Manager {
     
     // ================= //
     // ==== METHODS ==== //
-    // ================= // 
+    // ================= //
+    /**
+     * Get an user in DB by his id.
+     * @param json
+     * @param client
+     */
     public void getByUser(JSONObject json, ConnectionToClient client) {
     	ArrayList<Right> rights = null;
     	int id = json.getInt("id");

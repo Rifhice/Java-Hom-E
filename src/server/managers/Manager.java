@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import ocsf.server.ConnectionToClient;
 
 /**
- * A manager deals with the entities he manages. There is only one Manager by entity (singleton pattern).
+ * A manager deals with the entities he manages and there is only one Manager by entity (singleton pattern).
  * @author Clm-Roig
  *
  */

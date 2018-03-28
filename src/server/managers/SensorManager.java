@@ -173,7 +173,13 @@ public class SensorManager extends Manager{
 	}
 	
 	public void returnGetEnvironmentVariables(JSONObject json, ConnectionToClient client) {
-	    ArrayList<EnvironmentVariable> environmentVariables = getEnvironmentVariables();
+		ArrayList<EnvironmentVariable> environmentVariables = null;
+		try {
+			environmentVariables = getEnvironmentVariables();
+	    }
+	    catch (Exception e) {
+			e.printStackTrace();
+		}
 
         JSONObject result = new JSONObject();
         if(environmentVariables != null) {
@@ -185,7 +191,9 @@ public class SensorManager extends Manager{
             }
         }
         else {
+        	result.put("recipient", "sensor");
             result.put("result", "failure");
+            result.put("action", "getEnvironmentVariables");
         }
         try {
             client.sendToClient(result.toString());

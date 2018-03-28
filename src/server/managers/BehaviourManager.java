@@ -58,7 +58,7 @@ public class BehaviourManager extends Manager{
 			behaviour.put("id", behaviours.get(i).getId());
 			behaviour.put("name", behaviours.get(i).getName());
 			behaviour.put("description", behaviours.get(i).getDescription());
-			behaviour.put("expression", behaviours.get(i).getExpression());
+			behaviour.put("expression", behaviours.get(i).getExpression().toJson());
 			result.append("behaviours", behaviour);
 		}
 		try {

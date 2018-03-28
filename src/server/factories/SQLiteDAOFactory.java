@@ -84,7 +84,7 @@ public class SQLiteDAOFactory extends AbstractDAOFactory{
 	}
 
     @Override
-    public EnvironmentVariableDAO getEnvironmentVariable() {
+    public EnvironmentVariableDAO getEnvironmentVariableDAO() {
         return new SQLiteEnvironmentVariableDAO(connect);
     }
     

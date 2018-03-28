@@ -62,5 +62,5 @@ public abstract class AbstractDAOFactory {
     public abstract CommandDAO getCommandDAO();
     public abstract ComplexActionDAO getComplexActionDAO();
     public abstract RightDAO getRightDAO();
-    public abstract EnvironmentVariableDAO getEnvironmentVariable();
+    public abstract EnvironmentVariableDAO getEnvironmentVariableDAO();
 }

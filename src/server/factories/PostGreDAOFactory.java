@@ -87,7 +87,7 @@ public class PostGreDAOFactory extends AbstractDAOFactory {
 	}
 
     @Override
-    public EnvironmentVariableDAO getEnvironmentVariable() {
+    public EnvironmentVariableDAO getEnvironmentVariableDAO() {
         // TODO Auto-generated method stub
         return null;
     }

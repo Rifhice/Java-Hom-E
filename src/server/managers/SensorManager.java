@@ -137,13 +137,7 @@ public class SensorManager extends Manager{
 	
 	public ArrayList<EnvironmentVariable> getEnvironmentVariables(){
 		ArrayList<EnvironmentVariable> variables = new ArrayList<EnvironmentVariable>();
-
-		for (int i = 0; i < sensors.size(); i++) {
-			variables.addAll(sensors.get(i).getEnvironmentVariables());
-		}
-		
-		System.out.println("LES SENSORS : "+sensors);
-		System.out.println("LES VARIABLES"+variables);
+		variables = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getAll();		
 		return variables;
 	}
 	
@@ -177,7 +171,8 @@ public class SensorManager extends Manager{
         JSONObject result = new JSONObject();
         if(environmentVariables != null) {
             result.put("result", "success");
-            result.put("verb", "get");
+            result.put("recipient", "sensor");
+            result.put("action", "getEnvironmentVariables");
             for (EnvironmentVariable environmentVariable : environmentVariables) {
                 result.append("environmentVariables", environmentVariable.toJson());
             }

@@ -20,7 +20,7 @@ public class Sensor extends ExternalActor{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	private EnvironmentVariable environmentVariables;
+	private EnvironmentVariable environmentVariables = null;
 	
 	// Attributes from others tables
     private SensorCategory sensorCategory;

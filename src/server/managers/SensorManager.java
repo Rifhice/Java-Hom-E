@@ -195,8 +195,14 @@ public class SensorManager extends Manager{
         result.put("recipient", "sensor");
         result.put("action", "getAll");
 		for (int i = 0; i < sensors.size(); i++) {
+			try {
 			result.append("sensors", sensors.get(i).toJson());
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		System.out.println(result.toString());
         try {
             client.sendToClient(result.toString());
         } catch (IOException e) {

@@ -28,6 +28,13 @@ public class ContinuousValue extends Value {
         this.valueMin = valueMin;
         this.currentValue = currentValue;
     }
+    
+    public ContinuousValue( double valueMin,double valueMax, double precision, double currentValue) {
+        super();
+        this.valueMax = valueMax;
+        this.valueMin = valueMin;
+        this.currentValue = currentValue;
+    }
 
     // ================= //
     // ==== METHODS ==== //
@@ -56,7 +63,7 @@ public class ContinuousValue extends Value {
         this.precision = precision;
     }
 
-    public double getCurrentValue() {
+    public Object getCurrentValue() {
     	return currentValue;
     }
     

@@ -272,6 +272,7 @@ public class SQLiteSensorDao extends SensorDAO{
         } catch (SQLException e) {
             throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);
         }
+        System.out.println(sensors);
         return sensors;
     }
     
@@ -326,6 +327,7 @@ public class SQLiteSensorDao extends SensorDAO{
             	for (int i = 0; i < array.length(); i++) {
 					possibleValues.add(array.getString(i));
 				}
+            	value.setCurrentValue(rs.getString("current_value"));
             	value.setPossibleValues(possibleValues);
             }
         } catch (SQLException e) {

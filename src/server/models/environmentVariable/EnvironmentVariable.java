@@ -53,6 +53,14 @@ public class EnvironmentVariable extends Observable{
         this.sensor = sensor;
     }
 	
+	public EnvironmentVariable(int id, String name, String description, String unit, Value value) {
+        this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.description = description;
+        this.value = value;
+    }
+	
 	public EnvironmentVariable(int id, String name, String description, String unit, Sensor sensor, Value value) {
         this.id = id;
         this.name = name;

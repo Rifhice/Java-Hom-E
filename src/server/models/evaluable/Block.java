@@ -28,6 +28,12 @@ public class Block implements Evaluable {
     // ====================== //
     public Block() {}
 
+    public Block(int id, EnvironmentVariable environmentVariable, String operator) {
+        this.environmentVariable = environmentVariable;
+        this.value = value;
+        this.operator = operator;
+    }
+    
     public Block(EnvironmentVariable environmentVariable, Value value, String operator) {
         this.environmentVariable = environmentVariable;
         this.value = value;

@@ -22,6 +22,7 @@ import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 import server.models.environmentVariable.Value;
 import server.models.evaluable.Block;
+import server.models.evaluable.Evaluable;
 import server.models.evaluable.Expression;
 
 public class SQLiteBehaviourDAO extends BehaviourDAO{
@@ -344,7 +345,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 int previousId = 0;
                 ArrayList<AtomicAction> atomics = new ArrayList<AtomicAction>();
                 ArrayList<ComplexAction> complexs = new ArrayList<ComplexAction>();
-                ArrayList<Block> blocks = new ArrayList<Block>();
+                ArrayList<Evaluable> blocks = new ArrayList<Evaluable>();
 
                 Behaviour behaviour = new Behaviour();
                 do {
@@ -357,7 +358,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                             
                             complexs= new ArrayList<ComplexAction>();
                             atomics = new ArrayList<AtomicAction>();
-                            blocks = new ArrayList<Block>();
+                            blocks = new ArrayList<Evaluable>();
                             behaviour = new Behaviour();  
                         }   
 
@@ -371,10 +372,9 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
         					JSONArray array = JSON.getJSONArray("operators");
         					ArrayList<String> arrayl = new ArrayList(array.toList());
-        					
-        					behaviour.setExpression(new Expression(rs.getInt("Eid"), arrayl));
-        					//System.out.println(arrayl);
-        					//System.out.println(behaviour.getExpression());
+        					Expression E = new Expression(rs.getInt("Eid"), arrayl);
+        					E.setEvaluables(blocks);
+        					behaviour.setExpression(E);
         				} catch (Exception e) {
         					
         				}
@@ -388,26 +388,20 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
                     atomics.add(atomic);
                     
+                    int complexId = rs.getInt("Caid");
+                    String complexName = rs.getString("Caname");
+                    ComplexAction complex = new ComplexAction(complexId, complexName);
+                    complexs.add(complex);
+                    
+                    
+                    EnvironmentVariable ev = new EnvironmentVariable(rs.getInt("EVid"), rs.getString("EVname"), rs.getString("EVdescription"), rs.getString("EVunit"));
+                    
+                    
                     int value1id = rs.getInt("VVid");
                     int value2id = rs.getInt("Vid"); 
                     
-                    if (rs.getString("DVpossible_values") != null) {
-                    	DiscreteValue DV = new DiscreteValue();
-                    	try {
-        					JSONObject JSON = new JSONObject(rs.getString("DVpossible_values"));
-        					JSONArray array = JSON.getJSONArray("possible_values");
-        					ArrayList<String> arrayl = new ArrayList(array.toList());
-        					DV.setPossibleValues(arrayl);
-
-        				} catch (Exception e) {
-        					
-        				}
-                    	DV.setCurrentValue(rs.getString("DVcurrent_value"));
-                    	DV.setId(value2id);
-                    } else {
-                    	ContinuousValue CV = new ContinuousValue(value2id, rs.getInt("CVvalue_min"), rs.getInt("CVvalue_max"), rs.getInt("CVprecision"), rs.getInt("CVcurrent_value"));
-                    }
-                    
+                    Value vv; 
+                   
                     if (rs.getString("DVVpossible_values") != null) {
                     	DiscreteValue DVV = new DiscreteValue();
                     	try {
@@ -421,25 +415,48 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         				}
                     	DVV.setCurrentValue(rs.getString("DVcurrent_value"));
                     	DVV.setId(value1id);
+    					vv = DVV; 
+    					
                     } else {
                     	ContinuousValue CVV = new ContinuousValue(value1id, rs.getInt("CVVvalue_min"), rs.getInt("CVVvalue_max"), rs.getInt("CVVprecision"), rs.getInt("CVVcurrent_value"));
+    					vv = CVV; 
+    					
                     }
                     
-                    //Faire Environnement variable avec Continuous ou Discrete
-                    
-                    
-                    
+                    ev.setValue(vv);
                     
                     int blockId = rs.getInt("Blid");
                     String blockOperator = rs.getString("Bloperator");
-                    EnvironmentVariable ev = new EnvironmentVariable(rs.getInt("EVid"), rs.getString("EVname"), rs.getString("EVdescription"), rs.getString("EVunit"));
-                    //Block block= new Block(blockId, ev, blockOperator); 
-                             
+                    Block block= new Block(blockId, ev, blockOperator);
                     
-                    int complexId = rs.getInt("Caid");
-                    String complexName = rs.getString("Caname");
-                    ComplexAction complex = new ComplexAction(complexId, complexName);
-                    complexs.add(complex);
+                    Value v; 
+                    
+                    if (rs.getString("DVpossible_values") != null) {
+                    	DiscreteValue DV = new DiscreteValue();
+                    	try {
+        					JSONObject JSON = new JSONObject(rs.getString("DVpossible_values"));
+        					JSONArray array = JSON.getJSONArray("possible_values");
+        					ArrayList<String> arrayl = new ArrayList(array.toList());
+        					DV.setPossibleValues(arrayl);
+        					
+        					
+        				} catch (Exception e) {
+        					
+        				}
+                    	DV.setCurrentValue(rs.getString("DVcurrent_value"));
+                    	DV.setId(value2id);
+                    	v = DV; 
+                    	
+                    	
+                    } else {
+                    	ContinuousValue CV = new ContinuousValue(value2id, rs.getInt("CVvalue_min"), rs.getInt("CVvalue_max"), rs.getInt("CVprecision"), rs.getInt("CVcurrent_value"));
+                    	v = CV;
+                    }
+                    
+                    block.setValue(v);
+                    blocks.add(block);
+                            
+                
                 } while (rs.next());
                 // Push the last behaviour
                 behaviour.setAtomicActions(atomics);

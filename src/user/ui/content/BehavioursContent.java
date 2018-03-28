@@ -10,6 +10,7 @@ import user.ui.componentJavaFX.MyGridPane;
 import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
+import user.ui.scene.ContentScene;
 
 public class BehavioursContent extends Content {
 
@@ -110,7 +111,7 @@ public class BehavioursContent extends Content {
 		cancelButton = new MyButtonFX("Cancel", cancelButtonBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-
+				ContentScene.getInstance().changeContent(BehavioursCommandsContent.getInstance());
 			}
 		});
 		

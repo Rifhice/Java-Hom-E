@@ -106,19 +106,6 @@ public class UserManager extends Manager{
 				user.put("id", currentUser.getId());
 				user.put("pseudo", currentUser.getPseudo());
 				System.out.println(user);
-				List<Right> rights = currentUser.getRights();
-				try {
-					for(int j = 0; j < rights.size(); j++) {
-						Right right = rights.get(j);
-						JSONObject rightJSON = new JSONObject();
-						rightJSON.put("id", right.getId());
-						rightJSON.put("denomination", right.getDenomination());
-						rightJSON.put("description", right.getDescription());
-						user.append("rights", rightJSON);
-					}
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
 				result.append("users", user);
 			}
 		}

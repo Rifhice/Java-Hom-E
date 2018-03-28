@@ -3,12 +3,22 @@ package user.ui.content;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import server.models.environmentVariable.EnvironmentVariable;
+import javafx.util.StringConverter;
 import user.ClientFX;
+import user.models.CommandValue;
+import user.models.ContinuousCommandValue;
+import user.models.DiscreteCommandValue;
+import user.models.environmentVariable.ContinuousValue;
+import user.models.environmentVariable.DiscreteValue;
+import user.models.environmentVariable.EnvironmentVariable;
+import user.models.environmentVariable.Value;
 import user.tools.ARITHMETICOPERATOR;
 import user.tools.BOOLEANOPERATOR;
 import user.ui.componentJavaFX.MyButtonFX;
@@ -17,6 +27,7 @@ import user.ui.componentJavaFX.MyGridPane;
 import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
+import user.ui.componentJavaFX.MySlider;
 import user.ui.scene.ContentScene;
 
 public class BehavioursContent extends Content {
@@ -47,21 +58,24 @@ public class BehavioursContent extends Content {
 	MyRectangle blocksBounds = new MyRectangle(0.7f, 0.1f, 0.25f, 0.35f);
 	MyRectangle expressionsBounds = new MyRectangle(0.7f, 0.55f, 0.25f, 0.35f);
 	
-	MyComboBox variablesComboBox;
-	MyComboBox operatorTopComboBox;
-	MyComboBox valueComboBox;
+	MyComboBox<EnvironmentVariable> variablesComboBox;
+	MyComboBox<String> operatorTopComboBox;
+	MyComboBox<String> valueComboBox;
+	MySlider valueSlider;
 	MyButtonFX validateBlockButton;
 	
-	MyComboBox evaluableRightComboBox;
-	MyComboBox operatorBottomComboBox;
-	MyComboBox evaluableLeftComboBox;
+	boolean type = false;
+	
+	MyComboBox<String> evaluableRightComboBox;
+	MyComboBox<String> operatorBottomComboBox;
+	MyComboBox<String> evaluableLeftComboBox;
 	MyButtonFX validateExpressionButton;
 	
 	MyLabel finalExpressionLabel;
-	MyComboBox finalExpressionComboBox;
+	MyComboBox<String> finalExpressionComboBox;
 	
 	MyLabel commandLabel;
-	MyComboBox commandKeyComboBox;
+	MyComboBox<String> commandKeyComboBox;
 	MyLabel argsLabel;
 	MyScrollPane argsScrollPane;
 	MyGridPane argsGridPane;
@@ -92,14 +106,51 @@ public class BehavioursContent extends Content {
 			boolOperators.add(BOOLEANOPERATOR.values()[i].toString());
 		}
 		
-		variablesComboBox = new MyComboBox(variableBounds.computeBounds(width, height),new ArrayList<String>());
-		operatorTopComboBox = new MyComboBox(operatorBoundsTop.computeBounds(width, height),arithOperators);
+		variablesComboBox = new MyComboBox<EnvironmentVariable>(variableBounds.computeBounds(width, height), environmentVariables);
+		variablesComboBox.valueProperty().addListener(new ChangeListener<EnvironmentVariable>() {
+
+			@Override
+			public void changed(ObservableValue<? extends EnvironmentVariable> arg0, EnvironmentVariable arg1, EnvironmentVariable arg2) {
+				if(arg2.getValue() instanceof ContinuousValue) {
+					ContinuousValue cv = (ContinuousValue) arg2.getValue();
+					type = true;
+					getChildren().remove(valueComboBox);
+					if(!getChildren().contains(valueSlider)) {
+						getChildren().add(valueSlider);
+					}
+					valueSlider.setMin(cv.getValueMin());
+					valueSlider.setMax(cv.getValueMax());
+					valueSlider.setBlockIncrement(cv.getPrecision());
+					valueSlider.setValue((valueSlider.getMin() + valueSlider.getMax()) / 2);
+				} else if (arg2.getValue() instanceof DiscreteValue) {
+					DiscreteValue dv = (DiscreteValue) arg2.getValue();
+					getChildren().remove(valueSlider);
+					if(!getChildren().contains(valueComboBox)) {
+						getChildren().add(valueComboBox);
+					}
+					valueComboBox.getItems().clear();
+					valueComboBox.getItems().addAll(dv.getPossibleValues());
+					type = false;
+				}
+				
+			}
+			
+		});
+		operatorTopComboBox = new MyComboBox<String>(operatorBoundsTop.computeBounds(width, height),arithOperators);
 		operatorTopComboBox.getSelectionModel().selectFirst();
-		valueComboBox = new MyComboBox(valueBounds.computeBounds(width, height),new ArrayList<String>());
+		valueComboBox = new MyComboBox<String>(valueBounds.computeBounds(width, height), null);
+		valueSlider = new MySlider(valueBounds.computeBounds(width, height), 0, 1, 0.1);
 		validateBlockButton = new MyButtonFX("Validate", newBlockBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				String evaluable = variablesComboBox.getValue() + " " + operatorTopComboBox.getValue() + " " + valueComboBox.getValue();
+				String value = "";
+				if(type) {
+					value = ((Double)(Math.floor(valueSlider.getValue() * 100) / 100)).toString();
+				} else {
+					value = valueComboBox.getValue();
+				}
+				String evaluable = ((EnvironmentVariable)(variablesComboBox.getValue())).getName() + " " + operatorTopComboBox.getValue() + " " + value;
+				
 				MyLabel label = new MyLabel(evaluable);
 				label.setPrefWidth(blocksScrollPane.getPrefWidth());
 				nbBlocks++;
@@ -113,10 +164,10 @@ public class BehavioursContent extends Content {
 			}
 		});
 
-		evaluableRightComboBox = new MyComboBox(leftEvaluableBounds.computeBounds(width, height), evaluables);
-		operatorBottomComboBox = new MyComboBox(operatorBoundsBottom.computeBounds(width, height), boolOperators);
+		evaluableRightComboBox = new MyComboBox<String>(leftEvaluableBounds.computeBounds(width, height), evaluables);
+		operatorBottomComboBox = new MyComboBox<String>(operatorBoundsBottom.computeBounds(width, height), boolOperators);
 		operatorBottomComboBox.getSelectionModel().selectFirst();
-		evaluableLeftComboBox = new MyComboBox(rightEvaluableBounds.computeBounds(width, height), evaluables);
+		evaluableLeftComboBox = new MyComboBox<String>(rightEvaluableBounds.computeBounds(width, height), evaluables);
 		validateExpressionButton = new MyButtonFX("Validate", expressionBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -141,10 +192,10 @@ public class BehavioursContent extends Content {
 		expressionsScrollPane.setContent(expressionsGridPane);
 		
 		finalExpressionLabel = new MyLabel("Final Expression", finalExpressionLabelBounds.computeBounds(width, height));
-		finalExpressionComboBox = new MyComboBox(finalExpressionComboBounds.computeBounds(width, height),new ArrayList<String>());
+		finalExpressionComboBox = new MyComboBox<String>(finalExpressionComboBounds.computeBounds(width, height),new ArrayList<String>());
 		
 		commandLabel = new MyLabel("Output command", commandsLabelBounds.computeBounds(width, height));
-		commandKeyComboBox = new MyComboBox(commandComboBounds.computeBounds(width, height),new ArrayList<String>());
+		commandKeyComboBox = new MyComboBox<String>(commandComboBounds.computeBounds(width, height),new ArrayList<String>());
 		argsLabel = new MyLabel("Args",argsLabelBounds.computeBounds(width, height));
 		
 		argsGridPane = new MyGridPane(argsGridBounds.computeBounds(width, height));
@@ -220,7 +271,7 @@ public class BehavioursContent extends Content {
 	}
 	
 	@Override
-	public void handleMessage(Object message) {
+	public void handleMessage(Object message) { 
 		if(message instanceof String) {
 			try {
 				System.out.println(message.toString());
@@ -230,7 +281,31 @@ public class BehavioursContent extends Content {
 				switch(recipient) {
 				case "sensor":
 					switch(action) {
-					case "get":
+					case "getEnvironmentVariables":
+                        JSONArray arrArg = json.getJSONArray("environmentVariables");
+                        for (int j = 0; j < arrArg.length(); j++){
+                            JSONObject current = arrArg.getJSONObject(j);
+                            String name = current.getString("name");
+                            String description = current.getString("description");
+                            int id = current.getInt("id");
+                            JSONObject value = current.getJSONObject("value");
+                            String type = value.getString("type");
+                            if(type.equals(Value.VALUE_TYPE.CONTINUOUS.toString())) {
+                            	ContinuousValue cv = new ContinuousValue(value.getDouble("valueMin"), value.getDouble("valueMax"), value.getDouble("precision"));
+                            	environmentVariables.add(new EnvironmentVariable(id, name, description, null, cv));
+                            } else if (type.equals(Value.VALUE_TYPE.DISCRETE.toString())) {
+                            	JSONArray valuesJSON = value.getJSONArray("possibleValues");
+                            	ArrayList<String> values = new ArrayList<String>();
+                            	for(int i = 0; i < valuesJSON.length(); i++) {
+                            		values.add(valuesJSON.getString(i));
+                            	}
+                            	DiscreteValue dv = new DiscreteValue(1, values);
+                            	environmentVariables.add(new EnvironmentVariable(id, name, description, null, dv));
+                            }
+                            // TODO : decomment 1rst line and delete 2nd one when getAll() functional
+                            // behaviours.add(new Behaviour(current.getInt("id"), current.getString("name"), current.getBoolean("isActivated")));
+                        }
+                        updateCommandValuesUI();
 						break;
 					}
 					break;
@@ -241,6 +316,28 @@ public class BehavioursContent extends Content {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void updateCommandValuesUI() {
+		variablesComboBox.getItems().clear();
+		for(int i = 0; i < environmentVariables.size(); i++) {
+			variablesComboBox.getItems().add(environmentVariables.get(i));
+		}
+		variablesComboBox.setConverter(new StringConverter<EnvironmentVariable>() {
+
+			@Override
+			public EnvironmentVariable fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String toString(EnvironmentVariable arg0) {
+				// TODO Auto-generated method stub
+				return arg0 == null ? "" : arg0.getName();
+			}
+        });
+		
 	}
 
 	public void updateUI() {

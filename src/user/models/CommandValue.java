@@ -1,7 +1,5 @@
 package user.models;
 
-import java.util.ArrayList;
-
 import org.json.JSONObject;
 
 /**
@@ -15,7 +13,7 @@ public abstract class CommandValue {
     // ==================== //
     private int id;
     private String name;   
-
+    
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //

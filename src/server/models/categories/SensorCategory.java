@@ -2,7 +2,6 @@ package server.models.categories;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.models.Sensor;

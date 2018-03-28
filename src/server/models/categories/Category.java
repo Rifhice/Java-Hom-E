@@ -1,6 +1,5 @@
 package server.models.categories;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public abstract class Category {

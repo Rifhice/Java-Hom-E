@@ -8,9 +8,7 @@ import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.EnvironmentVariableDAO;
-import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
-import server.models.Right;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;

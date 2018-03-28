@@ -1,8 +1,6 @@
 package user.ui.componentJavaFX;
 
 
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
 import java.awt.geom.Rectangle2D;
 
 

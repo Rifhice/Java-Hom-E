@@ -5,7 +5,6 @@
 package sensor;
 
 import ocsf.server.*;
-import org.json.*;
 
 /**
  * This class overrides some of the methods in the abstract 

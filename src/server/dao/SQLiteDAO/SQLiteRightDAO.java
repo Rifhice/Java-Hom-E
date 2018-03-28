@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.RightDAO;
-import server.factories.AbstractDAOFactory;
 import server.models.User;
 import server.models.Right;
 

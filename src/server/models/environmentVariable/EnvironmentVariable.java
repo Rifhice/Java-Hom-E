@@ -3,7 +3,6 @@ package server.models.environmentVariable;
 
 import java.util.Observable;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.models.Sensor;

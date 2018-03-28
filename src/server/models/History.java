@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
-import org.json.JSONArray;
-
 /**
  *
  * @author Clm-Roig

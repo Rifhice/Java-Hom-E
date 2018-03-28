@@ -1,19 +1,13 @@
 package server.managers;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONObject;
 
-import javafx.util.Pair;
 import ocsf.server.ConnectionToClient;
 import server.dao.abstractDAO.RightDAO;
-import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Right;
 import server.models.User;
-import server.tools.Security;
 
 
 public class RightManager extends Manager {

@@ -12,8 +12,6 @@ import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.UserDAO;
 import server.factories.AbstractDAOFactory;
 import javafx.util.Pair;
-import server.models.Ambience;
-import server.models.Behaviour;
 import server.models.Role;
 import server.models.User;
 import server.models.Right;

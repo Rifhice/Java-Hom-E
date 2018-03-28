@@ -7,13 +7,8 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import server.factories.AbstractDAOFactory;
-import server.models.Behaviour;
 import server.models.Command;
 import server.models.ComplexAction;
-import server.models.categories.SensorCategory;
-import server.models.commandValue.CommandValue;
-import server.models.commandValue.ContinuousCommandValue;
-import server.models.commandValue.DiscreteCommandValue;
 import ocsf.server.ConnectionToClient;
 
 public class CommandManager extends Manager{

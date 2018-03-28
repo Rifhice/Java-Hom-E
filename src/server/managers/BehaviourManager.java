@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import server.factories.AbstractDAOFactory;
 import server.models.Behaviour;
-import server.models.categories.SensorCategory;
 import ocsf.server.ConnectionToClient;
 
 public class BehaviourManager extends Manager{

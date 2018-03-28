@@ -15,7 +15,6 @@ import server.models.Actuator;
 import server.models.AtomicAction;
 import server.models.Command;
 import server.models.commandValue.*;
-import server.models.Right;
 import server.models.categories.ActuatorCategory;
 
 public class SQLiteActuatorDAO extends ActuatorDAO  {

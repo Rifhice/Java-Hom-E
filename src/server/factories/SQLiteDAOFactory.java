@@ -25,7 +25,6 @@ import server.dao.abstractDAO.RightDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
-import server.models.ComplexAction;
 
 public class SQLiteDAOFactory extends AbstractDAOFactory{
     protected Connection connect = DriverConnection.getInstance(DriverConnection.SQLITE_DRIVER); 

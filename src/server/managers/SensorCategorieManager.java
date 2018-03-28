@@ -16,6 +16,12 @@ public class SensorCategorieManager extends Manager{
 	private static SensorCategorieManager manager = null;
 	private SensorCategoriesDAO sensorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorCategoriesDAO();
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //    
+    /**
+     *  Singleton pattern
+     */
 	private SensorCategorieManager() {
 		
 	}
@@ -26,6 +32,9 @@ public class SensorCategorieManager extends Manager{
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= // 
 	public void createSensorCategorie(SensorCategory obj, ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "sensorCategories");

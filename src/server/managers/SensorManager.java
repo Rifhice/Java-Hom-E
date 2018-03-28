@@ -28,6 +28,9 @@ public class SensorManager extends Manager{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+	/**
+	 *  Singleton pattern
+	 */
 	private SensorManager() {
 		sensors = new ArrayList<Sensor>();
 	}
@@ -41,7 +44,6 @@ public class SensorManager extends Manager{
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-	
 	/**
 	 * Create a sensor from a JSON. 
 	 * @param jsonToParse

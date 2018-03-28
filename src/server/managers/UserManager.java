@@ -33,6 +33,9 @@ public class UserManager extends Manager{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    /**
+     *  Singleton pattern
+     */
     private UserManager() {
         users = new ArrayList<User>();
     }
@@ -46,7 +49,6 @@ public class UserManager extends Manager{
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-
     /**
      * Return a pair with the user and a code defining success or failure : 
      * 0 = success, 

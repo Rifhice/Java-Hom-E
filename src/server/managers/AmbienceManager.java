@@ -18,6 +18,12 @@ public class AmbienceManager extends Manager{
 
 	private static AmbienceManager manager = null;
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
 	private AmbienceManager() {
 	}
 	
@@ -27,7 +33,9 @@ public class AmbienceManager extends Manager{
 		return manager;
 	}
 	
-	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= // 
 	public void getAllAmbience(JSONObject json, ConnectionToClient client){
 		ArrayList<Ambience> ambiences = null;
 

@@ -21,6 +21,12 @@ public class ActuatorManager extends Manager {
 	
 	private static ActuatorManager manager = null;
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+	/**
+	 *  Singleton pattern
+	 */
 	private ActuatorManager() {
 		actuators = new ArrayList<Actuator>();
 	}
@@ -31,6 +37,9 @@ public class ActuatorManager extends Manager {
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //	
 	public void registerActuatorToTheSystem(JSONObject json) {
 		// TODO
 	}

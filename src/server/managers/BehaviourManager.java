@@ -14,6 +14,12 @@ public class BehaviourManager extends Manager{
 
 	private static BehaviourManager manager = null;
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
 	private BehaviourManager() {
 	}
 	
@@ -23,6 +29,9 @@ public class BehaviourManager extends Manager{
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= // 
 	public void createBehaviour(JSONObject json) {
 	}
 	

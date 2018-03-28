@@ -13,9 +13,18 @@ import ocsf.server.ConnectionToClient;
 
 public class ActuatorCategorieManager extends Manager{
 
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private static ActuatorCategorieManager manager = null;
 	private ActuatorCategoriesDAO actuatorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getActuatorCategoriesDAO();
-	
+    
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //	
+	/**
+	 *  Singleton pattern
+	 */
 	private ActuatorCategorieManager() {
 		
 	}
@@ -26,6 +35,9 @@ public class ActuatorCategorieManager extends Manager{
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	public void getAllActuatorCategorie(ConnectionToClient client) {
 		ArrayList<ActuatorCategory> actuatorCategories = actuatorCategoriesDAO.getAll();
 		JSONObject result = new JSONObject();

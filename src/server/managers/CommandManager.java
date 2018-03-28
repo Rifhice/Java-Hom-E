@@ -19,7 +19,12 @@ import ocsf.server.ConnectionToClient;
 public class CommandManager extends Manager{
 
 	private static CommandManager manager = null;
-	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== // 
+    /**
+     *  Singleton pattern
+     */
 	private CommandManager() {
 		
 	}
@@ -30,6 +35,9 @@ public class CommandManager extends Manager{
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= // 
 	public void createComplexCommand(JSONObject json,ConnectionToClient client) {
 		
 	}

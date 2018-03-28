@@ -35,12 +35,12 @@ public class SystemManager extends Manager{
 	// Currently used DB = SQLite
 	public static final int db = AbstractDAOFactory.SQLITE_DAO_FACTORY;
 	
-	// ====================== //
-	// ==== CONSTRUCTORS ==== //
-	// ====================== //
-	/**
-	 * Private constructor (singleton pattern)
-	 */
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
 	private SystemManager() {
 		ambienceManager = AmbienceManager.getManager();
 		behaviourManager = BehaviourManager.getManager();

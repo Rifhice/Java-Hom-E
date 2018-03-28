@@ -25,12 +25,26 @@ public class RightManager extends Manager {
     private RightDAO rightDAO = AbstractDAOFactory.getFactory(SystemManager.db).getRightDAO();
     private static RightManager manager = null;
     
+    
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
+    private RightManager() {
+        
+    }
+    
+    public static RightManager getManager() {
+        if(manager == null) 
+            manager = new RightManager();
+        return manager;
+    }
+    
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-    
-  
-    
     public void getByUser(JSONObject json, ConnectionToClient client) {
     	ArrayList<Right> rights = null;
     	int id = json.getInt("id");
@@ -72,8 +86,6 @@ public class RightManager extends Manager {
     	
     }
 		
-		
-
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");

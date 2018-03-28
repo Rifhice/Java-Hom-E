@@ -625,12 +625,14 @@ public class SQLiteDatabaseManager {
         String insertOwns10 = "INSERT INTO owns ('fk_user_id','fk_right_id') VALUES (1,1);";
         String insertOwns11 = "INSERT INTO owns ('fk_user_id','fk_right_id') VALUES (1,2);";
         String insertOwns20 = "INSERT INTO owns ('fk_user_id','fk_right_id') VALUES (2,1);";
+        String insertOwns32 = "INSERT INTO owns ('fk_user_id','fk_right_id') VALUES (3,3);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertOwns10);
             stmt.execute(insertOwns11);
             stmt.execute(insertOwns20);
+            stmt.execute(insertOwns32);
         } catch (SQLException e) {
-            System.out.println("ERROR inserting OwnsByDefault : " + e.getMessage());
+            System.out.println("ERROR inserting Owns : " + e.getMessage());
         }
     }
     
@@ -671,9 +673,11 @@ public class SQLiteDatabaseManager {
     private static void insertRights() {
         String insertRightLRLights = "INSERT INTO rights ('id', 'denomination', 'description') VALUES (1, 'Switch the living room lights.','Allow to switch on and off the lights of the living room.');";
         String insertRightKHeats = "INSERT INTO rights ('id','denomination', 'description') VALUES (2, 'Set kitchen-heater temperature.','You can change the temperature of the kitchen.');";
+        String insertRightDoor = "INSERT INTO rights ('id','denomination', 'description') VALUES (3, 'Open the front door.','You can unlock and open the front door of your house.');";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertRightLRLights);
             stmt.execute(insertRightKHeats);
+            stmt.execute(insertRightDoor);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Rights : " + e.getMessage());
         }
@@ -721,9 +725,12 @@ public class SQLiteDatabaseManager {
     private static void insertUsers() {
         String insertUser1 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('The Boss', 'password', 1);";
         String insertUser2 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('Rifhice', 'password', 2);";
+        String insertUser3 = "INSERT INTO users ('pseudo', 'password', 'fk_role_id') VALUES ('Flectra', 'MyPassword', 2);";
+
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertUser1);
             stmt.execute(insertUser2);
+            stmt.execute(insertUser3);
         } catch (SQLException e) {
             System.out.println("ERROR inserting Users : " + e.getMessage());
         }

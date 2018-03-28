@@ -6,14 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.ComplexActionDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.AtomicAction;
-import server.models.Behaviour;
-import server.models.Command;
 import server.models.ComplexAction;
 
 public class SQLiteComplexActionDAO extends ComplexActionDAO {
@@ -22,6 +19,12 @@ public class SQLiteComplexActionDAO extends ComplexActionDAO {
 		super(connect);
 		// TODO Auto-generated constructor stub
 	}
+	
+	@Override
+    public ComplexAction getById(int id) throws DAOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 	@Override
 	public ComplexAction create(ComplexAction obj) throws DAOException {

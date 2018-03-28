@@ -30,8 +30,12 @@ public class SQLiteCommandDAO extends CommandDAO {
 	public Command create(Command obj) throws DAOException {
 		return null;
 	}
-
-
+	
+    @Override
+    public Command getById(int id) throws DAOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 	@Override
 	public int update(Command obj) throws DAOException {

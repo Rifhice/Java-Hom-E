@@ -208,6 +208,7 @@ public class SensorContent extends Content {
 						if(sensors.get(i).getId() == json.getInt("idSensor")) {
 							sensors.get(i).changeValue(json.getString("value"));
 						}
+						updateUI();
 					}
 					break;
 				default:

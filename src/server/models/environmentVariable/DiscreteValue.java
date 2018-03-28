@@ -103,4 +103,8 @@ public class DiscreteValue extends Value {
         return false;
     }  
 
+	public Object getValue() {
+		return currentValue;
+	}
+    
 }

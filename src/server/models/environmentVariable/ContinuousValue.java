@@ -128,4 +128,8 @@ public class ContinuousValue extends Value {
         }
         return false;
     }
+
+	public Object getValue() {
+		return currentValue;
+	}
 }

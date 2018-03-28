@@ -60,6 +60,13 @@ public class EnvironmentVariable extends Observable{
         this.value = value;
     }
 	
+	public EnvironmentVariable(String name, String description, String unit, Value value) {
+        this.name = name;
+        this.unit = unit;
+        this.description = description;
+        this.value = value;
+    }
+	
 	public EnvironmentVariable(int id, String name, String description, String unit, Sensor sensor, Value value) {
         this.id = id;
         this.name = name;
@@ -114,6 +121,10 @@ public class EnvironmentVariable extends Observable{
     
     public Value getValue() {
         return value;
+    }
+    
+    public Object getCurrentValue() {
+        return value.getValue();
     }
 
     public void setValue(Value value) {

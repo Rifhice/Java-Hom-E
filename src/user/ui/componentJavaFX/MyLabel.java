@@ -1,15 +1,9 @@
 package user.ui.componentJavaFX;
 
-import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import user.tools.GraphicalCharter;
 

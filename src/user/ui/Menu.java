@@ -3,7 +3,6 @@ package user.ui;
 
 import user.ClientFX;
 import user.ui.componentJavaFX.MyButtonFX;
-import user.ui.content.Content;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;

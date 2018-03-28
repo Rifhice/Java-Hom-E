@@ -11,11 +11,25 @@ import server.factories.AbstractDAOFactory;
 import server.models.categories.ActuatorCategory;
 import ocsf.server.ConnectionToClient;
 
+/**
+ * 
+ * @author Clm-Roig
+ *
+ */
 public class ActuatorCategorieManager extends Manager{
 
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private static ActuatorCategorieManager manager = null;
 	private ActuatorCategoriesDAO actuatorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getActuatorCategoriesDAO();
-	
+    
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //	
+	/**
+	 *  Singleton pattern
+	 */
 	private ActuatorCategorieManager() {
 		
 	}
@@ -26,7 +40,10 @@ public class ActuatorCategorieManager extends Manager{
 		return manager;
 	}
 	
-	public void getAllActuatorCategorie(ConnectionToClient client) {
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
+	public void getAllActuatorCategories(ConnectionToClient client) {
 		ArrayList<ActuatorCategory> actuatorCategories = actuatorCategoriesDAO.getAll();
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
@@ -100,12 +117,21 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 
+	/**
+	 * Possible values for key "action":
+	 * <ul>
+	 * <li>getAll</li>
+	 * <li>create</li>
+	 * <li>delete</li>
+	 * <li>update</li>
+	 * </ul>
+	 */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
-	        	getAllActuatorCategorie(client);
+	        	getAllActuatorCategories(client);
 	            break;
 	        case "create":
 	        	createActuatorCategorie(new ActuatorCategory(json.getString("name"),json.getString("description")),client);
@@ -118,4 +144,5 @@ public class ActuatorCategorieManager extends Manager{
 	            break;
         }
 	}
+
 }

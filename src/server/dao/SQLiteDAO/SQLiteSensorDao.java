@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorDAO;
-import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;
@@ -50,12 +50,10 @@ public class SQLiteSensorDao extends SensorDAO{
               
               if(created > 0) {
                   sensor.setId(SQLiteDAOTools.getLastId(connect));
-                  for (int i = 0; i < sensor.getEnvironmentVariables().size(); i++) {
-                	boolean tmp = createEnvironmentVariable(sensor.getEnvironmentVariables().get(i));
+                	boolean tmp = createEnvironmentVariable(sensor.getEnvironmentVariables());
                 	if(!tmp) {
 						return null;
 					}
-				}
               }
               else {
                   sensor = null;
@@ -67,9 +65,12 @@ public class SQLiteSensorDao extends SensorDAO{
     }
 
     private boolean createEnvironmentVariable(EnvironmentVariable variable) {
+	  	  if(!createValue(variable.getValue())) {
+			  return false;
+	      }
     	String sql = "INSERT INTO environmentVariables "
-                + "(name, description,unit, fk_sensor_id) VALUES "
-                + "(?, ?, ?,?)";
+                + "(name, description,unit, fk_sensor_id,fk_vvalue_id) VALUES "
+                + "(?, ?, ?,?,?)";
         
         // Insert the object
         int created = 0;
@@ -80,20 +81,11 @@ public class SQLiteSensorDao extends SensorDAO{
               prepStat.setString(2, variable.getDescription());
               prepStat.setString(3, variable.getUnit());
               prepStat.setInt(4, variable.getSensor().getId());
+              prepStat.setInt(5, SQLiteDAOTools.getLastId(connect));
               created = prepStat.executeUpdate();
               // Get the id generated for this object
               if(created > 0) {
                   variable.setId(SQLiteDAOTools.getLastId(connect));
-                  if(variable.getValue() instanceof ContinuousValue) {
-                	  if(!createValue((ContinuousValue)variable.getValue())) {
-                		  return false;
-                	  }
-                  }
-                  else if(variable.getValue() instanceof DiscreteValue) {
-                	  if(!createValue((DiscreteValue)variable.getValue())) {
-                		  return false;
-                	  }
-                  }
               }
               else {
                   return false;
@@ -167,7 +159,7 @@ public class SQLiteSensorDao extends SensorDAO{
               prepStat.setFloat(2,(float) value.getValueMin());
               prepStat.setFloat(3, (float)value.getValueMax());
               prepStat.setFloat(4,(float) value.getCurrentValue());
-              prepStat.setFloat(5, (float)value.getPrecision());          
+              prepStat.setFloat(5, (float)value.getPrecision());  
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
@@ -198,7 +190,7 @@ public class SQLiteSensorDao extends SensorDAO{
               for (int i = 0; i < value.getPossibleValues().size(); i++) {
 				json.append("possibleValues", value.getPossibleValues().get(i));
               }
-              prepStat.setString(3, json.toString());       
+              prepStat.setString(3, json.toString());   
               created = prepStat.executeUpdate();
               
               // Get the id generated for this object
@@ -267,12 +259,95 @@ public class SQLiteSensorDao extends SensorDAO{
             	sensor.setId(rs.getInt("id"));
             	sensor.setName(rs.getString("name"));
             	sensor.setDescription(rs.getString("description"));
+            	sensor.setEnvironmentVariable(getEnvironmentVariable(sensor.getId()));
                 sensors.add(sensor);
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);
         }
+        System.out.println(sensors);
         return sensors;
+    }
+    
+    public EnvironmentVariable getEnvironmentVariable(int id) throws DAOException {
+    	EnvironmentVariable variable = null;
+        String sql = "SELECT * FROM environmentVariables WHERE fk_sensor_id = ?";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            while (rs.next()) {
+            	variable = new EnvironmentVariable();
+            	variable.setId(rs.getInt("id"));
+            	variable.setName(rs.getString("name"));
+            	variable.setDescription(rs.getString("description"));
+            	variable.setUnit(rs.getString("unit"));
+            	DiscreteValue dvalue = getDiscreteValue(rs.getInt("fk_vvalue_id"));
+            	if(dvalue == null) {
+            		ContinuousValue cvalue = getContinuousValue(rs.getInt("fk_vvalue_id"));
+            		if(cvalue == null) {
+            			System.out.println("AUCUNE VALUE TROUVE");
+            		}
+            		else {
+            			variable.setValue(cvalue);
+            		}
+            	}
+            	else {
+            		variable.setValue(dvalue);
+            	}
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : SensorDAO getEnvironmentVariable() :" + e.getMessage(), e);
+        }
+        return variable;
+    }
+    
+    public DiscreteValue getDiscreteValue(int id) {
+    	DiscreteValue value = null;
+        String sql = "SELECT * FROM discreteVValues WHERE fk_vvalue_id = ?";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            while (rs.next()) {
+            	value = new DiscreteValue();
+            	value.setId(rs.getInt("current_value"));
+            	ArrayList<String> possibleValues = new ArrayList<String>();
+            	JSONObject json = new JSONObject(rs.getString("possible_values"));
+            	JSONArray array = json.getJSONArray("possibleValues");
+            	for (int i = 0; i < array.length(); i++) {
+					possibleValues.add(array.getString(i));
+				}
+            	value.setCurrentValue(rs.getString("current_value"));
+            	value.setPossibleValues(possibleValues);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : SensorDAO getDiscreteValue() :" + e.getMessage(), e);
+        }
+        return value;
+    }
+    
+    public ContinuousValue getContinuousValue(int id) {
+    	ContinuousValue value = null;
+        String sql = "SELECT * FROM continuousVValues WHERE fk_vvalue_id = ?";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            while (rs.next()) {
+            	value = new ContinuousValue();
+            	value.setValueMin(rs.getDouble("value_min"));
+            	value.setValueMax(rs.getDouble("value_max"));
+            	value.setCurrentValue(rs.getDouble("current_value"));
+            	value.setPrecision(rs.getDouble("precision"));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : SensorDAO getContinuousValue() :" + e.getMessage(), e);
+        }
+        return value;
     }
     
     // ======================== //
@@ -282,7 +357,7 @@ public class SQLiteSensorDao extends SensorDAO{
     // ============== //
     // ==== MAIN ==== //
     // ============== // 
-    public static void main (String args[]) {
+    public static void main (String args[]) {/*
         SensorDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO();
        
         Value value = new ContinuousValue(45, -50.0, 50.0, 0.5, 20);
@@ -292,6 +367,6 @@ public class SQLiteSensorDao extends SensorDAO{
         
         Sensor sensor = new Sensor("thermomètre", "il mesure bien la chaleur", list);    
         System.out.println(test.create(sensor));
-        System.out.println(test.getAll());
+        System.out.println(test.getAll());*/
     }
 }

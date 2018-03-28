@@ -1,7 +1,5 @@
 package server.factories;
 
-import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
-import server.dao.SQLiteDAO.SQLiteSensorCategoriesDAO;
 import server.dao.abstractDAO.ActuatorCategoriesDAO;
 import server.dao.abstractDAO.ActuatorDAO;
 import server.dao.abstractDAO.AmbienceDAO;
@@ -14,8 +12,6 @@ import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorCategoriesDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
-import server.models.Command;
-import server.models.ComplexAction;
 
 public abstract class AbstractDAOFactory {
 	

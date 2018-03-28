@@ -1,7 +1,5 @@
 package user.ui.scene;
 
-import java.awt.geom.Rectangle2D;
-
 import org.json.JSONObject;
 
 import user.ui.componentJavaFX.MyButtonFX;

@@ -1,20 +1,10 @@
 package user.ui.componentJavaFX;
 
-import java.awt.geom.Rectangle2D;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import user.models.User;
 import user.tools.GraphicalCharter;
-
-import javafx.scene.image.Image;
 
 public class UserCell extends MyPane{
 	

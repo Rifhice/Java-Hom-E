@@ -11,12 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import user.communication.UserClient;
 import user.tools.GraphicalCharter;
 import user.ui.scene.ContentScene;
-import user.ui.scene.LoginScene;
 import user.ui.scene.MyScene;
 
 public class ClientFX extends Application{

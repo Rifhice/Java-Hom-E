@@ -3,7 +3,6 @@ package server.models.environmentVariable;
 
 import java.util.Observable;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.models.Sensor;
@@ -132,7 +131,9 @@ public class EnvironmentVariable extends Observable{
     	result.put("name", name);
     	result.put("unit", unit);
     	result.put("description", description);
-    	result.put("value", value.toJson());
+    	if(value != null) {
+    		result.put("value", value.toJson());
+    	}
     	return result;
     }
 

@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import server.models.environmentVariable.EnvironmentVariable;
 import user.ClientFX;
+import user.tools.ARITHMETICOPERATOR;
+import user.tools.BOOLEANOPERATOR;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyComboBox;
 import user.ui.componentJavaFX.MyGridPane;
@@ -42,7 +44,8 @@ public class BehavioursContent extends Content {
 	MyRectangle validateButtonBounds = new MyRectangle(0.2f, 0.85f, 0.1f, 0.05f);
 	MyRectangle cancelButtonBounds = new MyRectangle(0.4f, 0.85f, 0.1f, 0.05f);
 	
-	MyRectangle evaluablesBounds = new MyRectangle(0.7f, 0.1f, 0.25f, 0.8f);
+	MyRectangle blocksBounds = new MyRectangle(0.7f, 0.1f, 0.25f, 0.35f);
+	MyRectangle expressionsBounds = new MyRectangle(0.7f, 0.55f, 0.25f, 0.35f);
 	
 	MyComboBox variablesComboBox;
 	MyComboBox operatorTopComboBox;
@@ -63,40 +66,79 @@ public class BehavioursContent extends Content {
 	MyScrollPane argsScrollPane;
 	MyGridPane argsGridPane;
 	
-	MyScrollPane evaluableScrollPane;
-	MyGridPane evaluableGridPane;
+	MyScrollPane blocksScrollPane;
+	MyScrollPane expressionsScrollPane;
+	MyGridPane blocksGridPane;
+	MyGridPane expressionsGridPane;
 	
 	MyButtonFX valideButton;
 	MyButtonFX cancelButton;
 	
 	// ========= ATTRIBUTES ========= //
 	private ArrayList<EnvironmentVariable> environmentVariables = new ArrayList<EnvironmentVariable>();
+	private ArrayList<String> evaluables = new ArrayList<String>();
+	private int nbBlocks = 0, nbExpressions = 0;
 	
-	private BehavioursContent() {
+	private BehavioursContent() {		
+		int nbArithOperator = ARITHMETICOPERATOR.values().length;
+		ArrayList<String> arithOperators = new ArrayList<String>();
+		for(int i = 0; i < nbArithOperator; i++) {
+			arithOperators.add(ARITHMETICOPERATOR.values()[i].toString());
+		}
+		
+		int nbBoolOperator = BOOLEANOPERATOR.values().length;
+		ArrayList<String> boolOperators = new ArrayList<String>();
+		for(int i = 0; i < nbBoolOperator; i++) {
+			boolOperators.add(BOOLEANOPERATOR.values()[i].toString());
+		}
+		
 		variablesComboBox = new MyComboBox(variableBounds.computeBounds(width, height),new ArrayList<String>());
-		operatorTopComboBox = new MyComboBox(operatorBoundsTop.computeBounds(width, height),new ArrayList<String>());;
-		valueComboBox = new MyComboBox(valueBounds.computeBounds(width, height),new ArrayList<String>());;
+		operatorTopComboBox = new MyComboBox(operatorBoundsTop.computeBounds(width, height),arithOperators);
+		operatorTopComboBox.getSelectionModel().selectFirst();
+		valueComboBox = new MyComboBox(valueBounds.computeBounds(width, height),new ArrayList<String>());
 		validateBlockButton = new MyButtonFX("Validate", newBlockBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				String evaluable = variablesComboBox.getValue() + " " + operatorTopComboBox.getValue() + " " + valueComboBox.getValue();
+				MyLabel label = new MyLabel(evaluable);
+				label.setPrefWidth(blocksScrollPane.getPrefWidth());
+				nbBlocks++;
+				if(nbBlocks % 2 == 0) {
+					label.setStyle("-fx-background-color: #FFFFFF;");
+				}
+				blocksGridPane.add(label, 0, nbBlocks);
+				evaluables.add(evaluable);
+				evaluableRightComboBox.getItems().add(evaluable);
+				evaluableLeftComboBox.getItems().add(evaluable);
 			}
 		});
 
-		evaluableRightComboBox = new MyComboBox(leftEvaluableBounds.computeBounds(width, height),new ArrayList<String>());
-		operatorBottomComboBox = new MyComboBox(operatorBoundsBottom.computeBounds(width, height),new ArrayList<String>());
-		evaluableLeftComboBox = new MyComboBox(rightEvaluableBounds.computeBounds(width, height),new ArrayList<String>());
+		evaluableRightComboBox = new MyComboBox(leftEvaluableBounds.computeBounds(width, height), evaluables);
+		operatorBottomComboBox = new MyComboBox(operatorBoundsBottom.computeBounds(width, height), boolOperators);
+		operatorBottomComboBox.getSelectionModel().selectFirst();
+		evaluableLeftComboBox = new MyComboBox(rightEvaluableBounds.computeBounds(width, height), evaluables);
 		validateExpressionButton = new MyButtonFX("Validate", expressionBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+				String evaluable = evaluableLeftComboBox.getValue() + " " + operatorBottomComboBox.getValue() + " " + evaluableRightComboBox.getValue();
+				MyLabel label = new MyLabel(evaluable);
+				label.setPrefWidth(blocksScrollPane.getPrefWidth());
+				nbExpressions++;
+				if(nbExpressions % 2 == 0) {
+					label.setStyle("-fx-background-color: #FFFFFF;");
+				}
+				expressionsGridPane.add(label, 0, nbExpressions);
+				evaluables.add(evaluable);
+				finalExpressionComboBox.getItems().add(evaluable);
 			}
 		});
 		
-		evaluableGridPane = new MyGridPane(evaluablesBounds.computeBounds(width, height));
-		evaluableGridPane.add(new MyLabel("Evaluable"), 0, 0);
-		evaluableScrollPane = new MyScrollPane(evaluablesBounds.computeBounds(width, height));
-		evaluableScrollPane.setContent(evaluableGridPane);
+		blocksGridPane = new MyGridPane(blocksBounds.computeBounds(width, height));
+		expressionsGridPane = new MyGridPane(expressionsBounds.computeBounds(width, height));
+		blocksScrollPane = new MyScrollPane(blocksBounds.computeBounds(width, height));
+		blocksScrollPane.setContent(blocksGridPane);
+		expressionsScrollPane = new MyScrollPane(expressionsBounds.computeBounds(width, height));
+		expressionsScrollPane.setContent(expressionsGridPane);
 		
 		finalExpressionLabel = new MyLabel("Final Expression", finalExpressionLabelBounds.computeBounds(width, height));
 		finalExpressionComboBox = new MyComboBox(finalExpressionComboBounds.computeBounds(width, height),new ArrayList<String>());
@@ -134,7 +176,8 @@ public class BehavioursContent extends Content {
         this.getChildren().add(evaluableLeftComboBox);
         this.getChildren().add(validateExpressionButton);
         
-        this.getChildren().add(evaluableScrollPane);
+        this.getChildren().add(blocksScrollPane);
+        this.getChildren().add(expressionsScrollPane);
         
         this.getChildren().add(finalExpressionLabel);
         this.getChildren().add(finalExpressionComboBox);
@@ -178,7 +221,29 @@ public class BehavioursContent extends Content {
 	
 	@Override
 	public void handleMessage(Object message) {
-		System.out.println(message);
+		if(message instanceof String) {
+			try {
+				System.out.println(message.toString());
+				JSONObject json = new JSONObject((String)message);
+				String recipient = json.getString("recipient");
+				String action = json.getString("action");
+				switch(recipient) {
+				case "sensor":
+					switch(action) {
+					case "get":
+						break;
+					}
+					break;
+				default:
+					break;
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void updateUI() {
 	}
 	
 

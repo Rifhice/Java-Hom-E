@@ -93,7 +93,7 @@ public class SensorManager extends Manager{
                 
                 variables.add(ev);			
 			}
-			return new Sensor(name, description, variables);
+			return new Sensor(name, description, variables.get(0));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -117,8 +117,8 @@ public class SensorManager extends Manager{
 			result.put("verb", "post");
 			result.put("id", sensorCreated.getId());
 			// TODO : temporarily, we just return the 1rst environmentVariable.
-			result.put("idEnv",sensorCreated.getEnvironmentVariables().get(0).getId());
-	        result.put("idValue",sensorCreated.getEnvironmentVariables().get(0).getValue().getId());
+			result.put("idEnv",sensorCreated.getEnvironmentVariables().getId());
+	        result.put("idValue",sensorCreated.getEnvironmentVariables().getValue().getId());
 		}
 		else {
 			result.put("result", "failure");
@@ -188,6 +188,22 @@ public class SensorManager extends Manager{
         System.out.println("RESULT: "+result.toString());
 	}
 
+	public void getAll(JSONObject json,ConnectionToClient client) {
+		ArrayList<Sensor> sensors = sensorDAO.getAll();
+		JSONObject result = new JSONObject();
+        result.put("result", "success");
+        result.put("recipient", "sensor");
+        result.put("action", "getAll");
+		for (int i = 0; i < sensors.size(); i++) {
+			result.append("sensors", sensors.get(i).toJson());
+		}
+        try {
+            client.sendToClient(result.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");
@@ -201,6 +217,8 @@ public class SensorManager extends Manager{
 		case "getEnvironmentVariables": 
 		    returnGetEnvironmentVariables(json, client);
 		    break;
+		case "getAll":
+			getAll(json,client);
 		default:
 			break;
 		}

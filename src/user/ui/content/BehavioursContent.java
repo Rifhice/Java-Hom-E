@@ -10,7 +10,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.util.StringConverter;
 import user.ClientFX;
 import user.models.Actuator;
@@ -315,7 +314,7 @@ public class BehavioursContent extends Content {
 		valideButton = new MyButtonFX("Validate", validateButtonBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-
+				
 			}
 		});
 		

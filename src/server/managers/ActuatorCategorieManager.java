@@ -38,7 +38,7 @@ public class ActuatorCategorieManager extends Manager{
 	// ================= //
     // ==== METHODS ==== //
     // ================= //
-	public void getAllActuatorCategorie(ConnectionToClient client) {
+	public void getAllActuatorCategories(ConnectionToClient client) {
 		ArrayList<ActuatorCategory> actuatorCategories = actuatorCategoriesDAO.getAll();
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
@@ -112,12 +112,21 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 
+	/**
+	 * Possible values for key "action":
+	 * <ul>
+	 * <li>getAll</li>
+	 * <li>create</li>
+	 * <li>delete</li>
+	 * <li>update</li>
+	 * </ul>
+	 */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
-	        	getAllActuatorCategorie(client);
+	        	getAllActuatorCategories(client);
 	            break;
 	        case "create":
 	        	createActuatorCategorie(new ActuatorCategory(json.getString("name"),json.getString("description")),client);
@@ -130,4 +139,5 @@ public class ActuatorCategorieManager extends Manager{
 	            break;
         }
 	}
+
 }

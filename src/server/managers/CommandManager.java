@@ -110,6 +110,17 @@ public class CommandManager extends Manager{
 		}
 	}
 
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>getAll</li>
+     * <li>getAllComplex</li>
+     * <li>getAllAtomic</li>
+     * <li>create</li>
+     * <li>delete</li>
+     * <li>update</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");

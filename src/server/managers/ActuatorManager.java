@@ -139,6 +139,13 @@ public class ActuatorManager extends Manager {
 		}
 	}
 	
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>post</li>
+     * <li>execute</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String verb = json.getString("verb");

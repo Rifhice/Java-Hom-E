@@ -84,6 +84,15 @@ public class BehaviourManager extends Manager{
 		behaviour.setActivated(false);
 	}
 
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>getAll</li>
+     * <li>create</li>
+     * <li>delete</li>
+     * <li>update</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");

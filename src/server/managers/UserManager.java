@@ -130,7 +130,15 @@ public class UserManager extends Manager{
 			e.printStackTrace();
 		}
     }
-
+    
+    /**
+     * Possible values for key "action":
+     * <ul>
+     * <li>login</li>
+     * <li>loginAsGuest</li>
+     * <li>getAll</li>
+     * </ul>
+     */
     @Override
     public void handleMessage(JSONObject json, ConnectionToClient client) {
         String action = json.getString("action");

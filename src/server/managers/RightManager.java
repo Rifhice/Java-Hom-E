@@ -86,11 +86,16 @@ public class RightManager extends Manager {
     	
     }
 		
+    /**
+     * Possible values for key "action":
+     * <ul>
+     * <li>getByUser</li>
+     * <li>getAll</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");
-        System.out.println(action);
-        String user;
         switch(action) {
 	        case "getByUser":
 	            getByUser(json,client);

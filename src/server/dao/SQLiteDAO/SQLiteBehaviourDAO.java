@@ -615,9 +615,44 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public Value getValue(EnvironmentVariable ev) throws DAOException {
         Value value = null;
-        
-        // TODO 
+        String sql = "SELECT V.id AS id, "
+                + "CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, "
+                + "CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
+                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values "
+                + "FROM EnvironmentVariables AS EV "
+                + "JOIN Vvalues AS V ON V.id = EV.fk_vvalue_id "
+                + "LEFT JOIN ContinuousVvalues AS CV ON CV.fk_vvalue_id = V.id "
+                + "LEFT JOIN DiscreteVvalues AS DV ON DV.fk_vvalue_id = V.id "
+                + "WHERE V.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, ev.getId());
+            ResultSet rs = prepStat.executeQuery();
 
+            if(rs.next()) {                
+                if(rs.getInt("DVpossible_values") != 0) {
+                    value = new DiscreteValue();
+                    ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
+                    
+                    JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
+                    JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
+                    ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());
+                    ((DiscreteValue) value).setPossibleValues(possibleValues);
+                }
+                else {
+                    value = new ContinuousValue();
+                    ((ContinuousValue)value).setValueMax(rs.getDouble("CVvalue_max"));
+                    ((ContinuousValue)value).setValueMin(rs.getDouble("CVvalue_min"));
+                    ((ContinuousValue)value).setCurrentValue(rs.getDouble("CVcurrent_value"));
+                    ((ContinuousValue)value).setPrecision(rs.getDouble("CVprecision"));
+                }
+                value.setId(rs.getInt("id"));
+               
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getValue("+ ev.getId()+") :" + e.getMessage(), e);
+        }
         return value;
     }
 
@@ -629,8 +664,45 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public Value getValue(Block block) throws DAOException {
         Value value = null;
+        
+        String sql = "SELECT V.id AS id, "
+                + "CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, "
+                + "CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
+                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values "
+                + "FROM Blocks AS B "
+                + "JOIN Vvalues AS V ON V.id = B.fk_vvalue_id "
+                + "LEFT JOIN ContinuousVvalues AS CV ON CV.fk_vvalue_id = V.id "
+                + "LEFT JOIN DiscreteVvalues AS DV ON DV.fk_vvalue_id = V.id "
+                + "WHERE V.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, block.getId());
+            ResultSet rs = prepStat.executeQuery();
 
-        // TODO 
+            if(rs.next()) {                
+                if(rs.getInt("DVpossible_values") != 0) {
+                    value = new DiscreteValue();
+                    ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
+                    
+                    JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
+                    JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
+                    ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());
+                    ((DiscreteValue) value).setPossibleValues(possibleValues);
+                }
+                else {
+                    value = new ContinuousValue();
+                    ((ContinuousValue)value).setValueMax(rs.getDouble("CVvalue_max"));
+                    ((ContinuousValue)value).setValueMin(rs.getDouble("CVvalue_min"));
+                    ((ContinuousValue)value).setCurrentValue(rs.getDouble("CVcurrent_value"));
+                    ((ContinuousValue)value).setPrecision(rs.getDouble("CVprecision"));
+                }
+                value.setId(rs.getInt("id"));
+               
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getValue("+ block.getId()+") :" + e.getMessage(), e);
+        }
 
         return value;
     }
@@ -643,10 +715,16 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         // System.out.println(test.getAll());
         Behaviour b = new Behaviour();
         b = test.getById(1);
+        
         Expression e = new Expression();
         e.setId(1);
+        
         Block bl = new Block();
         bl.setId(1);
-        System.out.println(((SQLiteBehaviourDAO)test).getEnvironmentVariable(bl));
+        
+        EnvironmentVariable ev = new EnvironmentVariable();
+        ev.setId(1);
+        
+        System.out.println(((SQLiteBehaviourDAO)test).getValue(bl));
     }
 }

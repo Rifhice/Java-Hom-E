@@ -102,7 +102,7 @@ public class Expression implements Evaluable {
         int operatorCpt = 0;
         if(evaluables != null) {
         	for (int i = 0; i < evaluables.size(); i++) {
-                res += "[" + evaluables.get(i).toString() + "]";
+                res += "\n[" + evaluables.get(i).toString() + "]\n";
                 if(operatorCpt < operators.size()) {
                     res += " " + operators.get(operatorCpt) + " ";
                 }

@@ -346,6 +346,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 ArrayList<Evaluable> blocks = new ArrayList<Evaluable>();
 
                 Behaviour behaviour = new Behaviour();
+                Expression E = null;
                 do {
                     if(previousId != rs.getInt("id")) {
                         // Not first behaviour : push the previous behaviour
@@ -356,8 +357,9 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                             
                             complexs= new ArrayList<ComplexAction>();
                             atomics = new ArrayList<AtomicAction>();
-                            blocks = new ArrayList<Evaluable>();
+                            //blocks = new ArrayList<Evaluable>();
                             behaviour = new Behaviour();  
+                            
                         }   
 
                         
@@ -370,9 +372,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
         					JSONArray array = JSON.getJSONArray("operators");
         					ArrayList<String> arrayl = new ArrayList(array.toList());
-        					Expression E = new Expression(rs.getInt("Eid"), arrayl);
+        					E = new Expression(rs.getInt("Eid"), arrayl);
         					E.setEvaluables(blocks);
         					behaviour.setExpression(E);
+
         				} catch (Exception e) {
         					
         				}
@@ -380,16 +383,20 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     }
 
                     // Same behaviour as previous one, we add the next atomicAction
-                    int atomicId = rs.getInt("Acid");
-                    String atomicExecutable = rs.getString("Acexecutable");
-                    String atomicName = rs.getString("Acname");
-                    AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
-                    atomics.add(atomic);
+                    if (rs.getInt("Acid") != 0 ) {
+                    	int atomicId = rs.getInt("Acid");
+                    	String atomicExecutable = rs.getString("Acexecutable");
+                    	String atomicName = rs.getString("Acname");
+                    	AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
+                    	atomics.add(atomic);
+                    }
                     
-                    int complexId = rs.getInt("Caid");
-                    String complexName = rs.getString("Caname");
-                    ComplexAction complex = new ComplexAction(complexId, complexName);
-                    complexs.add(complex);
+                    if( rs.getInt("Caid") != 0 ) {
+                    	int complexId = rs.getInt("Caid");
+                    	String complexName = rs.getString("Caname");
+                    	ComplexAction complex = new ComplexAction(complexId, complexName);
+                    	complexs.add(complex);
+                    }
                     
                     
                     EnvironmentVariable ev = new EnvironmentVariable(rs.getInt("EVid"), rs.getString("EVname"), rs.getString("EVdescription"), rs.getString("EVunit"));
@@ -404,7 +411,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     	DiscreteValue DVV = new DiscreteValue();
                     	try {
         					JSONObject JSON2 = new JSONObject(rs.getString("DVVpossible_values"));
-        					JSONArray array = JSON2.getJSONArray("possible_values");
+        					JSONArray array = JSON2.getJSONArray("possibleValues");
         					ArrayList<String> arrayl = new ArrayList(array.toList());
         					DVV.setPossibleValues(arrayl);
 
@@ -423,10 +430,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     
                     ev.setValue(vv);
                     
+                    
                     int blockId = rs.getInt("Blid");
                     String blockOperator = rs.getString("Bloperator");
                     Block block= new Block(blockId, ev, blockOperator);
-                    
                     Value v; 
                     
                     if (rs.getString("DVpossible_values") != null) {
@@ -452,11 +459,14 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     }
                     
                     block.setValue(v);
+                    //System.out.println(block+" id:"+block.getId()+"\n");
                     blocks.add(block);
+                    
                             
                 
                 } while (rs.next());
                 // Push the last behaviour
+
                 behaviour.setAtomicActions(atomics);
                 behaviour.setComplexActions(complexs);
                 behaviours.add(behaviour); 
@@ -499,6 +509,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     public static void main (String args[]) {
         BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
         System.out.println(test.getAll());
-        //test.getAll();
+        test.getAll();
     }
 }

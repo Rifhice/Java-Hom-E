@@ -16,6 +16,7 @@ import server.factories.AbstractDAOFactory;
 import server.models.AtomicAction;
 import server.models.Behaviour;
 import server.models.ComplexAction;
+import server.models.Right;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
@@ -706,13 +707,48 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
         return value;
     }
+    
+    /**
+     * Return the list of atomic actions triggered by a behaviour. If none, returns an empty list.
+     * @param behaviour
+     * @return 
+     * @throws DAOException
+     */
+    public ArrayList<AtomicAction> getAtomicActions(Behaviour behaviour) throws DAOException {
+        ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
+        String sql = "SELECT AA.id AS id, AA.name AS name, AA.executable AS executable "
+                + "FROM Behaviours AS B "
+                + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
+                + "JOIN AtomicActions AS AA ON AA.id = L.fk_atomicAction_id "
+                + "WHERE B.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, behaviour.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                do {
+                    AtomicAction aa = new AtomicAction();
+                    aa.setId(rs.getInt("id"));
+                    aa.setName(rs.getString("name"));
+                    aa.setExecutable(rs.getString("executable"));
+                    atomicActions.add(aa);
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO getAtomicActions(" + behaviour.getId() + ") (owns):" + e.getMessage(), e);
+        }
+        
+        return atomicActions;
+    }
 
     // ============== //
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
         BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
-        // System.out.println(test.getAll());
+
         Behaviour b = new Behaviour();
         b = test.getById(1);
         
@@ -725,6 +761,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         EnvironmentVariable ev = new EnvironmentVariable();
         ev.setId(1);
         
-        System.out.println(((SQLiteBehaviourDAO)test).getValue(bl));
+        System.out.println(((SQLiteBehaviourDAO)test).getAtomicActions(b));
     }
 }

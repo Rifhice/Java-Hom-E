@@ -137,9 +137,13 @@ public class SensorManager extends Manager{
 	
 	public ArrayList<EnvironmentVariable> getEnvironmentVariables(){
 		ArrayList<EnvironmentVariable> variables = new ArrayList<EnvironmentVariable>();
+
 		for (int i = 0; i < sensors.size(); i++) {
 			variables.addAll(sensors.get(i).getEnvironmentVariables());
 		}
+		
+		System.out.println("LES SENSORS : "+sensors);
+		System.out.println("LES VARIABLES"+variables);
 		return variables;
 	}
 	
@@ -166,6 +170,28 @@ public class SensorManager extends Manager{
 		}
 		return null;
 	}
+	
+	public void returnGetEnvironmentVariables(JSONObject json, ConnectionToClient client) {
+	    ArrayList<EnvironmentVariable> environmentVariables = getEnvironmentVariables();
+
+        JSONObject result = new JSONObject();
+        if(environmentVariables != null) {
+            result.put("result", "success");
+            result.put("verb", "get");
+            for (EnvironmentVariable environmentVariable : environmentVariables) {
+                result.append("environmentVariables", environmentVariable.toJson());
+            }
+        }
+        else {
+            result.put("result", "failure");
+        }
+        try {
+            client.sendToClient(result.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("RESULT: "+result.toString());
+	}
 
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
@@ -177,8 +203,8 @@ public class SensorManager extends Manager{
 		case "changeValue":
 			changeEnvironmentVariableValue(json, client);
 			break;
-		case "getEnvironmentsVariables": 
-		    
+		case "getEnvironmentVariables": 
+		    returnGetEnvironmentVariables(json, client);
 		    break;
 		default:
 			break;

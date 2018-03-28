@@ -178,7 +178,7 @@ public class BehavioursContent extends Content {
 	
 	@Override
 	public void handleMessage(Object message) {
-		
+		System.out.println(message);
 	}
 	
 

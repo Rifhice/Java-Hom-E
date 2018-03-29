@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import server.factories.AbstractDAOFactory;
-import server.managers.SystemManager;
-import server.models.Sensor;
-import server.models.environmentVariable.ContinuousValue;
-import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 
 /**
@@ -143,7 +138,6 @@ public class Expression implements Evaluable {
         return result;
     }
 
-    // TODO : To move in a Manager
     public static Expression createExpressionFromJson(JSONObject json) {
         ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
         ArrayList<String> operators = new ArrayList<String>();
@@ -151,7 +145,7 @@ public class Expression implements Evaluable {
         for (int i = 0; i < arr.length(); i++){
             JSONObject object = arr.getJSONObject(i);
             if(object.getString("type").equals("block")) {
-                evaluables.add(createBlockFromJson(object));
+                evaluables.add(Block.createBlockFromJson(object));
             }
             else {
                 evaluables.add(createExpressionFromJson(object));
@@ -163,37 +157,5 @@ public class Expression implements Evaluable {
         }
         return new Expression(evaluables, operators);
     }
-
-	private static Block createBlockFromJson(JSONObject json) {
-	    EnvironmentVariable variable = null;
-	    Object value = null;
-	    String operator = null;
-	    
-	    ArrayList<Sensor> sensors = new ArrayList<Sensor>();
-	    for (int i = 0; i < sensors.size(); i++) {
-			if(sensors.get(i).getEnvironmentVariables().getId() == json.getInt("variable")) {
-				variable = sensors.get(i).getEnvironmentVariables();
-			}
-		}
-	    if(variable == null) {
-	        variable = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getById(json.getInt("variable"));
-	    }
-		
-		if(variable != null) {
-		   operator = json.getString("operator");
-		   try {
-			   	value = json.getDouble("value");
-			   	return new Block(variable, new ContinuousValue((Double)value), operator);
-			} catch (Exception e) {
-				value = json.getString("value");
-				return new Block(variable, new DiscreteValue((String)value), operator);
-			}
-		}
-		else {
-			System.out.println("ERROR VARIABLE NOT FOUND !");
-			//SHOULD THROW EXCEPTION AS THE VARIABLE WASN'T FOUND
-		}
-		return null;
-	}
 
 }

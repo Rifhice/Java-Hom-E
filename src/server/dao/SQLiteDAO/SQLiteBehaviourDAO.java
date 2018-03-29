@@ -445,8 +445,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 // Continuous Value
                 if(value instanceof ContinuousValue) {
                     sql = "INSERT INTO ContinuousVValues "
-                            + "(value_min, value_max, current_value, precision) VALUES "
-                            + "(?,?,?,?)"
+                            + "(value_min, value_max, current_value, precision, fk_vvalue_id) VALUES "
+                            + "(?,?,?,?,?)"
                             + ";";
                     try {
                         PreparedStatement prepStatCV = this.connect.prepareStatement(sql);
@@ -455,6 +455,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         prepStatCV.setDouble(2, cv.getValueMax());
                         prepStatCV.setDouble(3, cv.getCurrentValue());
                         prepStatCV.setDouble(4, cv.getPrecision());
+                        prepStatCV.setInt(5, cv.getId());
 
                         created = prepStatCV.executeUpdate();
                         if(created > 0) {
@@ -468,8 +469,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 // Discrete Value
                 else if(value instanceof DiscreteValue) {
                     sql = "INSERT INTO DiscreteVValues "
-                            + "(current_value, possible_values) VALUES "
-                            + "(?,?) "
+                            + "(current_value, possible_values, fk_vvalue_id) VALUES "
+                            + "(?,?,?) "
                             + ";";
                     try {
                         PreparedStatement prepStatDV = this.connect.prepareStatement(sql);
@@ -479,6 +480,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
                         JSONObject JSON = new JSONObject(dv.getPossibleValues());                        
                         prepStatDV.setString(2, JSON.toString());
+                        prepStatDV.setInt(3, dv.getId());
 
                         created = prepStatDV.executeUpdate();
                         if(created > 0) {

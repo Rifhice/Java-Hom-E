@@ -441,7 +441,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             int created = prepStat.executeUpdate();
+
             if(created > 0) {
+                v.setId(SQLiteDAOTools.getLastId(connect));
+
                 // Continuous Value
                 if(value instanceof ContinuousValue) {
                     sql = "INSERT INTO ContinuousVValues "

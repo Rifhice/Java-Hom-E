@@ -622,7 +622,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 + "JOIN Vvalues AS V ON V.id = EV.fk_vvalue_id "
                 + "LEFT JOIN ContinuousVvalues AS CV ON CV.fk_vvalue_id = V.id "
                 + "LEFT JOIN DiscreteVvalues AS DV ON DV.fk_vvalue_id = V.id "
-                + "WHERE V.id = ? "
+                + "WHERE EV.id = ? "
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);

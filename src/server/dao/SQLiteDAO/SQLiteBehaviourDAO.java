@@ -447,19 +447,34 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
                 // Continuous Value
                 if(value instanceof ContinuousValue) {
-                    sql = "INSERT INTO ContinuousVValues "
-                            + "(value_min, value_max, current_value, precision, fk_vvalue_id) VALUES "
-                            + "(?,?,?,?,?)"
-                            + ";";
+                    ContinuousValue cv = (ContinuousValue) v;
+                    
+                    // Test if there are details about the value (value from a sensor)
+                    boolean isFromSensor = false;                  
+                    if(cv.getValueMin() != 0) {
+                        sql = "INSERT INTO ContinuousVValues "
+                                + "(current_value, fk_vvalue_id, value_min, value_max, precision) VALUES "
+                                + "(?,?,?,?,?)"
+                                + ";";
+                        isFromSensor = true;
+                    }
+                    else {
+                        sql = "INSERT INTO ContinuousVValues "
+                                + "(current_value, fk_vvalue_id) VALUES "
+                                + "(?,?)"
+                                + ";";
+                    }                  
                     try {
                         PreparedStatement prepStatCV = this.connect.prepareStatement(sql);
-                        ContinuousValue cv = (ContinuousValue) v;
-                        prepStatCV.setDouble(1, cv.getValueMin());
-                        prepStatCV.setDouble(2, cv.getValueMax());
-                        prepStatCV.setDouble(3, cv.getCurrentValue());
-                        prepStatCV.setDouble(4, cv.getPrecision());
-                        prepStatCV.setInt(5, cv.getId());
+                        prepStatCV.setDouble(1, cv.getCurrentValue());
+                        prepStatCV.setInt(2, cv.getId());
 
+                        if(isFromSensor) {
+                            prepStatCV.setDouble(1, cv.getValueMin());
+                            prepStatCV.setDouble(2, cv.getValueMax());
+                            prepStatCV.setDouble(4, cv.getPrecision());
+                        }
+                        
                         created = prepStatCV.executeUpdate();
                         if(created > 0) {
                             v.setId(SQLiteDAOTools.getLastId(connect));
@@ -474,7 +489,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     
                     DiscreteValue dv = (DiscreteValue) v;
                     
-                    // Test if there are possible values (value of a sensor or from a block)
+                    // Test if there are possible values (value of a sensor) 
                     boolean isPossible = false;                    
                     if(dv.getPossibleValues() != null) {
                         sql = "INSERT INTO DiscreteVValues "

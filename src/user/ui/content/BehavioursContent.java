@@ -2,6 +2,7 @@ package user.ui.content;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.util.StringConverter;
 import user.ClientFX;
 import user.models.Actuator;
@@ -312,9 +314,37 @@ public class BehavioursContent extends Content {
 		argsScrollPane.setContent(argsGridPane);
 		
 		valideButton = new MyButtonFX("Validate", validateButtonBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void handle(ActionEvent arg0) {
-				
+				if(true) {
+					
+				}
+				Evaluable finalEvaluable = finalExpressionComboBox.getValue();
+				JSONObject request = new JSONObject();
+				request.put("recipient", "behaviour");
+				request.put("action", "create");
+				if(finalEvaluable instanceof Block) {
+					request.put("block", finalEvaluable.toJson()); 
+				} else {
+					request.put("expression", finalEvaluable.toJson());
+				}
+				String command = commandKeyComboBox.getValue().getName();
+				for(int i = 0; i < argsGridPane.getChildren().size(); i++){
+					if(argsGridPane.getChildren().get(i) instanceof MySlider) {
+						MySlider slider = (MySlider) argsGridPane.getChildren().get(i);
+						command += " " + ((Double)(Math.floor(slider.getValue() * 100) / 100)).toString();
+					} else if (argsGridPane.getChildren().get(i) instanceof MyComboBox) {
+						MyComboBox<String> comboBox = (MyComboBox<String>) argsGridPane.getChildren().get(i);
+						command += " " + comboBox.getValue();
+					}
+				}
+				request.put("command", command);
+				try {
+                    ClientFX.client.sendToServer(command.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 			}
 		});
 		

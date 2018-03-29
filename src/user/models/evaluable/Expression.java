@@ -74,7 +74,7 @@ public class Expression implements Evaluable {
     	JSONObject result = new JSONObject();
         result.put("type", "expression");
         for (int i = 0; i < evaluables.size(); i++) {
-			result.append("evaluable",evaluables.get(i).toJson());
+			result.append("evaluables",evaluables.get(i).toJson());
 		}
 		result.append("operators", operator);
         return result;

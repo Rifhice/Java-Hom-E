@@ -191,7 +191,7 @@ public class AccountContent extends Content {
 			JSONObject current = arrArg.getJSONObject(j);
 			Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
 			this.notAllowedRights.add(right);
-			this.rightCells.add(new RightCell(right, notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+			this.rightCells.add(new RightCell(false, right, notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
@@ -213,14 +213,14 @@ public class AccountContent extends Content {
 					notAllowedRights.remove(i);
 				}
 			}
-			this.rightCells.add(new RightCell(right, allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+			this.rightCells.add(new RightCell(true, right, allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 				}}));
 		}
 		for (int j = 0; j < notAllowedRights.size(); j++){
-			this.rightCells.add(new RightCell(this.notAllowedRights.get(j), notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+			this.rightCells.add(new RightCell(false, this.notAllowedRights.get(j), notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
@@ -309,7 +309,7 @@ public class AccountContent extends Content {
 		                	notAllowedRightsList.getChildren().clear();
 		         			for (int i = 0; i < notAllowedRights.size(); i++) {
 		         				
-		         				notAllowedRightsList.add(new RightCell(notAllowedRights.get(i) ,notAllowedRightsList.getPrefWidth(),notAllowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
+		         				notAllowedRightsList.add(new RightCell(false, notAllowedRights.get(i) ,notAllowedRightsList.getPrefWidth(),notAllowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
 		         						new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent event) {
@@ -326,7 +326,7 @@ public class AccountContent extends Content {
 				if(allowedRights != null) {
 			           	allowedRightsList.getChildren().clear();
 			    			for (int i = 0; i < allowedRights.size(); i++) {
-			    				allowedRightsList.add(new RightCell(allowedRights.get(i) ,allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
+			    				allowedRightsList.add(new RightCell(true, allowedRights.get(i) ,allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
 			    						new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent event) {

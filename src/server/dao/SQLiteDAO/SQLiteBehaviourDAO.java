@@ -396,6 +396,21 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 if(created > 0) {
                     ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect)); 
                     ((Block)evs.get(i)).setValue(createValue(((Block)evs.get(i)).getValue()));
+                    
+                    // Insert fk_vvalue_id created into blocks
+                    sql = "UPDATE Blocks "
+                            + "SET fk_vvalue_id = ? "
+                            + "WHERE id = ? "
+                            + ";";
+                    try {
+                        PreparedStatement prepStatFkValue = this.connect.prepareStatement(sql);
+                        prepStatFkValue.setInt(1, ((Block)evs.get(i)).getValue().getId());
+                        prepStatFkValue.setInt(2, ((Block)evs.get(i)).getId());
+                        prepStatFkValue.executeUpdate();
+                    } catch (SQLException e) {
+                        throw new DAOException("DAOException : BehaviourDAO createEvaluables() inserting fk_vvalue_id :" + e.getMessage(), e); 
+                    }
+                            
                 }
             } catch (SQLException e) {
                 throw new DAOException("DAOException : BehaviourDAO createEvaluables() :" + e.getMessage(), e); 
@@ -871,6 +886,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         EnvironmentVariable ev = new EnvironmentVariable();
         ev.setId(1);
         
+        //System.out.println(b);
         test.create(b);
     }
 }

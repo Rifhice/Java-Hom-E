@@ -189,6 +189,7 @@ public class Behaviour implements Observer {
 	    }
 	    AtomicAction action = new AtomicAction(command.getString("action"),actuator);
 	    Behaviour behaviour = new Behaviour(expression);
+	    System.out.println(behaviour + " " + action);
 	    behaviour.addAtomicAction(action);
 		return behaviour;
 	}

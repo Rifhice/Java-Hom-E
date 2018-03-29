@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import server.factories.AbstractDAOFactory;
+import server.managers.SensorManager;
 import server.managers.SystemManager;
 import server.models.Sensor;
 import server.models.environmentVariable.ContinuousValue;
@@ -128,7 +129,7 @@ public class Block implements Evaluable {
         Object value = null;
         String operator = null;
         
-        ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+        ArrayList<Sensor> sensors = SensorManager.getSensors();
         for (int i = 0; i < sensors.size(); i++) {
             if(sensors.get(i).getEnvironmentVariables().getId() == json.getInt("variable")) {
                 variable = sensors.get(i).getEnvironmentVariables();

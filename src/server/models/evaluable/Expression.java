@@ -139,21 +139,27 @@ public class Expression implements Evaluable {
     }
 
     public static Expression createExpressionFromJson(JSONObject json) {
+    	System.out.println(json.toString());
         ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
         ArrayList<String> operators = new ArrayList<String>();
-        JSONArray arr = json.getJSONArray("evaluables");
-        for (int i = 0; i < arr.length(); i++){
-            JSONObject object = arr.getJSONObject(i);
-            if(object.getString("type").equals("block")) {
-                evaluables.add(Block.createBlockFromJson(object));
-            }
-            else {
-                evaluables.add(createExpressionFromJson(object));
-            }
+        if(json.getString("type").equals("block")) {
+            evaluables.add(Block.createBlockFromJson(json));
         }
-        arr = json.getJSONArray("operators");
-        for (int i = 0; i < arr.length(); i++) {
-            operators.add((String) arr.get(i));
+        else{
+            JSONArray arr = json.getJSONArray("evaluables");
+            for (int i = 0; i < arr.length(); i++){
+                JSONObject object = arr.getJSONObject(i);
+                if(object.getString("type").equals("block")) {
+                    evaluables.add(Block.createBlockFromJson(object));
+                }
+                else {
+                    evaluables.add(createExpressionFromJson(object));
+                }
+            }
+            arr = json.getJSONArray("operators");
+            for (int i = 0; i < arr.length(); i++) {
+                operators.add((String) arr.get(i));
+            }
         }
         return new Expression(evaluables, operators);
     }

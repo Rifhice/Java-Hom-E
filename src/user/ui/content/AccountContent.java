@@ -208,7 +208,7 @@ public class AccountContent extends Content {
 					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 				}}));
 		}
-		System.out.println("Je vais à présent update la vue");
+		System.out.println("Je vais Ã  prÃ©sent update la vue");
 		updateRightsUI();
 	}
 	
@@ -307,7 +307,7 @@ public class AccountContent extends Content {
 				if(allowedRights != null) {
 						System.out.println("3");
 			           	allowedRightsList.getChildren().clear();
-			           	System.out.println(" Avant de compléter la liste allowedRights : ");
+			           	System.out.println(" Avant de complÃ©ter la liste allowedRights : ");
 			    			for (int i = 0; i < allowedRights.size(); i++) {
 			    				allowedRightsList.add(new RightCell(allowedRights.get(i) ,allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
 			    						new EventHandler<ActionEvent>() {

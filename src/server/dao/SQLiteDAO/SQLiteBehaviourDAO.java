@@ -87,6 +87,22 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         // Insert in others tables
         behaviour.setAtomicActions(createAtomicActions(behaviour.getAtomicActions()));
         behaviour.setExpression(createExpression(behaviour.getExpression()));   
+        
+        if(behaviour.getExpression().getId() != 0) {
+            // Set behaviour id in Expressions
+            sql = "UPDATE Expressions "
+                    + "SET fk_behaviour_id = ?"
+                    + "WHERE id = ? "
+                    + ";";
+            try {
+                PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                prepStat.setInt(1, behaviour.getId());
+                prepStat.setInt(2, behaviour.getExpression().getId());
+                prepStat.executeUpdate();            
+            } catch (SQLException e) {
+                throw new DAOException("DAOException : BehaviourDAO create(" + obj.getName() + ") inserting behaviour id in expression:" + e.getMessage(), e); 
+            }        
+        }        
 
         // Launches 
         ArrayList<AtomicAction> aas = behaviour.getAtomicActions();

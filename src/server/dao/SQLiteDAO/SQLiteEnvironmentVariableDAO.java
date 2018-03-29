@@ -145,7 +145,7 @@ public class SQLiteEnvironmentVariableDAO extends EnvironmentVariableDAO {
                     v = new DiscreteValue();
                     v.setId(rs.getInt("DVfk_vvalue_id"));
                     ((DiscreteValue) v).setCurrentValue(rs.getString("DVcurrent_value"));
-                    
+                
                     JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
                     JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
                     ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());

@@ -115,7 +115,11 @@ public class SensorManager extends Manager{
 			result.put("id", sensorCreated.getId());
 			result.put("idEnv",sensorCreated.getEnvironmentVariables().getId());
 	        result.put("idValue",sensorCreated.getEnvironmentVariables().getValue().getId());
-	        SystemManager.sendToAllClient(result.toString());
+	        try {
+				client.sendToClient(result.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		else {
 			result.put("result", "failure");

@@ -35,6 +35,11 @@ public class Behaviour implements Observer {
     // ====================== //
 	public Behaviour() {}
 	
+	public Behaviour(String name, Expression expression) {
+        this.name = name;
+        this.expression = expression;
+	}
+	
 	public Behaviour(Expression expression) {
         this.expression = expression;
         this.isActivated = true;
@@ -188,9 +193,14 @@ public class Behaviour implements Observer {
 	    	actuator = AbstractDAOFactory.getFactory(SystemManager.db).getActuatorDAO().getById(command.getInt("id"));
 	    }
 	    AtomicAction action = new AtomicAction(command.getString("action"),actuator);
-	    Behaviour behaviour = new Behaviour(expression);
+	    Behaviour behaviour = new Behaviour(json.getString("name"),expression);
 	    System.out.println(behaviour + " " + action);
-	    behaviour.addAtomicAction(action);
+	    behaviour.addAtomicAction(action); 
+	    System.out.println("Les variables de l'expression : " + expression.getVariables());
+	    for (int i = 0; i < expression.getVariables().size(); i++) {
+			expression.getVariables().get(i).addObserver(behaviour);
+		}
+	    System.out.println("Nombre d'observer : " + expression.getVariables().get(0).countObservers());
 		return behaviour;
 	}
 

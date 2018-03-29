@@ -113,7 +113,6 @@ public class SensorConsole implements ChatIF
 	  EnvironmentVariable ev = new EnvironmentVariable("Presence", "Presence de quelqu'un dans la piece", "N/A",v2);
 	  System.out.println(ev);
 	  server.client.setSensor(new Sensor(server.getClient(), "Presence", "Putain ca marche !", ev));
-	  new ServerSensor(1114,server.client);
   }
 }
 //End of ConsoleChat class

@@ -1,7 +1,6 @@
 package server.managers;
 
 
-import java.net.StandardSocketOptions;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
@@ -44,7 +43,6 @@ public class BehaviourManager extends Manager{
 
 		try {
 			behaviours = behaviourDAO.getAll();
-			System.out.println(behaviours);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -82,24 +80,20 @@ public class BehaviourManager extends Manager{
 		Behaviour behaviour = null;
 		try {
 			behaviour = Behaviour.createBehaviour(json); 
-			AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().create(behaviour);
+			behaviourDAO.create(behaviour);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		JSONObject result = new JSONObject();
 		try {
+            result.put("recipient", "behaviour");
+            result.put("action", "create");
 			if(behaviour == null) {
-				result.put("recipient", "behaviour");
-				result.put("action", "create");
 				result.put("result", "failure");
-				System.out.println(result.toString());
 				client.sendToClient(result.toString());
 			}
 			else {
-				result.put("recipient", "behaviour");
-				result.put("action", "create");
 				result.put("result", "success");
-				System.out.println(result.toString());
 				SystemManager.sendToAllClient(result.toString());
 			}
 		} catch (Exception e) {

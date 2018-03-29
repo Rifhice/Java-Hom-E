@@ -1,6 +1,7 @@
 package server.managers;
 
 
+import java.net.StandardSocketOptions;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
@@ -39,26 +40,33 @@ public class BehaviourManager extends Manager{
 	
 	/**
      * Get all the behaviours in DB. Send to the client a JSONObject.    
-     * @param json
      * @param client
      */
-	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
+	public void getAllBehaviours(ConnectionToClient client) {
 		ArrayList<Behaviour> behaviours = null;
 
 		try {
 			behaviours = behaviourDAO.getAll();
+			System.out.println(behaviours);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		JSONObject result = new JSONObject();
 		result.put("recipient", "behaviour");
 		result.put("action", "getAll");
+		JSONObject behaviour;
 		for (int i = 0; i < behaviours.size(); i++) {
-			JSONObject behaviour = new JSONObject();
+		    behaviour = new JSONObject();
 			behaviour.put("id", behaviours.get(i).getId());
 			behaviour.put("name", behaviours.get(i).getName());
 			behaviour.put("description", behaviours.get(i).getDescription());
-			behaviour.put("expression", behaviours.get(i).getExpression().toJson());
+			
+			try {
+		         behaviour.put("expression", behaviours.get(i).getExpression().toJson());
+			} catch (Exception e) {
+			    e.printStackTrace();
+			}
+			
 			result.append("behaviours", behaviour);
 		}
 		try {
@@ -105,7 +113,7 @@ public class BehaviourManager extends Manager{
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
-	        	getAllBehaviours(json,client);
+	        	getAllBehaviours(client);
 	            break;
 	        case "create":
 	        	createBehaviours(json,client);

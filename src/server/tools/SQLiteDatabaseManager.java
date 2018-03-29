@@ -448,13 +448,11 @@ public class SQLiteDatabaseManager {
         String insertBlock2 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (2,'==', 2, 2);";
         String insertBlock3 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (3,'>=', 3, 3);";
         String insertBlock4 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (4,'>', 1, 1);";
-        String insertBlock5 = "INSERT INTO blocks ('id','operator', 'fk_environmentVariable_id', 'fk_vvalue_id') VALUES (5,'!=', 2, 2);";        
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertBlock1);
             stmt.execute(insertBlock2);
             stmt.execute(insertBlock3);
             stmt.execute(insertBlock4);
-            stmt.execute(insertBlock5);
         } catch (SQLException e) {
             System.out.println("ERROR inserting ActuatorCategories : " + e.getMessage());
         }
@@ -554,7 +552,7 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertEnvironmentVariables() {
-        String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit', 'fk_sensor_id', 'fk_vvalue_id') VALUES (1,'temperature','Variable temperature', '�C', '3', 1);";
+        String insertEnvironmentVariable1 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit', 'fk_sensor_id', 'fk_vvalue_id') VALUES (1,'temperature','Variable temperature', '°C', '3', 1);";
         String insertEnvironmentVariable2 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit', 'fk_sensor_id', 'fk_vvalue_id') VALUES (2,'presence','Is anybody in there ?', '', '1', '2');";
         String insertEnvironmentVariable3 = "INSERT INTO environmentVariables ('id', 'name', 'description', 'unit', 'fk_sensor_id', 'fk_vvalue_id') VALUES (3,'light','Measure the light intensity', 'L', '2', '3');";
         try (Statement stmt = conn.createStatement()) {
@@ -568,8 +566,8 @@ public class SQLiteDatabaseManager {
     
     private static void insertExpressions() {
         String insertExpression1 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (1,'{operators: [&&]}',1);";
-        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{operators: [||]}',2);";
-        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{operators: [&&]}',3);";
+        String insertExpression2 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (2,'{operators: []}',2);";
+        String insertExpression3 = "INSERT INTO expressions ('id', 'operators', 'fk_behaviour_id') VALUES (3,'{operators: []}',3);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertExpression1);
             stmt.execute(insertExpression2);

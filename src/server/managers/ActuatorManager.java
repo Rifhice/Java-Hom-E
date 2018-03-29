@@ -19,7 +19,7 @@ import ocsf.server.ConnectionToClient;
 public class ActuatorManager extends Manager {
 	
     private ActuatorDAO actuatorDAO = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
-	private ArrayList<Actuator> actuators;
+	private static ArrayList<Actuator> actuators;
 	
 	private static ActuatorManager manager = null;
 	
@@ -46,7 +46,7 @@ public class ActuatorManager extends Manager {
 		// TODO
 	}
 	
-	public ArrayList<Actuator> getActuators(){
+	public static ArrayList<Actuator> getActuators(){
 		return actuators;
 	}
 	

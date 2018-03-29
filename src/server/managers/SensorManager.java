@@ -20,7 +20,7 @@ public class SensorManager extends Manager{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	private ArrayList<Sensor> sensors;
+	private static ArrayList<Sensor> sensors;
 	private SensorDAO sensorDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorDAO();
 	
 	private static SensorManager manager = null;
@@ -128,7 +128,7 @@ public class SensorManager extends Manager{
 		System.out.println(sensor + "\nAdded to the system !");
 	}
 	
-	public ArrayList<Sensor> getSensors(){
+	public static ArrayList<Sensor> getSensors(){
 		return sensors;
 	}
 	

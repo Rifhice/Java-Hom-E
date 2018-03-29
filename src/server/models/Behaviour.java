@@ -7,6 +7,9 @@ import java.util.Observer;
 
 import org.json.JSONObject;
 
+import server.factories.AbstractDAOFactory;
+import server.managers.ActuatorManager;
+import server.managers.SystemManager;
 import server.models.evaluable.Expression;
 
 /**
@@ -115,6 +118,10 @@ public class Behaviour implements Observer {
         this.isActivated = isActivated;
     }
     
+    public void addAtomicAction(AtomicAction action) {
+    	atomicActions.add(action);
+    }
+    
     public ArrayList<AtomicAction> getAtomicActions() {
         return atomicActions;
     }
@@ -169,8 +176,21 @@ public class Behaviour implements Observer {
 	
 	// TODO : to move in a Manager
 	public static Behaviour createBehaviour(JSONObject json) {
-	    Expression expression = Expression.createExpressionFromJson(json.getJSONObject("expression"));
-		return new Behaviour(expression);
+	    Expression expression = Expression.createExpressionFromJson(json.getJSONObject("evaluable"));
+	    JSONObject command = json.getJSONObject("command"); 
+	    Actuator actuator = null;
+	    for (int i = 0; i < ActuatorManager.getActuators().size(); i++) {
+			if(ActuatorManager.getActuators().get(i).getId() == command.getInt("id")) {
+				actuator = ActuatorManager.getActuators().get(i);
+			}
+		}
+	    if(actuator == null) {
+	    	actuator = AbstractDAOFactory.getFactory(SystemManager.db).getActuatorDAO().getById(command.getInt("id"));
+	    }
+	    AtomicAction action = new AtomicAction(command.getString("action"),actuator);
+	    Behaviour behaviour = new Behaviour(expression);
+	    behaviour.addAtomicAction(action);
+		return behaviour;
 	}
 
 	public JSONObject toJson() {

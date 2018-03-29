@@ -34,9 +34,6 @@ public class BehaviourManager extends Manager{
 	// ================= //
     // ==== METHODS ==== //
     // ================= //
-	public void createBehaviour(JSONObject json) {
-	    
-	}
 	
 	/**
      * Get all the behaviours in DB. Send to the client a JSONObject.    
@@ -81,6 +78,29 @@ public class BehaviourManager extends Manager{
 	}
 	
 	public void createBehaviours(JSONObject json, ConnectionToClient client) {
+		Behaviour behaviour = Behaviour.createBehaviour(json); 
+		try {
+			behaviour = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().create(behaviour);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		try {
+			if(behaviour == null) {
+				result.put("recipient", "behaviour");
+				result.put("action", "create");
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("recipient", "behaviour");
+				result.put("action", "create");
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

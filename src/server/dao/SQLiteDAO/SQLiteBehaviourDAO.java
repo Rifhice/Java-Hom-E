@@ -334,7 +334,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         ArrayList<Evaluable> evs = evaluables;
 
         String sql = "INSERT INTO Blocks "
-                + "(operators) VALUES "
+                + "(operator) VALUES "
                 + "(?)"
                 + ";";
 
@@ -368,7 +368,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public EnvironmentVariable createEnvironmentVariable(EnvironmentVariable environmentVariable) throws DAOException {
         EnvironmentVariable ev = environmentVariable;
-        String sql = "INSERT INTO EnvironmentVariable "
+        String sql = "INSERT INTO EnvironmentVariables "
                 + "(name, description, unit) VALUES "
                 + "(?,?,?)"
                 + ";";
@@ -772,19 +772,15 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
 
         Behaviour b = new Behaviour();
-        b = test.getById(1);
+        b = test.getAll().get(1);
 
         Expression e = new Expression();
-        e.setId(1);
+        e.setId(2);
 
         Block bl = new Block();
         bl.setId(1);
 
         EnvironmentVariable ev = new EnvironmentVariable();
         ev.setId(1);
-
-        for(Behaviour beh : test.getAll()){
-            System.out.println("\n"+beh);
-        }
     }
 }

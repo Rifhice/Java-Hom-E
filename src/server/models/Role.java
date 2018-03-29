@@ -23,6 +23,12 @@ public class Role {
         this.id = id;
         this.name = name;
     }
+    
+    public Role(int id, String name, ArrayList<Right> rights) {
+        this.id = id;
+        this.name = name;
+        this.rights = rights;
+    }
 
     // ================= //
     // ==== METHODS ==== //

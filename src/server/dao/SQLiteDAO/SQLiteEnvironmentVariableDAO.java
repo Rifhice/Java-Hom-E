@@ -35,8 +35,35 @@ public class SQLiteEnvironmentVariableDAO extends EnvironmentVariableDAO {
 
     @Override
     public EnvironmentVariable getById(int id) throws DAOException {
-        // TODO Auto-generated method stub
-        return null;
+        EnvironmentVariable ev = null;
+        
+        String sql = "SELECT EV.id AS id, EV.name AS name, EV.description AS description, EV.unit AS unit "
+                + "FROM EnvironmentVariables AS EV "
+                + "WHERE EV.id = ? "
+                + ";";
+        
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            if(rs.next()) { 
+                do {
+                    ev = new EnvironmentVariable();
+                    ev.setId(rs.getInt("id"));
+                    ev.setName(rs.getString("name"));
+                    ev.setDescription(rs.getString("description"));
+                    ev.setUnit(rs.getString("unit"));
+                    
+                    Value v = getValue(ev);
+                    ev.setValue(v);    
+                } while (rs.next());  
+            }            
+        }
+        catch(SQLException e) {
+            throw new DAOException("DAOException : EnvironmentVariable getById("+id+") : " + e.getMessage(),e);
+        }   
+        
+        return ev;
     }
 
     @Override
@@ -80,9 +107,14 @@ public class SQLiteEnvironmentVariableDAO extends EnvironmentVariableDAO {
         catch(SQLException e) {
             throw new DAOException("DAOException : EnvironmentVariable getAll() : " + e.getMessage(),e);
         }   
+        
         return evs;
     }
     
+    
+    // ========================= //
+    // ===== HELPER METHODS ==== //
+    // ========================= //   
     public Value getValue(EnvironmentVariable ev) throws DAOException {
         Value v = null;
         String sql = "SELECT V.id, "
@@ -134,7 +166,7 @@ public class SQLiteEnvironmentVariableDAO extends EnvironmentVariableDAO {
     // ============== // 
     public static void main (String args[]) {
         EnvironmentVariableDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getEnvironmentVariableDAO();
-        System.out.println(test.getAll());
+        System.out.println(test.getById(1));
     }
 
 

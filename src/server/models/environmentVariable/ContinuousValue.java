@@ -28,6 +28,10 @@ public class ContinuousValue extends Value {
         this.valueMin = valueMin;
         this.currentValue = currentValue;
     }
+    
+    public ContinuousValue(double currentValue) {
+        this.currentValue = currentValue;
+    }
 
     // ================= //
     // ==== METHODS ==== //

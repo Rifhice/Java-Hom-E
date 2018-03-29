@@ -28,6 +28,11 @@ public class AtomicAction {
         this.executable = executable;
     }
     
+    public AtomicAction(String executable,Actuator actuator) {
+        this.executable = executable;
+        this.actuator = actuator;
+    }
+    
     public AtomicAction(int id, String name, String executable,Actuator actuator) {
         this.id = id;
         this.name = name;

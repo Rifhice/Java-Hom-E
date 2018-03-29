@@ -30,6 +30,10 @@ public class DiscreteValue extends Value {
         this.possibleValues = values;
         this.currentValue = currentValue;
     }
+    
+    public DiscreteValue(String currentValue) {
+        this.currentValue = currentValue;
+    }
 
     // ================= //
     // ==== METHODS ==== //

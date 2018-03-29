@@ -217,7 +217,8 @@ public class ControlContent extends Content {
                     		try {
 								for (int j = 0; j < currentComplexCommands.getJSONArray("atomicAction").length(); j++) {
 									JSONObject currentAtomicAction = currentComplexCommands.getJSONArray("atomicAction").getJSONObject(j);
-									atomicActions.add(new AtomicAction(currentAtomicAction.getString("name"),currentAtomicAction.getString("executable")));
+									
+									atomicActions.add(new AtomicAction(currentAtomicAction.getString("executable")));
 								}
                     		}
                     		catch(Exception e) {

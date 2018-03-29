@@ -1,7 +1,9 @@
 package user.models.evaluable;
 
+
 import org.json.JSONObject;
 
+import user.models.evaluable.Block;
 import user.models.environmentVariable.EnvironmentVariable;
 
 /**
@@ -63,4 +65,29 @@ public class Block implements Evaluable {
         result.put("value", value);
         return result;
     }
+    
+    /*
+    public static Block createBlockFromJson(JSONObject json) {
+        EnvironmentVariable variable = null;
+        Object value = null;
+        String operator = null;
+        
+        json.getInt("variable");
+        if(variable != null) {
+           operator = json.getString("operator");
+           try {
+                value = json.getDouble("value");
+                return new Block(variable, new ContinuousValue((Double)value), operator);
+            } catch (Exception e) {
+                value = json.getString("value");
+                return new Block(variable, new DiscreteValue((String)value), operator);
+            }
+        }
+        else {
+            System.out.println("ERROR VARIABLE NOT FOUND !");
+            //SHOULD THROW EXCEPTION AS THE VARIABLE WASN'T FOUND
+        }
+        return null;
+    }
+   */
 }

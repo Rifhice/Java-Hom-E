@@ -2,9 +2,9 @@ package user.models;
 
 import java.util.ArrayList;
 
-import server.models.AtomicAction;
-import server.models.ComplexAction;
-import server.models.evaluable.Expression;
+import user.models.AtomicAction;
+import user.models.ComplexAction;
+import user.models.evaluable.Expression;
 
 public class Behaviour {
 	// ==================== //

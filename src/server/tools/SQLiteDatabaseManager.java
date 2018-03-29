@@ -112,7 +112,6 @@ public class SQLiteDatabaseManager {
         
         String createTableAtomicActions = "CREATE TABLE IF NOT EXISTS atomicActions (\n" 
                 + " id integer PRIMARY KEY,\n"
-                + " name text NOT NULL, \n"
                 + " executable text NOT NULL, \n"
                 + " fk_actuator_id integer, \n"
                 + " FOREIGN KEY (fk_actuator_id) REFERENCES actuators(id) \n"
@@ -412,12 +411,12 @@ public class SQLiteDatabaseManager {
     }
     
     private static void insertAtomicActions() {
-        String insertAtomicAction1 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (1, 'Switch On','switch on',1);";
-        String insertAtomicAction2 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (2, 'Switch Off','switch off',1);";
-        String insertAtomicAction3 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (3, 'Set Temperature 22','setTemperature 22',2);";
-        String insertAtomicAction4 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (4, 'Set Temperature 24','setTemperature 24',3);";
-        String insertAtomicAction5 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (5, 'Make tea','make tea',4);";
-        String insertAtomicAction6 = "INSERT INTO atomicActions ('id', 'name', 'executable', 'fk_actuator_id') VALUES (6, 'Switch On','switch on',5);";
+        String insertAtomicAction1 = "INSERT INTO atomicActions ('id', 'executable', 'fk_actuator_id') VALUES (1,'switch on',1);";
+        String insertAtomicAction2 = "INSERT INTO atomicActions ('id', 'executable', 'fk_actuator_id') VALUES (2,'switch off',1);";
+        String insertAtomicAction3 = "INSERT INTO atomicActions ('id', 'executable', 'fk_actuator_id') VALUES (3,'setTemperature 22',2);";
+        String insertAtomicAction4 = "INSERT INTO atomicActions ('id', 'executable', 'fk_actuator_id') VALUES (4,'setTemperature 24',3);";
+        String insertAtomicAction5 = "INSERT INTO atomicActions ('id', 'executable', 'fk_actuator_id') VALUES (5, 'make tea',4);";
+        String insertAtomicAction6 = "INSERT INTO atomicActions ('id', 'executable', 'fk_actuator_id') VALUES (6, 'switch on',5);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertAtomicAction1);
             stmt.execute(insertAtomicAction2);

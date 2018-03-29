@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import server.factories.AbstractDAOFactory;
-import server.managers.SystemManager;
-import server.models.Sensor;
-import server.models.environmentVariable.ContinuousValue;
-import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 
 /**
@@ -143,61 +138,30 @@ public class Expression implements Evaluable {
         return result;
     }
 
-    // TODO : To move in a Manager
     public static Expression createExpressionFromJson(JSONObject json) {
+    	System.out.println(json.toString());
         ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
         ArrayList<String> operators = new ArrayList<String>();
-        JSONArray arr = json.getJSONArray("evaluables");
-        for (int i = 0; i < arr.length(); i++){
-            JSONObject object = arr.getJSONObject(i);
-            if(object.getString("type").equals("block")) {
-                evaluables.add(createBlockFromJson(object));
-            }
-            else {
-                evaluables.add(createExpressionFromJson(object));
-            }
+        if(json.getString("type").equals("block")) {
+            evaluables.add(Block.createBlockFromJson(json));
         }
-        arr = json.getJSONArray("operators");
-        for (int i = 0; i < arr.length(); i++) {
-            operators.add((String) arr.get(i));
+        else{
+            JSONArray arr = json.getJSONArray("evaluables");
+            for (int i = 0; i < arr.length(); i++){
+                JSONObject object = arr.getJSONObject(i);
+                if(object.getString("type").equals("block")) {
+                    evaluables.add(Block.createBlockFromJson(object));
+                }
+                else {
+                    evaluables.add(createExpressionFromJson(object));
+                }
+            }
+            arr = json.getJSONArray("operators");
+            for (int i = 0; i < arr.length(); i++) {
+                operators.add((String) arr.get(i));
+            }
         }
         return new Expression(evaluables, operators);
     }
-
-    // TODO : To move in a Manager
-    // TODO : to fix (value is a Value, not an object)
-	private static Block createBlockFromJson(JSONObject json) {
-	    EnvironmentVariable variable = null;
-	    Object value = null;
-	    String operator = null;
-	    
-	    //TODO Change by getEnvVarById
-	    EnvironmentVariable variables = null;
-	    ArrayList<Sensor> sensors = new ArrayList<Sensor>();
-	    for (int i = 0; i < sensors.size(); i++) {
-			if(sensors.get(i).getEnvironmentVariables().getId() == json.getInt("variable")) {
-				variables = sensors.get(i).getEnvironmentVariables();
-			}
-		}
-	    if(variables == null) {
-	    	variables = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getById(json.getInt("variable"));
-	    }
-		
-		if(variable != null) {
-		   operator = json.getString("operator");
-		   try {
-			   	value = json.getDouble("value");
-			   	return new Block(variable, new ContinuousValue((Double)value), operator);
-			} catch (Exception e) {
-				value = json.getString("value");
-				return new Block(variable, new DiscreteValue((String)value), operator);
-			}
-		}
-		else {
-			System.out.println("ERROR VARIABLE NOT FOUND !");
-			//SHOULD THROW EXCEPTION AS THE VARIABLE WASN'T FOUND
-		}
-		return null;
-	}
 
 }

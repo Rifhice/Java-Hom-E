@@ -94,7 +94,6 @@ public class SQLiteComplexActionDAO extends ComplexActionDAO {
             AtomicAction action = null;
             while (rs.next()) {
             	action = new AtomicAction();
-            	action.setName(rs.getString("name"));
             	action.setId(rs.getInt("id"));
             	action.setExecutable(rs.getString("executable"));
             	action.setActuator(new Actuator(rs.getInt("fk_actuator_id")));

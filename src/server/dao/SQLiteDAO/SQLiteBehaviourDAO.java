@@ -234,15 +234,14 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         ArrayList<AtomicAction> aa = atomicActions;
         
         String sql = "INSERT INTO AtomicActions "
-                + "(name, executable) VALUES "
-                + "(?,?) "
+                + "(executable) VALUES "
+                + "(?) "
                 + ";";
         
         for (int i = 0; i < aa.size(); i++) {
             try {
                 PreparedStatement prepStat = this.connect.prepareStatement(sql);
-                prepStat.setString(1, aa.get(i).getName());
-                prepStat.setString(2, aa.get(i).getExecutable());
+                prepStat.setString(1, aa.get(i).getExecutable());
                 
                 int created = prepStat.executeUpdate();
                 if(created > 0) {
@@ -684,7 +683,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public ArrayList<AtomicAction> getAtomicActions(Behaviour behaviour) throws DAOException {
         ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
-        String sql = "SELECT AA.id AS id, AA.name AS name, AA.executable AS executable "
+        String sql = "SELECT AA.id AS id, AA.executable AS executable "
                 + "FROM Behaviours AS B "
                 + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
                 + "JOIN AtomicActions AS AA ON AA.id = L.fk_atomicAction_id "
@@ -699,7 +698,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 do {
                     AtomicAction aa = new AtomicAction();
                     aa.setId(rs.getInt("id"));
-                    aa.setName(rs.getString("name"));
                     aa.setExecutable(rs.getString("executable"));
                     atomicActions.add(aa);
                 } while (rs.next());

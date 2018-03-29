@@ -250,7 +250,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
             
         // Get Atomic Actions
         String sqlAA = "SELECT A.id AS id, A.name AS name, A.description AS description, "
-                + "AA.id AS AAid, AA.name AS AAname, AA.executable AS AAexecutable "
+                + "AA.id AS AAid, AA.executable AS AAexecutable "
                 + "FROM Actuators AS A "
                 + "JOIN AtomicActions AS AA ON AA.fk_actuator_id = A.id "
                 + "WHERE A.id = ?";
@@ -264,9 +264,8 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
             if(rsAA.next()) {
                 do {
                     int atomicActionId = rsAA.getInt("AAid");
-                    String atomicActionName = rsAA.getString("AAname");
                     String atomicActionExecutable = rsAA.getString("AAexecutable");
-                    AtomicAction aa = new AtomicAction(atomicActionId, atomicActionName, atomicActionExecutable);
+                    AtomicAction aa = new AtomicAction(atomicActionId, atomicActionExecutable);
                     atomicActions.add(aa); 
                 } while(rsAA.next());
                 actuator.setAtomicActions(atomicActions);

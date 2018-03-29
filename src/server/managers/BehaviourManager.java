@@ -79,8 +79,11 @@ public class BehaviourManager extends Manager{
 	}
 	
 	public void createBehaviours(JSONObject json, ConnectionToClient client) {
-		Behaviour behaviour = Behaviour.createBehaviour(json); 
+		System.out.println("\n\n\n\nhey");
+		Behaviour behaviour = null;
 		try {
+			behaviour = Behaviour.createBehaviour(json); 
+			behaviour.setName("0mG sA v March");
 			behaviour = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().create(behaviour);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,12 +94,14 @@ public class BehaviourManager extends Manager{
 				result.put("recipient", "behaviour");
 				result.put("action", "create");
 				result.put("result", "failure");
+				System.out.println(result.toString());
 				client.sendToClient(result.toString());
 			}
 			else {
 				result.put("recipient", "behaviour");
 				result.put("action", "create");
 				result.put("result", "success");
+				System.out.println(result.toString());
 				SystemManager.sendToAllClient(result.toString());
 			}
 		} catch (Exception e) {

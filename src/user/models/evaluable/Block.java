@@ -66,6 +66,7 @@ public class Block implements Evaluable {
         return result;
     }
     
+    /*
     public static Block createBlockFromJson(JSONObject json) {
         EnvironmentVariable variable = null;
         Object value = null;
@@ -88,5 +89,5 @@ public class Block implements Evaluable {
         }
         return null;
     }
-   
+   */
 }

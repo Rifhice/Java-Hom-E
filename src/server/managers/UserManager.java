@@ -99,6 +99,7 @@ public class UserManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "user");
 		result.put("action", "getAll");
+		System.out.println("Taille : "  + users.size());
 		for (int i = 0; i < users.size(); i++) {
 			User currentUser = users.get(i);
 			JSONObject user = new JSONObject();
@@ -128,7 +129,8 @@ public class UserManager extends Manager{
 		}
     	JSONObject result = new JSONObject();
     	result.put("recipient", "user");
-		result.put("action", "create");
+		result.put("action", "createFamilyMember");
+		result.put("user", newUser);
 		result.put("id", newUser.getId());
 		try {
 			client.sendToClient(result.toString());

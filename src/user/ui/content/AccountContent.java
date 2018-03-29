@@ -155,11 +155,12 @@ public class AccountContent extends Content {
 	public void createFamilyMember(String userName, String password) {
 		JSONObject newFamilyMember = new JSONObject();
 		newFamilyMember.put("recipient", "user");
-		newFamilyMember.put("action", "create");
+		newFamilyMember.put("action", "createFamilyMember");
 		newFamilyMember.put("pseudo", userName );
 		newFamilyMember.put("password", password);
 		System.out.println("\n Message envoye au serveur :" + newFamilyMember.toString());
 		try {
+			System.out.println("J'envoie au serveur " + newFamilyMember.toString());
 			ClientFX.client.sendToServer(newFamilyMember.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -258,9 +259,10 @@ public class AccountContent extends Content {
 					case "getAll":
 						getAllFamilyMembers(json);
 						break;
-					case "create":
+					case "createFamilyMember":
 						int id;
 						id = json.getInt("id");
+						updateView("user");
 						updateViewRight(id);
 						break;
 					}
@@ -300,7 +302,7 @@ public class AccountContent extends Content {
 									@Override
 									public void handle(ActionEvent event) {
 										int id = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-										System.out.println("User cliqu� " + id);
+										System.out.println("User cliqu " + id);
 										updateView("right");
 										updateViewRight(id);
 									}

@@ -56,6 +56,7 @@ public class SQLiteUserDAO extends UserDAO {
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO create(" + obj.getPseudo() + ") :" + e.getMessage(), e); 
         }
+        System.out.println("J'ai bien crée le nouveau membre");
         return user;
     }
 
@@ -176,60 +177,24 @@ public class SQLiteUserDAO extends UserDAO {
     @Override
     public ArrayList<User> getAll() throws DAOException {
         ArrayList<User> users = new ArrayList<User>();
-        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, "
-                + "R.id AS Rid, R.name AS Rname, Ri.denomination AS Ridenomination, "
-                + "Ri.description AS Ridescription, Ri.id AS Riid "
+        String sql = "SELECT U.id AS id, U.pseudo AS pseudo, U.password AS password, U.fk_role_id As Rid, "
+        		+ "R.name AS Rname "
                 + "FROM Users AS U "
                 + "JOIN Roles AS R ON R.id = U.fk_role_id "
-                + "JOIN Owns AS O ON O.fk_user_id = U.id "
-                + "JOIN Rights AS Ri ON Ri.id = O.fk_right_id "
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             ResultSet rs = prepStat.executeQuery();
-
-            if(rs.next()) {
-                // Know if the user manipulated changed.
-                int previousId = 0;
-                ArrayList<Right> rights = new ArrayList<Right>();
-                User user = new User();
-                do {
-                    /* New User : 
-                     *  - Add the rights to the previous one
-                     *  - Add the previous one to users
-                     *  - Empty the rights variable
-                     *  - Empty the user variable
-                     */  
-                    if(previousId != rs.getInt("id")) {
-                        // Not first user : push the previous user
-                        if(previousId != 0) {
-                            user.setRights(rights);
-                            users.add(user);   
-
-                            rights = new ArrayList<Right>();
-                            user = new User();  
-                        }   
-
+                
+                do {           
+                		User user = new User();
                         user.setId(rs.getInt("id"));
                         user.setPseudo(rs.getString("pseudo"));
                         user.setPassword(rs.getString("password"));
-                        user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname"))); 
-
-                        previousId = rs.getInt("id");                      
-                    }
-
-                    // Same user as previous ony, we add the next right
-                    int rightId = rs.getInt("Riid");
-                    String rightDenomination = rs.getString("Ridenomination");
-                    String rightDescription = rs.getString("Ridescription");
-                    Right right = new Right(rightId, rightDenomination, rightDescription);
-                    rights.add(right);
-
+                        user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname")));                    
+                        users.add(user);
                 } while (rs.next());
                 // Push the last user
-                user.setRights(rights);
-                users.add(user);
-            }
 
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getAll() :" + e.getMessage(), e);

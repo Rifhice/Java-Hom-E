@@ -60,11 +60,11 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     public Behaviour create(Behaviour obj) throws DAOException {
         Behaviour behaviour = obj;
 
+        // Insert Behaviour
         String sql = "INSERT INTO Behaviours "
                 + "(name, description, is_activated) VALUES "
                 + "(?, ?, ?);";
 
-        // Insert the User
         int created = 0;
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
@@ -74,12 +74,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
             created = prepStat.executeUpdate();
 
-            // Get the id generated for this object
             if(created > 0) {
-                String sqlGetLastId = "SELECT last_insert_rowid()";
-                PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                int id = prepStatLastId.executeQuery().getInt(1);
-                behaviour.setId(id);
+                behaviour.setId(SQLiteDAOTools.getLastId(connect));
             }
             else {
                 behaviour = null;
@@ -87,6 +83,11 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         } catch (SQLException e) {
             throw new DAOException("DAOException : BehaviourDAO create(" + obj.getName() + ") :" + e.getMessage(), e); 
         }
+        
+        // Insert in others tables
+        behaviour.setAtomicActions(createAtomicActions(behaviour.getAtomicActions()));
+        behaviour.setExpression(createExpression(behaviour.getExpression()));        
+        
         return behaviour;
     }
 
@@ -223,7 +224,43 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     // ======== HELPER METHODS ======== //
     // ================================ //
     /**
-     * Create an expression from an object in DB. If success, returns the object with the id set 
+     * Create AtomicActions in DB from a list. If success, returns the list with the id of eache
+     * atomic action set to the one in DB, else returns the list passed.  
+     * @param atomicActions
+     * @return
+     * @throws DAOException
+     */
+    public ArrayList<AtomicAction> createAtomicActions(ArrayList<AtomicAction> atomicActions) throws DAOException {
+        ArrayList<AtomicAction> aa = atomicActions;
+        
+        String sql = "INSERT INTO AtomicActions "
+                + "(name, executable) VALUES "
+                + "(?,?) "
+                + ";";
+        
+        for (int i = 0; i < aa.size(); i++) {
+            try {
+                PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                prepStat.setString(1, aa.get(i).getName());
+                prepStat.setString(2, aa.get(i).getExecutable());
+                
+                int created = prepStat.executeUpdate();
+                if(created > 0) {
+                    aa.get(i).setId(SQLiteDAOTools.getLastId(connect));
+                }
+                
+            } catch (SQLException e) {
+                throw new DAOException("DAOException : BehaviourDAO createAtomicActions() :" + e.getMessage(), e);
+            }
+        }
+        
+        return aa;
+    }
+    
+    
+    
+    /**
+     * Create an expression in DB from an object. If success, returns the object with the id set 
      * to the one in DB, else returns the object passed. 
      * @param expression
      * @return
@@ -272,6 +309,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     if(created > 0) {
                         ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));  
                         ((Block)evs.get(i)).setEnvironmentVariable(createEnvironmentVariable(((Block)evs.get(i)).getEnvironmentVariable()));
+                        Value v = ((Block)evs.get(i)).getValue();
+                        ((Block)evs.get(i)).setValue(v);
                     }                        
                 } catch (SQLException e) {
                     throw new DAOException("DAOException : BehaviourDAO create IsPartOf(" + exp.getId() + ") insert into isPartOf:" + e.getMessage(), e); 
@@ -306,7 +345,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 prepStat.setString(1, block.getOperator());       
                 int created = prepStat.executeUpdate();
                 if(created > 0) {
-                    ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));                
+                    ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect)); 
+                    ((Block)evs.get(i)).setValue(createValue(((Block)evs.get(i)).getValue()));
                 }
             } catch (SQLException e) {
                 throw new DAOException("DAOException : BehaviourDAO createEvaluables() :" + e.getMessage(), e); 
@@ -340,7 +380,9 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             prepStat.setString(3, ev.getUnit());  
             int created = prepStat.executeUpdate();
             if(created > 0) {
-                ev.setId(SQLiteDAOTools.getLastId(connect));                
+                ev.setId(SQLiteDAOTools.getLastId(connect));
+                // Value
+                ev.setValue(createValue(ev.getValue()));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : BehaviourDAO createEnvironmentVariable() :" + e.getMessage(), e); 
@@ -358,7 +400,68 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public Value createValue(Value value) throws DAOException {
         Value v = value;
-
+        
+        String sql = "INSERT INTO VValues "
+                + "default VALUES"
+                + ";";
+        
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            int created = prepStat.executeUpdate();
+            if(created > 0) {
+                // Continuous Value
+                if(value instanceof ContinuousValue) {
+                    sql = "INSERT INTO ContinuousVValues "
+                            + "(value_min, value_max, current_value, precision) VALUES "
+                            + "(?,?,?,?)"
+                            + ";";
+                    try {
+                        PreparedStatement prepStatCV = this.connect.prepareStatement(sql);
+                        ContinuousValue cv = (ContinuousValue) v;
+                        prepStatCV.setDouble(1, cv.getValueMin());
+                        prepStatCV.setDouble(2, cv.getValueMax());
+                        prepStatCV.setDouble(3, cv.getCurrentValue());
+                        prepStatCV.setDouble(4, cv.getPrecision());
+                        
+                        created = prepStatCV.executeUpdate();
+                        if(created > 0) {
+                            v.setId(SQLiteDAOTools.getLastId(connect));
+                        }
+                        
+                    } catch (SQLException e) {
+                        throw new DAOException("DAOException : BehaviourDAO createValue() :" + e.getMessage(), e); 
+                    }
+                }
+                // Discrete Value
+                else if(value instanceof DiscreteValue) {
+                    sql = "INSERT INTO DiscreteVValues "
+                            + "(current_value, possible_values) VALUES "
+                            + "(?,?) "
+                            + ";";
+                    try {
+                        PreparedStatement prepStatDV = this.connect.prepareStatement(sql);
+                        
+                        DiscreteValue dv = (DiscreteValue) v;
+                        prepStatDV.setString(1, dv.getCurrentValue());
+                        
+                        JSONObject JSON = new JSONObject(dv.getPossibleValues());                        
+                        prepStatDV.setString(2, JSON.toString());
+                        
+                        created = prepStatDV.executeUpdate();
+                        if(created > 0) {
+                            v.setId(SQLiteDAOTools.getLastId(connect));
+                        }
+                        
+                    } catch (SQLException e) {
+                        throw new DAOException("DAOException : BehaviourDAO createValue() :" + e.getMessage(), e); 
+                    }
+                    
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO createValue() :" + e.getMessage(), e); 
+        }
+                
         return v;
     }
 

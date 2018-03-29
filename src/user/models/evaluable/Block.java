@@ -1,12 +1,8 @@
 package user.models.evaluable;
 
-import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import user.models.Sensor;
-import user.models.environmentVariable.ContinuousValue;
-import user.models.environmentVariable.DiscreteValue;
 import user.models.evaluable.Block;
 import user.models.environmentVariable.EnvironmentVariable;
 
@@ -70,14 +66,12 @@ public class Block implements Evaluable {
         return result;
     }
     
-    /* TODO 
     public static Block createBlockFromJson(JSONObject json) {
         EnvironmentVariable variable = null;
         Object value = null;
         String operator = null;
         
-
-        json.getInt("variable")
+        json.getInt("variable");
         if(variable != null) {
            operator = json.getString("operator");
            try {
@@ -94,5 +88,5 @@ public class Block implements Evaluable {
         }
         return null;
     }
-    */
+   
 }

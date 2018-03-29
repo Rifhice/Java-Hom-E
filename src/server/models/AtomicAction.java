@@ -11,7 +11,6 @@ public class AtomicAction {
     // ==== ATTRIBUTES ==== //
     // ==================== //
     private int id;
-    private String name;
     private String executable;
     private Actuator actuator;
     
@@ -22,9 +21,8 @@ public class AtomicAction {
     // ====================== //
     public AtomicAction() {}
 
-    public AtomicAction(int id, String name, String executable) {
+    public AtomicAction(int id, String executable) {
         this.id = id;
-        this.name = name;
         this.executable = executable;
     }
     
@@ -33,9 +31,8 @@ public class AtomicAction {
         this.actuator = actuator;
     }
     
-    public AtomicAction(int id, String name, String executable,Actuator actuator) {
+    public AtomicAction(int id, String executable,Actuator actuator) {
         this.id = id;
-        this.name = name;
         this.executable = executable;
         this.actuator = actuator;
     }
@@ -49,14 +46,6 @@ public class AtomicAction {
 
     public void setId(int id) {
         this.id = id;
-    }
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Actuator getActuator() {
@@ -77,7 +66,7 @@ public class AtomicAction {
     
     // ================================
     public String toString() {
-        String res = "AT.ACTION #"+id+" "+name ;
+        String res = "AT.ACTION #"+id ;
         res += "  " + executable;      
         return res;
     }
@@ -89,7 +78,6 @@ public class AtomicAction {
     public JSONObject toJson() {
     	JSONObject result = new JSONObject();
     	result.put("id", id);
-    	result.put("name", name);
     	result.put("executable", executable);
     	result.put("actuator", actuator.getId());
     	return result;

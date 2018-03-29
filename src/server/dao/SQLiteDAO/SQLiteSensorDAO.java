@@ -17,12 +17,12 @@ import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 import server.models.environmentVariable.Value;
 
-public class SQLiteSensorDao extends SensorDAO{
+public class SQLiteSensorDAO extends SensorDAO{
 	
 	// ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
-    public SQLiteSensorDao(Connection connectionDriver) {
+    public SQLiteSensorDAO(Connection connectionDriver) {
         super(connectionDriver);
     }    
     

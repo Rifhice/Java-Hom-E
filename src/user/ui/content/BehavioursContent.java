@@ -98,6 +98,15 @@ public class BehavioursContent extends Content {
 	MyButtonFX valideButton;
 	MyButtonFX cancelButton;
 	
+	ChangeListener<Object> changeListener = new ChangeListener<Object>() {
+
+		@Override
+		public void changed(ObservableValue<? extends Object> arg0, Object arg1, Object arg2) {
+			
+		}
+		
+	};
+	
 	// ========= ATTRIBUTES ========= //
 	private ArrayList<EnvironmentVariable> environmentVariables = new ArrayList<EnvironmentVariable>();
 	private ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
@@ -331,30 +340,50 @@ public class BehavioursContent extends Content {
 			@Override
 			public void handle(ActionEvent arg0) {
 				Evaluable finalEvaluable = finalExpressionComboBox.getValue();
+				Command command = commandKeyComboBox.getValue();
+				boolean error = false;
 				if(finalEvaluable == null) {
 					finalExpressionComboBox.setStyle("-fx-background-color: "+GraphicalCharter.RED);
+					error = true;
+				}
+				if (command == null) {
+					commandKeyComboBox.setStyle("-fx-background-color: "+GraphicalCharter.RED);
+					error = true;
+				}
+				if (command != null) {
+					for(int i = 0; i < command.getCommandValues().size(); i++) {
+						Node node = argsGridPane.getChildren().get(i);
+						if(node instanceof MyComboBox) {
+							if(((MyComboBox<String>) node).getValue() == null) {
+								error = true;
+								((MyComboBox<String>) node).setStyle("-fx-background-background: " + GraphicalCharter.RED);
+							}
+						}
+					}
+				}
+				if(error) {
 					return;
 				}
 				finalExpressionComboBox.setStyle("-fx-background-color: white");
 				JSONObject request = new JSONObject();
 				request.put("recipient", "behaviour");
 				request.put("action", "create");
-				if(finalEvaluable instanceof Block) {
-					request.put("block", finalEvaluable.toJson()); 
-				} else {
-					request.put("expression", finalEvaluable.toJson());
-				}
-				String command = commandKeyComboBox.getValue().getName();
+				request.put("evaluable", finalEvaluable.toJson());
+				String action = command.getName();
 				for(int i = 0; i < argsGridPane.getChildren().size(); i++){
 					if(argsGridPane.getChildren().get(i) instanceof MySlider) {
 						MySlider slider = (MySlider) argsGridPane.getChildren().get(i);
-						command += " " + ((Double)(Math.floor(slider.getValue() * 100) / 100)).toString();
+						action += " " + ((Double)(Math.floor(slider.getValue() * 100) / 100)).toString();
 					} else if (argsGridPane.getChildren().get(i) instanceof MyComboBox) {
 						MyComboBox<String> comboBox = (MyComboBox<String>) argsGridPane.getChildren().get(i);
-						command += " " + comboBox.getValue();
+						action += " " + comboBox.getValue();
 					}
 				}
-				request.put("command", command);
+				JSONObject commandJSON = new JSONObject();
+				commandJSON.put("id", command.getActuator().getId());
+				commandJSON.put("action", action);
+				request.put("command", commandJSON);
+				System.out.println(request.toString());
 				try {
                     ClientFX.client.sendToServer(command.toString());
                 } catch (IOException e) {

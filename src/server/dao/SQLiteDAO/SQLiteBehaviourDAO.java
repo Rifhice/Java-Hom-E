@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
+import server.dao.abstractDAO.EnvironmentVariableDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.AtomicAction;
@@ -325,8 +326,12 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            JSONObject JSON = new JSONObject(expression.getOperators());
-            prepStat.setString(1, JSON.toString());       
+            if(expression.getOperators() != null) {
+                JSONObject JSON = new JSONObject(expression.getOperators());
+                prepStat.setString(1, JSON.toString()); 
+            } else {
+                prepStat.setString(1, "{operators:[]}");
+            }
 
             int created = prepStat.executeUpdate();
             if(created > 0) {
@@ -873,20 +878,36 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     // ============== // 
     public static void main (String args[]) {
         BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
+        EnvironmentVariableDAO evDAO = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getEnvironmentVariableDAO();
 
         Behaviour b = new Behaviour();
-        b = test.getAll().get(1);
-
-        Expression e = new Expression();
-        e.setId(2);
-
-        Block bl = new Block();
-        bl.setId(1);
-
-        EnvironmentVariable ev = new EnvironmentVariable();
-        ev.setId(1);
+        b.setActivated(true);
+        b.setDescription("descri");
+        b.setName("test Name");
         
-        //System.out.println(b);
+        ArrayList<AtomicAction> aas = new ArrayList<AtomicAction>();
+        AtomicAction aa = new AtomicAction();
+        aa.setExecutable("exec ok");
+        aas.add(aa);
+        
+        b.setAtomicActions(aas);
+        
+        Expression e = new Expression();
+        
+        Block bl = new Block();
+        bl.setOperator(">");
+        DiscreteValue value = new DiscreteValue();
+        value.setCurrentValue("TRUE");
+        bl.setValue(value);
+        
+        bl.setEnvironmentVariable(evDAO.getById(1));
+        
+        ArrayList<Evaluable> eval = new ArrayList<Evaluable>();
+        eval.add(bl);
+        e.setEvaluables(eval);
+
+        b.setExpression(e);
+        
         test.create(b);
     }
 }

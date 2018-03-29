@@ -119,15 +119,15 @@ public class ActuatorManager extends Manager {
 			result.put("result", "success");
 			result.put("verb", "post");
 			result.put("id", create.getId());
+			SystemManager.sendToAllClient(result.toString());
 		}
 		else {
 			result.put("result", "failure");
-		}
-		try {
-			System.out.println(result.toString());
-			client.sendToClient(result.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				client.sendToClient(result.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println(actuator + "\nAdded to the system !");
 	}

@@ -66,9 +66,9 @@ public class DiscreteValue extends Value {
     	return result;
     }
     
-    public boolean isEqual(Object value) {
-        if(value instanceof String) {
-            return ((String)value).equals(currentValue);
+    public boolean isEqual(Value value) {
+        if(value.getValue() instanceof String) {
+            return ((String)value.getValue()).equals(currentValue);
         }
         return false;
     }
@@ -92,25 +92,25 @@ public class DiscreteValue extends Value {
         return res;
     }
 
-    public boolean isNotEqual(Object value) {
-        if(value instanceof String) {
-            return !((String)value).equals(currentValue);
+    public boolean isNotEqual(Value value) {
+        if(value.getValue() instanceof String) {
+            return !((String)value.getValue()).equals(currentValue);
         }
         return false;
     }
 
-    public boolean isSuperior(Object value) {
+    public boolean isSuperior(Value value) {
         return false;
     }
 
-    public boolean isInferior(Object value) {
+    public boolean isInferior(Value value) {
         return false;
     }
 
-    public boolean isSuperiorOrEqual(Object value) {
+    public boolean isSuperiorOrEqual(Value value) {
         return false;
     }
-    public boolean isInferiorOrEqual(Object value) {
+    public boolean isInferiorOrEqual(Value value) {
         return false;
     }  
 

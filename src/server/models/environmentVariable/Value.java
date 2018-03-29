@@ -40,12 +40,12 @@ public abstract class Value extends Observable {
         result.put("id", id);
         return result;
     }
-    public abstract boolean isEqual(Object value);
-    public abstract boolean isNotEqual(Object value);
-    public abstract boolean isSuperior(Object value);
-    public abstract boolean isInferior(Object value);
-    public abstract boolean isSuperiorOrEqual(Object value);
-    public abstract boolean isInferiorOrEqual(Object value);
+    public abstract boolean isEqual(Value value);
+    public abstract boolean isNotEqual(Value value);
+    public abstract boolean isSuperior(Value value);
+    public abstract boolean isInferior(Value value);
+    public abstract boolean isSuperiorOrEqual(Value value);
+    public abstract boolean isInferiorOrEqual(Value value);
     
     public String toString() {
         String res = "#" + getId();

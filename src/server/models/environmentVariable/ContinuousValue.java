@@ -83,9 +83,9 @@ public class ContinuousValue extends Value {
 
     // ==================================
 
-    public boolean isEqual(Object value) {
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue() == currentValue;
+    public boolean isEqual(Value value) {
+        if (value.getValue() instanceof Number) {
+            return ((Number) value.getValue()).doubleValue() == currentValue;
         }
         return false;
     }
@@ -98,37 +98,37 @@ public class ContinuousValue extends Value {
         return res;
     }
 
-    public boolean isNotEqual(Object value) {
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue() != currentValue;
+    public boolean isNotEqual(Value value) {
+        if (value.getValue() instanceof Number) {
+            return ((Number) value.getValue()).doubleValue() != currentValue;
         }
         return false;
     }
 
-    public boolean isSuperior(Object value) {
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue() > currentValue;
+    public boolean isSuperior(Value value) {
+        if (value.getValue() instanceof Number) {
+            return ((Number) value.getValue()).doubleValue() > currentValue;
         }
         return false;
     }
 
-    public boolean isInferior(Object value) {
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue() < currentValue;
+    public boolean isInferior(Value value) {
+        if (value.getValue() instanceof Number) {
+            return ((Number) value.getValue()).doubleValue() < currentValue;
         }
         return false;
     }
 
-    public boolean isSuperiorOrEqual(Object value) {
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue() >= currentValue;
+    public boolean isSuperiorOrEqual(Value value) {
+        if (value.getValue() instanceof Number) {
+            return ((Number) value.getValue()).doubleValue() >= currentValue;
         }
         return false;
     }
 
-    public boolean isInferiorOrEqual(Object value) {
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue() <= currentValue;
+    public boolean isInferiorOrEqual(Value value) {
+        if (value.getValue() instanceof Number) {
+            return ((Number) value.getValue()).doubleValue() <= currentValue;
         }
         return false;
     }

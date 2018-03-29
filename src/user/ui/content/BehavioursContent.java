@@ -383,7 +383,7 @@ public class BehavioursContent extends Content {
 				request.put("action", "create");
 				request.put("name", behaviourNameTextField.getText());
 				request.put("evaluable", finalEvaluable.toJson());
-				String action = command.getName();
+				String action = command.getKey();
 				for(int i = 0; i < argsGridPane.getChildren().size(); i++){
 					if(argsGridPane.getChildren().get(i) instanceof MySlider) {
 						MySlider slider = (MySlider) argsGridPane.getChildren().get(i);

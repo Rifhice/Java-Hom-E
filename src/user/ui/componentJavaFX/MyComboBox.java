@@ -10,6 +10,7 @@ public class MyComboBox<T> extends ComboBox<T>{
 	public MyComboBox(ArrayList<T> elements) {
 		super();
 		this.getItems().addAll(elements);
+		resetStyle();
 	}
 	
 	public MyComboBox(Rectangle2D.Float bounds, ArrayList<T> options) {
@@ -20,6 +21,11 @@ public class MyComboBox<T> extends ComboBox<T>{
 		setLayoutY(bounds.y);
 		setPrefWidth(bounds.width);
 		setPrefHeight(bounds.height);
+		resetStyle();
+	}
+	
+	public void resetStyle() {
+		setStyle("-fx-background-color: white");
 	}
 	
 }

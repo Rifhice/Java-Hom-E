@@ -34,6 +34,7 @@ public class Behaviour implements Observer {
 	
 	public Behaviour(Expression expression) {
         this.expression = expression;
+        this.isActivated = true;
     }
 	
 	public Behaviour(int id, Expression expression) {

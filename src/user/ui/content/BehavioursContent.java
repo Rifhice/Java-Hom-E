@@ -1,5 +1,6 @@
 package user.ui.content;
 
+import java.awt.GradientPaint;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +8,8 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -28,6 +31,7 @@ import user.models.evaluable.Evaluable;
 import user.models.evaluable.Expression;
 import user.tools.ARITHMETICOPERATOR;
 import user.tools.BOOLEANOPERATOR;
+import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyComboBox;
 import user.ui.componentJavaFX.MyGridPane;
@@ -255,6 +259,7 @@ public class BehavioursContent extends Content {
 		
 		finalExpressionLabel = new MyLabel("Final Expression", finalExpressionLabelBounds.computeBounds(width, height));
 		finalExpressionComboBox = new MyComboBox<Evaluable>(finalExpressionComboBounds.computeBounds(width, height),new ArrayList<Evaluable>());
+		finalExpressionComboBox.setStyle("-fx-background-color: white");
 		finalExpressionComboBox.setConverter(new StringConverter<Evaluable>() {
 
 			@Override
@@ -305,6 +310,14 @@ public class BehavioursContent extends Content {
 				}
 			}
 		});
+		commandKeyComboBox.valueProperty().addListener(new InvalidationListener() {
+			
+			@Override
+			public void invalidated(Observable arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		
 		
@@ -317,10 +330,12 @@ public class BehavioursContent extends Content {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void handle(ActionEvent arg0) {
-				if(true) {
-					
-				}
 				Evaluable finalEvaluable = finalExpressionComboBox.getValue();
+				if(finalEvaluable == null) {
+					finalExpressionComboBox.setStyle("-fx-background-color: "+GraphicalCharter.RED);
+					return;
+				}
+				finalExpressionComboBox.setStyle("-fx-background-color: white");
 				JSONObject request = new JSONObject();
 				request.put("recipient", "behaviour");
 				request.put("action", "create");

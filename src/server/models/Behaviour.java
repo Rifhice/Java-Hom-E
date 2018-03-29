@@ -27,8 +27,8 @@ public class Behaviour implements Observer {
 	
 	// Attributes from other tables
 	private Expression expression;
-	private ArrayList<AtomicAction> atomicActions;
-    private ArrayList<ComplexAction> complexActions;
+	private ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
+    private ArrayList<ComplexAction> complexActions = new ArrayList<ComplexAction>();
 	
     // ====================== //
     // ==== CONSTRUCTORS ==== //

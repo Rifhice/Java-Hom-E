@@ -90,148 +90,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return behaviour;
     }
 
-    /*@Override
-	public Behaviour getById(int id) throws DAOException {
-		Behaviour behaviour = null;
-        String sql = "SELECT B.id AS id, B.name AS name, B.is_activated AS isActivated, "
-                + "E.id AS Eid, E.operators AS Eoperators "
-                + "FROM Behaviour AS B "
-                + "JOIN Expression AS E ON E.id = B.fk_expression_id "
-                + "WHERE E.id = ?;";
-
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
-
-            if(rs.next()) {
-                behaviour = new Behaviour();
-                behaviour.setId(rs.getInt("id"));
-                behaviour.setName(rs.getString("name"));
-                behaviour.setActivated(rs.getBoolean("is_activated"));
-                try {
-					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
-					JSONArray array = JSON.getJSONArray("operators");
-					ArrayList<String> arrayl = new ArrayList(array.toList());
-					behaviour.setExpression(new Expression(rs.getInt("Eid"), arrayl));
-				} catch (Exception e) {
-
-				}
-
-               ; 
-            }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
-        }
-
-        behaviour.setAtomicActions(this.getAtomicActions(behaviour.getId()));
-        behaviour.setComplexActions(this.getComplexActions(behaviour.getId()));
-
-        return behaviour;
-	}
-
-	 public ArrayList<AtomicAction> getAtomicActions(int id) throws DAOException {
-	        Behaviour Behaviour = null;
-	        // Get executes atomic actions
-	        String sql = "SELECT Ac.name AS Acname, Ac.exececutable AS Acexecutable,"
-	                + "Ac.id AS Acid "
-	                + "FROM Behaviour AS B "
-	                + "JOIN Lauches AS L ON L.fk_behaviour_id = B.id "
-	                + "JOIN AtomicAction AS AC ON AC.id = L.fk_atomicaction_id "
-	                + "WHERE B.id = ?;";
-
-	        ArrayList<AtomicAction> atomiclaunch = new ArrayList<AtomicAction>();
-
-	        try {
-	            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-	            prepStat.setInt(1, id);
-	            ResultSet rs = prepStat.executeQuery();
-
-	            if(rs.next()) {
-	                do {
-	                    int atomicId = rs.getInt("Acid");
-	                    String atomicName = rs.getString("Acname");
-	                    String atomicLaunch = rs.getString("Acexecutable");
-	                    AtomicAction atomicAction = new AtomicAction(atomicId, atomicName, atomicLaunch);
-	                    atomiclaunch.add(atomicAction);
-	                } while (rs.next());
-	            }
-	        } catch (SQLException e) {
-	            throw new DAOException("DAOException : BehaviourDAO getAtomicActions(" + id + ") (executes):" + e.getMessage(), e);
-	        }
-
-
-
-	        // Build the list of DISTINCT Atomic Actions
-	        ArrayList<AtomicAction> allAtomicActions = atomiclaunch;
-	        boolean isAlreadyHere;
-	        if(atomiclaunch != null) {
-	            for (AtomicAction AtomicE : atomiclaunch) {
-	                isAlreadyHere = false;
-	                for (AtomicAction atomic : allAtomicActions) {
-	                    if(AtomicE.getId() == atomic.getId()) {
-	                        isAlreadyHere = true;
-	                    }
-	                }
-	                if(!isAlreadyHere) {
-	                    allAtomicActions.add(AtomicE);
-	                }
-	            }
-	        }        
-	        return allAtomicActions;
-	    }*/
-
-    // TODO : missing Arraylist<ComplexAction>
-
-    public ArrayList<ComplexAction> getComplexActions(int id) throws DAOException {
-        // Get complex actions
-        String sql = "SELECT Ca.name AS Caname "
-                + "Ca.id AS Caid "
-                + "FROM Behaviour AS B "
-                + "JOIN Executes AS E ON E.fk_behaviour_id = B.id "
-                + "JOIN ComplexAction AS CA ON CA.id = E.fk_complexaction_id "
-                + "WHERE B.id = ?;";
-
-        ArrayList<ComplexAction> complexexecute = new ArrayList<ComplexAction>();
-
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
-
-            if(rs.next()) {
-                do {
-                    // Construct rights in owns
-                    int complexId = rs.getInt("Caid");
-                    String complexName = rs.getString("Caname");
-                    ComplexAction complexAction = new ComplexAction(complexId, complexName);
-                    complexexecute.add(complexAction);
-                } while (rs.next());
-            }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : BehaviourDAO getComplexActions(" + id + ") (executes):" + e.getMessage(), e);
-        }
-
-        // Build the list of DISTINCT Complex action
-        ArrayList<ComplexAction> allComplexActions = complexexecute;
-        boolean isAlreadyHere;
-        if(complexexecute != null) {
-            for (ComplexAction ComplexE : complexexecute) {
-                isAlreadyHere = false;
-                for (ComplexAction complex : allComplexActions) {
-                    if(ComplexE.getId() == complex.getId()) {
-                        isAlreadyHere = true;
-                    }
-                }
-                if(!isAlreadyHere) {
-                    allComplexActions.add(ComplexE);
-                }
-            }
-        }  
-
-        return allComplexActions;
-    }
-
     @Override
     public int update(Behaviour obj) throws DAOException {
         // Update Behaviour
@@ -605,6 +463,63 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         
         return atomicActions;
     }
+    
+    /**
+     * Returns the list of ComplexActions associated to a behaviour. If none, returns an empty list.
+     * @param id
+     * @return the list of ComplexActions
+     * @throws DAOException
+     */
+    public ArrayList<ComplexAction> getComplexActions(Behaviour behaviour) throws DAOException {
+        // Get complex actions
+        String sql = "SELECT Ca.name AS Caname "
+                + "Ca.id AS Caid "
+                + "FROM Behaviour AS B "
+                + "JOIN Executes AS E ON E.fk_behaviour_id = B.id "
+                + "JOIN ComplexAction AS CA ON CA.id = E.fk_complexaction_id "
+                + "WHERE B.id = ?;";
+
+        ArrayList<ComplexAction> complexexecute = new ArrayList<ComplexAction>();
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, behaviour.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                do {
+                    // Construct rights in owns
+                    int complexId = rs.getInt("Caid");
+                    String complexName = rs.getString("Caname");
+                    ComplexAction complexAction = new ComplexAction(complexId, complexName);
+                    complexexecute.add(complexAction);
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO getComplexActions(" + behaviour.getId() + "):" + e.getMessage(), e);
+        }
+
+        // Build the list of DISTINCT Complex action
+        ArrayList<ComplexAction> allComplexActions = complexexecute;
+        boolean isAlreadyHere;
+        if(complexexecute != null) {
+            for (ComplexAction ComplexE : complexexecute) {
+                isAlreadyHere = false;
+                for (ComplexAction complex : allComplexActions) {
+                    if(ComplexE.getId() == complex.getId()) {
+                        isAlreadyHere = true;
+                    }
+                }
+                if(!isAlreadyHere) {
+                    allComplexActions.add(ComplexE);
+                }
+            }
+        }  
+
+        return allComplexActions;
+    }
+
+    
 
     // ============== //
     // ==== MAIN ==== //

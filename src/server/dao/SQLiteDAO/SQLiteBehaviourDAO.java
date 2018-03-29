@@ -471,19 +471,34 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 }
                 // Discrete Value
                 else if(value instanceof DiscreteValue) {
-                    sql = "INSERT INTO DiscreteVValues "
-                            + "(current_value, possible_values, fk_vvalue_id) VALUES "
-                            + "(?,?,?) "
-                            + ";";
+                    
+                    DiscreteValue dv = (DiscreteValue) v;
+                    
+                    // Test if there are possible values (value of a sensor or from a block)
+                    boolean isPossible = false;                    
+                    if(dv.getPossibleValues() != null) {
+                        sql = "INSERT INTO DiscreteVValues "
+                                + "(current_value, fk_vvalue_id, possible_values) VALUES "
+                                + "(?,?,?) "
+                                + ";";
+                        isPossible = true;
+                    }
+                    else {
+                        sql = "INSERT INTO DiscreteVValues "
+                                + "(current_value, fk_vvalue_id) VALUES "
+                                + "(?,?) "
+                                + ";";
+                    }                    
                     try {
                         PreparedStatement prepStatDV = this.connect.prepareStatement(sql);
 
-                        DiscreteValue dv = (DiscreteValue) v;
                         prepStatDV.setString(1, dv.getCurrentValue());
+                        prepStatDV.setInt(2, dv.getId());
 
-                        JSONObject JSON = new JSONObject(dv.getPossibleValues());                        
-                        prepStatDV.setString(2, JSON.toString());
-                        prepStatDV.setInt(3, dv.getId());
+                        if(isPossible) {
+                            JSONObject JSON = new JSONObject(dv.getPossibleValues());                        
+                            prepStatDV.setString(3, JSON.toString());
+                        }                       
 
                         created = prepStatDV.executeUpdate();
                         if(created > 0) {

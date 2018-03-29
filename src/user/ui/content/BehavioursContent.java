@@ -1,9 +1,7 @@
 package user.ui.content;
 
-import java.awt.GradientPaint;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -383,9 +381,8 @@ public class BehavioursContent extends Content {
 				commandJSON.put("id", command.getActuator().getId());
 				commandJSON.put("action", action);
 				request.put("command", commandJSON);
-				System.out.println(request.toString());
 				try {
-                    ClientFX.client.sendToServer(command.toString());
+                    ClientFX.client.sendToServer(request.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -465,8 +462,8 @@ public class BehavioursContent extends Content {
 	
 	@Override
 	public void handleMessage(Object message) { 
+		System.out.println("Salue");
 		if(message instanceof String) {
-			System.out.println("Salue " + message);
 			try {
 				System.out.println(message.toString());
 				JSONObject json = new JSONObject((String)message);

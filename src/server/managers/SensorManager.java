@@ -144,8 +144,10 @@ public class SensorManager extends Manager{
 	
 	public void changeEnvironmentVariableValue(JSONObject json,ConnectionToClient client) {
 		Sensor sensor = getSensorById(json.getInt("id"));
+		System.out.println(sensor.getEnvironmentVariables().countObservers());
 		if(sensor != null) {
 			sensor.changeValue(json.getString("value"));
+			sensor.getEnvironmentVariables().myNotify();
 			JSONObject result = new JSONObject();
 			result.put("recipient", "sensor");
 			result.put("action", "changeValue");

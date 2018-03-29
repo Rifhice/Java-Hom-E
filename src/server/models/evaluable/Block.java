@@ -133,9 +133,11 @@ public class Block implements Evaluable {
         for (int i = 0; i < sensors.size(); i++) {
             if(sensors.get(i).getEnvironmentVariables().getId() == json.getInt("variable")) {
                 variable = sensors.get(i).getEnvironmentVariables();
+                System.out.println("SENSOR FOUND : " + sensors.get(i).getEnvironmentVariables());
             }
         }
         if(variable == null) {
+        	System.out.println("SENSOR NOT FOUND : ");
             variable = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getById(json.getInt("variable"));
         }
         

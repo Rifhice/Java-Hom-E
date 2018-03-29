@@ -72,7 +72,8 @@ public class AtomicAction {
     }
     
     public void execute() {
-        // TODO
+    	System.out.println("EXECUTE ATOMIC");
+        actuator.execute(executable);
     }
     
     public JSONObject toJson() {

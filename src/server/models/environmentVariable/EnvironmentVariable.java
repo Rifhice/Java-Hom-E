@@ -131,6 +131,11 @@ public class EnvironmentVariable extends Observable{
         this.value = value;
     }
     
+    public void myNotify() {
+    	setChanged();
+    	notifyObservers();
+    }
+    
     // =================================================
     public String toString() {
         return id + ": " + name;

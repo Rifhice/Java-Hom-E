@@ -62,7 +62,12 @@ public class Sensor extends ExternalActor{
 	
 	public void changeValue(String value) {
 		if(environmentVariables.getValue() instanceof ContinuousValue) {
-			double valueDouble = Double.parseDouble(value);
+			double valueDouble = 0;
+			try {
+				valueDouble = Double.parseDouble(value);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			((ContinuousValue)environmentVariables.getValue()).setCurrentValue(valueDouble);
 		}
 		else {

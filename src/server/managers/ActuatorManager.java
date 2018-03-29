@@ -46,10 +46,19 @@ public class ActuatorManager extends Manager {
 		// TODO
 	}
 	
+	/**
+	 * 
+	 * @return The list of the different actuators in the system
+	 */
 	public static ArrayList<Actuator> getActuators(){
 		return actuators;
 	}
 	
+	/**
+	 * 
+	 * @param id Actuator id to get
+	 * @return Actuator
+	 */
 	public Actuator getActuatorById(String id) {
 		for (int i = 0; i < actuators.size(); i++) {
 			if(Integer.toString(actuators.get(i).getId()).equals(id)) {
@@ -58,7 +67,12 @@ public class ActuatorManager extends Manager {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * 
+	 * @param jsonToParse
+	 * @return Actuator from the JSON
+	 */
 	public static Actuator getActuatorFromJson(JSONObject jsonToParse) {
 		try {
 			String name = jsonToParse.getString("name");
@@ -101,6 +115,11 @@ public class ActuatorManager extends Manager {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param json Json to parse to register the actuator
+	 * @param client Connection to the client
+	 */
 	public void registerActuatorToTheSystem(JSONObject json,ConnectionToClient client) {
 		Actuator actuator = getActuatorFromJson(json);
 		Actuator create = null;
@@ -132,6 +151,11 @@ public class ActuatorManager extends Manager {
 		System.out.println(actuator + "\nAdded to the system !");
 	}
 	
+	/**
+	 * 
+	 * @param json Execute the executable in this json
+	 * @param client Connection to the client
+	 */
 	public void execute(JSONObject json,ConnectionToClient client) {
 		System.out.println(json.getString("executable"));
 		for (int i = 0; i < actuators.size(); i++) {

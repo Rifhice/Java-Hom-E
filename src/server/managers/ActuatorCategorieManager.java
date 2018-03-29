@@ -36,7 +36,7 @@ public class ActuatorCategorieManager extends Manager{
 	
 	/**
 	 * 
-	 * @return Retourne l'instance du Singleton de l'ActuatorCategorieManager
+	 * @return Return the instance of the ActuatorCategorieSingleton
 	 */
 	public static ActuatorCategorieManager getManager() {
 		if(manager == null) 
@@ -50,7 +50,7 @@ public class ActuatorCategorieManager extends Manager{
 	
 	/**
 	 * 
-	 * @param client 
+	 * @param client Connection to the client
 	 */
 	public void getAllActuatorCategories(ConnectionToClient client) {
 		ArrayList<ActuatorCategory> actuatorCategories = actuatorCategoriesDAO.getAll();
@@ -71,6 +71,11 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param obj ActuatorCategory to create
+	 * @param client Connection to the client
+	 */
 	public void createActuatorCategorie(ActuatorCategory obj, ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
@@ -89,6 +94,11 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param id Id of the actuator to delete
+	 * @param client Connection to the client
+	 */
 	public void deleteActuatorCategorie(int id,ConnectionToClient client) {
 		System.out.println("delete");
 		JSONObject result = new JSONObject();
@@ -108,6 +118,11 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param obj ActuatorCategory to update
+	 * @param client Connection to the client
+	 */
 	public void updateActuatorCategorie(ActuatorCategory obj,ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");

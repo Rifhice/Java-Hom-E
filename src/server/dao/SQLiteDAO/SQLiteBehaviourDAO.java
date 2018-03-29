@@ -683,7 +683,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public ArrayList<AtomicAction> getAtomicActions(Behaviour behaviour) throws DAOException {
         ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
-        String sql = "SELECT AA.id AS id, AA.name AS name, AA.executable AS executable "
+        String sql = "SELECT AA.id AS id, AA.executable AS executable "
                 + "FROM Behaviours AS B "
                 + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
                 + "JOIN AtomicActions AS AA ON AA.id = L.fk_atomicAction_id "

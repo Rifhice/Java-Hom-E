@@ -34,6 +34,10 @@ public class ActuatorCategorieManager extends Manager{
 		
 	}
 	
+	/**
+	 * 
+	 * @return Retourne l'instance du Singleton de l'ActuatorCategorieManager
+	 */
 	public static ActuatorCategorieManager getManager() {
 		if(manager == null) 
 			manager = new ActuatorCategorieManager();
@@ -43,6 +47,11 @@ public class ActuatorCategorieManager extends Manager{
 	// ================= //
     // ==== METHODS ==== //
     // ================= //
+	
+	/**
+	 * 
+	 * @param client 
+	 */
 	public void getAllActuatorCategories(ConnectionToClient client) {
 		ArrayList<ActuatorCategory> actuatorCategories = actuatorCategoriesDAO.getAll();
 		JSONObject result = new JSONObject();

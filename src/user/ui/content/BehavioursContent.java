@@ -37,6 +37,7 @@ import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyRectangle;
 import user.ui.componentJavaFX.MyScrollPane;
 import user.ui.componentJavaFX.MySlider;
+import user.ui.componentJavaFX.MyTextFieldFX;
 import user.ui.scene.ContentScene;
 
 public class BehavioursContent extends Content {
@@ -67,6 +68,9 @@ public class BehavioursContent extends Content {
 	MyRectangle blocksBounds = new MyRectangle(0.7f, 0.1f, 0.25f, 0.35f);
 	MyRectangle expressionsBounds = new MyRectangle(0.7f, 0.55f, 0.25f, 0.35f);
 	
+	MyRectangle behaviourNameLabelBounds = new MyRectangle(0.25f, 0.75f, 0.3f, 0.05f);
+	MyRectangle behaviourNameTextFieldBounds = new MyRectangle(0.35f, 0.75f, 0.3f, 0.05f);
+	
 	MyComboBox<EnvironmentVariable> variablesComboBox;
 	MyComboBox<String> operatorTopComboBox;
 	MyComboBox<String> valueComboBox;
@@ -92,6 +96,10 @@ public class BehavioursContent extends Content {
 	MyScrollPane expressionsScrollPane;
 	MyGridPane blocksGridPane;
 	MyGridPane expressionsGridPane;
+	
+	MyLabel behaviourNameLabel;
+	MyTextFieldFX behaviourNameTextField;
+	
 	
 	MyButtonFX valideButton;
 	MyButtonFX cancelButton;
@@ -333,6 +341,9 @@ public class BehavioursContent extends Content {
 		argsScrollPane = new MyScrollPane(argsGridBounds.computeBounds(width, height));
 		argsScrollPane.setContent(argsGridPane);
 		
+		behaviourNameLabel = new MyLabel("Nom", behaviourNameLabelBounds.computeBounds(width, height));
+		behaviourNameTextField = new MyTextFieldFX("Eteindre lu miere", behaviourNameTextFieldBounds.computeBounds(width, height), 1f);
+		
 		valideButton = new MyButtonFX("Validate", validateButtonBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -354,10 +365,14 @@ public class BehavioursContent extends Content {
 						if(node instanceof MyComboBox) {
 							if(((MyComboBox<String>) node).getValue() == null) {
 								error = true;
-								((MyComboBox<String>) node).setStyle("-fx-background-background: " + GraphicalCharter.RED);
+								((MyComboBox<String>) node).setStyle("-fx-background-color: " + GraphicalCharter.RED);
 							}
 						}
 					}
+				}
+				if(behaviourNameTextField.getText().equals("") || behaviourNameTextField.getText() == null) {
+					behaviourNameTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED);
+					error = true;
 				}
 				if(error) {
 					return;
@@ -366,6 +381,7 @@ public class BehavioursContent extends Content {
 				JSONObject request = new JSONObject();
 				request.put("recipient", "behaviour");
 				request.put("action", "create");
+				request.put("name", behaviourNameTextField.getText());
 				request.put("evaluable", finalEvaluable.toJson());
 				String action = command.getName();
 				for(int i = 0; i < argsGridPane.getChildren().size(); i++){
@@ -416,6 +432,9 @@ public class BehavioursContent extends Content {
         this.getChildren().add(commandKeyComboBox);
         this.getChildren().add(argsScrollPane);
         
+        this.getChildren().add(behaviourNameLabel);
+        this.getChildren().add(behaviourNameTextField);
+        
         this.getChildren().add(valideButton);
         this.getChildren().add(cancelButton);
         
@@ -462,7 +481,6 @@ public class BehavioursContent extends Content {
 	
 	@Override
 	public void handleMessage(Object message) { 
-		System.out.println("Salue");
 		if(message instanceof String) {
 			try {
 				System.out.println(message.toString());

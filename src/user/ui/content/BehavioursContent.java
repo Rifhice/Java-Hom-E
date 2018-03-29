@@ -422,6 +422,7 @@ public class BehavioursContent extends Content {
 	@Override
 	public void handleMessage(Object message) { 
 		if(message instanceof String) {
+			System.out.println("Salue " + message);
 			try {
 				System.out.println(message.toString());
 				JSONObject json = new JSONObject((String)message);

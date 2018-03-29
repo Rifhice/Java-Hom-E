@@ -31,10 +31,13 @@ public abstract class Value extends Observable {
         this.id = id;
     }    
     
+    public abstract Object getValue();
+    
     // =================================
     // TODO 
     public JSONObject toJson() {
         JSONObject result = new JSONObject();
+        result.put("id", id);
         return result;
     }
     public abstract boolean isEqual(Object value);
@@ -45,7 +48,7 @@ public abstract class Value extends Observable {
     public abstract boolean isInferiorOrEqual(Object value);
     
     public String toString() {
-        String res = "VALUE #" + getId();
+        String res = "#" + getId();
         return res;
     }
 }

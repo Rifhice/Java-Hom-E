@@ -3,6 +3,7 @@ package server.models;
 
 import org.json.JSONObject;
 
+import server.models.categories.Category;
 import server.models.categories.SensorCategory;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;
@@ -41,6 +42,7 @@ public class Sensor extends ExternalActor{
 	public Sensor(int id, String name, String description, EnvironmentVariable environmentVariables) {
 		super(id, name, description);
 		this.environmentVariables = environmentVariables;
+		environmentVariables.setSensor(this);
 	}
 	
 	public Sensor(int id, String name, String description, EnvironmentVariable environmentVariables, 
@@ -48,6 +50,7 @@ public class Sensor extends ExternalActor{
         super(id, name, description);
         this.environmentVariables = environmentVariables;
         this.sensorCategory = sensorCategory;
+        environmentVariables.setSensor(this);
     }
 
 	// ================= //
@@ -73,6 +76,7 @@ public class Sensor extends ExternalActor{
 
     public void setEnvironmentVariable(EnvironmentVariable environmentVariables) {
         this.environmentVariables = environmentVariables;
+        environmentVariables.setSensor(this);
     }
     
     public SensorCategory getSensorCategory() {
@@ -81,6 +85,7 @@ public class Sensor extends ExternalActor{
 
     public void setSensorCategory(SensorCategory sensorCategory) {
         this.sensorCategory = sensorCategory;
+        sensorCategory.addSensor(this);
     }   
     
     // ===================================================
@@ -98,7 +103,9 @@ public class Sensor extends ExternalActor{
     	if(environmentVariables != null) {
 			result.put("environmentVariable", environmentVariables.toJson());
     	}
-        //result.put("category", sensorCategory);
+        if(sensorCategory != null) {
+        	result.put("category", sensorCategory.toJsonCategory());
+        }
         return result;
     }
 

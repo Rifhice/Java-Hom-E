@@ -64,4 +64,12 @@ public abstract class Category {
 		return result;
 	}
 	
+	public JSONObject toJsonCategory() {
+		JSONObject result = new JSONObject();
+		result.put("id",id);
+		result.put("name",name);
+		result.put("description",description);
+		return result;
+	}
+	
 }

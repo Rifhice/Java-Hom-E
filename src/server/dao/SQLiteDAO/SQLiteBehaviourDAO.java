@@ -16,6 +16,7 @@ import server.factories.AbstractDAOFactory;
 import server.models.AtomicAction;
 import server.models.Behaviour;
 import server.models.ComplexAction;
+import server.models.Right;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
@@ -30,7 +31,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         super(connectionDriver);
         // TODO Auto-generated constructor stub
     }
-    
+
 
     @Override
     public Behaviour getById(int id) throws DAOException {
@@ -59,26 +60,22 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     public Behaviour create(Behaviour obj) throws DAOException {
         Behaviour behaviour = obj;
 
+        // Insert Behaviour
         String sql = "INSERT INTO Behaviours "
-                + "(name, description, is_activated, fk_expression_id) VALUES "
-                + "(?, ?, ?, ?);";
+                + "(name, description, is_activated) VALUES "
+                + "(?, ?, ?);";
 
-        // Insert the User
         int created = 0;
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setString(1, obj.getName());
             prepStat.setString(2, obj.getDescription());
             prepStat.setBoolean(3, obj.isActivated());
-            prepStat.setInt(4, obj.getExpression().getId());
+
             created = prepStat.executeUpdate();
 
-            // Get the id generated for this object
             if(created > 0) {
-                String sqlGetLastId = "SELECT last_insert_rowid()";
-                PreparedStatement prepStatLastId = this.connect.prepareStatement(sqlGetLastId);
-                int id = prepStatLastId.executeQuery().getInt(1);
-                behaviour.setId(id);
+                behaviour.setId(SQLiteDAOTools.getLastId(connect));
             }
             else {
                 behaviour = null;
@@ -86,150 +83,14 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         } catch (SQLException e) {
             throw new DAOException("DAOException : BehaviourDAO create(" + obj.getName() + ") :" + e.getMessage(), e); 
         }
+        
+        // Insert in others tables
+        behaviour.setAtomicActions(createAtomicActions(behaviour.getAtomicActions()));
+        behaviour.setExpression(createExpression(behaviour.getExpression()));        
+        
         return behaviour;
     }
 
-    /*@Override
-	public Behaviour getById(int id) throws DAOException {
-		Behaviour behaviour = null;
-        String sql = "SELECT B.id AS id, B.name AS name, B.is_activated AS isActivated, "
-                + "E.id AS Eid, E.operators AS Eoperators "
-                + "FROM Behaviour AS B "
-                + "JOIN Expression AS E ON E.id = B.fk_expression_id "
-                + "WHERE E.id = ?;";
-
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
-
-            if(rs.next()) {
-                behaviour = new Behaviour();
-                behaviour.setId(rs.getInt("id"));
-                behaviour.setName(rs.getString("name"));
-                behaviour.setActivated(rs.getBoolean("is_activated"));
-                try {
-					JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
-					JSONArray array = JSON.getJSONArray("operators");
-					ArrayList<String> arrayl = new ArrayList(array.toList());
-					behaviour.setExpression(new Expression(rs.getInt("Eid"), arrayl));
-				} catch (Exception e) {
-
-				}
-
-               ; 
-            }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
-        }
-
-        behaviour.setAtomicActions(this.getAtomicActions(behaviour.getId()));
-        behaviour.setComplexActions(this.getComplexActions(behaviour.getId()));
-
-        return behaviour;
-	}
-
-	 public ArrayList<AtomicAction> getAtomicActions(int id) throws DAOException {
-	        Behaviour Behaviour = null;
-	        // Get executes atomic actions
-	        String sql = "SELECT Ac.name AS Acname, Ac.exececutable AS Acexecutable,"
-	                + "Ac.id AS Acid "
-	                + "FROM Behaviour AS B "
-	                + "JOIN Lauches AS L ON L.fk_behaviour_id = B.id "
-	                + "JOIN AtomicAction AS AC ON AC.id = L.fk_atomicaction_id "
-	                + "WHERE B.id = ?;";
-
-	        ArrayList<AtomicAction> atomiclaunch = new ArrayList<AtomicAction>();
-
-	        try {
-	            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-	            prepStat.setInt(1, id);
-	            ResultSet rs = prepStat.executeQuery();
-
-	            if(rs.next()) {
-	                do {
-	                    int atomicId = rs.getInt("Acid");
-	                    String atomicName = rs.getString("Acname");
-	                    String atomicLaunch = rs.getString("Acexecutable");
-	                    AtomicAction atomicAction = new AtomicAction(atomicId, atomicName, atomicLaunch);
-	                    atomiclaunch.add(atomicAction);
-	                } while (rs.next());
-	            }
-	        } catch (SQLException e) {
-	            throw new DAOException("DAOException : BehaviourDAO getAtomicActions(" + id + ") (executes):" + e.getMessage(), e);
-	        }
-
-
-
-	        // Build the list of DISTINCT Atomic Actions
-	        ArrayList<AtomicAction> allAtomicActions = atomiclaunch;
-	        boolean isAlreadyHere;
-	        if(atomiclaunch != null) {
-	            for (AtomicAction AtomicE : atomiclaunch) {
-	                isAlreadyHere = false;
-	                for (AtomicAction atomic : allAtomicActions) {
-	                    if(AtomicE.getId() == atomic.getId()) {
-	                        isAlreadyHere = true;
-	                    }
-	                }
-	                if(!isAlreadyHere) {
-	                    allAtomicActions.add(AtomicE);
-	                }
-	            }
-	        }        
-	        return allAtomicActions;
-	    }*/
-
-    // TODO : missing Arraylist<ComplexAction>
-
-    public ArrayList<ComplexAction> getComplexActions(int id) throws DAOException {
-        // Get complex actions
-        String sql = "SELECT Ca.name AS Caname "
-                + "Ca.id AS Caid "
-                + "FROM Behaviour AS B "
-                + "JOIN Executes AS E ON E.fk_behaviour_id = B.id "
-                + "JOIN ComplexAction AS CA ON CA.id = E.fk_complexaction_id "
-                + "WHERE B.id = ?;";
-
-        ArrayList<ComplexAction> complexexecute = new ArrayList<ComplexAction>();
-
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            prepStat.setInt(1, id);
-            ResultSet rs = prepStat.executeQuery();
-
-            if(rs.next()) {
-                do {
-                    // Construct rights in owns
-                    int complexId = rs.getInt("Caid");
-                    String complexName = rs.getString("Caname");
-                    ComplexAction complexAction = new ComplexAction(complexId, complexName);
-                    complexexecute.add(complexAction);
-                } while (rs.next());
-            }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : BehaviourDAO getComplexActions(" + id + ") (executes):" + e.getMessage(), e);
-        }
-
-        // Build the list of DISTINCT Complex action
-        ArrayList<ComplexAction> allComplexActions = complexexecute;
-        boolean isAlreadyHere;
-        if(complexexecute != null) {
-            for (ComplexAction ComplexE : complexexecute) {
-                isAlreadyHere = false;
-                for (ComplexAction complex : allComplexActions) {
-                    if(ComplexE.getId() == complex.getId()) {
-                        isAlreadyHere = true;
-                    }
-                }
-                if(!isAlreadyHere) {
-                    allComplexActions.add(ComplexE);
-                }
-            }
-        }  
-
-        return allComplexActions;
-    }
 
     @Override
     public int update(Behaviour obj) throws DAOException {
@@ -316,182 +177,40 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return deletedBehaviour + deletedLaunches + deletedExecutes;
     }
 
+    /**
+     * Returns the list of all the behaviours. If none, returns.
+     * Included with the behaviour : 
+     * <ul>
+     * <li>AtomicActions</li>
+     * <li>Expression (non-recursive, only blocks)</li>
+     * <li>Blocks</li>
+     * <li>EnvironmentVariable</li>
+     * <li>Values (Block and EV ones)</li>
+     * <ul>     
+     * @throws DAOException
+     */
     @Override
     public ArrayList<Behaviour> getAll() throws DAOException {
         ArrayList<Behaviour> behaviours = new ArrayList<Behaviour>();
-        String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated, "
-                + "E.id AS Eid, E.operators AS Eoperators, Ca.name AS Caname, "
-                + "Ca.id AS Caid, Ac.executable AS Acexecutable, Ac.name AS Acname, Ac.id AS Acid, "
-                + "Bl.id AS Blid, Bl.operator AS Bloperator, "
-                + "VV.id AS VVid, EV.name AS EVname, EV.description as EVdescription, EV.unit as EVunit, "
-                + "EV.id AS EVid, CVV.value_min AS CVVvalue_min, CVV.value_max AS CVVvalue_max, CVV.current_value AS CVVcurrent_value, CVV.precision AS CVVprecision, "
-                + "V.id AS Vid, CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
-                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values, "
-                + "DVV.current_value AS DVVcurrent_value, DVV.possible_values AS DVVpossible_values "
+        String sql = "SELECT B.id AS id, B.name AS name, B.description AS description, B.is_activated AS isActivated "
                 + "FROM Behaviours AS B "
-                + "JOIN Expressions AS E ON E.id = B.fk_expression_id "
-                + "JOIN IsPartOf AS IPO ON IPO.fk_expression_id = E.id "
-                + "JOIN Blocks AS Bl ON Bl.id = IPO.fk_block_id " 
-                + "JOIN EnvironmentVariables AS EV ON EV.id = Bl.fk_environmentVariable_id "
-                + "JOIN VValues AS VV ON VV.id = EV.fk_vvalue_id "
-                + "JOIN VValues AS V ON V.id = Bl.fk_vvalue_id "
-                + "LEFT JOIN DiscreteVValues AS DVV ON DVV.fk_vvalue_id = VV.id "
-                + "LEFT JOIN ContinuousVValues AS CVV ON CVV.fk_vvalue_id = VV.id "
-                + "LEFT JOIN DiscreteVValues AS DV ON DV.fk_vvalue_id = V.id "
-                + "LEFT JOIN ContinuousVValues AS CV ON CV.fk_vvalue_id = V.id "
-                + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
-                + "JOIN AtomicActions AS Ac ON Ac.id = L.fk_atomicAction_id "
-                + "LEFT JOIN Executes AS Ex ON Ex.fk_behaviour_id = B.id "
-                + "LEFT JOIN ComplexActions AS Ca ON Ca.id = Ex.fk_complexAction_id "
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             ResultSet rs = prepStat.executeQuery();
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            // Print rs
-
-            //while (rs.next()) {
-            //    for (int i = 1; i <= columnsNumber; i++) {
-            //        if (i > 1) System.out.print(" | ");
-            //        System.out.print(rs.getString(i));
-            //    }
-            //    System.out.println("");
-            //}
-
             if(rs.next()) {
-                // Know if the behaviour manipulated changed.
-                int previousId = 0;
-                ArrayList<AtomicAction> atomics = new ArrayList<AtomicAction>();
-                ArrayList<ComplexAction> complexs = new ArrayList<ComplexAction>();
-                ArrayList<Evaluable> blocks = new ArrayList<Evaluable>();
-
-                Behaviour behaviour = new Behaviour();
-                Expression E = null;
                 do {
-                    if(previousId != rs.getInt("id")) {
-                        // Not first behaviour : push the previous behaviour
-                        if(previousId != 0) {
-                            behaviour.setAtomicActions(atomics);
-                            behaviour.setComplexActions(complexs);
-                            behaviours.add(behaviour);   
+                    Behaviour behaviour = new Behaviour();
+                    behaviour.setId(rs.getInt("id"));
+                    behaviour.setName(rs.getString("name"));
+                    behaviour.setDescription(rs.getString("description"));
+                    behaviour.setActivated(rs.getBoolean("isActivated"));
 
-                            complexs= new ArrayList<ComplexAction>();
-                            atomics = new ArrayList<AtomicAction>();
-                            //blocks = new ArrayList<Evaluable>();
-                            behaviour = new Behaviour();  
+                    behaviour.setAtomicActions(getAtomicActions(behaviour));
+                    behaviour.setExpression(getExpression(behaviour));
 
-                        }   
-
-
-                        behaviour.setId(rs.getInt("id"));
-                        behaviour.setName(rs.getString("name"));
-                        behaviour.setDescription(rs.getString("description"));
-                        behaviour.setActivated(rs.getBoolean("isActivated"));
-
-                        try {
-                            JSONObject JSON = new JSONObject(rs.getString("Eoperators"));
-                            JSONArray array = JSON.getJSONArray("operators");
-                            ArrayList<String> arrayl = new ArrayList(array.toList());
-                            E = new Expression(rs.getInt("Eid"), arrayl);
-                            E.setEvaluables(blocks);
-                            behaviour.setExpression(E);
-
-                        } catch (Exception e) {
-
-                        }
-                        previousId = rs.getInt("id");                      
-                    }
-
-                    // Same behaviour as previous one, we add the next atomicAction
-                    if (rs.getInt("Acid") != 0 ) {
-                        int atomicId = rs.getInt("Acid");
-                        String atomicExecutable = rs.getString("Acexecutable");
-                        String atomicName = rs.getString("Acname");
-                        AtomicAction atomic = new AtomicAction(atomicId, atomicName, atomicExecutable);
-                        atomics.add(atomic);
-                    }
-
-                    if( rs.getInt("Caid") != 0 ) {
-                        int complexId = rs.getInt("Caid");
-                        String complexName = rs.getString("Caname");
-                        ComplexAction complex = new ComplexAction(complexId, complexName);
-                        complexs.add(complex);
-                    }
-
-
-                    EnvironmentVariable ev = new EnvironmentVariable(rs.getInt("EVid"), rs.getString("EVname"), rs.getString("EVdescription"), rs.getString("EVunit"));
-
-
-                    int value1id = rs.getInt("VVid");
-                    int value2id = rs.getInt("Vid"); 
-
-                    Value vv; 
-
-                    if (rs.getString("DVVpossible_values") != null) {
-                        DiscreteValue DVV = new DiscreteValue();
-                        try {
-                            JSONObject JSON2 = new JSONObject(rs.getString("DVVpossible_values"));
-                            JSONArray array = JSON2.getJSONArray("possibleValues");
-                            ArrayList<String> arrayl = new ArrayList(array.toList());
-                            DVV.setPossibleValues(arrayl);
-
-                        } catch (Exception e) {
-
-                        }
-                        DVV.setCurrentValue(rs.getString("DVcurrent_value"));
-                        DVV.setId(value1id);
-                        vv = DVV; 
-
-                    } else {
-                        ContinuousValue CVV = new ContinuousValue(value1id, rs.getInt("CVVvalue_min"), rs.getInt("CVVvalue_max"), rs.getInt("CVVprecision"), rs.getInt("CVVcurrent_value"));
-                        vv = CVV; 
-
-                    }
-
-                    ev.setValue(vv);
-
-
-                    int blockId = rs.getInt("Blid");
-                    String blockOperator = rs.getString("Bloperator");
-                    Block block= new Block(blockId, ev, blockOperator);
-                    Value v; 
-
-                    if (rs.getString("DVpossible_values") != null) {
-                        DiscreteValue DV = new DiscreteValue();
-                        try {
-                            JSONObject JSON = new JSONObject(rs.getString("DVpossible_values"));
-                            JSONArray array = JSON.getJSONArray("possible_values");
-                            ArrayList<String> arrayl = new ArrayList(array.toList());
-                            DV.setPossibleValues(arrayl);
-
-
-                        } catch (Exception e) {
-
-                        }
-                        DV.setCurrentValue(rs.getString("DVcurrent_value"));
-                        DV.setId(value2id);
-                        v = DV; 
-
-
-                    } else {
-                        ContinuousValue CV = new ContinuousValue(value2id, rs.getInt("CVvalue_min"), rs.getInt("CVvalue_max"), rs.getInt("CVprecision"), rs.getInt("CVcurrent_value"));
-                        v = CV;
-                    }
-
-                    block.setValue(v);
-                    //System.out.println(block+" id:"+block.getId()+"\n");
-                    blocks.add(block);
-
-
-
-                } while (rs.next());
-                // Push the last behaviour
-
-                behaviour.setAtomicActions(atomics);
-                behaviour.setComplexActions(complexs);
-                behaviours.add(behaviour); 
-
+                    behaviours.add(behaviour);
+                } while(rs.next());
             }
 
         } catch (SQLException e) {
@@ -500,8 +219,254 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return behaviours;
     }
 
+
+    // ================================ //
+    // ======== HELPER METHODS ======== //
+    // ================================ //
     /**
-     * Return the expression associated to a Behaviour. If none, return null. 
+     * Create AtomicActions in DB from a list. If success, returns the list with the id of eache
+     * atomic action set to the one in DB, else returns the list passed.  
+     * @param atomicActions
+     * @return
+     * @throws DAOException
+     */
+    public ArrayList<AtomicAction> createAtomicActions(ArrayList<AtomicAction> atomicActions) throws DAOException {
+        ArrayList<AtomicAction> aa = atomicActions;
+        
+        String sql = "INSERT INTO AtomicActions "
+                + "(name, executable) VALUES "
+                + "(?,?) "
+                + ";";
+        
+        for (int i = 0; i < aa.size(); i++) {
+            try {
+                PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                prepStat.setString(1, aa.get(i).getName());
+                prepStat.setString(2, aa.get(i).getExecutable());
+                
+                int created = prepStat.executeUpdate();
+                if(created > 0) {
+                    aa.get(i).setId(SQLiteDAOTools.getLastId(connect));
+                }
+                
+            } catch (SQLException e) {
+                throw new DAOException("DAOException : BehaviourDAO createAtomicActions() :" + e.getMessage(), e);
+            }
+        }
+        
+        return aa;
+    }
+    
+    
+    
+    /**
+     * Create an expression in DB from an object. If success, returns the object with the id set 
+     * to the one in DB, else returns the object passed. 
+     * @param expression
+     * @return
+     * @throws DAOException
+     */
+    public Expression createExpression(Expression expression) throws DAOException {
+        Expression exp = expression;
+
+        // Insert Expression
+        String sql = "INSERT INTO Expressions "
+                + "(operators) VALUES "
+                + "(?)"
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            JSONObject JSON = new JSONObject(expression.getOperators());
+            prepStat.setString(1, JSON.toString());       
+
+            int created = prepStat.executeUpdate();
+            if(created > 0) {
+                exp.setId(SQLiteDAOTools.getLastId(connect));                
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO createExpression(" + exp.getId() + ") :" + e.getMessage(), e); 
+        }
+
+        // Exp correctly created ? 
+        if(exp.getId() != 0) {
+
+            // Insert Evaluables (blocks only for now) 
+            // TODO : Evaluables can be expression too
+            exp.setEvaluables(createEvaluables(exp.getEvaluables()));
+
+            // Insert isPartOf
+            sql = "INSERT INTO isPartOf "
+                    + "(fk_expression_id, fk_block_id) VALUES "
+                    + "(?,?) "
+                    + ";";
+            ArrayList<Evaluable> evs = exp.getEvaluables();
+            for (int i = 0; i < evs.size() ; i++ ) {
+                try {
+                    PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                    prepStat.setInt(1, exp.getId());
+                    prepStat.setInt(2, ((Block) evs.get(i)).getId());
+                    int created = prepStat.executeUpdate();
+                    if(created > 0) {
+                        ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));  
+                        ((Block)evs.get(i)).setEnvironmentVariable(createEnvironmentVariable(((Block)evs.get(i)).getEnvironmentVariable()));
+                        Value v = ((Block)evs.get(i)).getValue();
+                        ((Block)evs.get(i)).setValue(v);
+                    }                        
+                } catch (SQLException e) {
+                    throw new DAOException("DAOException : BehaviourDAO create IsPartOf(" + exp.getId() + ") insert into isPartOf:" + e.getMessage(), e); 
+                }
+            } 
+
+        } 
+
+        return exp;
+    }
+
+    /**
+     * Create evaluables in DB from a list . If success, returns the list of evaluables with 
+     * the id correctly set else, id is not set. Currently, deals only with Blocks.
+     * TODO : insert recursive Expression too
+     * @param evaluables
+     * @return
+     * @throws DAOException
+     */
+    public ArrayList<Evaluable> createEvaluables(ArrayList<Evaluable> evaluables) throws DAOException {
+        ArrayList<Evaluable> evs = evaluables;
+
+        String sql = "INSERT INTO Blocks "
+                + "(operator) VALUES "
+                + "(?)"
+                + ";";
+
+        for (int i = 0; i < evs.size(); i++) {
+            try {
+                Block block = ((Block)evs.get(i));
+                PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                prepStat.setString(1, block.getOperator());       
+                int created = prepStat.executeUpdate();
+                if(created > 0) {
+                    ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect)); 
+                    ((Block)evs.get(i)).setValue(createValue(((Block)evs.get(i)).getValue()));
+                }
+            } catch (SQLException e) {
+                throw new DAOException("DAOException : BehaviourDAO createEvaluables() :" + e.getMessage(), e); 
+            }
+        }
+
+
+        return evs;
+    }
+
+    /**
+     * Create an EnvironmentVariable in DB from an object. 
+     * If success, returns the EnvironmentVariable with the id correctly set else, id is not set. 
+     * Insert into Values too. 
+     * @param environmentVariable
+     * @return
+     * @throws DAOException
+     * @see {@link #createValue(Value)}
+     */
+    public EnvironmentVariable createEnvironmentVariable(EnvironmentVariable environmentVariable) throws DAOException {
+        EnvironmentVariable ev = environmentVariable;
+        String sql = "INSERT INTO EnvironmentVariables "
+                + "(name, description, unit) VALUES "
+                + "(?,?,?)"
+                + ";";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setString(1, ev.getName());  
+            prepStat.setString(2, ev.getDescription());  
+            prepStat.setString(3, ev.getUnit());  
+            int created = prepStat.executeUpdate();
+            if(created > 0) {
+                ev.setId(SQLiteDAOTools.getLastId(connect));
+                // Value
+                ev.setValue(createValue(ev.getValue()));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO createEnvironmentVariable() :" + e.getMessage(), e); 
+        }
+
+        return ev;
+    }
+
+    /**
+     * Create a Value in DB from an object. 
+     * If success, returns the value with the id correctly set else, id is not set. 
+     * @param value
+     * @return
+     * @throws DAOException
+     */
+    public Value createValue(Value value) throws DAOException {
+        Value v = value;
+        
+        String sql = "INSERT INTO VValues "
+                + "default VALUES"
+                + ";";
+        
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            int created = prepStat.executeUpdate();
+            if(created > 0) {
+                // Continuous Value
+                if(value instanceof ContinuousValue) {
+                    sql = "INSERT INTO ContinuousVValues "
+                            + "(value_min, value_max, current_value, precision) VALUES "
+                            + "(?,?,?,?)"
+                            + ";";
+                    try {
+                        PreparedStatement prepStatCV = this.connect.prepareStatement(sql);
+                        ContinuousValue cv = (ContinuousValue) v;
+                        prepStatCV.setDouble(1, cv.getValueMin());
+                        prepStatCV.setDouble(2, cv.getValueMax());
+                        prepStatCV.setDouble(3, cv.getCurrentValue());
+                        prepStatCV.setDouble(4, cv.getPrecision());
+                        
+                        created = prepStatCV.executeUpdate();
+                        if(created > 0) {
+                            v.setId(SQLiteDAOTools.getLastId(connect));
+                        }
+                        
+                    } catch (SQLException e) {
+                        throw new DAOException("DAOException : BehaviourDAO createValue() :" + e.getMessage(), e); 
+                    }
+                }
+                // Discrete Value
+                else if(value instanceof DiscreteValue) {
+                    sql = "INSERT INTO DiscreteVValues "
+                            + "(current_value, possible_values) VALUES "
+                            + "(?,?) "
+                            + ";";
+                    try {
+                        PreparedStatement prepStatDV = this.connect.prepareStatement(sql);
+                        
+                        DiscreteValue dv = (DiscreteValue) v;
+                        prepStatDV.setString(1, dv.getCurrentValue());
+                        
+                        JSONObject JSON = new JSONObject(dv.getPossibleValues());                        
+                        prepStatDV.setString(2, JSON.toString());
+                        
+                        created = prepStatDV.executeUpdate();
+                        if(created > 0) {
+                            v.setId(SQLiteDAOTools.getLastId(connect));
+                        }
+                        
+                    } catch (SQLException e) {
+                        throw new DAOException("DAOException : BehaviourDAO createValue() :" + e.getMessage(), e); 
+                    }
+                    
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO createValue() :" + e.getMessage(), e); 
+        }
+                
+        return v;
+    }
+
+    /**
+     * Returns the expression associated to a Behaviour. If none, return null. 
      * By now, does not support the "recursive" expressions.
      * 
      * TODO : support "recursive" expressions
@@ -527,8 +492,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 JSONArray array = JSON.getJSONArray("operators");
                 ArrayList<String> arrayl = new ArrayList(array.toList());
                 exp.setOperators(arrayl);
-                
-                // Get Evaluables (blocks only for now
+
+                // Get Evaluables (blocks only for now)
                 // TODO : get Expressions recursively 
                 ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
                 evaluables = getEvaluables(exp);
@@ -540,71 +505,282 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         }
         return exp;
     }
-    
+
     /**
-     * Return the list of Evaluables of an Expression. If none, return an empty list.
+     * Returns the list of Evaluables of an Expression. If none, returns an empty list.
+     * Returns only blocks. TODO : return recursive Expression too.
      * @param exp
      * @return
      * @throws DAOException
      */
     public ArrayList<Evaluable> getEvaluables(Expression exp) throws DAOException {
         ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
-        
-        // TODO
-        
+        String sql = "SELECT B.id AS Bid, B.operator AS Boperator "
+                + "FROM isPartOf AS IPO "
+                + "LEFT JOIN Blocks AS B ON B.id = IPO.fk_block_id "
+                + "WHERE IPO.fk_expression_id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, exp.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                do {
+                    Block b = new Block();
+                    b.setId(rs.getInt("Bid"));
+                    b.setOperator(rs.getString("Boperator"));
+                    b.setValue(getValue(b));
+                    b.setEnvironmentVariable(getEnvironmentVariable(b));                    
+                    evaluables.add(b);                   
+                } while(rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getEvaluables("+ exp.getId()+") :" + e.getMessage(), e);
+        }
         return evaluables;
     }
-    
+
     /**
-     * Return the EnvironmentVariable of a block. If none, return null.
+     * Returns the EnvironmentVariable of a block. If none, returns null.
      * @param environmentVariable
      * @return
      * @throws DAOException
      */
     public EnvironmentVariable getEnvironmentVariable(Block block) throws DAOException {
         EnvironmentVariable ev = null;
-        
-        // TODO 
-         
+        String sql = "SELECT EV.id AS id, EV.name AS name, EV.description AS description, EV.unit AS unit "
+                + "FROM Blocks AS B "
+                + "JOIN EnvironmentVariables AS EV ON EV.id = B.fk_environmentVariable_id "
+                + "WHERE B.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, block.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                ev = new EnvironmentVariable();
+                ev.setId(rs.getInt("id"));
+                ev.setName(rs.getString("name"));
+                ev.setDescription(rs.getString("description"));
+                ev.setUnit(rs.getString("unit"));
+                ev.setValue(getValue(ev));
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getEnvironmentVariable("+ block.getId()+") :" + e.getMessage(), e);
+        }
         return ev; 
     }
-    
+
     /**
-     * Return the Value of an EnvironmentVariable. If none, return null.
+     * Returns the Value of an EnvironmentVariable. If none, returns null.
      * @param ev
      * @return
      * @throws DAOException
      */
     public Value getValue(EnvironmentVariable ev) throws DAOException {
         Value value = null;
-        
-        // TODO 
-        
+        String sql = "SELECT V.id AS id, "
+                + "CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, "
+                + "CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
+                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values "
+                + "FROM EnvironmentVariables AS EV "
+                + "JOIN Vvalues AS V ON V.id = EV.fk_vvalue_id "
+                + "LEFT JOIN ContinuousVvalues AS CV ON CV.fk_vvalue_id = V.id "
+                + "LEFT JOIN DiscreteVvalues AS DV ON DV.fk_vvalue_id = V.id "
+                + "WHERE V.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, ev.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {                
+                if(rs.getInt("DVpossible_values") != 0) {
+                    value = new DiscreteValue();
+                    ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
+
+                    JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
+                    JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
+                    ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());
+                    ((DiscreteValue) value).setPossibleValues(possibleValues);
+                }
+                else {
+                    value = new ContinuousValue();
+                    ((ContinuousValue)value).setValueMax(rs.getDouble("CVvalue_max"));
+                    ((ContinuousValue)value).setValueMin(rs.getDouble("CVvalue_min"));
+                    ((ContinuousValue)value).setCurrentValue(rs.getDouble("CVcurrent_value"));
+                    ((ContinuousValue)value).setPrecision(rs.getDouble("CVprecision"));
+                }
+                value.setId(rs.getInt("id"));
+
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getValue("+ ev.getId()+") :" + e.getMessage(), e);
+        }
         return value;
     }
-    
+
     /**
-     * Return the value of a block. If none, return null.
+     * Returns the value of a block. If none, returns null.
      * @param block
      * @return
      * @throws DAOException
      */
     public Value getValue(Block block) throws DAOException {
         Value value = null;
-        
-        // TODO 
-        
+
+        String sql = "SELECT V.id AS id, "
+                + "CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, "
+                + "CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
+                + "DV.current_value AS DVcurrent_value, DV.possible_values AS DVpossible_values "
+                + "FROM Blocks AS B "
+                + "JOIN Vvalues AS V ON V.id = B.fk_vvalue_id "
+                + "LEFT JOIN ContinuousVvalues AS CV ON CV.fk_vvalue_id = V.id "
+                + "LEFT JOIN DiscreteVvalues AS DV ON DV.fk_vvalue_id = V.id "
+                + "WHERE V.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, block.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {                
+                if(rs.getString("DVpossible_values") != null) {
+                    value = new DiscreteValue();
+                    ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
+
+                    JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
+                    JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
+                    ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());
+                    ((DiscreteValue) value).setPossibleValues(possibleValues);
+                }
+                else {
+                    value = new ContinuousValue();
+                    ((ContinuousValue)value).setValueMax(rs.getDouble("CVvalue_max"));
+                    ((ContinuousValue)value).setValueMin(rs.getDouble("CVvalue_min"));
+                    ((ContinuousValue)value).setCurrentValue(rs.getDouble("CVcurrent_value"));
+                    ((ContinuousValue)value).setPrecision(rs.getDouble("CVprecision"));
+                }
+                value.setId(rs.getInt("id"));
+
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours getValue("+ block.getId()+") :" + e.getMessage(), e);
+        }
+
         return value;
     }
+
+    /**
+     * Returns the list of atomic actions triggered by a behaviour. If none, returns an empty list.
+     * @param behaviour
+     * @return 
+     * @throws DAOException
+     */
+    public ArrayList<AtomicAction> getAtomicActions(Behaviour behaviour) throws DAOException {
+        ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
+        String sql = "SELECT AA.id AS id, AA.name AS name, AA.executable AS executable "
+                + "FROM Behaviours AS B "
+                + "JOIN Launches AS L ON L.fk_behaviour_id = B.id "
+                + "JOIN AtomicActions AS AA ON AA.id = L.fk_atomicAction_id "
+                + "WHERE B.id = ? "
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, behaviour.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                do {
+                    AtomicAction aa = new AtomicAction();
+                    aa.setId(rs.getInt("id"));
+                    aa.setName(rs.getString("name"));
+                    aa.setExecutable(rs.getString("executable"));
+                    atomicActions.add(aa);
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO getAtomicActions(" + behaviour.getId() + ") (owns):" + e.getMessage(), e);
+        }
+
+        return atomicActions;
+    }
+
+    /**
+     * Returns the list of ComplexActions associated to a behaviour. If none, returns an empty list.
+     * @param id
+     * @return the list of ComplexActions
+     * @throws DAOException
+     */
+    public ArrayList<ComplexAction> getComplexActions(Behaviour behaviour) throws DAOException {
+        // Get complex actions
+        String sql = "SELECT Ca.name AS Caname "
+                + "Ca.id AS Caid "
+                + "FROM Behaviour AS B "
+                + "JOIN Executes AS E ON E.fk_behaviour_id = B.id "
+                + "JOIN ComplexAction AS CA ON CA.id = E.fk_complexaction_id "
+                + "WHERE B.id = ?;";
+
+        ArrayList<ComplexAction> complexexecute = new ArrayList<ComplexAction>();
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, behaviour.getId());
+            ResultSet rs = prepStat.executeQuery();
+
+            if(rs.next()) {
+                do {
+                    // Construct rights in owns
+                    int complexId = rs.getInt("Caid");
+                    String complexName = rs.getString("Caname");
+                    ComplexAction complexAction = new ComplexAction(complexId, complexName);
+                    complexexecute.add(complexAction);
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO getComplexActions(" + behaviour.getId() + "):" + e.getMessage(), e);
+        }
+
+        // Build the list of DISTINCT Complex action
+        ArrayList<ComplexAction> allComplexActions = complexexecute;
+        boolean isAlreadyHere;
+        if(complexexecute != null) {
+            for (ComplexAction ComplexE : complexexecute) {
+                isAlreadyHere = false;
+                for (ComplexAction complex : allComplexActions) {
+                    if(ComplexE.getId() == complex.getId()) {
+                        isAlreadyHere = true;
+                    }
+                }
+                if(!isAlreadyHere) {
+                    allComplexActions.add(ComplexE);
+                }
+            }
+        }  
+
+        return allComplexActions;
+    }
+
+
 
     // ============== //
     // ==== MAIN ==== //
     // ============== // 
     public static void main (String args[]) {
         BehaviourDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getBehaviourDAO();
-        // System.out.println(test.getAll());
+
         Behaviour b = new Behaviour();
-        b = test.getById(1);
-        System.out.println(((SQLiteBehaviourDAO)test).getExpression(b));
+        b = test.getAll().get(1);
+
+        Expression e = new Expression();
+        e.setId(2);
+
+        Block bl = new Block();
+        bl.setId(1);
+
+        EnvironmentVariable ev = new EnvironmentVariable();
+        ev.setId(1);
     }
 }

@@ -71,12 +71,20 @@ public class DiscreteValue extends Value {
     }
 
     public String toString() {
-        String res = super.toString() + ":" + currentValue;
+        String res = super.toString() + " " + currentValue;
         if(possibleValues != null) {
-            res += "\nPossibles values: ";
+            boolean firstValue = true;
+            res += "\nPossibles values: [";
             for (String possibleValue : possibleValues) {
-                res += possibleValue;
+                if(firstValue) {
+                    res += possibleValue;
+                    firstValue = false;
+                }
+                else {
+                    res += ", " + possibleValue;
+                }
             }
+            res += "]";
         }
         return res;
     }
@@ -103,4 +111,8 @@ public class DiscreteValue extends Value {
         return false;
     }  
 
+	public Object getValue() {
+		return currentValue;
+	}
+    
 }

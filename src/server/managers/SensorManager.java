@@ -113,17 +113,17 @@ public class SensorManager extends Manager{
 			result.put("result", "success");
 			result.put("verb", "post");
 			result.put("id", sensorCreated.getId());
-			// TODO : temporarily, we just return the 1rst environmentVariable.
 			result.put("idEnv",sensorCreated.getEnvironmentVariables().getId());
 	        result.put("idValue",sensorCreated.getEnvironmentVariables().getValue().getId());
+	        SystemManager.sendToAllClient(result.toString());
 		}
 		else {
 			result.put("result", "failure");
-		}
-		try {
-			client.sendToClient(result.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				client.sendToClient(result.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println(sensor + "\nAdded to the system !");
 	}
@@ -173,7 +173,13 @@ public class SensorManager extends Manager{
 	}
 	
 	public void returnGetEnvironmentVariables(JSONObject json, ConnectionToClient client) {
-	    ArrayList<EnvironmentVariable> environmentVariables = getEnvironmentVariables();
+		ArrayList<EnvironmentVariable> environmentVariables = null;
+		try {
+			environmentVariables = getEnvironmentVariables();
+	    }
+	    catch (Exception e) {
+			e.printStackTrace();
+		}
 
         JSONObject result = new JSONObject();
         if(environmentVariables != null) {
@@ -185,7 +191,9 @@ public class SensorManager extends Manager{
             }
         }
         else {
+        	result.put("recipient", "sensor");
             result.put("result", "failure");
+            result.put("action", "getEnvironmentVariables");
         }
         try {
             client.sendToClient(result.toString());

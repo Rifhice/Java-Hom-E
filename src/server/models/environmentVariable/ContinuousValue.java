@@ -87,7 +87,7 @@ public class ContinuousValue extends Value {
     }
 
     public String toString() {
-        String res = super.toString() + ":" + currentValue;
+        String res = super.toString() + " " + currentValue;
         res += "\nMin: " + valueMin;         
         res += "\nMax: " + valueMax;
         res += "\nPrecision: " + precision;
@@ -128,4 +128,8 @@ public class ContinuousValue extends Value {
         }
         return false;
     }
+
+	public Object getValue() {
+		return currentValue;
+	}
 }

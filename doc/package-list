@@ -18,6 +18,8 @@ server.tools
 user
 user.communication
 user.models
+user.models.environmentVariable
+user.models.evaluable
 user.tools
 user.ui
 user.ui.componentJavaFX

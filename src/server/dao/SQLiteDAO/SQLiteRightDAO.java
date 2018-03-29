@@ -63,12 +63,12 @@ public class SQLiteRightDAO extends RightDAO{
 	public ArrayList<Right> getByUser(User user) throws DAOException {
 		Right right = null;   	
 		ArrayList<Right> rights = new ArrayList<Right>();
-    	String sql = "SELECT  Ri.id AS id, Ri.denomination AS denomination, "
+    	String sql = "SELECT  DISTINCT Ri.id AS id, Ri.denomination AS denomination, "
     			+ "Ri.description AS description, U.pseudo AS pseudo " 
                 + "FROM Users AS U "
-                + "JOIN Owns AS O ON O.fk_user_id = U.id "
+                + "JOIN Owns AS O ON O.fk_user_id = U.id  "
                 + "JOIN OwnsByDefault AS OBD ON OBD.fk_role_id = U.fk_role_id "
-                + "JOIN Rights AS Ri ON OBD.fk_right_id = Ri.id "         
+                + "JOIN Rights AS Ri ON OBD.fk_right_id = Ri.id OR Ri.id = O.fk_right_id "         
                 + "WHERE U.id = ?;";
 
     	try {

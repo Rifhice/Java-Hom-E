@@ -156,7 +156,8 @@ public class Expression implements Evaluable {
                     evaluables.add(createExpressionFromJson(object));
                 }
             }
-            arr = json.getJSONArray("operators");
+            // TODO : Client sends "operator", we use "operators" in the server.
+            arr = json.getJSONArray("operator");
             for (int i = 0; i < arr.length(); i++) {
                 operators.add((String) arr.get(i));
             }

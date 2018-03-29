@@ -326,7 +326,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            if(expression.getOperators() != null) {
+            if(expression.getOperators().size() != 0) {
                 JSONObject JSON = new JSONObject(expression.getOperators());
                 prepStat.setString(1, JSON.toString()); 
             } else {

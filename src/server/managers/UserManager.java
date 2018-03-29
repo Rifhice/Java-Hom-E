@@ -99,14 +99,12 @@ public class UserManager extends Manager{
 		JSONObject result = new JSONObject();
 		result.put("recipient", "user");
 		result.put("action", "getAll");
-		System.out.println("Taille : "  + users.size());
 		for (int i = 0; i < users.size(); i++) {
 			User currentUser = users.get(i);
 			JSONObject user = new JSONObject();
 			if(currentUser.getRole().getId() != 1) {
 				user.put("id", currentUser.getId());
 				user.put("pseudo", currentUser.getPseudo());
-				System.out.println(user);
 				result.append("users", user);
 			}
 		}
@@ -150,7 +148,6 @@ public class UserManager extends Manager{
     @Override
     public void handleMessage(JSONObject json, ConnectionToClient client) {
         String action = json.getString("action");
-        System.out.println(action);
         String pseudo;
         String password;
         switch(action) {
@@ -174,7 +171,6 @@ public class UserManager extends Manager{
 	            }
 	            else {
 	                JSONObject result = new JSONObject();
-	                System.out.println(user.getValue());
 	                if(user.getValue() == -1) {
 	                    result.put("result","wrong_password");
 	                }

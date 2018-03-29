@@ -120,7 +120,6 @@ public class AccountContent extends Content {
 		JSONObject getObject = new JSONObject();
 		getObject.put("recipient", recipient);
 		getObject.put("action", "getAll");
-		System.out.println("\n Message envoye au serveur :" + getObject.toString());
 		try {
 			ClientFX.client.sendToServer(getObject.toString());
 		} catch (IOException e) {
@@ -133,7 +132,6 @@ public class AccountContent extends Content {
 		getObject.put("recipient", "right");
 		getObject.put("action", "getByUser");
 		getObject.put("id", id);
-		System.out.println("\n Message envoye au serveur :" + getObject.toString());
 		try {
 			ClientFX.client.sendToServer(getObject.toString());
 		} catch (IOException e) {
@@ -158,9 +156,7 @@ public class AccountContent extends Content {
 		newFamilyMember.put("action", "createFamilyMember");
 		newFamilyMember.put("pseudo", userName );
 		newFamilyMember.put("password", password);
-		System.out.println("\n Message envoye au serveur :" + newFamilyMember.toString());
 		try {
-			System.out.println("J'envoie au serveur " + newFamilyMember.toString());
 			ClientFX.client.sendToServer(newFamilyMember.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -174,7 +170,6 @@ public class AccountContent extends Content {
 		for (int j = 0; j < arrArg.length(); j++){
 			JSONObject current = arrArg.getJSONObject(j);
 			User user = new User(current.getInt("id"), current.getString("pseudo"));
-			System.out.println("id :" + current.getInt("id")+ "pseudo" + current.getString("pseudo"));
 			this.familyMembers.add(user);
 			this.userCells.add(new UserCell(user ,familyMembersList.getPrefWidth(),familyMembersList.getPrefHeight() / NB_OF_FAMILYMEMBERS_DISPLAYED, 
 					new EventHandler<ActionEvent>() {
@@ -206,19 +201,16 @@ public class AccountContent extends Content {
 	}
 	
 	public void getRightsByUser(JSONObject json) {
-		System.out.println(json.toString());
 		this.allowedRights = new ArrayList<Right>();
 		JSONArray allRights = json.getJSONArray("rights");
 		this.rightCells = new ArrayList<RightCell>();
 		for (int j = 0; j < allRights.length(); j++){
 			JSONObject current = allRights.getJSONObject(j);
-			System.out.println(current.getString("denomination"));
 			Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
 			this.allowedRights.add(right);
 			for (int i = 0; i < notAllowedRights.size(); i++){
 				if (notAllowedRights.get(i).getId() ==  current.getInt("id")) {
 					notAllowedRights.remove(i);
-					System.out.println("droit � retirer des non autoris�s");
 				}
 			}
 			this.rightCells.add(new RightCell(right, allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
@@ -227,17 +219,13 @@ public class AccountContent extends Content {
 					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 				}}));
 		}
-		System.out.println("allowedRights:" + allowedRights);
-		System.out.println("not allowed Rights: " +  notAllowedRights);
 		for (int j = 0; j < notAllowedRights.size(); j++){
-			System.out.println("remplissage not allowed rights");
 			this.rightCells.add(new RightCell(this.notAllowedRights.get(j), notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 				}}));
 		}
-		System.out.println("on va maintenant update l'interface");
 		updateRightsUI();
 	}
 	
@@ -245,7 +233,6 @@ public class AccountContent extends Content {
 	public void handleMessage(Object message) {
 		
 		if(message instanceof String) {
-			System.out.println("\n Message recu du serveur :" + message + "\n");
 			try {
 				JSONObject json = new JSONObject(message.toString());
 				String recipient = json.getString("recipient");
@@ -302,7 +289,6 @@ public class AccountContent extends Content {
 									@Override
 									public void handle(ActionEvent event) {
 										int id = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-										System.out.println("User cliqu " + id);
 										updateView("right");
 										updateViewRight(id);
 									}
@@ -317,7 +303,6 @@ public class AccountContent extends Content {
 	
 	
 	private void updateRightsUI() {
-		System.out.println("update l'interface");
 		Platform.runLater(new Runnable() {
             @Override public void run() {
 				if(notAllowedRights != null) {

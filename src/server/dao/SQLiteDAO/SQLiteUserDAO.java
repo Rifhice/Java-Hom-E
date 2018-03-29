@@ -80,13 +80,12 @@ public class SQLiteUserDAO extends UserDAO {
                 user.setPseudo(rs.getString("pseudo"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(new Role(rs.getInt("Rid"),rs.getString("Rname"))); 
+                user.setRights(this.getRights(user.getId()));
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO getById(" + id + ") :" + e.getMessage(), e);
         }
-       
-        user.setRights(this.getRights(user.getId()));
-        
+               
         return user;
     }
 

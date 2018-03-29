@@ -19,8 +19,12 @@ public class MyButtonImage extends Button {
 		imageView.setFitHeight(image.getHeight()*ratio);
 		setGraphic(imageView);
 		setOnAction(event);
-		setLayoutX((int)(bounds.getX()));
-		setLayoutY((int)(bounds.getY()));
+		setMinWidth(image.getWidth()*ratio);
+		setMinHeight(image.getHeight()*ratio);
+		setMaxWidth(image.getWidth()*ratio);
+		setMaxHeight(image.getHeight()*ratio);
+		setLayoutX(bounds.getX());
+		setLayoutY(bounds.getY());
 		
 	}
 	
@@ -34,11 +38,15 @@ public class MyButtonImage extends Button {
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
 		imageView.setFitWidth(image.getWidth()*ratioWidth);
-		imageView.setFitHeight(image.getHeight()*ratioHeight / 1.2);
+		imageView.setFitHeight(image.getHeight()*ratioHeight);
 		setGraphic(imageView);
 		setOnAction(event);
-		setLayoutX((int)(bounds.getX()));
-		setLayoutY((int)(bounds.getY()));
+		setLayoutX(bounds.getX());
+		setLayoutY(bounds.getY());
+		setMinWidth(image.getWidth()*ratioWidth);
+		setMinHeight(image.getHeight()*ratioHeight);
+		setMaxWidth(image.getWidth()*ratioWidth);
+		setMaxHeight(image.getHeight()*ratioHeight);
 		setPrefHeight((int)bounds.getHeight());
 		setPrefWidth((int)bounds.getWidth());
 	}

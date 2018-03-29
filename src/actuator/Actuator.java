@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
-import org.postgresql.shaded.com.ongres.scram.common.message.ClientFinalMessage;
 
 public class Actuator {
 
+	private static int id;
 	private static String name;
 	private static String description;
 	private static ArrayList<Command> commands;
@@ -37,6 +37,10 @@ public class Actuator {
 			System.out.println(registration.toString());
 			e.printStackTrace();
 		}
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

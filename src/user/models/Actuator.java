@@ -2,7 +2,7 @@ package user.models;
 
 import java.util.ArrayList;
 
-import server.models.categories.ActuatorCategory;
+import user.models.ActuatorCategory;
 
 /**
  * An actuator is a connected object managed by the server and performing physical actions according to it. 
@@ -23,6 +23,10 @@ public class Actuator extends ExternalActor{
     // ==== CONSTRUCTORS ==== //
     // ====================== //
     public Actuator() {}
+    
+    public Actuator(int id) {
+    	super(id);
+    }
     
     public Actuator(String name, String description) {
         super(name,description);

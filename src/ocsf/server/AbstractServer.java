@@ -317,7 +317,7 @@ public abstract class AbstractServer implements Runnable
         {
           // Wait here for new connection attempts, or a timeout
           Socket clientSocket = serverSocket.accept();
-
+          System.out.println("Client trying to connect !");
           // When a client is accepted, create a thread to handle
           // the data exchange, then add it to thread group
 

@@ -26,6 +26,7 @@ public class SystemManager extends Manager{
 	private ActuatorCategorieManager actuatorCategorieManager;
 	private SensorCategorieManager sensorCategorieManager;
 	private CommandManager commandManager;
+	private RightManager rightManager;
 	
 	private static EchoServer userServer;
 	private static EchoServer sensorServer;
@@ -34,12 +35,12 @@ public class SystemManager extends Manager{
 	// Currently used DB = SQLite
 	public static final int db = AbstractDAOFactory.SQLITE_DAO_FACTORY;
 	
-	// ====================== //
-	// ==== CONSTRUCTORS ==== //
-	// ====================== //
-	/**
-	 * Private constructor (singleton pattern)
-	 */
+    // ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
 	private SystemManager() {
 		ambienceManager = AmbienceManager.getManager();
 		behaviourManager = BehaviourManager.getManager();
@@ -49,6 +50,7 @@ public class SystemManager extends Manager{
 		actuatorCategorieManager = ActuatorCategorieManager.getManager();
 		sensorCategorieManager = SensorCategorieManager.getManager();
 		commandManager = CommandManager.getManager();
+		rightManager = RightManager.getManager();
 		
 		userServer = new EchoServer(USER_SERVER_PORT,this);
 		sensorServer = new EchoServer(SENSOR_SERVER_PORT,sensorManager);
@@ -75,35 +77,54 @@ public class SystemManager extends Manager{
 		return manager;
 	}
 	
+	/**
+     * Dispatch the JSON received to the specified manager in key "recipient".
+     * Possible values for key "recipient":
+     * <ul>
+     * <li>ambience</li>
+     * <li>behaviour</li>
+     * <li>sensor</li>
+     * <li>actuator</li>
+     * <li>user</li>
+     * <li>sensorCategories</li>
+     * <li>actuatorCategories</li>
+     * <li>command</li>
+     * <li>right</li>
+     * </ul>
+     */
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String recipient = json.getString("recipient");
 		switch (recipient) {
+		case "actuator":
+            actuatorManager.handleMessage(json,client);
+            break;
+		case "actuatorCategories":
+            actuatorCategorieManager.handleMessage(json,client);
+            break;
 		case "ambience":
 			ambienceManager.handleMessage(json,client);
 			break;
 		case "behaviour":
 			behaviourManager.handleMessage(json,client);
 			break;
+	     case "command":
+            commandManager.handleMessage(json,client);
+            break;
+        case "right":
+			System.out.println("Le SystemManager envoie au rightManager \n");
+            rightManager.handleMessage(json,client);
+            break;
 		case "sensor":
 			sensorManager.handleMessage(json,client);
 			break;
-		case "actuator":
-			actuatorManager.handleMessage(json,client);
-			break;
+		case "sensorCategories":
+            sensorCategorieManager.handleMessage(json,client);
+            break;
 		case "user":
 			userManager.handleMessage(json,client);
-			break;
-		case "sensorCategories":
-			sensorCategorieManager.handleMessage(json,client);
-			break;
-		case "actuatorCategories":
-			actuatorCategorieManager.handleMessage(json,client);
-			break;
-		case "command":
-			commandManager.handleMessage(json,client);
-			break;
+			break;		
 		default:
-			System.out.println("System manager: NOT FOUND");
+			System.out.println("System manager: Manager NOT FOUND.");
 			break;
 		}
 	}
@@ -119,118 +140,3 @@ public class SystemManager extends Manager{
 		new SystemManager();
 	}
 }
-
-/*
-ContinuousEnvironmentVariable time = new ContinuousEnvironmentVariable("Le temps", "C'est le super temps", "minutes", 0, 60, 1, 20);
-DiscreteEnvironmentVariable temperature = new DiscreteEnvironmentVariable("La temperature", "Savoir si il fait chaud ou pas", "", new ArrayList<String>(Arrays.asList("Froid","Normal","Chaud")), "Chaud");
-
-Block b1 = new Block(time,30,"==");
-Block b2 = new Block(temperature,"Froid","==");
-
-ArrayList<Evaluable> evaluable = new ArrayList<Evaluable>();		
-ArrayList<String> operators = new ArrayList<String>();
-
-evaluable.add(b1);
-operators.add("&&");
-evaluable.add(b2);
-
-Expression expression = new Expression(evaluable,operators);
-System.out.println(expression + " => " + expression.evaluate());
-
-
-ArrayList<Evaluable> evaluable2 = new ArrayList<Evaluable>();		
-ArrayList<String> operators2 = new ArrayList<String>();
-
-Block b3 = new Block(time,55,"==");
-
-evaluable2.add(expression);
-operators2.add("||");
-evaluable2.add(b3);
-
-Expression expression2 = new Expression(evaluable2,operators2);
-System.out.println(expression2 + " => " + expression2.evaluate());
-
-Behaviour behaviour = new Behaviour(expression2, null);
-
-while(true) {
-    Scanner in = new Scanner(System.in);
-    System.out.print("New value for the time (current : " + time		.getCurrentValue() + "): ");
-    double timeValue = in.nextDouble();
-    time.setCurrentValue(timeValue);
-    System.out.print("New value for the temperature (current : " + temperature.getCurrentValue() + ") : ");
-    String tempValue = in.next();
-    temperature.setCurrentValue(tempValue);
-}
-
-JSONObject json = new JSONObject("{\r\n" + 
-		"  recipient: 'externalActor',\r\n" + 
-		"  action: 'register',\r\n" + 
-		"  type: 'sensor',\r\n" + 
-		"  name: 'Des bails',\r\n" + 
-		"  description: 'Ce capteur signale des trucs.',\r\n" + 
-		"  variables: [{\r\n" + 
-		"    type: 'continuous',\r\n" + 
-		"    name: \"Le temps\",\r\n" + 
-		"    description: \"C'est le super temps\",\r\n" + 
-		"    unity: \"minutes\",\r\n" + 
-		"    valuemin: 0,\r\n" + 
-		"    valuemax: 60,\r\n" + 
-		"    precision: 1,\r\n" + 
-		"    currentvalue: 20\r\n" + 
-		"  }, {\r\n" + 
-		"    type: 'discrete',\r\n" + 
-		"    name: \"La temperature\",\r\n" + 
-		"    description: \"Savoir si il fait chaud ou pas\",\r\n" + 
-		"    unity: \"�\",\r\n" + 
-		"    values: [\"Froid\", \"Normal\", \"Chaud\"],\r\n" + 
-		"    currentvalue: \"Froid\"\r\n" + 
-		"  }]\r\n" + 
-		"}\r\n" + 
-		"");
-SystemManager manager = SystemManager.getManager();
-manager.handleMessage(json);
-json = new JSONObject("{\r\n" + 
-		"  recipient: \"behaviour\",\r\n" + 
-		"  action: \"create\",\r\n" + 
-		"  expression: {\r\n" + 
-		"    type: 'expression',\r\n" + 
-		"    evaluable: [{\r\n" + 
-		"      type: 'expression',\r\n" + 
-		"      evaluable: [{\r\n" + 
-		"        type: 'block',\r\n" + 
-		"        variable: '0',\r\n" + 
-		"        value: 30,\r\n" + 
-		"        valueType: 'Double',\r\n" + 
-		"        operators: '=='\r\n" + 
-		"      }, {\r\n" + 
-		"        type: 'block',\r\n" + 
-		"        variable: '0',\r\n" + 
-		"        value: 'Froid',\r\n" + 
-		"        valueType: 'String',\r\n" + 
-		"        operators: '=='\r\n" + 
-		"      }],\r\n" + 
-		"      operators: ['&&']\r\n" + 
-		"    }, {\r\n" + 
-		"      type: 'block',\r\n" + 
-		"      variable: '1',\r\n" + 
-		"      value: 55,\r\n" + 
-		"      valueType: 'Double',\r\n" + 
-		"      operators: '=='\r\n" + 
-		"    }],\r\n" + 
-		"    operators: [\"||\"]\r\n" + 
-		"  },\r\n" + 
-		"  command: \"lol\"\r\n" + 
-		"}\r\n" + 
-		"");
-manager.handleMessage(json);
-
-
-json = new JSONObject("{\r\n" + 
-		"  recipient: 'externalActor',\r\n" + 
-		"  type: \"sensor\",\r\n" + 
-		"  id: \"0\",\r\n" + 
-		"  action: \"setName\",\r\n" + 
-		"  name: \"Ca marche\"\r\n" + 
-		"}");
-manager.handleMessage(json);
-*/

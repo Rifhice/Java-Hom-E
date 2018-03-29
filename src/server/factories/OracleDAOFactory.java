@@ -10,10 +10,11 @@ import server.dao.abstractDAO.AmbienceDAO;
 import server.dao.abstractDAO.BehaviourDAO;
 import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.ComplexActionDAO;
+import server.dao.abstractDAO.EnvironmentVariableDAO;
+import server.dao.abstractDAO.RightDAO;
 import server.dao.abstractDAO.RoleDAO;
 import server.dao.abstractDAO.SensorDAO;
 import server.dao.abstractDAO.UserDAO;
-import server.models.ComplexAction;
 
 public class OracleDAOFactory extends AbstractDAOFactory {
     protected Connection connect = DriverConnection.getInstance(DriverConnection.ORACLE_DRIVER); 
@@ -77,5 +78,17 @@ public class OracleDAOFactory extends AbstractDAOFactory {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public RightDAO getRightDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+    @Override
+    public EnvironmentVariableDAO getEnvironmentVariableDAO() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

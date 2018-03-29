@@ -3,6 +3,7 @@ package server.managers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -13,8 +14,10 @@ import server.factories.AbstractDAOFactory;
 import javafx.util.Pair;
 import server.models.Role;
 import server.models.User;
+import server.models.Right;
 import ocsf.server.ConnectionToClient;
 import server.tools.Security;
+
 
 public class UserManager extends Manager{
     // ==================== //
@@ -28,6 +31,9 @@ public class UserManager extends Manager{
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+    /**
+     *  Singleton pattern
+     */
     private UserManager() {
         users = new ArrayList<User>();
     }
@@ -41,7 +47,6 @@ public class UserManager extends Manager{
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-
     /**
      * Return a pair with the user and a code defining success or failure : 
      * 0 = success, 
@@ -82,11 +87,67 @@ public class UserManager extends Manager{
     	users.add(user);
     	return user;
     }
+    
+    public void getAllFamilyMembers(JSONObject json, ConnectionToClient client) {
+    	ArrayList<User> users = null;
 
+		try {
+			users = userDAO.getAll();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		result.put("recipient", "user");
+		result.put("action", "getAll");
+		for (int i = 0; i < users.size(); i++) {
+			User currentUser = users.get(i);
+			JSONObject user = new JSONObject();
+			if(currentUser.getRole().getId() != 1) {
+				user.put("id", currentUser.getId());
+				user.put("pseudo", currentUser.getPseudo());
+				result.append("users", user);
+			}
+		}
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public void createFamilyMember(JSONObject json, ConnectionToClient client) {
+    	
+    	Role role= roleDAO.getById(2);
+    	User user = new User( json.getString("pseudo"), json.getString("password"), role);
+    	User newUser = null;
+    	try {
+			newUser = userDAO.create(user);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+    	JSONObject result = new JSONObject();
+    	result.put("recipient", "user");
+		result.put("action", "createFamilyMember");
+		result.put("user", newUser);
+		result.put("id", newUser.getId());
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * Possible values for key "action":
+     * <ul>
+     * <li>login</li>
+     * <li>loginAsGuest</li>
+     * <li>getAll</li>
+     * </ul>
+     */
     @Override
     public void handleMessage(JSONObject json, ConnectionToClient client) {
         String action = json.getString("action");
-        System.out.println(action);
         String pseudo;
         String password;
         switch(action) {
@@ -110,7 +171,6 @@ public class UserManager extends Manager{
 	            }
 	            else {
 	                JSONObject result = new JSONObject();
-	                System.out.println(user.getValue());
 	                if(user.getValue() == -1) {
 	                    result.put("result","wrong_password");
 	                }
@@ -146,18 +206,12 @@ public class UserManager extends Manager{
                     e.printStackTrace();
                 }
 	        	break;
-	        case "getAll":
-	        	//TODO ici ce n'est qu'un test il faut renvoyer le code complet
-	        	System.out.println("le message est arrivé jusqu'ici");
-                JSONObject test = new JSONObject();
-                test.put("users",users);
-                test.put("action","getAll");
-                test.put("result","success");
-                try {
-                    client.sendToClient(test.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+	        case "getAll":  
+	        	getAllFamilyMembers(json,client);
+	        	break;
+	        	
+	        case "createFamilyMember":
+	        	createFamilyMember(json, client);
 	        	break;
         }
     }

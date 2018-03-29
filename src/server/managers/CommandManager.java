@@ -6,20 +6,22 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.CommandDAO;
 import server.factories.AbstractDAOFactory;
-import server.models.Behaviour;
 import server.models.Command;
 import server.models.ComplexAction;
-import server.models.categories.SensorCategory;
-import server.models.commandValue.CommandValue;
-import server.models.commandValue.ContinuousCommandValue;
-import server.models.commandValue.DiscreteCommandValue;
 import ocsf.server.ConnectionToClient;
 
 public class CommandManager extends Manager{
 
+    private CommandDAO commandDAO =  AbstractDAOFactory.getFactory(0).getCommandDAO();
 	private static CommandManager manager = null;
-	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== // 
+    /**
+     *  Singleton pattern
+     */
 	private CommandManager() {
 		
 	}
@@ -30,6 +32,9 @@ public class CommandManager extends Manager{
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= // 
 	public void createComplexCommand(JSONObject json,ConnectionToClient client) {
 		
 	}
@@ -41,9 +46,9 @@ public class CommandManager extends Manager{
 	public void updateComplexCommand(JSONObject json,ConnectionToClient client) {
 		
 	}
-	
+
 	public void getAllAtomicCommand(JSONObject json,ConnectionToClient client) {
-		ArrayList<Command> command = AbstractDAOFactory.getFactory(0).getCommandDAO().getAll();
+		ArrayList<Command> command = commandDAO.getAll();
 		JSONObject result = new JSONObject();
 		result.put("recipient", "command");
 		result.put("action", "getAllAtomic");
@@ -58,7 +63,7 @@ public class CommandManager extends Manager{
 	}
 	
 	public void getAllComplexAction(JSONObject json,ConnectionToClient client) {
-		ArrayList<ComplexAction> complexValue = AbstractDAOFactory.getFactory(0).getComplexActionDAO().getAll();
+		ArrayList<ComplexAction> complexValue = AbstractDAOFactory.getFactory(SystemManager.db).getComplexActionDAO().getAll();
 		JSONObject result = new JSONObject();
 		result.put("recipient", "command");
 		result.put("action", "getAllComplex");
@@ -76,8 +81,8 @@ public class CommandManager extends Manager{
 		ArrayList<Command> command = null;
 		ArrayList<ComplexAction> complexValue = null;
 		try {
-			command = AbstractDAOFactory.getFactory(0).getCommandDAO().getAll();
-			complexValue = AbstractDAOFactory.getFactory(0).getComplexActionDAO().getAll();
+			command = commandDAO.getAll();
+			complexValue = AbstractDAOFactory.getFactory(SystemManager.db).getComplexActionDAO().getAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,6 +107,17 @@ public class CommandManager extends Manager{
 		}
 	}
 
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>getAll</li>
+     * <li>getAllComplex</li>
+     * <li>getAllAtomic</li>
+     * <li>create</li>
+     * <li>delete</li>
+     * <li>update</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");

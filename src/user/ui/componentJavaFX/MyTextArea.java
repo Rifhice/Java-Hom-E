@@ -1,6 +1,5 @@
 package user.ui.componentJavaFX;
 import java.awt.geom.Rectangle2D;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import javafx.scene.control.TextArea;

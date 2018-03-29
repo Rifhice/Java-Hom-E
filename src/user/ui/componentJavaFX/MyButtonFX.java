@@ -1,8 +1,6 @@
 package user.ui.componentJavaFX;
 
 
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
 import java.awt.geom.Rectangle2D;
 
 
@@ -60,6 +58,11 @@ public class MyButtonFX extends Button{
 		setLayoutX(width * 0.5f - getPrefWidth() / 2.0f);
 		return this;
 	}
+	
+	public MyButtonFX centerY(double height) {
+        setLayoutY(height * 0.5f - getPrefHeight() / 2.0f);
+        return this;
+    }
 	
 	public MyButtonFX setFontMultiplier(float fontMultiplier) {
 		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));

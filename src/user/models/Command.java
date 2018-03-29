@@ -2,6 +2,10 @@ package user.models;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
+import user.models.CommandValue;
+
 /**
  * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
  * @author Clm-Roig
@@ -40,11 +44,12 @@ public class Command {
         this.actuator = actuator;
     }
     
-    public Command(String name,String description, String key, ArrayList<CommandValue> commandValues) {
+    public Command(String name,String description, String key, ArrayList<CommandValue> commandValues,Actuator actuator) {
         this.name = name;
         this.description = description;
         this.key = key;
         this.commandValues = commandValues;
+        this.actuator = actuator;
     }
     
     public Command(int id, String name, Actuator actuator,ArrayList<CommandValue> commandValues) {
@@ -116,5 +121,20 @@ public class Command {
     	}
     	return res;
     }
+    
+	public JSONObject toJson() {
+		try {
+	    	JSONObject curentCommand = new JSONObject();
+			curentCommand.put("id", getId());
+			ArrayList<CommandValue> commandValue = getCommandValues();
+			for (int j = 0; j < commandValue.size(); j++) {
+				curentCommand.append("commandValue", commandValue.get(j).toJson());
+			}
+			return curentCommand;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 }

@@ -15,7 +15,6 @@ import server.models.Actuator;
 import server.models.AtomicAction;
 import server.models.Command;
 import server.models.commandValue.*;
-import server.models.Right;
 import server.models.categories.ActuatorCategory;
 
 public class SQLiteActuatorDAO extends ActuatorDAO  {
@@ -34,7 +33,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     	int created = 0;
     	String sql = 
         		" INSERT INTO DiscreteCommandValues"
-        		+ "(possible_values, fk_environmentValue_id) VALUES"
+        		+ "(possible_values, fk_commandValue_id) VALUES"
         		+ "(?,?)";
     	
     	try {
@@ -62,7 +61,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     	
     	String sql = 
         		" INSERT INTO ContinuousCommandValues"
-        		+ "(min, max, precision, fk_environmentValue_id) VALUES"
+        		+ "(min, max, precision, fk_commandValue_id) VALUES"
         		+ "(?,?,?,?)";
     	
     	try {
@@ -182,7 +181,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 prepStat.setInt(3, obj.getActuatorCategory().getId());
             }
             created = prepStat.executeUpdate();
-            System.out.println("\n\nIci != 0 si l'actuator a bien été créé:" + created);
+            System.out.println("\n\nIci != 0 si l'actuator a bien Ã©tÃ© crÃ©Ã©:" + created);
             // Get the id generated for this object
             if(created > 0) {
             	actuator.setId(SQLiteDAOTools.getLastId(connect));
@@ -251,7 +250,7 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
             
         // Get Atomic Actions
         String sqlAA = "SELECT A.id AS id, A.name AS name, A.description AS description, "
-                + "AA.id AS AAid, AA.name AS AAname, AA.executable AS AAexecutable "
+                + "AA.id AS AAid, AA.executable AS AAexecutable "
                 + "FROM Actuators AS A "
                 + "JOIN AtomicActions AS AA ON AA.fk_actuator_id = A.id "
                 + "WHERE A.id = ?";
@@ -265,9 +264,8 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
             if(rsAA.next()) {
                 do {
                     int atomicActionId = rsAA.getInt("AAid");
-                    String atomicActionName = rsAA.getString("AAname");
                     String atomicActionExecutable = rsAA.getString("AAexecutable");
-                    AtomicAction aa = new AtomicAction(atomicActionId, atomicActionName, atomicActionExecutable);
+                    AtomicAction aa = new AtomicAction(atomicActionId, atomicActionExecutable);
                     atomicActions.add(aa); 
                 } while(rsAA.next());
                 actuator.setAtomicActions(atomicActions);

@@ -2,12 +2,9 @@ package server.models;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.models.commandValue.CommandValue;
-import server.models.commandValue.ContinuousCommandValue;
-import server.models.commandValue.DiscreteCommandValue;
 
 /**
  * A command is the information about the possible values (continuous or discrete) an actuator can receive to perform one action
@@ -131,6 +128,7 @@ public class Command {
     		curentCommand.put("name", getName());
     		curentCommand.put("description", getDescription());
     		curentCommand.put("key", getKey());
+    		curentCommand.put("actuator",actuator.getId());
     		ArrayList<CommandValue> commandValue = getCommandValues();
     		for (int j = 0; j < commandValue.size(); j++) {
     			curentCommand.append("commandValue", commandValue.get(j).toJson());

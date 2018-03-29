@@ -7,24 +7,30 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Sensor;
-import server.models.environmentVariable.ContinuousEnvironmentVariable;
-import server.models.environmentVariable.DiscreteEnvironmentVariable;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
+import server.models.environmentVariable.Value;
 import ocsf.server.ConnectionToClient;
 
 public class SensorManager extends Manager{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	private ArrayList<Sensor> sensors;
+	private static ArrayList<Sensor> sensors;
+	private SensorDAO sensorDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorDAO();
 	
 	private static SensorManager manager = null;
 	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
+	/**
+	 *  Singleton pattern
+	 */
 	private SensorManager() {
 		sensors = new ArrayList<Sensor>();
 	}
@@ -38,28 +44,53 @@ public class SensorManager extends Manager{
     // ================= //
     // ==== METHODS ==== //
     // ================= // 
-	
+	/**
+	 * Create a sensor from a JSON. 
+	 * @param jsonToParse
+	 * @return
+	 */
 	public static Sensor getSensorFromJson(JSONObject jsonToParse) {
 		try {
 			String name = jsonToParse.getString("name");
 			String description = jsonToParse.getString("description");
+			
 			ArrayList<EnvironmentVariable> variables = new ArrayList<EnvironmentVariable>();
-			JSONArray arr = jsonToParse.getJSONArray("variables");
-			for (int i = 0; i < arr.length(); i++){
-				JSONObject object = arr.getJSONObject(i);
-				if(object.getString("type").equals("continuous")) {
-					variables.add(new ContinuousEnvironmentVariable(object.getString("name"), object.getString("description"), object.getString("unity"), object.getDouble("valuemin"), object.getDouble("valuemax"), object.getDouble("precision"), object.getDouble("currentvalue")));
-				}
-				else if(arr.getJSONObject(i).getString("type").equals("discrete")){
-					ArrayList<String> values = new ArrayList<String>();
-					JSONArray valuesArray = object.getJSONArray("values");
-					for (int j = 0; j < valuesArray.length(); j++) {
-						values.add(valuesArray.getString(j));
-					}
-					variables.add(new DiscreteEnvironmentVariable(object.getString("name"), object.getString("description"), object.getString("unity"), values, object.getString("currentvalue")));
-				}
-			}
-			return new Sensor(name, description, variables);
+			JSONObject object = jsonToParse.getJSONObject("variables");
+
+			EnvironmentVariable ev = new EnvironmentVariable();
+			ev.setName(object.getString("name"));
+            ev.setDescription(object.getString("description"));
+            ev.setUnit(object.getString("unit"));	
+            
+            Value value;
+            JSONObject valueJ = object.getJSONObject("value");
+            // Value Continuous
+            if(valueJ.getString("type").equals("continuous")) {
+                value = new ContinuousValue();
+                ((ContinuousValue) value).setValueMin(valueJ.getDouble("valueMin"));
+                ((ContinuousValue) value).setValueMax(valueJ.getDouble("valueMax"));
+                ((ContinuousValue) value).setCurrentValue(valueJ.getDouble("currentValue"));
+                ((ContinuousValue) value).setPrecision(valueJ.getDouble("precision"));
+                
+                ev.setValue(value);
+            }
+            
+            // Value Discrete
+            else if(valueJ.getString("type").equals("discrete")) {
+                value = new DiscreteValue();
+                ((DiscreteValue) value).setCurrentValue(valueJ.getString("currentValue"));
+                
+                // Get the possible values
+                ArrayList<String> possibleValuesArray = new ArrayList<String>();
+                JSONArray valuesArray = valueJ.getJSONArray("possibleValues");
+                for (int j = 0; j < valuesArray.length(); j++) {
+                    possibleValuesArray.add(valuesArray.getString(j));
+                }
+                ((DiscreteValue) value).setPossibleValues(possibleValuesArray);        
+                ev.setValue(value);
+            }
+            	
+			return new Sensor(name, description, ev);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -72,7 +103,7 @@ public class SensorManager extends Manager{
 		Sensor sensor = getSensorFromJson(json); //Create the new Sensor object
 		Sensor sensorCreated = null;
 		try {
-			sensorCreated = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getSensorDAO().create(sensor);
+			sensorCreated = sensorDAO.create(sensor);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -80,33 +111,57 @@ public class SensorManager extends Manager{
 		if(sensorCreated != null) {
 			sensors.add(sensor);
 			result.put("result", "success");
+			result.put("verb", "post");
 			result.put("id", sensorCreated.getId());
+			result.put("idEnv",sensorCreated.getEnvironmentVariables().getId());
+	        result.put("idValue",sensorCreated.getEnvironmentVariables().getValue().getId());
+	        try {
+				client.sendToClient(result.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		else {
 			result.put("result", "failure");
-		}
-		try {
-			client.sendToClient(result.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				client.sendToClient(result.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println(sensor + "\nAdded to the system !");
 	}
 	
-	public ArrayList<Sensor> getSensors(){
+	public static ArrayList<Sensor> getSensors(){
 		return sensors;
 	}
 	
 	public ArrayList<EnvironmentVariable> getEnvironmentVariables(){
 		ArrayList<EnvironmentVariable> variables = new ArrayList<EnvironmentVariable>();
-		for (int i = 0; i < sensors.size(); i++) {
-			variables.addAll(sensors.get(i).getEnvironmentVariable());
-		}
+		variables = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getAll();		
 		return variables;
 	}
 	
-	public void valueChange(JSONObject json) {
-		
+	public void changeEnvironmentVariableValue(JSONObject json,ConnectionToClient client) {
+		Sensor sensor = getSensorById(json.getInt("id"));
+		System.out.println(sensor.getEnvironmentVariables().countObservers());
+		if(sensor != null) {
+			sensor.changeValue(json.getString("value"));
+			sensor.getEnvironmentVariables().myNotify();
+			JSONObject result = new JSONObject();
+			result.put("recipient", "sensor");
+			result.put("action", "changeValue");
+			result.put("idSensor", json.getInt("id"));
+			result.put("value", json.getString("value"));
+			try {
+				SystemManager.sendToAllClient(result.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("SENSOR UNKNOWN OR NOT CONNECTED");
+		}
 	}
 	
 	/**
@@ -114,22 +169,92 @@ public class SensorManager extends Manager{
 	 * @param id, the id of sensors searched
 	 * @return Sensor, the sensor corresponding the id given or null if there is none.
 	 */
-	public Sensor getSensorById(String id) {
+	public Sensor getSensorById(int id) {
 		for (int i = 0; i < sensors.size(); i++) {
-			if(Integer.toString(sensors.get(i).getId()).equals(id)) {
+			if(sensors.get(i).getId() == (id)) {
 				return sensors.get(i);
 			}
 		}
 		return null;
 	}
+	
+	public void returnGetEnvironmentVariables(JSONObject json, ConnectionToClient client) {
+		ArrayList<EnvironmentVariable> environmentVariables = null;
+		try {
+			environmentVariables = getEnvironmentVariables();
+	    }
+	    catch (Exception e) {
+			e.printStackTrace();
+		}
 
+        JSONObject result = new JSONObject();
+        if(environmentVariables != null) {
+            result.put("result", "success");
+            result.put("recipient", "sensor");
+            result.put("action", "getEnvironmentVariables");
+            for (EnvironmentVariable environmentVariable : environmentVariables) {
+                result.append("environmentVariables", environmentVariable.toJson());
+            }
+        }
+        else {
+        	result.put("recipient", "sensor");
+            result.put("result", "failure");
+            result.put("action", "getEnvironmentVariables");
+        }
+        try {
+            client.sendToClient(result.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("RESULT: "+result.toString());
+	}
+
+	public void getAll(JSONObject json,ConnectionToClient client) {
+		ArrayList<Sensor> sensors = sensorDAO.getAll();
+		JSONObject result = new JSONObject();
+        result.put("result", "success");
+        result.put("recipient", "sensor");
+        result.put("action", "getAll");
+		for (int i = 0; i < sensors.size(); i++) {
+			try {
+			result.append("sensors", sensors.get(i).toJson());
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println(result.toString());
+        try {
+            client.sendToClient(result.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+    /**
+     * Possible values for key "action":
+     * <ul>
+     * <li>post</li>
+     * <li>changeValue</li>
+     * <li>getEnvironmentVariables</li>
+     * <li>getAll</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		String verb = json.getString("verb");
-		switch (verb) {
+		String action = json.getString("action");
+		switch (action) {
 		case "post":
 			registerSensorToTheSystem(json,client);
 			break;
+		case "changeValue":
+			changeEnvironmentVariableValue(json, client);
+			break;
+		case "getEnvironmentVariables": 
+		    returnGetEnvironmentVariables(json, client);
+		    break;
+		case "getAll":
+			getAll(json,client);
 		default:
 			break;
 		}

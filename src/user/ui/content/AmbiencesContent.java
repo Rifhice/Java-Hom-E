@@ -84,8 +84,6 @@ public class AmbiencesContent extends Content {
 
 	private static Image checkImage = new Image("file:asset/images/check.png");
 	private static Image removeImage = new Image("file:asset/images/remove.png");
-
-	AmbiencesContent context = this;
 	
 	private AmbiencesContent() {
 		newAmbiencePane = new MyPane(topAmbienceBounds.computeBounds(width, height));
@@ -107,10 +105,9 @@ public class AmbiencesContent extends Content {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				behavioursNotChosenScrollPane.changeBounds(behavioursNotChosenBounds.computeBounds(width, height));
 				behavioursChosenScrollPane.changeBounds(behavioursChosenBounds.computeBounds(width, height));
-				context.getChildren().remove(modifyAmbiencePane);
+				getChildren().remove(modifyAmbiencePane);
 			}
 			
 		});
@@ -125,7 +122,6 @@ public class AmbiencesContent extends Content {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				String name = newAmbienceName.getText();
 				if(!name.equals("")) {
 					JSONObject json = new JSONObject();
@@ -232,14 +228,14 @@ public class AmbiencesContent extends Content {
 		        						new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent event) {
-												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+												int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 												changeBehaviourState(pressedButton);
 											}
 										},
 		        						new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent event) {
-												int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+												int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 											}
 										}, 
 		        						false
@@ -318,14 +314,12 @@ public class AmbiencesContent extends Content {
 
 
 	private void changeBehaviourState(int pressedButton) {
-		// TODO Auto-generated method stub
 		BehaviourCell behaviourCell = this.getBehaviourCell(pressedButton);
 		behaviourCell.changeState();
 		this.updateCellState(behaviourCell);
 	}
 	
 	private void updateCellState(BehaviourCell behaviourCell) {
-		// TODO Auto-generated method stub
 		if(behaviourCell.getState() == true) {
 			selectedBehaviours.add(behaviourCell.getBehaviour());
 			notSelectedBehaviours.remove(behaviourCell.getBehaviour());
@@ -402,22 +396,20 @@ public class AmbiencesContent extends Content {
 	}
 
 	private void modificateAmbience() {
-		// TODO Auto-generated method stub
 		Ambience ambience = this.getAmbienceSelected();
 		if(ambience == null) {
 			return;
 		}
 		System.out.println("Reinit");
 		reinitBehaviours();
-		System.out.println(ambience.getBehaviours());
 		for (Integer id : ambience.getBehaviours()) {
 			changeBehaviourState(id);
 		}
 		behavioursNotChosenScrollPane.changeBounds(behavioursNotChosenBoundsModif.computeBounds(width, height));
 		behavioursChosenScrollPane.changeBounds(behavioursChosenBoundsModif.computeBounds(width, height));
 		modifyAmbienceLabel.setText(ambience.getName());
-		if(!this.getChildren().contains(modifyAmbiencePane)){
-			context.getChildren().add(modifyAmbiencePane);
+		if(!getChildren().contains(modifyAmbiencePane)){
+			getChildren().add(modifyAmbiencePane);
 		}
 	}
 

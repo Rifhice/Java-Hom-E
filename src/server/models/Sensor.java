@@ -1,11 +1,12 @@
 package server.models;
 
 
-import java.util.ArrayList;
-
 import org.json.JSONObject;
 
+import server.models.categories.Category;
 import server.models.categories.SensorCategory;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
 
 /**
@@ -18,7 +19,7 @@ public class Sensor extends ExternalActor{
     // ==================== //
     // ==== ATTRIBUTES ==== //
     // ==================== //
-	private ArrayList<EnvironmentVariable> environmentVariable;
+	private EnvironmentVariable environmentVariables = null;
 	
 	// Attributes from others tables
     private SensorCategory sensorCategory;
@@ -32,25 +33,24 @@ public class Sensor extends ExternalActor{
     	super(name,description);
     }
     
-    public Sensor(String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
+    public Sensor(String name, String description, EnvironmentVariable environmentVariables) {
         super(name, description);
-        this.environmentVariable = environmentVariable;
-        for (int i = 0; i < environmentVariable.size(); i++) {
-			environmentVariable.get(i).setSensor(this);
-			
-		}
+        this.environmentVariables = environmentVariables;
+        environmentVariables.setSensor(this);
     }
     
-	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariable) {
+	public Sensor(int id, String name, String description, EnvironmentVariable environmentVariables) {
 		super(id, name, description);
-		this.environmentVariable = environmentVariable;
+		this.environmentVariables = environmentVariables;
+		environmentVariables.setSensor(this);
 	}
 	
-	public Sensor(int id, String name, String description, ArrayList<EnvironmentVariable> environmentVariables, 
+	public Sensor(int id, String name, String description, EnvironmentVariable environmentVariables, 
 	        SensorCategory sensorCategory) {
         super(id, name, description);
-        this.environmentVariable = environmentVariables;
+        this.environmentVariables = environmentVariables;
         this.sensorCategory = sensorCategory;
+        environmentVariables.setSensor(this);
     }
 
 	// ================= //
@@ -60,12 +60,28 @@ public class Sensor extends ExternalActor{
 		this.id = id;
 	}
 	
-	public ArrayList<EnvironmentVariable> getEnvironmentVariable() {
-        return environmentVariable;
+	public void changeValue(String value) {
+		if(environmentVariables.getValue() instanceof ContinuousValue) {
+			double valueDouble = 0;
+			try {
+				valueDouble = Double.parseDouble(value);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			((ContinuousValue)environmentVariables.getValue()).setCurrentValue(valueDouble);
+		}
+		else {
+			((DiscreteValue)environmentVariables.getValue()).setCurrentValue(value);
+		}
+	}
+	
+	public EnvironmentVariable getEnvironmentVariables() {
+        return environmentVariables;
     }
 
-    public void setEnvironmentVariable(ArrayList<EnvironmentVariable> environmentVariable) {
-        this.environmentVariable = environmentVariable;
+    public void setEnvironmentVariable(EnvironmentVariable environmentVariables) {
+        this.environmentVariables = environmentVariables;
+        environmentVariables.setSensor(this);
     }
     
     public SensorCategory getSensorCategory() {
@@ -74,26 +90,27 @@ public class Sensor extends ExternalActor{
 
     public void setSensorCategory(SensorCategory sensorCategory) {
         this.sensorCategory = sensorCategory;
+        sensorCategory.addSensor(this);
     }   
     
     // ===================================================
 
     public String toString() {
-		String res = "SENSOR #" + id + " " + this.name + "\n" + this.sensorCategory + "\n"+ this.description + "\nVARIABLES";
-		if(environmentVariable != null) {
-			for (int i = 0; i < environmentVariable.size(); i++) {
-				res += "\n" + environmentVariable.get(i);
-			}
+		String res = "SENSOR #" + id + " " + this.name + "\n" +/* this.sensorCategory +*/ "\n"+ this.description + "\nVARIABLES";
+		if(environmentVariables != null) {
+			res += "\n" + environmentVariables;
 		}
 		return res;
 	}
     
     public JSONObject toJson() {
     	JSONObject result = super.toJson();
-        for (int i = 0; i < environmentVariable.size(); i++) {
-			result.append("environmentVariable", environmentVariable.get(i).toJson());
-		}
-        result.put("category", sensorCategory);
+    	if(environmentVariables != null) {
+			result.put("environmentVariable", environmentVariables.toJson());
+    	}
+        if(sensorCategory != null) {
+        	result.put("category", sensorCategory.toJsonCategory());
+        }
         return result;
     }
 

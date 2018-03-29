@@ -1,7 +1,5 @@
 package user.ui.scene;
 
-import java.awt.geom.Rectangle2D;
-
 import org.json.JSONObject;
 
 import user.ui.componentJavaFX.MyButtonFX;
@@ -153,7 +151,7 @@ public class LoginScene extends MyScene{
 				String result = json.getString("result");
 				if(result.equals("success")) {
 					ClientFX.token = json.getString("token");
-					ClientFX.setScene(new ContentScene(new Group(),width,height));
+					ClientFX.setScene(ContentScene.instanciate(new Group(),width,height));
 				}else if(result.equals("wrong_pseudo")){
 					pseudoTextField.setText("");
 					pseudoTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");

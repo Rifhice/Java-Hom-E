@@ -5,15 +5,22 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.BehaviourDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Behaviour;
-import server.models.categories.SensorCategory;
 import ocsf.server.ConnectionToClient;
 
 public class BehaviourManager extends Manager{
 
+    private BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
 	private static BehaviourManager manager = null;
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+    /**
+     *  Singleton pattern
+     */
 	private BehaviourManager() {
 	}
 	
@@ -23,24 +30,39 @@ public class BehaviourManager extends Manager{
 		return manager;
 	}
 	
-	public void createBehaviour(JSONObject json) {
-	}
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
 	
-	public void getAllBehaviours(JSONObject json, ConnectionToClient client) {
+	/**
+     * Get all the behaviours in DB. Send to the client a JSONObject.    
+     * @param client
+     */
+	public void getAllBehaviours(ConnectionToClient client) {
 		ArrayList<Behaviour> behaviours = null;
 
 		try {
-			behaviours = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().getAll();
+			behaviours = behaviourDAO.getAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		JSONObject result = new JSONObject();
 		result.put("recipient", "behaviour");
 		result.put("action", "getAll");
+		JSONObject behaviour;
 		for (int i = 0; i < behaviours.size(); i++) {
-			JSONObject behaviour = new JSONObject();
+		    behaviour = new JSONObject();
 			behaviour.put("id", behaviours.get(i).getId());
 			behaviour.put("name", behaviours.get(i).getName());
+			behaviour.put("description", behaviours.get(i).getDescription());
+			behaviour.put("isActivated", behaviours.get(i).isActivated());
+			
+			try {
+		         behaviour.put("expression", behaviours.get(i).getExpression().toJson());
+			} catch (Exception e) {
+			    e.printStackTrace();
+			}
+			
 			result.append("behaviours", behaviour);
 		}
 		try {
@@ -55,6 +77,28 @@ public class BehaviourManager extends Manager{
 	}
 	
 	public void createBehaviours(JSONObject json, ConnectionToClient client) {
+		Behaviour behaviour = null;
+		try {
+			behaviour = Behaviour.createBehaviour(json); 
+			behaviourDAO.create(behaviour);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		try {
+            result.put("recipient", "behaviour");
+            result.put("action", "create");
+			if(behaviour == null) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -73,12 +117,21 @@ public class BehaviourManager extends Manager{
 		behaviour.setActivated(false);
 	}
 
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>getAll</li>
+     * <li>create</li>
+     * <li>delete</li>
+     * <li>update</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
-	        	getAllBehaviours(json,client);
+	        	getAllBehaviours(client);
 	            break;
 	        case "create":
 	        	createBehaviours(json,client);

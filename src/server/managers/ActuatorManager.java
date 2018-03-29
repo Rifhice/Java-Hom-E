@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import server.dao.abstractDAO.ActuatorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Command;
@@ -17,10 +18,17 @@ import ocsf.server.ConnectionToClient;
 
 public class ActuatorManager extends Manager {
 	
-	private ArrayList<Actuator> actuators;
+    private ActuatorDAO actuatorDAO = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO();
+	private static ArrayList<Actuator> actuators = new ArrayList<Actuator>();
 	
 	private static ActuatorManager manager = null;
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //
+	/**
+	 *  Singleton pattern
+	 */
 	private ActuatorManager() {
 		actuators = new ArrayList<Actuator>();
 	}
@@ -31,14 +39,26 @@ public class ActuatorManager extends Manager {
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //	
 	public void registerActuatorToTheSystem(JSONObject json) {
 		// TODO
 	}
 	
-	public ArrayList<Actuator> getActuators(){
+	/**
+	 * 
+	 * @return The list of the different actuators in the system
+	 */
+	public static ArrayList<Actuator> getActuators(){
 		return actuators;
 	}
 	
+	/**
+	 * 
+	 * @param id Actuator id to get
+	 * @return Actuator
+	 */
 	public Actuator getActuatorById(String id) {
 		for (int i = 0; i < actuators.size(); i++) {
 			if(Integer.toString(actuators.get(i).getId()).equals(id)) {
@@ -47,7 +67,12 @@ public class ActuatorManager extends Manager {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * 
+	 * @param jsonToParse
+	 * @return Actuator from the JSON
+	 */
 	public static Actuator getActuatorFromJson(JSONObject jsonToParse) {
 		try {
 			String name = jsonToParse.getString("name");
@@ -90,39 +115,73 @@ public class ActuatorManager extends Manager {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param json Json to parse to register the actuator
+	 * @param client Connection to the client
+	 */
 	public void registerActuatorToTheSystem(JSONObject json,ConnectionToClient client) {
 		Actuator actuator = getActuatorFromJson(json);
 		Actuator create = null;
 		try {
-		 create = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getActuatorDAO().create(actuator);
+		 create = actuatorDAO.create(actuator);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		JSONObject result = new JSONObject();
+		System.out.println(result);
 		if(create != null) {
+			create.setConnectionToClient(client);
 			actuators.add(actuator);
 			result.put("result", "success");
+			result.put("verb", "post");
 			result.put("id", create.getId());
+			SystemManager.sendToAllClient(result.toString());
 		}
 		else {
 			result.put("result", "failure");
-		}
-		try {
-			client.sendToClient(result.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				client.sendToClient(result.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println(actuator + "\nAdded to the system !");
+		System.out.println(actuators);
 	}
 	
+	/**
+	 * 
+	 * @param json Execute the executable in this json
+	 * @param client Connection to the client
+	 */
+	public void execute(JSONObject json,ConnectionToClient client) {
+		System.out.println(json.getString("executable"));
+		for (int i = 0; i < actuators.size(); i++) {
+			if(actuators.get(i).getId() == json.getInt("id")) {
+				actuators.get(i).execute(json.getString("executable"));
+			}
+		}
+	}
+	
+	/**
+     * Possible values for key "action":
+     * <ul>
+     * <li>post</li>
+     * <li>execute</li>
+     * </ul>
+     */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String verb = json.getString("verb");
 		switch (verb) {
 		case "post":
 			registerActuatorToTheSystem(json,client);
+			break;
+		case "execute":
+			execute(json,client);
 			break;
 		default:
 			break;

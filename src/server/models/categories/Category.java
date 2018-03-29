@@ -1,6 +1,5 @@
 package server.models.categories;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public abstract class Category {
@@ -58,6 +57,14 @@ public abstract class Category {
 	}
 	
 	public JSONObject toJson() {
+		JSONObject result = new JSONObject();
+		result.put("id",id);
+		result.put("name",name);
+		result.put("description",description);
+		return result;
+	}
+	
+	public JSONObject toJsonCategory() {
 		JSONObject result = new JSONObject();
 		result.put("id",id);
 		result.put("name",name);

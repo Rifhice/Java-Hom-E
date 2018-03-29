@@ -2,7 +2,6 @@ package server.models.categories;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.models.Sensor;
@@ -13,7 +12,7 @@ public class SensorCategory extends Category{
     // ==================== //
     
     // Attributes from other tables
-    ArrayList<Sensor> sensors;
+    ArrayList<Sensor> sensors = new ArrayList<Sensor>();
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -40,6 +39,10 @@ public class SensorCategory extends Category{
         return sensors;
     }
 
+    public void addSensor(Sensor sensor) {
+    	sensors.add(sensor);
+    }
+    
     public void setSensors(ArrayList<Sensor> sensors) {
         this.sensors = sensors;
     }
@@ -52,9 +55,12 @@ public class SensorCategory extends Category{
     
     public JSONObject toJson() {
     	JSONObject result = super.toJson();
-    	for (int i = 0; i < sensors.size(); i++) {
-			result.append("sensors", sensors.get(i).toJson());
-		}
+    	if(sensors != null) {
+	    	for (int i = 0; i < sensors.size(); i++) {
+				result.append("sensors", sensors.get(i).toJson());
+			}
+    	}
     	return result;
     }
+    
 }

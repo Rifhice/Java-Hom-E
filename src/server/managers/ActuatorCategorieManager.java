@@ -11,22 +11,48 @@ import server.factories.AbstractDAOFactory;
 import server.models.categories.ActuatorCategory;
 import ocsf.server.ConnectionToClient;
 
+/**
+ * 
+ * @author Clm-Roig
+ *
+ */
 public class ActuatorCategorieManager extends Manager{
 
+    // ==================== //
+    // ==== ATTRIBUTES ==== //
+    // ==================== //
 	private static ActuatorCategorieManager manager = null;
 	private ActuatorCategoriesDAO actuatorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getActuatorCategoriesDAO();
-	
+    
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //	
+	/**
+	 *  Singleton pattern
+	 */
 	private ActuatorCategorieManager() {
 		
 	}
 	
+	/**
+	 * 
+	 * @return Return the instance of the ActuatorCategorieSingleton
+	 */
 	public static ActuatorCategorieManager getManager() {
 		if(manager == null) 
 			manager = new ActuatorCategorieManager();
 		return manager;
 	}
 	
-	public void getAllActuatorCategorie(ConnectionToClient client) {
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
+	
+	/**
+	 * 
+	 * @param client Connection to the client
+	 */
+	public void getAllActuatorCategories(ConnectionToClient client) {
 		ArrayList<ActuatorCategory> actuatorCategories = actuatorCategoriesDAO.getAll();
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
@@ -45,6 +71,11 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param obj ActuatorCategory to create
+	 * @param client Connection to the client
+	 */
 	public void createActuatorCategorie(ActuatorCategory obj, ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
@@ -63,6 +94,11 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param id Id of the actuator to delete
+	 * @param client Connection to the client
+	 */
 	public void deleteActuatorCategorie(int id,ConnectionToClient client) {
 		System.out.println("delete");
 		JSONObject result = new JSONObject();
@@ -82,6 +118,11 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param obj ActuatorCategory to update
+	 * @param client Connection to the client
+	 */
 	public void updateActuatorCategorie(ActuatorCategory obj,ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
@@ -100,12 +141,21 @@ public class ActuatorCategorieManager extends Manager{
 		}
 	}
 
+	/**
+	 * Possible values for key "action":
+	 * <ul>
+	 * <li>getAll</li>
+	 * <li>create</li>
+	 * <li>delete</li>
+	 * <li>update</li>
+	 * </ul>
+	 */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		String action = json.getString("action");
         switch(action) {
 	        case "getAll":
-	        	getAllActuatorCategorie(client);
+	        	getAllActuatorCategories(client);
 	            break;
 	        case "create":
 	        	createActuatorCategorie(new ActuatorCategory(json.getString("name"),json.getString("description")),client);
@@ -118,4 +168,5 @@ public class ActuatorCategorieManager extends Manager{
 	            break;
         }
 	}
+
 }

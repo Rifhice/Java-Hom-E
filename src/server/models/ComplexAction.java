@@ -2,7 +2,6 @@ package server.models;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -17,7 +16,7 @@ public class ComplexAction {
     private String name;
     
     // Attributes from other tables
-    private ArrayList<AtomicAction> atomicActions;
+    private ArrayList<AtomicAction> atomicActions = new ArrayList<AtomicAction>();
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -73,9 +72,11 @@ public class ComplexAction {
     
     public String toString() {
     	String res = "Id : " + id + "\nName : " + name+"\n";
-    	for (int i = 0; i < atomicActions.size(); i++) {
-			res += atomicActions.get(i).toString()+"\n";
-		}
+    	if(atomicActions != null) {
+    		for (int i = 0; i < atomicActions.size(); i++) {
+    			res += atomicActions.get(i).toString()+"\n";
+    		}
+    	}    	
     	return res;
     }
     

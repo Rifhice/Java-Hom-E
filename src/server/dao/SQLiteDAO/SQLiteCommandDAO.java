@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import server.dao.abstractDAO.CommandDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
-import server.models.Behaviour;
+import server.models.Actuator;
 import server.models.Command;
 import server.models.commandValue.CommandValue;
 import server.models.commandValue.ContinuousCommandValue;
@@ -29,8 +29,12 @@ public class SQLiteCommandDAO extends CommandDAO {
 	public Command create(Command obj) throws DAOException {
 		return null;
 	}
-
-
+	
+    @Override
+    public Command getById(int id) throws DAOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 	@Override
 	public int update(Command obj) throws DAOException {
@@ -59,6 +63,7 @@ public class SQLiteCommandDAO extends CommandDAO {
             	command.setKey(rs.getString("key"));
             	command.setDescription(rs.getString("description"));
             	command.setCommandValues(getAllCommandValues(command.getId()));
+            	command.setActuator(new Actuator(rs.getInt("fk_actuator_id")));
             	commands.add(command);
             }
         } catch (SQLException e) {

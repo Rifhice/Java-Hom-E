@@ -1,9 +1,17 @@
 package server.models.evaluable;
 
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 
-import server.models.commandValue.CommandValue;
+import server.factories.AbstractDAOFactory;
+import server.managers.SensorManager;
+import server.managers.SystemManager;
+import server.models.Sensor;
+import server.models.environmentVariable.ContinuousValue;
+import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
+import server.models.environmentVariable.Value;
 
 /**
  * A block is something evaluable composed by an environment variable compares thanks
@@ -19,7 +27,7 @@ public class Block implements Evaluable {
     private String operator;
     
     // Attributes from other table
-    private CommandValue commandValue; 
+    private Value value; 
     private EnvironmentVariable environmentVariable;
 
     // ====================== //
@@ -27,15 +35,20 @@ public class Block implements Evaluable {
     // ====================== //
     public Block() {}
 
-    public Block(EnvironmentVariable environmentVariable, CommandValue commandValue, String operator) {
+    public Block(int id, EnvironmentVariable environmentVariable, String operator) {
         this.environmentVariable = environmentVariable;
-        this.commandValue = commandValue;
+        this.operator = operator;
+    }
+    
+    public Block(EnvironmentVariable environmentVariable, Value value, String operator) {
+        this.environmentVariable = environmentVariable;
+        this.value = value;
         this.operator = operator;
     }
 
-    public Block(int id, EnvironmentVariable environmentVariable, CommandValue commandValue, String operator) {
+    public Block(int id, EnvironmentVariable environmentVariable, Value value, String operator) {
         this.id = id;
-        this.commandValue = commandValue;
+        this.value = value;
         this.environmentVariable = environmentVariable;
         this.operator = operator;
     }
@@ -59,12 +72,12 @@ public class Block implements Evaluable {
         this.operator = operator;
     }
     
-    public Object getCommandValue() {
-        return commandValue;
+    public Value getValue() {
+        return value;
     }
 
-    public void setCommandValue(CommandValue commandValue) {
-        this.commandValue = commandValue;
+    public void setValue(Value value) {
+        this.value = value;
     }
 
     public EnvironmentVariable getEnvironmentVariable() {
@@ -80,23 +93,25 @@ public class Block implements Evaluable {
     public boolean evaluate() {
         switch (operator) {
         case "==":
-            return environmentVariable.isEqual(commandValue);
+            return environmentVariable.getValue().isEqual(value);
         case "!=":
-            return environmentVariable.isNotEqual(commandValue);
+            return environmentVariable.getValue().isNotEqual(value);
         case "<=":
-            return environmentVariable.isInferiorOrEqual(commandValue);
+            return environmentVariable.getValue().isInferiorOrEqual(value);
         case ">=":
-            return environmentVariable.isSuperiorOrEqual(commandValue);
+            return environmentVariable.getValue().isSuperiorOrEqual(value);
         case "<":
-            return environmentVariable.isSuperior(commandValue);
+            return environmentVariable.getValue().isSuperior(value);
         case ">":
-            return environmentVariable.isInferior(commandValue);
+            return environmentVariable.getValue().isInferior(value);
         }
         return false;
     }
 
     public String toString() {
-        return environmentVariable.toString() + " " + operator + " " + commandValue;
+        String res = "#" + environmentVariable.getId() + " " + environmentVariable.getName();
+        res += " " + operator + " " + value;
+        return res;
     }
 
     public JSONObject toJson() {
@@ -104,9 +119,43 @@ public class Block implements Evaluable {
         result.put("type", "block");
         result.put("id", id);
         result.put("operator",operator);
-        result.put("command", commandValue.toJson());
+        result.put("command", value.toJson());
         result.put("variable", environmentVariable.toJson());
         return result;
+    }
+    
+    public static Block createBlockFromJson(JSONObject json) {
+        EnvironmentVariable variable = null;
+        Object value = null;
+        String operator = null;
+        
+        ArrayList<Sensor> sensors = SensorManager.getSensors();
+        for (int i = 0; i < sensors.size(); i++) {
+            if(sensors.get(i).getEnvironmentVariables().getId() == json.getInt("variable")) {
+                variable = sensors.get(i).getEnvironmentVariables();
+                System.out.println("SENSOR FOUND : " + sensors.get(i).getEnvironmentVariables());
+            }
+        }
+        if(variable == null) {
+        	System.out.println("SENSOR NOT FOUND : ");
+            variable = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getById(json.getInt("variable"));
+        }
+        
+        if(variable != null) {
+           operator = json.getString("operator");
+           try {
+                value = json.getDouble("value");
+                return new Block(variable, new ContinuousValue((Double)value), operator);
+            } catch (Exception e) {
+                value = json.getString("value");
+                return new Block(variable, new DiscreteValue((String)value), operator);
+            }
+        }
+        else {
+            System.out.println("ERROR VARIABLE NOT FOUND !");
+            //SHOULD THROW EXCEPTION AS THE VARIABLE WASN'T FOUND
+        }
+        return null;
     }
     
 }

@@ -12,10 +12,16 @@ import server.models.categories.SensorCategory;
 import ocsf.server.ConnectionToClient;
 
 public class SensorCategorieManager extends Manager{
-
+    
+    private SensorCategoriesDAO sensorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorCategoriesDAO();
 	private static SensorCategorieManager manager = null;
-	private SensorCategoriesDAO sensorCategoriesDAO = AbstractDAOFactory.getFactory(SystemManager.db).getSensorCategoriesDAO();
 	
+	// ====================== //
+    // ==== CONSTRUCTORS ==== //
+    // ====================== //    
+    /**
+     *  Singleton pattern
+     */
 	private SensorCategorieManager() {
 		
 	}
@@ -26,6 +32,14 @@ public class SensorCategorieManager extends Manager{
 		return manager;
 	}
 	
+	// ================= //
+    // ==== METHODS ==== //
+    // ================= //
+	/**
+	 * Create a sensor category in DB and send to all the clients.
+	 * @param obj
+	 * @param client
+	 */
 	public void createSensorCategorie(SensorCategory obj, ConnectionToClient client) {
 		JSONObject result = new JSONObject();
 		result.put("recipient", "sensorCategories");

@@ -596,11 +596,12 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             prepStat.setInt(1, ev.getId());
             ResultSet rs = prepStat.executeQuery();
 
-            if(rs.next()) {                
-                if(rs.getInt("DVpossible_values") != 0) {
+            if(rs.next()) {
+                if(rs.getString("DVpossible_values") != null) {
                     value = new DiscreteValue();
                     ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
-
+                    
+                    
                     JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
                     JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
                     ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());
@@ -639,13 +640,13 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 + "JOIN Vvalues AS V ON V.id = B.fk_vvalue_id "
                 + "LEFT JOIN ContinuousVvalues AS CV ON CV.fk_vvalue_id = V.id "
                 + "LEFT JOIN DiscreteVvalues AS DV ON DV.fk_vvalue_id = V.id "
-                + "WHERE V.id = ? "
+                + "WHERE B.id = ? "
                 + ";";
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setInt(1, block.getId());
             ResultSet rs = prepStat.executeQuery();
-
+            
             if(rs.next()) {                
                 if(rs.getString("DVpossible_values") != null) {
                     value = new DiscreteValue();
@@ -662,6 +663,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     ((ContinuousValue)value).setValueMin(rs.getDouble("CVvalue_min"));
                     ((ContinuousValue)value).setCurrentValue(rs.getDouble("CVcurrent_value"));
                     ((ContinuousValue)value).setPrecision(rs.getDouble("CVprecision"));
+                    
+                    System.out.println("\n"+((ContinuousValue)value).getCurrentValue()+"\n");
                 }
                 value.setId(rs.getInt("id"));
 

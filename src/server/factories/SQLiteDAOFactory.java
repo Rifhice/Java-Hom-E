@@ -3,7 +3,7 @@ package server.factories;
 import java.sql.Connection;
 
 import server.dao.*;
-import server.dao.SQLiteDAO.SQLiteSensorDao;
+import server.dao.SQLiteDAO.SQLiteSensorDAO;
 import server.dao.SQLiteDAO.SQLiteActuatorCategoriesDAO;
 import server.dao.SQLiteDAO.SQLiteActuatorDAO;
 import server.dao.SQLiteDAO.SQLiteAmbienceDAO;
@@ -45,7 +45,7 @@ public class SQLiteDAOFactory extends AbstractDAOFactory{
     }
 	
     public SensorDAO getSensorDAO() {
-    	return new SQLiteSensorDao(connect);
+    	return new SQLiteSensorDAO(connect);
     }
     
     public SQLiteSensorCategoriesDAO getSensorCategoriesDAO() {

@@ -213,10 +213,7 @@ public class BehavioursCommandsContent extends Content {
                         JSONArray arrArg = json.getJSONArray("behaviours");
                         for (int j = 0; j < arrArg.length(); j++){
                             JSONObject current = arrArg.getJSONObject(j);
-                            
-                            // TODO : decomment 1rst line and delete 2nd one when getAll() functional
-                            // behaviours.add(new Behaviour(current.getInt("id"), current.getString("name"), current.getBoolean("isActivated")));
-                            behaviours.add(new Behaviour(current.getInt("id"), current.getString("name"), current.getString("description")));
+                            behaviours.add(new Behaviour(current.getInt("id"), current.getString("name"), current.getBoolean("isActivated")));
                         }
                         this.updateBehaviourUI();
                         break;
@@ -269,7 +266,7 @@ public class BehavioursCommandsContent extends Content {
                                 currentBehaviourIndex = pressedButton;
                                 currentBehaviourName.setText(behaviours.get(currentBehaviourIndex).getName());
                                 currentBehaviourDescription.setText(behaviours.get(currentBehaviourIndex).getDescription());
-                                if(stateButton.getText() == "Activate") {
+                                if(behaviours.get(currentBehaviourIndex).isActivated()) {
                                     stateButton.setText("Deactivate");
                                 }
                                 else {

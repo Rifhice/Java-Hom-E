@@ -83,6 +83,7 @@ public class BehaviourManager extends Manager{
 		Behaviour behaviour = null;
 		try {
 			behaviour = Behaviour.createBehaviour(json); 
+			behaviour.setName("0mG sA v March");
 			behaviour = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO().create(behaviour);
 		} catch (Exception e) {
 			e.printStackTrace();

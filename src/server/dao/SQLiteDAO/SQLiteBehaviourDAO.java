@@ -326,7 +326,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      * <li>Blocks</li>
      * <li>EnvironmentVariable</li>
      * <li>Values (Block and EV ones)</li>
-     * <ul>     * 
+     * <ul>     
      * @throws DAOException
      */
     @Override

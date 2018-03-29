@@ -122,9 +122,10 @@ public class SQLiteEnvironmentVariableDAO extends EnvironmentVariableDAO {
                 + "CV.fk_vvalue_id AS CVfk_vvalue_id, CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, "
                 + "CV.current_value AS CVcurrent_value, CV.precision AS CVprecision "
                 + "FROM Vvalues AS V "
+                + "JOIN EnvironmentVariables AS EV ON EV.fk_vvalue_id = V.id "
                 + "LEFT JOIN ContinuousVValues AS CV ON CV.fk_vvalue_id = V.id "
                 + "LEFT JOIN DiscreteVValues AS DV ON DV.fk_vvalue_id = V.id "
-                + "WHERE V.id = ? "
+                + "WHERE EV.id = ? "
                 + ";";
 
         try {

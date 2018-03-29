@@ -175,7 +175,6 @@ public class Behaviour implements Observer {
 		return res;
 	}
 	
-	// TODO : to move in a Manager
 	public static Behaviour createBehaviour(JSONObject json) {
 	    Expression expression = Expression.createExpressionFromJson(json.getJSONObject("evaluable"));
 	    JSONObject command = json.getJSONObject("command"); 

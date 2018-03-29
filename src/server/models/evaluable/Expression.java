@@ -164,23 +164,19 @@ public class Expression implements Evaluable {
         return new Expression(evaluables, operators);
     }
 
-    // TODO : To move in a Manager
-    // TODO : to fix (value is a Value, not an object)
 	private static Block createBlockFromJson(JSONObject json) {
 	    EnvironmentVariable variable = null;
 	    Object value = null;
 	    String operator = null;
 	    
-	    //TODO Change by getEnvVarById
-	    EnvironmentVariable variables = null;
 	    ArrayList<Sensor> sensors = new ArrayList<Sensor>();
 	    for (int i = 0; i < sensors.size(); i++) {
 			if(sensors.get(i).getEnvironmentVariables().getId() == json.getInt("variable")) {
-				variables = sensors.get(i).getEnvironmentVariables();
+				variable = sensors.get(i).getEnvironmentVariables();
 			}
 		}
-	    if(variables == null) {
-	    	variables = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getById(json.getInt("variable"));
+	    if(variable == null) {
+	        variable = AbstractDAOFactory.getFactory(SystemManager.db).getEnvironmentVariableDAO().getById(json.getInt("variable"));
 	    }
 		
 		if(variable != null) {

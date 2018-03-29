@@ -202,7 +202,6 @@ public class BehavioursCommandsContent extends Content {
     @Override
     public void handleMessage(Object message) {
         if(message instanceof String) {
-            System.out.println(message);
             try {
                 JSONObject json = new JSONObject((String)message);
                 if(json.getString("recipient").equals("behaviour")) {

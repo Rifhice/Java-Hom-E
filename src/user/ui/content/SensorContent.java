@@ -172,11 +172,12 @@ public class SensorContent extends Content {
 
 	@Override
 	public void handleMessage(Object message) {
-		System.out.println(message);
 		if(message instanceof String) {
 			JSONObject json = new JSONObject((String)message);
 			if(json.getString("recipient").equals("sensor")) {
+			    
 				switch (json.getString("action")) {
+				
 				case "getAll":
 					JSONArray array = json.getJSONArray("sensors");
 					for (int i = 0; i < array.length(); i++) {
@@ -203,6 +204,7 @@ public class SensorContent extends Content {
 					}
 					updateUI();
 					break;
+					
 				case "changeValue":
 					for (int i = 0; i < sensors.size(); i++) {
 						if(sensors.get(i).getId() == json.getInt("idSensor")) {
@@ -211,6 +213,7 @@ public class SensorContent extends Content {
 						updateUI();
 					}
 					break;
+					
 				default:
 					break;
 				}

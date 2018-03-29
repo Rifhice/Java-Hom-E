@@ -143,8 +143,6 @@ public class ControlContent extends Content {
 					        } catch (IOException e) {
 					            e.printStackTrace();
 					        }
-						    System.out.println(executable);
-							System.out.println(currentCommand.getActuator().getId());
 						}
 					}),j + 1,i + 1);
                 }
@@ -174,14 +172,13 @@ public class ControlContent extends Content {
 	
 	@Override
 	public void handleMessage(Object message) {
-        System.out.println("Received: " + message);
         if(message instanceof String) {
             try {
-                System.out.println(message.toString());
                 JSONObject json = new JSONObject((String)message);
                 if(json.getString("recipient").equals("command")) {
                     String action = json.getString("action");
                     switch (action) {
+                    
                     case "getAll":
                     	//Parses the commands
                     	JSONArray commands = json.getJSONArray("commands");
@@ -204,7 +201,7 @@ public class ControlContent extends Content {
 								}
 							}
 							catch(Exception e) {
-								System.out.println("Pas d'arguments pour cette commande !");
+								System.out.println("No argument for this command.");
 							}
                     		this.commands.add(new Command(currentCommand.getString("name"),currentCommand.getString("description"),currentCommand.getString("key"),arguments,new Actuator(currentCommand.getInt("actuator"))));
 						}
@@ -222,14 +219,13 @@ public class ControlContent extends Content {
 								}
                     		}
                     		catch(Exception e) {
-                    			System.out.println("Pas d'atomic action pour cette action complexe !");
+                    			System.out.println("No atomic action for this complex action.");
                     		}
                     		this.complexAction.add(new ComplexAction(currentComplexCommands.getString("name"),atomicActions));
 						}
-                    	System.out.println(this.commands);
-                    	System.out.println(this.complexAction);
                     	updateUI();
                         break;
+                        
                     case "create":
                         
                         break;

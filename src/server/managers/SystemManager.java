@@ -111,7 +111,6 @@ public class SystemManager extends Manager{
             commandManager.handleMessage(json,client);
             break;
         case "right":
-			System.out.println("Le SystemManager envoie au rightManager \n");
             rightManager.handleMessage(json,client);
             break;
 		case "sensor":

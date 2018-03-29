@@ -299,10 +299,8 @@ public class CategoriesContent extends Content {
 
     @Override
     public void handleMessage(Object message) {
-        System.out.println("Received: " + message);
         if(message instanceof String) {
             try {
-                System.out.println(message.toString());
                 JSONObject json = new JSONObject((String)message);
                 if(json.getString("recipient").equals("sensorCategories")) {
                     String action = json.getString("action");
@@ -345,7 +343,6 @@ public class CategoriesContent extends Content {
                             JSONObject current = arrArg.getJSONObject(j);
                             actuator.add(new ActuatorCategory(current.getInt("id"), current.getString("name"), current.getString("description")));
                         }
-                        System.out.println(actuator);
                         updateActuatorUI();
                         break;
                     case "create":

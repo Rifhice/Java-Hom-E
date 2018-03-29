@@ -483,13 +483,13 @@ public class BehavioursContent extends Content {
 	public void handleMessage(Object message) { 
 		if(message instanceof String) {
 			try {
-				System.out.println(message.toString());
 				JSONObject json = new JSONObject((String)message);
 				String recipient = json.getString("recipient");
 				String action = json.getString("action");
 				switch(recipient) {
 				case "sensor":
 					switch(action) {
+					
 					case "getEnvironmentVariables":
                         JSONArray arrArg = json.getJSONArray("environmentVariables");
                         for (int j = 0; j < arrArg.length(); j++){
@@ -518,8 +518,10 @@ public class BehavioursContent extends Content {
 						break;
 					}
 					break;
+					
 				case "command":
 	                    switch (action) {
+	                    
 	                    case "getAll":
 	                    	//Parses the commands
 	                    	JSONArray commands = json.getJSONArray("commands");
@@ -542,25 +544,30 @@ public class BehavioursContent extends Content {
 									}
 								}
 								catch(Exception e) {
-									System.out.println("Pas d'arguments pour cette commande !");
+									System.out.println("No argument for this command.");
 								}
 	                    		this.commands.add(new Command(currentCommand.getString("name"),currentCommand.getString("description"),currentCommand.getString("key"),arguments,new Actuator(currentCommand.getInt("actuator"))));
 							}
 	                    	updateCommandUI();
 	                        break;
+	                        
 	                    case "create":
 	                        
 	                        break;
+	                        
 	                    case "update":
 	                        
 	                        break;
+	                        
 	                    case "delete":
 	                       
 	                        break;
+	                        
 	                    default:
 	                        break;
 	                    }
 					break;
+					// end case "command"
 				default:
 					break;
 				}

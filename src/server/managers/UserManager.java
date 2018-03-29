@@ -192,7 +192,6 @@ public class UserManager extends Manager{
 				} catch (Exception e) {
 					tmp = loginAsGuest("");
 				}
-	        	System.out.println(tmp);
                 JSONObject token = new JSONObject();
                 token.put("type", tmp.getRole().getId());
                 token.put("pseudo", tmp.getPseudo());

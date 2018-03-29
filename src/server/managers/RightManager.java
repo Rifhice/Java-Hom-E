@@ -67,7 +67,6 @@ public class RightManager extends Manager {
     }
     
     public void getAll(JSONObject json, ConnectionToClient client) {
-    	System.out.println("Je récupère tous les droits \n");
     	ArrayList<Right> rights = null;
 		try {
 			rights = rightDAO.getAll();
@@ -101,7 +100,6 @@ public class RightManager extends Manager {
 	            getByUser(json,client);
 	            break;
 	        case "getAll":
-	        	System.out.println("Le rightManager va exécuter la fonction getAllFamilyMembers()\n");
 	        	getAll(json,client);
 	        	break;
         }

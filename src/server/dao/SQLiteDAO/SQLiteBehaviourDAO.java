@@ -71,7 +71,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             prepStat.setString(1, obj.getName());
             prepStat.setString(2, obj.getDescription());
             prepStat.setBoolean(3, obj.isActivated());
-            
+
             created = prepStat.executeUpdate();
 
             // Get the id generated for this object
@@ -89,131 +89,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         }
         return behaviour;
     }
-    
-    /**
-     * Create an expression from an object in DB. If success, returns the object with the id set 
-     * to the one in DB, else returns the object passed. 
-     * @param expression
-     * @return
-     * @throws DAOException
-     */
-    public Expression createExpression(Expression expression) throws DAOException {
-        Expression exp = expression;
-        
-        // Insert Expression
-        String sql = "INSERT INTO Expressions "
-                + "(operators) VALUES "
-                + "(?)"
-                + ";";
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sql);
-            JSONObject JSON = new JSONObject(expression.getOperators());
-            prepStat.setString(1, JSON.toString());       
-            
-            int created = prepStat.executeUpdate();
-            if(created > 0) {
-                exp.setId(SQLiteDAOTools.getLastId(connect));                
-            }
-        } catch (SQLException e) {
-            throw new DAOException("DAOException : BehaviourDAO createExpression(" + exp.getId() + ") :" + e.getMessage(), e); 
-        }
-        
-        // Exp correctly created ? 
-        if(exp.getId() != 0) {
-            
-            // Insert Evaluables (blocks only for now) 
-            // TODO : Evaluables can be expression too
-            exp.setEvaluables(createEvaluables(exp.getEvaluables()));
-            
-            // Insert isPartOf
-            sql = "INSERT INTO isPartOf "
-                    + "(fk_expression_id, fk_block_id) VALUES "
-                    + "(?,?) "
-                    + ";";
-            ArrayList<Evaluable> evs = exp.getEvaluables();
-            for (int i = 0; i < evs.size() ; i++ ) {
-                try {
-                    PreparedStatement prepStat = this.connect.prepareStatement(sql);
-                    prepStat.setInt(1, exp.getId());
-                    prepStat.setInt(2, ((Block) evs.get(i)).getId());
-                    int created = prepStat.executeUpdate();
-                    if(created > 0) {
-                        ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));  
-                        ((Block)evs.get(i)).setEnvironmentVariable(createEnvironmentVariable(((Block)evs.get(i)).getEnvironmentVariable());
-                    }                        
-                } catch (SQLException e) {
-                    throw new DAOException("DAOException : BehaviourDAO create IsPartOf(" + exp.getId() + ") insert into isPartOf:" + e.getMessage(), e); 
-                }
-            } 
-            
-        } 
-        
-        return exp;
-    }
-    
-    /**
-     * Create evaluables in DB from a list . If success, returns the list of evaluables with 
-     * the id correctly set else, id is not set. Currently, deals only with Blocks.
-     * TODO : insert recursive Expression too
-     * @param evaluables
-     * @return
-     * @throws DAOException
-     */
-    public ArrayList<Evaluable> createEvaluables(ArrayList<Evaluable> evaluables) throws DAOException {
-        ArrayList<Evaluable> evs = evaluables;
-        
-        String sql = "INSERT INTO Blocks "
-                + "(operators) VALUES "
-                + "(?)"
-                + ";";
-        
-        for (int i = 0; i < evs.size(); i++) {
-            try {
-                Block block = ((Block)evs.get(i));
-                PreparedStatement prepStat = this.connect.prepareStatement(sql);
-                prepStat.setString(1, block.getOperator());       
-                int created = prepStat.executeUpdate();
-                if(created > 0) {
-                    ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));                
-                }
-            } catch (SQLException e) {
-                throw new DAOException("DAOException : BehaviourDAO createEvaluables() :" + e.getMessage(), e); 
-            }
-        }
-       
-        
-        return evs;
-    }
-    
-    /**
-     * Create an EnvironmentVariable in DB from an object. 
-     * If success, returns the EnvironmentVariable with the id correctly set else, id is not set. 
-     * Insert into Values too. 
-     * @param environmentVariable
-     * @return
-     * @throws DAOException
-     * @see {@link #createValue(Value)}
-     */
-    public EnvironmentVariable createEnvironmentVariable(EnvironmentVariable environmentVariable) throws DAOException {
-        EnvironmentVariable ev = environmentVariable;
-        
-        return ev;
-    }
-    
-    /**
-     * Create a Value in DB from an object. 
-     * If success, returns the value with the id correctly set else, id is not set. 
-     * @param value
-     * @return
-     * @throws DAOException
-     */
-    public Value createValue(Value value) throws DAOException {
-        Value v = value;
-       
-        return v;
-    }
-   
-    
+
 
     @Override
     public int update(Behaviour obj) throws DAOException {
@@ -328,24 +204,164 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     behaviour.setName(rs.getString("name"));
                     behaviour.setDescription(rs.getString("description"));
                     behaviour.setActivated(rs.getBoolean("isActivated"));
-                                   
+
                     behaviour.setAtomicActions(getAtomicActions(behaviour));
                     behaviour.setExpression(getExpression(behaviour));
-                    
+
                     behaviours.add(behaviour);
                 } while(rs.next());
             }
-            
+
         } catch (SQLException e) {
             throw new DAOException("DAOException : BehaviourDAO getAll() :" + e.getMessage(), e);
         }
         return behaviours;
     }
 
-    
-    // ================================= //
-    // ======== HELPERS METHODS ======== //
-    // ================================= //
+
+    // ================================ //
+    // ======== HELPER METHODS ======== //
+    // ================================ //
+    /**
+     * Create an expression from an object in DB. If success, returns the object with the id set 
+     * to the one in DB, else returns the object passed. 
+     * @param expression
+     * @return
+     * @throws DAOException
+     */
+    public Expression createExpression(Expression expression) throws DAOException {
+        Expression exp = expression;
+
+        // Insert Expression
+        String sql = "INSERT INTO Expressions "
+                + "(operators) VALUES "
+                + "(?)"
+                + ";";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            JSONObject JSON = new JSONObject(expression.getOperators());
+            prepStat.setString(1, JSON.toString());       
+
+            int created = prepStat.executeUpdate();
+            if(created > 0) {
+                exp.setId(SQLiteDAOTools.getLastId(connect));                
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO createExpression(" + exp.getId() + ") :" + e.getMessage(), e); 
+        }
+
+        // Exp correctly created ? 
+        if(exp.getId() != 0) {
+
+            // Insert Evaluables (blocks only for now) 
+            // TODO : Evaluables can be expression too
+            exp.setEvaluables(createEvaluables(exp.getEvaluables()));
+
+            // Insert isPartOf
+            sql = "INSERT INTO isPartOf "
+                    + "(fk_expression_id, fk_block_id) VALUES "
+                    + "(?,?) "
+                    + ";";
+            ArrayList<Evaluable> evs = exp.getEvaluables();
+            for (int i = 0; i < evs.size() ; i++ ) {
+                try {
+                    PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                    prepStat.setInt(1, exp.getId());
+                    prepStat.setInt(2, ((Block) evs.get(i)).getId());
+                    int created = prepStat.executeUpdate();
+                    if(created > 0) {
+                        ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));  
+                        ((Block)evs.get(i)).setEnvironmentVariable(createEnvironmentVariable(((Block)evs.get(i)).getEnvironmentVariable()));
+                    }                        
+                } catch (SQLException e) {
+                    throw new DAOException("DAOException : BehaviourDAO create IsPartOf(" + exp.getId() + ") insert into isPartOf:" + e.getMessage(), e); 
+                }
+            } 
+
+        } 
+
+        return exp;
+    }
+
+    /**
+     * Create evaluables in DB from a list . If success, returns the list of evaluables with 
+     * the id correctly set else, id is not set. Currently, deals only with Blocks.
+     * TODO : insert recursive Expression too
+     * @param evaluables
+     * @return
+     * @throws DAOException
+     */
+    public ArrayList<Evaluable> createEvaluables(ArrayList<Evaluable> evaluables) throws DAOException {
+        ArrayList<Evaluable> evs = evaluables;
+
+        String sql = "INSERT INTO Blocks "
+                + "(operators) VALUES "
+                + "(?)"
+                + ";";
+
+        for (int i = 0; i < evs.size(); i++) {
+            try {
+                Block block = ((Block)evs.get(i));
+                PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                prepStat.setString(1, block.getOperator());       
+                int created = prepStat.executeUpdate();
+                if(created > 0) {
+                    ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));                
+                }
+            } catch (SQLException e) {
+                throw new DAOException("DAOException : BehaviourDAO createEvaluables() :" + e.getMessage(), e); 
+            }
+        }
+
+
+        return evs;
+    }
+
+    /**
+     * Create an EnvironmentVariable in DB from an object. 
+     * If success, returns the EnvironmentVariable with the id correctly set else, id is not set. 
+     * Insert into Values too. 
+     * @param environmentVariable
+     * @return
+     * @throws DAOException
+     * @see {@link #createValue(Value)}
+     */
+    public EnvironmentVariable createEnvironmentVariable(EnvironmentVariable environmentVariable) throws DAOException {
+        EnvironmentVariable ev = environmentVariable;
+        String sql = "INSERT INTO EnvironmentVariable "
+                + "(name, description, unit) VALUES "
+                + "(?,?,?)"
+                + ";";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setString(1, ev.getName());  
+            prepStat.setString(2, ev.getDescription());  
+            prepStat.setString(3, ev.getUnit());  
+            int created = prepStat.executeUpdate();
+            if(created > 0) {
+                ev.setId(SQLiteDAOTools.getLastId(connect));                
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : BehaviourDAO createEnvironmentVariable() :" + e.getMessage(), e); 
+        }
+
+        return ev;
+    }
+
+    /**
+     * Create a Value in DB from an object. 
+     * If success, returns the value with the id correctly set else, id is not set. 
+     * @param value
+     * @return
+     * @throws DAOException
+     */
+    public Value createValue(Value value) throws DAOException {
+        Value v = value;
+
+        return v;
+    }
+
     /**
      * Returns the expression associated to a Behaviour. If none, return null. 
      * By now, does not support the "recursive" expressions.
@@ -386,7 +402,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         }
         return exp;
     }
-    
+
     /**
      * Returns the list of Evaluables of an Expression. If none, returns an empty list.
      * Returns only blocks. TODO : return recursive Expression too.
@@ -481,7 +497,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 if(rs.getInt("DVpossible_values") != 0) {
                     value = new DiscreteValue();
                     ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
-                    
+
                     JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
                     JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
                     ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());
@@ -495,7 +511,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     ((ContinuousValue)value).setPrecision(rs.getDouble("CVprecision"));
                 }
                 value.setId(rs.getInt("id"));
-               
+
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : Behaviours getValue("+ ev.getId()+") :" + e.getMessage(), e);
@@ -511,7 +527,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      */
     public Value getValue(Block block) throws DAOException {
         Value value = null;
-        
+
         String sql = "SELECT V.id AS id, "
                 + "CV.value_min AS CVvalue_min, CV.value_max AS CVvalue_max, "
                 + "CV.current_value AS CVcurrent_value, CV.precision AS CVprecision, "
@@ -531,7 +547,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 if(rs.getString("DVpossible_values") != null) {
                     value = new DiscreteValue();
                     ((DiscreteValue)value).setCurrentValue(rs.getString("DVcurrent_value"));
-                    
+
                     JSONObject JSONpossibleValues = new JSONObject(rs.getString("DVpossible_values"));
                     JSONArray JSONarray = JSONpossibleValues.getJSONArray("possibleValues");
                     ArrayList<String> possibleValues = new ArrayList(JSONarray.toList());
@@ -545,7 +561,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     ((ContinuousValue)value).setPrecision(rs.getDouble("CVprecision"));
                 }
                 value.setId(rs.getInt("id"));
-               
+
             }
         } catch (SQLException e) {
             throw new DAOException("DAOException : Behaviours getValue("+ block.getId()+") :" + e.getMessage(), e);
@@ -553,7 +569,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
         return value;
     }
-    
+
     /**
      * Returns the list of atomic actions triggered by a behaviour. If none, returns an empty list.
      * @param behaviour
@@ -585,10 +601,10 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         } catch (SQLException e) {
             throw new DAOException("DAOException : BehaviourDAO getAtomicActions(" + behaviour.getId() + ") (owns):" + e.getMessage(), e);
         }
-        
+
         return atomicActions;
     }
-    
+
     /**
      * Returns the list of ComplexActions associated to a behaviour. If none, returns an empty list.
      * @param id
@@ -644,7 +660,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         return allComplexActions;
     }
 
-    
+
 
     // ============== //
     // ==== MAIN ==== //
@@ -654,16 +670,16 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
         Behaviour b = new Behaviour();
         b = test.getById(1);
-        
+
         Expression e = new Expression();
         e.setId(1);
-        
+
         Block bl = new Block();
         bl.setId(1);
-        
+
         EnvironmentVariable ev = new EnvironmentVariable();
         ev.setId(1);
-        
+
         for(Behaviour beh : test.getAll()){
             System.out.println("\n"+beh);
         }

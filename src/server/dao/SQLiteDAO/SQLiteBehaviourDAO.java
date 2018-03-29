@@ -357,14 +357,13 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                     int created = prepStat.executeUpdate();
                     if(created > 0) {
                         ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));  
-                        ((Block)evs.get(i)).setEnvironmentVariable(createEnvironmentVariable(((Block)evs.get(i)).getEnvironmentVariable()));
                         Value v = ((Block)evs.get(i)).getValue();
                         ((Block)evs.get(i)).setValue(v);
                     }                        
                 } catch (SQLException e) {
                     throw new DAOException("DAOException : BehaviourDAO create IsPartOf(" + exp.getId() + ") insert into isPartOf:" + e.getMessage(), e); 
                 }
-            } 
+            }         
 
         } 
 
@@ -374,7 +373,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     /**
      * Create evaluables in DB from a list . If success, returns the list of evaluables with 
      * the id correctly set else, id is not set. Currently, deals only with Blocks.
-     * TODO : insert recursive Expression too
+     * TODO : insert recursive Expressions too
      * @param evaluables
      * @return
      * @throws DAOException
@@ -383,15 +382,16 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         ArrayList<Evaluable> evs = evaluables;
 
         String sql = "INSERT INTO Blocks "
-                + "(operator) VALUES "
-                + "(?)"
+                + "(operator, fk_environmentVariable_id) VALUES "
+                + "(?, ?)"
                 + ";";
 
         for (int i = 0; i < evs.size(); i++) {
             try {
                 Block block = ((Block)evs.get(i));
                 PreparedStatement prepStat = this.connect.prepareStatement(sql);
-                prepStat.setString(1, block.getOperator());       
+                prepStat.setString(1, block.getOperator());  
+                prepStat.setInt(2, block.getEnvironmentVariable().getId());
                 int created = prepStat.executeUpdate();
                 if(created > 0) {
                     ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect)); 
@@ -401,7 +401,6 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 throw new DAOException("DAOException : BehaviourDAO createEvaluables() :" + e.getMessage(), e); 
             }
         }
-
 
         return evs;
     }
@@ -415,7 +414,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
      * @throws DAOException
      * @see {@link #createValue(Value)}
      */
-    public EnvironmentVariable createEnvironmentVariable(EnvironmentVariable environmentVariable) throws DAOException {
+    /*public EnvironmentVariable createEnvironmentVariable(EnvironmentVariable environmentVariable) throws DAOException {
         EnvironmentVariable ev = environmentVariable;
         String sql = "INSERT INTO EnvironmentVariables "
                 + "(name, description, unit) VALUES "
@@ -439,6 +438,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
         return ev;
     }
+    */
 
     /**
      * Create a Value in DB from an object. 
@@ -572,10 +572,14 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
             if(rs.next()) {
                 exp = new Expression();
                 exp.setId(rs.getInt("id"));
-                JSONObject JSON = new JSONObject(rs.getString("operators"));
-                JSONArray array = JSON.getJSONArray("operators");
-                ArrayList<String> arrayl = new ArrayList(array.toList());
-                exp.setOperators(arrayl);
+                if(rs.getString("operators") != null) {
+                    JSONObject JSON = new JSONObject(rs.getString("operators"));
+                    JSONArray array = JSON.getJSONArray("operators");
+                    ArrayList<String> arrayl = new ArrayList(array.toList());
+                    exp.setOperators(arrayl);
+                } else {
+                    exp.setOperators(new ArrayList<String>());
+                }
 
                 // Get Evaluables (blocks only for now)
                 // TODO : get Expressions recursively 

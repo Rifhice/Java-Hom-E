@@ -79,7 +79,7 @@ public class AccountContent extends Content {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				createFamilyMember(newPseudoText.getText(), newPasswordText.getText());
 				
 			}
 			
@@ -152,6 +152,21 @@ public class AccountContent extends Content {
 		return content;
 	}
 	
+	public void createFamilyMember(String userName, String password) {
+		JSONObject newFamilyMember = new JSONObject();
+		newFamilyMember.put("recipient", "user");
+		newFamilyMember.put("action", "create");
+		newFamilyMember.put("pseudo", userName );
+		newFamilyMember.put("password", password);
+		System.out.println("\n Message envoye au serveur :" + newFamilyMember.toString());
+		try {
+			ClientFX.client.sendToServer(newFamilyMember.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public void getAllFamilyMembers(JSONObject json) {
 		this.familyMembers = new ArrayList<User>();
 		JSONArray arrArg = json.getJSONArray("users");
@@ -165,7 +180,7 @@ public class AccountContent extends Content {
 						@Override
 						public void handle(ActionEvent event) {
 							int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
-							updateViewRight(current.getInt("id"));
+							updateViewRight(pressedButton);//current.getInt("id")
 							
 						}}));
 		}
@@ -193,14 +208,17 @@ public class AccountContent extends Content {
 		System.out.println(json.toString());
 		this.allowedRights = new ArrayList<Right>();
 		JSONArray allRights = json.getJSONArray("rights");
-		this.rightCells.clear();
+		this.rightCells = new ArrayList<RightCell>();
 		for (int j = 0; j < allRights.length(); j++){
 			JSONObject current = allRights.getJSONObject(j);
 			System.out.println(current.getString("denomination"));
 			Right right = new Right(current.getInt("id"), current.getString("denomination"), current.getString("description"));
 			this.allowedRights.add(right);
-			if(this.notAllowedRights.contains(right)) {
-				this.notAllowedRights.remove(right);
+			for (int i = 0; i < notAllowedRights.size(); i++){
+				if (notAllowedRights.get(i).getId() ==  current.getInt("id")) {
+					notAllowedRights.remove(i);
+					System.out.println("droit � retirer des non autoris�s");
+				}
 			}
 			this.rightCells.add(new RightCell(right, allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
 				@Override
@@ -208,7 +226,17 @@ public class AccountContent extends Content {
 					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
 				}}));
 		}
-		System.out.println("Je vais à présent update la vue");
+		System.out.println("allowedRights:" + allowedRights);
+		System.out.println("not allowed Rights: " +  notAllowedRights);
+		for (int j = 0; j < notAllowedRights.size(); j++){
+			System.out.println("remplissage not allowed rights");
+			this.rightCells.add(new RightCell(this.notAllowedRights.get(j), notAllowedRightsList.getPrefWidth(), notAllowedRightsList.getPrefHeight()/NB_OF_RIGHTS_DISPLAYED,new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+				}}));
+		}
+		System.out.println("on va maintenant update l'interface");
 		updateRightsUI();
 	}
 	
@@ -229,6 +257,11 @@ public class AccountContent extends Content {
 					
 					case "getAll":
 						getAllFamilyMembers(json);
+						break;
+					case "create":
+						int id;
+						id = json.getInt("id");
+						updateViewRight(id);
 						break;
 					}
 					break;
@@ -267,7 +300,8 @@ public class AccountContent extends Content {
 									@Override
 									public void handle(ActionEvent event) {
 										int id = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-										int pressedButton = id;
+										System.out.println("User cliqu� " + id);
+										updateView("right");
 										updateViewRight(id);
 									}
 								} 
@@ -284,9 +318,7 @@ public class AccountContent extends Content {
 		System.out.println("update l'interface");
 		Platform.runLater(new Runnable() {
             @Override public void run() {
-            	System.out.println("1");
 				if(notAllowedRights != null) {
-						System.out.println("2");
 		                	notAllowedRightsList.getChildren().clear();
 		         			for (int i = 0; i < notAllowedRights.size(); i++) {
 		         				
@@ -305,9 +337,7 @@ public class AccountContent extends Content {
 		             };
 				}
 				if(allowedRights != null) {
-						System.out.println("3");
 			           	allowedRightsList.getChildren().clear();
-			           	System.out.println(" Avant de compléter la liste allowedRights : ");
 			    			for (int i = 0; i < allowedRights.size(); i++) {
 			    				allowedRightsList.add(new RightCell(allowedRights.get(i) ,allowedRightsList.getPrefWidth(), allowedRightsList.getPrefHeight() / NB_OF_RIGHTS_DISPLAYED, 
 			    						new EventHandler<ActionEvent>() {

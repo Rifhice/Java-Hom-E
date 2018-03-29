@@ -116,6 +116,27 @@ public class UserManager extends Manager{
 		}
     }
     
+    public void createFamilyMember(JSONObject json, ConnectionToClient client) {
+    	
+    	Role role= roleDAO.getById(2);
+    	User user = new User( json.getString("pseudo"), json.getString("password"), role);
+    	User newUser = null;
+    	try {
+			newUser = userDAO.create(user);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+    	JSONObject result = new JSONObject();
+    	result.put("recipient", "user");
+		result.put("action", "create");
+		result.put("id", newUser.getId());
+		try {
+			client.sendToClient(result.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
     /**
      * Possible values for key "action":
      * <ul>
@@ -189,6 +210,10 @@ public class UserManager extends Manager{
 	        	break;
 	        case "getAll":  
 	        	getAllFamilyMembers(json,client);
+	        	break;
+	        	
+	        case "createFamilyMember":
+	        	createFamilyMember(json, client);
 	        	break;
         }
     }

@@ -61,7 +61,9 @@ public class User {
         this.rights = rights;
     }
 
-    // ================= //
+
+
+	// ================= //
     // ==== METHODS ==== //
     // ================= //
     public int getId() {

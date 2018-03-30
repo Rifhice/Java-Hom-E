@@ -77,7 +77,6 @@ public class ContinuousValue extends Value {
     	result.put("valueMax", valueMax);
     	result.put("precision", precision);
     	result.put("currentValue", currentValue);
-    	System.out.println(result);
     	return result;
     }
 

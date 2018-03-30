@@ -48,7 +48,7 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
         }
         
         // Adding his behaviours
-        String sqlInsertRights = "INSERT INTO Composes "
+        String sqlInsertBehaviours = "INSERT INTO Composes "
                 + "(fk_ambience_id, fk_behaviour_id) VALUES "
                 + "(?, ?);";
 
@@ -56,7 +56,7 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
         if(obj.getBehaviours() != null) {
             for (Behaviour behaviour : obj.getBehaviours()) {
                 try {
-                    PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertRights);
+                    PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertBehaviours);
                     prepStat.setInt(1, obj.getId());
                     prepStat.setInt(2, behaviour.getId());
                     behaviourInserted = prepStat.executeUpdate();
@@ -76,8 +76,46 @@ public class SQLiteAmbienceDAO extends AmbienceDAO {
 
     @Override
     public int update(Ambience obj) throws DAOException {
-        // TODO Auto-generated method stub
-        return 0;
+    	int update = 0;
+    	int idAmbience = obj.getId();
+        String sql = "UPDATE Ambiences SET "
+        		+ "name = ? "
+        		+ "WHERE id = ?;";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, idAmbience);
+            update = prepStat.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : AmbienceDAO update(" +idAmbience + ") :" + e.getMessage(), e);
+        }
+        sql = "DELETE FROM Composes WHERE fk_ambience_id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, obj.getId());
+            update = prepStat.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : Behaviours deleted from AmbienceDAO(" + idAmbience + ") :" + e.getMessage(), e);
+        }
+        // Adding his behaviours
+        String sqlInsertBehaviours = "INSERT INTO Composes "
+                + "(fk_ambience_id, fk_behaviour_id) VALUES "
+                + "(?, ?);";
+
+        int behaviourInserted = 0;
+        if(obj.getBehaviours() != null) {
+            for (Behaviour behaviour : obj.getBehaviours()) {
+                try {
+                    PreparedStatement prepStat = this.connect.prepareStatement(sqlInsertBehaviours);
+                    prepStat.setInt(1, obj.getId());
+                    prepStat.setInt(2, behaviour.getId());
+                    behaviourInserted = prepStat.executeUpdate();
+                } catch (SQLException e) {
+                    throw new DAOException("DAOException : Behaviours("+behaviour.getId()+") added to Ambience(" + idAmbience + ") :" + e.getMessage(), e); 
+                }   
+            } 
+        }
+        return update;
+        
     }
 
     @Override

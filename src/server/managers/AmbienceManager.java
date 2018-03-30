@@ -62,7 +62,6 @@ public class AmbienceManager extends Manager{
 			try {
 				for(int j = 0; j < behaviours.size(); j++) {
 					Behaviour behaviour = behaviours.get(j);
-					System.out.println(behaviour.getId());
 					JSONObject behaviourJSON = new JSONObject();
 					behaviourJSON.put("id", behaviour.getId());
 					ambience.append("behaviours", behaviourJSON);
@@ -92,11 +91,22 @@ public class AmbienceManager extends Manager{
 	 * @param client
 	 * @see AmbienceDAO#create(Ambience)
 	 */
-	public void createAmbience(Ambience ambience, ConnectionToClient client) {
-		JSONObject result = new JSONObject();
-		result.put("recipient", "ambience");
-		result.put("action", "create");
+	public void createAmbience(JSONObject json, ConnectionToClient client) {
+    	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
+    	Ambience ambience = new Ambience();
 		try {
+    		JSONArray behavioursJSON = json.getJSONArray("behaviours");
+        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
+        	for(int i = 0; i < behavioursJSON.length(); i++) {
+        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
+        	}
+        	ambience.setName(json.getString("name"));
+        	ambience.setBehaviours(behaviours);
+        	
+        	
+    		JSONObject result = new JSONObject();
+    		result.put("recipient", "ambience");
+    		result.put("action", "create");
 			if(ambienceDAO.create(ambience) == null) {
 				result.put("result", "failure");
 				client.sendToClient(result.toString());
@@ -105,10 +115,11 @@ public class AmbienceManager extends Manager{
 				result.put("ambience", ambience.toJSON());
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Ambience #" + ambience.getId() + " created");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
 		
 	}
 	
@@ -124,6 +135,36 @@ public class AmbienceManager extends Manager{
 
 	}
 
+	private void updateAmbience(JSONObject json, ConnectionToClient client) {
+    	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
+    	Ambience ambience = new Ambience();
+		try {
+    		JSONArray behavioursJSON = json.getJSONArray("behaviours");
+        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
+        	for(int i = 0; i < behavioursJSON.length(); i++) {
+        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
+        	}
+        	ambience.setName(json.getString("name"));
+        	ambience.setId(json.getInt("id"));
+        	ambience.setBehaviours(behaviours);
+        	
+    		JSONObject result = new JSONObject();
+    		result.put("recipient", "ambience");
+    		result.put("action", "update");
+			if(ambienceDAO.update(ambience) == 0) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("ambience", ambience.toJSON());
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+	}
+
 	/**
      * Possible values for key "action":
      * <ul>
@@ -137,31 +178,19 @@ public class AmbienceManager extends Manager{
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		// TODO Auto-generated method stub
 		String action = json.getString("action");
+    	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
         switch(action) {
 	        case "getAll":
 	        	getAllAmbiences(json,client);
 	            break;
 	        case "create":
-	        	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
-	        	try {
-	        		JSONArray behavioursJSON = json.getJSONArray("behaviours");
-		        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
-		        	for(int i = 0; i < behavioursJSON.length(); i++) {
-		        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
-		        	}
-		        	Ambience ambience = new Ambience();
-		        	ambience.setName(json.getString("name"));
-		        	ambience.setBehaviours(behaviours);
-		        	createAmbience(ambience ,client);
-	        	} catch (Exception e) {
-	        		e.printStackTrace();
-	        	}
-	        	
+	        	createAmbience(json, client);
 	            break;
 	        case "delete":
 	        	deleteAmbience(json,client);
 	            break;
 	        case "update":
+	        	updateAmbience(json, client);
 	            break;
         }
 	}

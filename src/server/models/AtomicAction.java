@@ -72,7 +72,6 @@ public class AtomicAction {
     }
     
     public void execute() {
-    	System.out.println("EXECUTE ATOMIC");
         actuator.execute(executable);
     }
     

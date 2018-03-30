@@ -3,6 +3,8 @@ package user.models;
 
 import org.json.JSONObject;
 
+import user.models.environmentVariable.*;
+
 
 /**
  * A sensor is a connected object in charge of sending useful changes about environment variables to the server.

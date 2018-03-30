@@ -27,8 +27,8 @@ public class Expression implements Evaluable {
     // ==== ATTRIBUTES ==== //
     // ==================== //
     private int id;
-    private ArrayList<Evaluable> evaluables;
-    private ArrayList<String> operators;
+    private ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
+    private ArrayList<String> operators = new ArrayList<String>();
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -100,7 +100,7 @@ public class Expression implements Evaluable {
         String res = "EXP #"+id;
         res += "(";
         int operatorCpt = 0;
-        if(evaluables != null) {
+        if(evaluables.size() > 0) {
         	for (int i = 0; i < evaluables.size(); i++) {
                 res += "\n[" + evaluables.get(i).toString() + "]\n";
                 if(operatorCpt < operators.size()) {
@@ -139,7 +139,6 @@ public class Expression implements Evaluable {
     }
 
     public static Expression createExpressionFromJson(JSONObject json) {
-    	System.out.println(json.toString());
         ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
         ArrayList<String> operators = new ArrayList<String>();
         if(json.getString("type").equals("block")) {

@@ -163,7 +163,6 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
     @Override
     public Actuator create(Actuator obj) throws DAOException {
         Actuator actuator = obj;
-        System.out.println("\n\nLe Manager rentre dans la fonction \n\n");
         
         String sql = "INSERT INTO Actuators "
                 + "(name, description, fk_actuatorCategory_id) VALUES "
@@ -181,16 +180,13 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 prepStat.setInt(3, obj.getActuatorCategory().getId());
             }
             created = prepStat.executeUpdate();
-            System.out.println("\n\nIci != 0 si l'actuator a bien été créé:" + created);
             // Get the id generated for this object
             if(created > 0) {
             	actuator.setId(SQLiteDAOTools.getLastId(connect));
-            	System.out.println("\n\nIci :" + actuator.getId());
             	if(obj.getCommands() != null) {
 	                int commandCreated = 0;
 	                for (Command command : obj.getCommands()) {
 	                	commandCreated = createCommand(actuator, command);
-	                	System.out.println(commandCreated);
 	                }
 	                if (commandCreated == 0) {
 	                	return null;

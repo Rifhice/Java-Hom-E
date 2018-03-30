@@ -147,9 +147,6 @@ public class Behaviour implements Observer {
     // ==================================
     
     public void update(Observable arg0, Object arg1) {
-    	System.out.println("UPDATED : " + expression.evaluate());
-    	System.out.println("EXPRESSION : " +expression);
-    	System.out.println("ACTIONS : " +atomicActions);
         if(isActivated && expression.evaluate()) {
             System.out.println("It works !");
             
@@ -197,14 +194,10 @@ public class Behaviour implements Observer {
 	    }
 	    AtomicAction action = new AtomicAction(command.getString("action"),actuator);
 	    Behaviour behaviour = new Behaviour(json.getString("name"),expression);
-	    System.out.println(behaviour + " " + action);
 	    behaviour.addAtomicAction(action); 
-	    System.out.println("Les variables de l'expression : " + expression.getVariables());
 	    for (int i = 0; i < expression.getVariables().size(); i++) {
 			expression.getVariables().get(i).addObserver(behaviour);
-		    System.out.println("Nombre d'observer : " + expression.getVariables().get(0).countObservers());
 		}
-	    System.out.println("Nombre d'observer : " + expression.getVariables().get(0).countObservers());
 		return behaviour;
 	}
 

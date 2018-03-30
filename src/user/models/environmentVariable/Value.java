@@ -56,5 +56,13 @@ public abstract class Value {
         String res = "VALUE #" + getId();
         return res;
     }
+    
+    public abstract boolean isEqual(Object value);
+    public abstract boolean isNotEqual(Object value);
+    public abstract boolean isSuperior(Object value);
+    public abstract boolean isInferior(Object value);
+    public abstract boolean isSuperiorOrEqual(Object value);
+    public abstract boolean isInferiorOrEqual(Object value);
+    public abstract Object getCurrentValue();
 }
 

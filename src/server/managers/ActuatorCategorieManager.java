@@ -88,6 +88,7 @@ public class ActuatorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Actuator category #" + obj.getId() + " created");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,7 +101,6 @@ public class ActuatorCategorieManager extends Manager{
 	 * @param client Connection to the client
 	 */
 	public void deleteActuatorCategorie(int id,ConnectionToClient client) {
-		System.out.println("delete");
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
 		result.put("action", "delete");
@@ -112,6 +112,7 @@ public class ActuatorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Actuator category #" + id + " deleted");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,6 +136,7 @@ public class ActuatorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Actuator category #" + obj.getId() + " updated");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

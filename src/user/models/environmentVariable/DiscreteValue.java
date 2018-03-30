@@ -16,6 +16,7 @@ public class DiscreteValue extends Value {
     // ==== ATTRIBUTES ==== //
     // ==================== //
     private ArrayList<String> possibleValues;
+    private String currentValue;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -27,6 +28,12 @@ public class DiscreteValue extends Value {
     public DiscreteValue(int id, ArrayList<String> values) {
         super(id);
         this.possibleValues = values;
+    }
+    
+    public DiscreteValue(ArrayList<String> possibleValues, String currentValue) {
+        super();
+        this.currentValue = currentValue;
+        this.possibleValues = possibleValues;
     }
 
     // ================= //
@@ -40,6 +47,14 @@ public class DiscreteValue extends Value {
         this.possibleValues = values;
     }
     
+    public String getCurrentValue() {
+        return currentValue;
+    }
+
+    public void setCurrentValue(String currentValue) {
+        this.currentValue = currentValue;
+    }
+
     // ==================================
 
     public JSONObject toJson() {
@@ -59,6 +74,42 @@ public class DiscreteValue extends Value {
             }
         }
         return res;
+    }
+
+    @Override
+    public boolean isEqual(Object value) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isNotEqual(Object value) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isSuperior(Object value) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isInferior(Object value) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isSuperiorOrEqual(Object value) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isInferiorOrEqual(Object value) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

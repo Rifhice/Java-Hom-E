@@ -144,7 +144,6 @@ public class SensorManager extends Manager{
 	
 	public void changeEnvironmentVariableValue(JSONObject json,ConnectionToClient client) {
 		Sensor sensor = getSensorById(json.getInt("id"));
-		System.out.println(sensor.getEnvironmentVariables().countObservers());
 		if(sensor != null) {
 			sensor.changeValue(json.getString("value"));
 			sensor.getEnvironmentVariables().myNotify();
@@ -206,7 +205,6 @@ public class SensorManager extends Manager{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("RESULT: "+result.toString());
 	}
 
 	public void getAll(JSONObject json,ConnectionToClient client) {
@@ -223,7 +221,6 @@ public class SensorManager extends Manager{
 				e.printStackTrace();
 			}
 		}
-		System.out.println(result.toString());
         try {
             client.sendToClient(result.toString());
         } catch (IOException e) {

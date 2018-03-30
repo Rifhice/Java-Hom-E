@@ -52,7 +52,6 @@ public class DiscreteValue extends Value {
     
     public void setCurrentValue(String value) {
         currentValue = value;
-        System.out.println("\n\nDISCRETE Nombre observer : " + countObservers());
     }
     
     // ==================================

@@ -110,7 +110,6 @@ public class Actuator extends ExternalActor{
     }
     
     public void execute(String executable) {
-    	System.out.println("EXECUTE ACTUATOR");
     	JSONObject json = new JSONObject();
     	json.put("verb","command");
     	json.put("command", executable);

@@ -62,7 +62,6 @@ public class AmbienceManager extends Manager{
 			try {
 				for(int j = 0; j < behaviours.size(); j++) {
 					Behaviour behaviour = behaviours.get(j);
-					System.out.println(behaviour.getId());
 					JSONObject behaviourJSON = new JSONObject();
 					behaviourJSON.put("id", behaviour.getId());
 					ambience.append("behaviours", behaviourJSON);

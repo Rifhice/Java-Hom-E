@@ -100,7 +100,6 @@ public class ActuatorCategorieManager extends Manager{
 	 * @param client Connection to the client
 	 */
 	public void deleteActuatorCategorie(int id,ConnectionToClient client) {
-		System.out.println("delete");
 		JSONObject result = new JSONObject();
 		result.put("recipient", "actuatorCategories");
 		result.put("action", "delete");

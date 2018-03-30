@@ -275,7 +275,6 @@ public class SQLiteSensorDAO extends SensorDAO{
         } catch (SQLException e) {
             throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);
         }
-        System.out.println(sensors);
         return sensors;
     }
     

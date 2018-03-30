@@ -139,7 +139,6 @@ public class Expression implements Evaluable {
     }
 
     public static Expression createExpressionFromJson(JSONObject json) {
-    	System.out.println(json.toString());
         ArrayList<Evaluable> evaluables = new ArrayList<Evaluable>();
         ArrayList<String> operators = new ArrayList<String>();
         if(json.getString("type").equals("block")) {

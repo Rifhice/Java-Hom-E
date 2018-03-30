@@ -53,7 +53,6 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-	  System.out.println(msg);
 	  JSONObject jmsg = new JSONObject(msg.toString());
 	  System.out.println(jmsg);
 	  manager.handleMessage(jmsg,client);

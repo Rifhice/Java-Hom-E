@@ -593,6 +593,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 exp = new Expression();
                 exp.setId(rs.getInt("id"));
                 if(rs.getString("operators") != null) {
+                	
                     JSONObject JSON = new JSONObject(rs.getString("operators"));
                     JSONArray array = JSON.getJSONArray("operators");
                     ArrayList<String> arrayl = new ArrayList(array.toList());

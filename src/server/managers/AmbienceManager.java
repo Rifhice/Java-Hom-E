@@ -124,6 +124,39 @@ public class AmbienceManager extends Manager{
 
 	}
 
+	private void updateAmbience(JSONObject json, ConnectionToClient client) {
+    	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
+    	Ambience ambience = new Ambience();
+		try {
+    		JSONArray behavioursJSON = json.getJSONArray("behaviours");
+        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
+        	for(int i = 0; i < behavioursJSON.length(); i++) {
+        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
+        	}
+        	ambience.setName(json.getString("name"));
+        	ambience.setId(json.getInt("id"));
+        	ambience.setBehaviours(behaviours);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+		JSONObject result = new JSONObject();
+		result.put("recipient", "ambience");
+		result.put("action", "update");
+		try {
+			if(ambienceDAO.update(ambience) == 0) {
+				result.put("result", "failure");
+				client.sendToClient(result.toString());
+			}
+			else {
+				result.put("ambience", ambience.toJSON());
+				result.put("result", "success");
+				SystemManager.sendToAllClient(result.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
      * Possible values for key "action":
      * <ul>
@@ -137,12 +170,12 @@ public class AmbienceManager extends Manager{
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
 		// TODO Auto-generated method stub
 		String action = json.getString("action");
+    	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
         switch(action) {
 	        case "getAll":
 	        	getAllAmbiences(json,client);
 	            break;
 	        case "create":
-	        	BehaviourDAO behaviourDAO = AbstractDAOFactory.getFactory(SystemManager.db).getBehaviourDAO();
 	        	try {
 	        		JSONArray behavioursJSON = json.getJSONArray("behaviours");
 		        	List<Behaviour> behaviours = new ArrayList<Behaviour>();
@@ -150,6 +183,7 @@ public class AmbienceManager extends Manager{
 		        		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
 		        	}
 		        	Ambience ambience = new Ambience();
+		        	ambience.setId(json.getInt("id"));
 		        	ambience.setName(json.getString("name"));
 		        	ambience.setBehaviours(behaviours);
 		        	createAmbience(ambience ,client);
@@ -162,6 +196,7 @@ public class AmbienceManager extends Manager{
 	        	deleteAmbience(json,client);
 	            break;
 	        case "update":
+	        	updateAmbience(json, client);
 	            break;
         }
 	}

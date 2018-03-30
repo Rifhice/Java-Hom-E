@@ -95,8 +95,20 @@ public class AmbiencesContent extends Content {
 
             @Override
             public void handle(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+            	String name = modifyAmbienceLabel.getText();
+            	JSONObject json = new JSONObject();
+                json.put("recipient", "ambience");
+                json.put("action", "update");
+                json.put("id", currentAmbienceSelected);
+                json.put("name", name);
+                for (int i = 0; i < selectedBehaviours.size(); i++) {
+                    json.append("behaviours", selectedBehaviours.get(i).getId());
+                }
+                try {
+                    ClientFX.client.sendToServer(json.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }	
             }
 
         });
@@ -207,6 +219,7 @@ public class AmbiencesContent extends Content {
 
     @Override
     public void handleMessage(Object message) {
+    	System.out.println(message.toString());
         if(message instanceof String) {
             try {
                 JSONObject json = new JSONObject((String)message);
@@ -280,6 +293,18 @@ public class AmbiencesContent extends Content {
                         }
                         updateAmbienceUI();
                         break;
+                    case "update":
+                    	if(json.getString("result").equals("success")) {
+                    		JSONObject ambienceJSON = json.getJSONObject("ambience");
+                    		Ambience ambience = this.getAmbienceById(ambienceJSON.getInt("id"));
+                    		ambience.getBehaviours().clear();
+                            JSONArray arrBehav = ambienceJSON.getJSONArray("behaviours");
+                            for(int k = 0; k < arrBehav.length(); k++) {
+                                ambience.getBehaviours().add(arrBehav.getJSONObject(k).getInt("id"));
+                            }
+                    		
+                    	}
+                    	break;
                     }
                 }
             } catch(Exception e) {
@@ -288,7 +313,19 @@ public class AmbiencesContent extends Content {
         }
     }
 
-    private BehaviourCell getBehaviourCell(int id) {
+    private Ambience getAmbienceById(int id) {
+        Ambience ambience = null;
+        int i = 0;
+        while(i < ambiences.size() && ambience == null) {
+            if(ambiences.get(i).getId() == id) {
+                ambience = ambiences.get(i);
+            }
+            i++;
+        }
+        return ambience;
+	}
+
+	private BehaviourCell getBehaviourCell(int id) {
         int i = 0;
         BehaviourCell cell = null;
         while(i < behaviourCells.size() && cell == null) {

@@ -6,6 +6,8 @@ import java.util.Observable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import user.models.Sensor;
+
 /**
  * An environment variable is an interesting value  for the server, related to the environment. 
  * It allows the server to send the right action to the actuators.
@@ -23,6 +25,7 @@ public class EnvironmentVariable {
 	
 	// Attributes from other tables
 	private Value value;
+	private Sensor sensor;
 
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -93,6 +96,14 @@ public class EnvironmentVariable {
         this.value = value;
     }
     
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
     // =================================================
     public String toString() {
         return id + ": " + name;

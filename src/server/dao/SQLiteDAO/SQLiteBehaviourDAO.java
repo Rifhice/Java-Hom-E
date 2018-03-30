@@ -229,7 +229,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     }
 
     /**
-     * Returns the list of all the behaviours. If none, returns.
+     * Returns the list of all the behaviours. If none, returns an empty list.
      * Included with the behaviour : 
      * <ul>
      * <li>AtomicActions</li>
@@ -275,7 +275,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     // ======== HELPER METHODS ======== //
     // ================================ //
     /**
-     * Create AtomicActions in DB from a list. If success, returns the list with the id of eache
+     * Create AtomicActions in DB from a list. If success, returns the list with the id of each
      * atomic action set to the one in DB, else returns the list passed.  
      * @param atomicActions
      * @return
@@ -427,7 +427,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
     /**
      * Create an EnvironmentVariable in DB from an object. 
-     * If success, returns the EnvironmentVariable with the id correctly set else, id is not set. 
+     * If success, returns the EnvironmentVariable with the id correctly set, else id is not set. 
      * Insert into Values too. 
      * @param environmentVariable
      * @return
@@ -462,7 +462,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
 
     /**
      * Create a Value in DB from an object. 
-     * If success, returns the value with the id correctly set else, id is not set. 
+     * If success, returns the value with the id correctly set, else id is not set. 
      * @param value
      * @return
      * @throws DAOException

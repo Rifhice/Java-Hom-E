@@ -76,7 +76,7 @@ public class Expression implements Evaluable {
         for (int i = 0; i < evaluables.size(); i++) {
 			result.append("evaluables",evaluables.get(i).toJson());
 		}
-		result.append("operators", operator);
+		result.append("operator", operator);
         return result;
     }
     

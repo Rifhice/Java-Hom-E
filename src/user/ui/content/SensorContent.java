@@ -37,13 +37,14 @@ public class SensorContent extends Content {
     
     private MyRectangle sensorBounds = new MyRectangle(0f, 0.1f, 1f, 0.05f); 
 	private MyRectangle nomBounds = new MyRectangle(0f, 0.15f, 1f, 0.05f); 
-	private MyRectangle descriptionBounds = new MyRectangle(0.1f, 0.2f, 0.375f, 0.05f); 
-	private MyRectangle variableDescriptionBounds = new MyRectangle(0.1f, 0.25f, 0.5f, 0.2f); 
+	private MyRectangle descriptionBounds = new MyRectangle(0.02f, 0.2f, 0.375f, 0.05f); 
+	private MyRectangle variableDescriptionBounds = new MyRectangle(0.02f, 0.22f, 0.9f, 0.2f); 
 	
 	private MyRectangle variableBounds = new MyRectangle(0f, 0.1f, 1f, 0.05f);
 	private MyRectangle nomVariableBounds = new MyRectangle(0f, 0.15f, 1f, 0.05f); 
-	private MyRectangle descriptionVariableBounds = new MyRectangle(0.1f, 0.2f, 0.375f, 0.05f); 
-	private MyRectangle variableDescriptionVariableBounds = new MyRectangle(0.1f, 0.25f, 0.5f, 0.2f); 
+	private MyRectangle descriptionVariableBounds = new MyRectangle(0.02f, 0.2f, 0.375f, 0.05f); 
+	private MyRectangle variableDescriptionVariableBounds = new MyRectangle(0.02f, 0.22f, 0.9f, 0.2f); 
+	
 	private MyRectangle currentValueBounds = new MyRectangle(0.1f, 0.35f, 0.5f, 0.2f);
 	private MyRectangle currentValueVariableBounds = new MyRectangle(0.1f, 0.4f, 0.5f, 0.2f);
 	
@@ -71,11 +72,11 @@ public class SensorContent extends Content {
         
         
 	    MyPane selectedSensorPane = new MyPane(selectedSensorBounds.computeBounds(width, height));
-	    sensorLabel = new MyLabel("Nom",sensorBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),1.5f);
+	    sensorLabel = new MyLabel("Name",sensorBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),1.5f);
 	    sensorLabel.centerX(selectedSensorPane.getPrefWidth());
 	    sensorLabel.setAlignment(Pos.CENTER);
 	    
-	    nomLabel = new MyLabel("nom",nomBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));
+	    nomLabel = new MyLabel("Name",nomBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));
 	    nomLabel.centerX(selectedSensorPane.getPrefWidth());
 	    nomLabel.setAlignment(Pos.CENTER);
 	    description = new MyLabel("Description",descriptionBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));

@@ -27,7 +27,7 @@ import user.models.environmentVariable.Value;
 import user.models.evaluable.Block;
 import user.models.evaluable.Evaluable;
 import user.models.evaluable.Expression;
-import user.tools.ARITHMETICOPERATOR;
+import user.tools.ArithmeticOperator;
 import user.tools.BOOLEANOPERATOR;
 import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;
@@ -120,12 +120,6 @@ public class BehavioursContent extends Content {
 	private int nbBlocks = 0, nbExpressions = 0;
 	
 	private BehavioursContent() {		
-		int nbArithOperator = ARITHMETICOPERATOR.values().length;
-		ArrayList<String> arithOperators = new ArrayList<String>();
-		for(int i = 0; i < nbArithOperator; i++) {
-			arithOperators.add(ARITHMETICOPERATOR.values()[i].toString());
-		}
-		
 		int nbBoolOperator = BOOLEANOPERATOR.values().length;
 		ArrayList<String> boolOperators = new ArrayList<String>();
 		for(int i = 0; i < nbBoolOperator; i++) {
@@ -162,6 +156,8 @@ public class BehavioursContent extends Content {
 					valueSlider.setMax(cv.getValueMax());
 					valueSlider.setBlockIncrement(cv.getPrecision());
 					valueSlider.setValue((valueSlider.getMin() + valueSlider.getMax()) / 2);
+					operatorTopComboBox.setValues(ArithmeticOperator.getContinuousOperators());
+					operatorTopComboBox.autosize();
 				} else if (arg2.getValue() instanceof DiscreteValue) {
 					DiscreteValue dv = (DiscreteValue) arg2.getValue();
 					getChildren().remove(valueSlider);
@@ -170,13 +166,15 @@ public class BehavioursContent extends Content {
 					}
 					valueComboBox.getItems().clear();
 					valueComboBox.getItems().addAll(dv.getPossibleValues());
+					operatorTopComboBox.setValues(ArithmeticOperator.getDiscreteOperators());
+					operatorTopComboBox.autosize();
 					type = false;
 				}
 				
 			}
 			
 		});
-		operatorTopComboBox = new MyComboBox<String>(operatorBoundsTop.computeBounds(width, height),arithOperators);
+		operatorTopComboBox = new MyComboBox<String>(operatorBoundsTop.computeBounds(width, height),null);
 		operatorTopComboBox.getSelectionModel().selectFirst();
 		valueComboBox = new MyComboBox<String>(valueBounds.computeBounds(width, height), null);
 		valueSlider = new MySlider(valueBounds.computeBounds(width, height), 0, 1, 0.1);

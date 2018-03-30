@@ -58,5 +58,10 @@ public class MyComboBox<T> extends ComboBox<T>{
 	public void resetStyle() {
 		setStyle("-fx-background-color: white");
 	}
+
+	public void setValues(ArrayList<T> operators) {
+		this.getItems().clear();
+		this.getItems().addAll(operators);
+	}
 	
 }

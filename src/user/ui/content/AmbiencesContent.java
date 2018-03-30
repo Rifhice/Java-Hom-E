@@ -236,7 +236,7 @@ public class AmbiencesContent extends Content {
                                     new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
-                                    int pressedButton = Integer.parseInt(((MyButtonImage)event.getSource()).getId());
+                                    int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
                                 }
                             }, 
                                     false

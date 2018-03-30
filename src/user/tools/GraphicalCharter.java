@@ -18,5 +18,7 @@ public class GraphicalCharter {
     public static String LIGHT_BLUE = "#5EADF6";
     public static String DEEP_BLUE = "#0F204F";
     public static String LIGHT_GRAY = "#C6CDE0";
+    public static String DARK_GRAY = "#444444";
+    public static String WHITE = "#FFFFFF";
     
 }

@@ -62,11 +62,11 @@ public class BehavioursContent extends Content {
 	MyRectangle argsLabelBounds = new MyRectangle(0.3f, 0.5f, 0.1f, 0.05f);
 	MyRectangle argsGridBounds = new MyRectangle(0.35f, 0.5f, 0.32f, 0.2f);
 	
-	MyRectangle validateButtonBounds = new MyRectangle(0.2f, 0.85f, 0.1f, 0.05f);
-	MyRectangle cancelButtonBounds = new MyRectangle(0.4f, 0.85f, 0.1f, 0.05f);
+	MyRectangle validateButtonBounds = new MyRectangle(0.2f, 0.85f, 0.15f, 0.05f);
+	MyRectangle cancelButtonBounds = new MyRectangle(0.4f, 0.85f, 0.15f, 0.05f);
 	
-	MyRectangle blocksBounds = new MyRectangle(0.7f, 0.1f, 0.25f, 0.35f);
-	MyRectangle expressionsBounds = new MyRectangle(0.7f, 0.55f, 0.25f, 0.35f);
+	MyRectangle blocksBounds = new MyRectangle(0.7f, 0.1f, 0.28f, 0.35f);
+	MyRectangle expressionsBounds = new MyRectangle(0.7f, 0.55f, 0.28f, 0.35f);
 	
 	MyRectangle behaviourNameLabelBounds = new MyRectangle(0.25f, 0.75f, 0.3f, 0.05f);
 	MyRectangle behaviourNameTextFieldBounds = new MyRectangle(0.35f, 0.75f, 0.3f, 0.05f);

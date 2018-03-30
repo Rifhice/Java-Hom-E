@@ -1,6 +1,7 @@
 package user.ui.content;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Observable;
 

@@ -134,27 +134,6 @@ public class ActuatorCategoryTest {
 	}
 
 	
-	/**
-	 * Test method for {@link server.models.ActuatorCategory#toJSON()}.
-	 */
-	@Test
-	void testToJSON() {
-		JSONObject actuatorCategoryJSON = actuatorCategory.toJson();
-		JSONArray actuatorsARRAY = actuatorCategoryJSON.getJSONArray("actuators");
-		try {
-			assertTrue(actuatorCategoryJSON.getInt("id") == 1);
-			assertTrue(actuatorCategoryJSON.getString("name").equals("actuatorCategory"));
-			assertTrue(actuatorCategoryJSON.getString("description").equals("description"));
-			
-			for(int i = 0; i < actuatorsARRAY.length(); i++) {
-				JSONObject currentActuator = actuatorsARRAY.getJSONObject(i);
-				
-				assertTrue(currentActuator.getInt("id") == 0);
-			}
-		}catch (Exception e) {
-			fail(e.getMessage());
-		}
-		
-	}
+
 	
 }

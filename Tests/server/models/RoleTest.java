@@ -18,7 +18,7 @@ public class RoleTest {
 	public static Role role;
 	static ArrayList<Right> rights = new ArrayList<Right>();
 	static int id = 1;
-	static String name = "right"; 
+	static String name = "name"; 
 	
 	/**
 	 * @throws java.lang.Exception
@@ -78,14 +78,14 @@ public class RoleTest {
 	@Test
 	void testSetName() {
 		role.setName("rightModified");
-		assertTrue(role.getName().equals("roleModified"));
+		assertTrue(role.getName().equals("rightModified"));
 	}
 
 	/**
 	 * Test method for {@link server.models.Role#getName()}.
 	 */
 	@Test
-	void testGetDenomination() {
+	void testGetName() {
 		assertTrue(role.getName().equals("name"));
 	}
 
@@ -113,26 +113,6 @@ public class RoleTest {
 	}
 
 	
-	/**
-	 * Test method for {@link server.models.Role#toJSON()}.
-	 */
-	@Test
-	void testToJSON() {
-		JSONObject roleJSON = role.toJson();
-		JSONArray rightsARRAY = roleJSON.getJSONArray("rights");
-		try {
-			assertTrue(roleJSON.getInt("id") == 1);
-			assertTrue(roleJSON.getString("name").equals("name"));
-			
-			for(int i = 0; i < rightsARRAY.length(); i++) {
-				JSONObject currentRight = rightsARRAY.getJSONObject(i);
-				
-				assertTrue(currentRight.getInt("id") == 0);
-			}
-		}catch (Exception e) {
-			fail(e.getMessage());
-		}
-		
-	}
+
 	
 }

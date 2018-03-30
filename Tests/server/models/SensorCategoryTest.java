@@ -234,51 +234,6 @@ public class SensorCategoryTest {
  
 
  
-  
- 
-  /**
- 
-   * Test method for {@link server.models.SensorCategory#toJSON()}.
- 
-   */
- 
-@Test
- 
-  void testToJSON() {
- 
-    JSONObject sensorCategoryJSON = sensorCategory.toJson();
- 
-    JSONArray sensorsARRAY = sensorCategoryJSON.getJSONArray("actuators");
- 
-    try {
- 
-      assertTrue(sensorCategoryJSON.getInt("id") == 1);
- 
-      assertTrue(sensorCategoryJSON.getString("name").equals("sensorCategory"));
- 
-      assertTrue(sensorCategoryJSON.getString("description").equals("description"));
- 
-      
- 
-      for(int i = 0; i < sensorsARRAY.length(); i++) {
- 
-        JSONObject currentSensor = sensorsARRAY.getJSONObject(i);
- 
-        
- 
-        assertTrue(currentSensor.getInt("id") == 0);
- 
-      }
- 
-    }catch (Exception e) {
- 
-      fail(e.getMessage());
- 
-    }
- 
-    
- 
-  }
  
 
  

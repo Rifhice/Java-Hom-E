@@ -133,27 +133,5 @@ public class RightTest {
 	}
 
 	
-	/**
-	 * Test method for {@link server.models.Right#toJSON()}.
-	 */
-	@Test
-	void testToJSON() {
-		JSONObject rightJSON = right.toJson();
-		JSONArray commandsARRAY = rightJSON.getJSONArray("commands");
-		try {
-			assertTrue(rightJSON.getInt("id") == 1);
-			assertTrue(rightJSON.getString("denomination").equals("denomination"));
-			assertTrue(rightJSON.getString("description").equals("description"));
-			
-			for(int i = 0; i < commandsARRAY.length(); i++) {
-				JSONObject currentCommand = commandsARRAY.getJSONObject(i);
-				
-				assertTrue(currentCommand.getInt("id") == 0);
-			}
-		}catch (Exception e) {
-			fail(e.getMessage());
-		}
-		
-	}
 	
 }

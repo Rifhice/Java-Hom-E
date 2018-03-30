@@ -206,37 +206,4 @@ public class BehaviourTest {
 	}
 
 	
-	/**
-	 * Test method for {@link server.models.Behaviour#toJSON()}.
-	 */
-	@Test
-	void testToJSON() {
-		JSONObject behaviourJSON = behaviour.toJson();
-		JSONArray complexActionsARRAY = behaviourJSON.getJSONArray("complexActions");
-		JSONArray atomicActionsARRAY = behaviourJSON.getJSONArray("atomicActions");
-		try {
-			assertTrue(behaviourJSON.getInt("id") == 1);
-			assertTrue(behaviourJSON.getString("name").equals("actuatorCategory"));
-			assertTrue(behaviourJSON.getString("description").equals("description"));
-			assertTrue(behaviourJSON.getBoolean("isActivated") == true);
-			//tester expression
-
-			
-			for(int i = 0; i < complexActionsARRAY.length(); i++) {
-				JSONObject currentComplexAction = complexActionsARRAY.getJSONObject(i);
-				
-				assertTrue(currentComplexAction.getInt("id") == 0);
-			}
-			
-			for(int i = 0; i < atomicActionsARRAY.length(); i++) {
-				JSONObject currentAtomicActions = atomicActionsARRAY.getJSONObject(i);
-				
-				assertTrue(currentAtomicActions.getInt("id") == 0);
-			}
-		}catch (Exception e) {
-			fail(e.getMessage());
-		}
-		
-	}
-	
 }

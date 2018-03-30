@@ -45,15 +45,15 @@ public class BehavioursContent extends Content {
     // =========== UI =========== //
 	private static BehavioursContent content = null;
 	
-	MyRectangle variableBounds = new MyRectangle(0.05f, 0.1f, 0.1f, 0.05f);
+	MyRectangle variableBounds = new MyRectangle(0.02f, 0.1f, 0.17f, 0.05f);
 	MyRectangle operatorBoundsTop = new MyRectangle(0.2f, 0.1f, 0.1f, 0.05f);
-	MyRectangle valueBounds = new MyRectangle(0.35f, 0.1f, 0.1f, 0.05f);
-	MyRectangle newBlockBounds = new MyRectangle(0.5f, 0.1f, 0.1f, 0.05f);
+	MyRectangle valueBounds = new MyRectangle(0.31f, 0.1f, 0.17f, 0.05f);
+	MyRectangle newBlockBounds = new MyRectangle(0.49f, 0.1f, 0.15f, 0.05f);
 	
-	MyRectangle leftEvaluableBounds = new MyRectangle(0.05f, 0.2f, 0.1f, 0.05f);
+	MyRectangle leftEvaluableBounds = new MyRectangle(0.02f, 0.2f, 0.17f, 0.05f);
 	MyRectangle operatorBoundsBottom = new MyRectangle(0.2f, 0.2f, 0.1f, 0.05f);
-	MyRectangle rightEvaluableBounds = new MyRectangle(0.35f, 0.2f, 0.1f, 0.05f);
-	MyRectangle expressionBounds = new MyRectangle(0.5f, 0.2f, 0.1f, 0.05f);
+	MyRectangle rightEvaluableBounds = new MyRectangle(0.31f, 0.2f, 0.17f, 0.05f);
+	MyRectangle expressionBounds = new MyRectangle(0.49f, 0.2f, 0.15f, 0.05f);
 
 	MyRectangle finalExpressionLabelBounds = new MyRectangle(0.02f, 0.4f, 0.20f, 0.05f);
 	MyRectangle finalExpressionComboBounds = new MyRectangle(0.22f, 0.4f, 0.45f, 0.05f);
@@ -341,8 +341,8 @@ public class BehavioursContent extends Content {
 		argsScrollPane = new MyScrollPane(argsGridBounds.computeBounds(width, height));
 		argsScrollPane.setContent(argsGridPane);
 		
-		behaviourNameLabel = new MyLabel("Nom", behaviourNameLabelBounds.computeBounds(width, height));
-		behaviourNameTextField = new MyTextFieldFX("Eteindre lu miere", behaviourNameTextFieldBounds.computeBounds(width, height), 1f);
+		behaviourNameLabel = new MyLabel("Name", behaviourNameLabelBounds.computeBounds(width, height));
+		behaviourNameTextField = new MyTextFieldFX("Name", behaviourNameTextFieldBounds.computeBounds(width, height), 1f);
 		
 		valideButton = new MyButtonFX("Validate", validateButtonBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
 			@SuppressWarnings("unchecked")

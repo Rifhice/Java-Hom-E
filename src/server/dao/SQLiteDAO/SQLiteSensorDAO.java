@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 import server.dao.abstractDAO.DAOException;
 import server.dao.abstractDAO.SensorDAO;
+import server.factories.AbstractDAOFactory;
+import server.managers.SystemManager;
 import server.models.Sensor;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;
@@ -260,6 +262,14 @@ public class SQLiteSensorDAO extends SensorDAO{
             	sensor.setName(rs.getString("name"));
             	sensor.setDescription(rs.getString("description"));
             	sensor.setEnvironmentVariable(getEnvironmentVariable(sensor.getId()));
+            	if(rs.getInt("fk_sensorCategory_id") != 0) {
+            		try {
+            			sensor.setSensorCategory(AbstractDAOFactory.getFactory(SystemManager.db).getSensorCategoriesDAO().getById(rs.getInt("fk_sensorCategory_id")));
+            		}
+            		catch (Exception e) {
+						e.printStackTrace();
+					}
+            	}
                 sensors.add(sensor);
             }
         } catch (SQLException e) {
@@ -349,6 +359,7 @@ public class SQLiteSensorDAO extends SensorDAO{
         }
         return value;
     }
+    
     
     // ======================== //
     // ==== Custom methods ==== //

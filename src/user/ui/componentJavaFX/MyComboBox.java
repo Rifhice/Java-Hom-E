@@ -40,6 +40,21 @@ public class MyComboBox<T> extends ComboBox<T>{
 		});
 	}
 	
+	public MyComboBox(ArrayList<T> elements,double width,double height) {
+		super();
+		this.getItems().addAll(elements);
+		resetStyle();
+		setPrefWidth(width);
+		setPrefHeight(height);
+		setOnMouseClicked(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				setStyle("-fx-background-color: white;");
+			}
+		});
+	}
+	
 	public void resetStyle() {
 		setStyle("-fx-background-color: white");
 	}

@@ -27,7 +27,7 @@ public class ContentScene extends MyScene implements MenuDelegate {
 	
 	private Menu menu;
 	private Content content;
-	private Pane infoBar;
+	private InfoBar infoBar;
 	private BorderPane scenePane;
 
 	public final static double infoBarWidthRatio = 1;
@@ -124,6 +124,10 @@ public class ContentScene extends MyScene implements MenuDelegate {
 	public void changeContent(Content content) {
 		this.content = content;
 		scenePane.setCenter(this.content);
+	}
+
+	public void setPseudo(String text) {
+		this.infoBar.setPseudo(text);	
 	}
 	
 	

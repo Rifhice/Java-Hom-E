@@ -8,13 +8,13 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.scene.image.Image;
 import user.communication.UserClient;
 import user.tools.GraphicalCharter;
-import user.ui.scene.ContentScene;
+import user.ui.scene.LoginScene;
 import user.ui.scene.MyScene;
 
 public class ClientFX extends Application{
@@ -61,12 +61,11 @@ public class ClientFX extends Application{
 		width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
 		height = (int)(ClientFX.screenSize.getHeight()* heightRatio);
 		
-		//LoginScene firstScene = new LoginScene(new Group(),this.width,this.height);
-		ContentScene contentScene = ContentScene.instanciate(new Group(),this.width,this.height);
+		LoginScene firstScene = new LoginScene(new Group(),this.width,this.height);
 		
 		try {
-			client = new UserClient(DEFAULT_HOST,DEFAULT_PORT,contentScene);	
-			setScene(contentScene);
+			client = new UserClient(DEFAULT_HOST,DEFAULT_PORT,firstScene);	
+			setScene(firstScene);
 		} catch (Exception e) {
 			System.out.println("Connexion impossible");
 		}

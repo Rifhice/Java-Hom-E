@@ -151,7 +151,13 @@ public class LoginScene extends MyScene{
 				String result = json.getString("result");
 				if(result.equals("success")) {
 					ClientFX.token = json.getString("token");
-					ClientFX.setScene(ContentScene.instanciate(new Group(),width,height));
+					ContentScene contentScene = ContentScene.instanciate(new Group(),width,height);
+					ClientFX.setScene(contentScene);
+					if(pseudoTextField.getText().equals("")) {
+						contentScene.setPseudo("Guest");
+					} else {
+						contentScene.setPseudo(pseudoTextField.getText());
+					}
 				}else if(result.equals("wrong_pseudo")){
 					pseudoTextField.setText("");
 					pseudoTextField.setStyle("-fx-background-color: "+GraphicalCharter.RED+";");

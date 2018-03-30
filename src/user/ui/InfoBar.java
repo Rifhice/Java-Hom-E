@@ -22,6 +22,8 @@ public class InfoBar extends Pane {
 	private MyRectangle connectedBounds = new MyRectangle(0.8f, 0.5f, 0.15f, 0.5f);
 	private MyRectangle deconnectionBounds = new MyRectangle(0.95f, 0.2f, 0.03f, 0.5f);
 	
+	MyLabel labelConnected;
+	
 	public InfoBar() {
 		this.setMaxWidth(width);
 		this.setMaxHeight(height);
@@ -38,13 +40,17 @@ public class InfoBar extends Pane {
 		MyLabel label = new MyLabel(date, dateBounds.computeBounds(width, height), true);
 		getChildren().add(label); 
 		
-		String owner = "Connected: Owner";
-		MyLabel labelConnected = new MyLabel(owner, connectedBounds.computeBounds(width, height), true);
+		String unknown = "Connected: unknown";
+		labelConnected = new MyLabel(unknown, connectedBounds.computeBounds(width, height), true);
 		labelConnected.setAlignment(Pos.CENTER_RIGHT);
 		getChildren().add(labelConnected);
 		
 		MyButtonImage deconnectionButton = new MyButtonImage(new Image("file:asset/images/deconnection.png"), deconnectionBounds.computeBounds(width, height), null);
 		getChildren().add(deconnectionButton);
 		
+	}
+	
+	public void setPseudo(String pseudo) {
+		this.labelConnected.setText("Connected: "+ pseudo);
 	}
 }

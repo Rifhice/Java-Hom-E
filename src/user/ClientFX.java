@@ -61,7 +61,7 @@ public class ClientFX extends Application{
 		width = (int)(ClientFX.screenSize.getWidth()* widthRatio);
 		height = (int)(ClientFX.screenSize.getHeight()* heightRatio);
 		
-		LoginScene firstScene = new LoginScene(new Group(),this.width,this.height);
+		LoginScene firstScene = new LoginScene(new Group(),ClientFX.width,ClientFX.height);
 		
 		try {
 			client = new UserClient(DEFAULT_HOST,DEFAULT_PORT,firstScene);	
@@ -92,6 +92,11 @@ public class ClientFX extends Application{
     // ============== //
 	public static void main(String[] args) {
 		Application.launch(ClientFX.class, args);
+	}
+
+	public static void logout() {
+		token = "";
+		setScene(new LoginScene(new Group(),width,height));
 	}
 	
 

@@ -1,10 +1,15 @@
 package user.ui;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;import javafx.geometry.Pos;
+import java.util.Date;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import user.ClientFX;
+import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonImage;
 import user.ui.componentJavaFX.MyImage;
 import user.ui.componentJavaFX.MyLabel;
@@ -31,6 +36,7 @@ public class InfoBar extends Pane {
 		this.setHeight(height);
 		this.setMinHeight(height);
 		this.setMinWidth(width);
+		this.setStyle("-fx-background-color: "+ GraphicalCharter.LIGHT_GRAY +";");
 		
 		MyImage logo = new MyImage("asset/images/logo.png", logoBounds.computeBounds(width, height), true);
 		getChildren().add(logo);
@@ -45,7 +51,13 @@ public class InfoBar extends Pane {
 		labelConnected.setAlignment(Pos.CENTER_RIGHT);
 		getChildren().add(labelConnected);
 		
-		MyButtonImage deconnectionButton = new MyButtonImage(new Image("file:asset/images/deconnection.png"), deconnectionBounds.computeBounds(width, height), null);
+		MyButtonImage deconnectionButton = new MyButtonImage(new Image("file:asset/images/deconnection.png"), deconnectionBounds.computeBounds(width, height), new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				ClientFX.logout();
+			}
+		});
 		getChildren().add(deconnectionButton);
 		
 	}

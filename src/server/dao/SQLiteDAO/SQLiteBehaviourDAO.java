@@ -366,13 +366,8 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                 try {
                     PreparedStatement prepStat = this.connect.prepareStatement(sql);
                     prepStat.setInt(1, exp.getId());
-                    prepStat.setInt(2, ((Block) evs.get(i)).getId());
+                    prepStat.setInt(2, ((Block) evs.get(i)).getId());  
                     int created = prepStat.executeUpdate();
-                    if(created > 0) {
-                        ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));  
-                        Value v = ((Block)evs.get(i)).getValue();
-                        ((Block)evs.get(i)).setValue(v);
-                    }                        
                 } catch (SQLException e) {
                     throw new DAOException("DAOException : BehaviourDAO create IsPartOf(" + exp.getId() + ") insert into isPartOf:" + e.getMessage(), e); 
                 }
@@ -394,22 +389,42 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
     public ArrayList<Evaluable> createEvaluables(ArrayList<Evaluable> evaluables) throws DAOException {
         ArrayList<Evaluable> evs = evaluables;
 
+        // Create Blocks
         String sql = "INSERT INTO Blocks "
-                + "(operator, fk_environmentVariable_id) VALUES "
-                + "(?, ?)"
+                + "(operator) VALUES "
+                + "(?) "
                 + ";";
+        for (int i = 0; i < evaluables.size(); i++) {
+            try {
+                PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                prepStat.setString(1, ((Block)evs.get(i)).getOperator());
+                int created = prepStat.executeUpdate();
+                ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect));
+            } catch (SQLException e) {
+                throw new DAOException("DAOException : BehaviourDAO createEvaluables() :" + e.getMessage(), e); 
+            }
+        }
+       
+        // Update them
+        
 
         for (int i = 0; i < evs.size(); i++) {
+            sql = "UPDATE Blocks "
+                    + "SET operator = ?, fk_environmentVariable_id = ? "
+                    + "WHERE id = ? "
+                    + ";";
+
             try {
                 Block block = ((Block)evs.get(i));
                 PreparedStatement prepStat = this.connect.prepareStatement(sql);
+                
                 prepStat.setString(1, block.getOperator());  
                 prepStat.setInt(2, block.getEnvironmentVariable().getId());
+                prepStat.setInt(3, block.getId());
+                
                 int created = prepStat.executeUpdate();
                 if(created > 0) {
-                    ((Block)evs.get(i)).setId(SQLiteDAOTools.getLastId(connect)); 
-                    ((Block)evs.get(i)).setValue(createValue(((Block)evs.get(i)).getValue()));
-                    
+                    ((Block)evs.get(i)).setValue(createValue(((Block)evs.get(i)).getValue())); 
                     // Insert fk_vvalue_id created into blocks
                     sql = "UPDATE Blocks "
                             + "SET fk_vvalue_id = ? "
@@ -420,6 +435,7 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         prepStatFkValue.setInt(1, ((Block)evs.get(i)).getValue().getId());
                         prepStatFkValue.setInt(2, ((Block)evs.get(i)).getId());
                         prepStatFkValue.executeUpdate();
+
                     } catch (SQLException e) {
                         throw new DAOException("DAOException : BehaviourDAO createEvaluables() inserting fk_vvalue_id :" + e.getMessage(), e); 
                     }
@@ -514,9 +530,9 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
                         prepStatCV.setInt(2, cv.getId());
 
                         if(isFromSensor) {
-                            prepStatCV.setDouble(1, cv.getValueMin());
-                            prepStatCV.setDouble(2, cv.getValueMax());
-                            prepStatCV.setDouble(4, cv.getPrecision());
+                            prepStatCV.setDouble(3, cv.getValueMin());
+                            prepStatCV.setDouble(4, cv.getValueMax());
+                            prepStatCV.setDouble(5, cv.getPrecision());
                         }
                         
                         created = prepStatCV.executeUpdate();
@@ -909,14 +925,27 @@ public class SQLiteBehaviourDAO extends BehaviourDAO{
         value.setCurrentValue("TRUE");
         bl.setValue(value);
         
+        Block bl2 = new Block();
+        bl2.setOperator("<");
+        DiscreteValue value2 = new DiscreteValue();
+        value2.setCurrentValue("TRUE");
+        bl2.setValue(value2);
+        
         bl.setEnvironmentVariable(evDAO.getById(1));
+        bl2.setEnvironmentVariable(evDAO.getById(2));
         
         ArrayList<Evaluable> eval = new ArrayList<Evaluable>();
         eval.add(bl);
+        eval.add(bl2);
         e.setEvaluables(eval);
+        
+        ArrayList<String> operators = new ArrayList<String>();
+        operators.add("&&");
+        e.setOperators(operators);
 
         b.setExpression(e);
         
-        test.create(b);
+        System.out.println(test.create(b));
+        //System.out.println(test.getAll());
     }
 }

@@ -48,8 +48,20 @@ public class SQLiteSensorCategoriesDAO extends SensorCategoriesDAO{
 
 	@Override
 	public SensorCategory getById(int id) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+    	String sql = "SELECT * "
+                + "FROM sensorCategories "
+                + "WHERE id = ?";
+    	SensorCategory category = null;
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setInt(1, id);
+              ResultSet rs = prepStat.executeQuery();
+              category = new SensorCategory(rs.getInt("id"),rs.getString("name"), rs.getString("description"));
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : SensorCategories getById(" + id + ") :" + e.getMessage(), e); 
+          }
+        return category;
 	}
 
 	@Override

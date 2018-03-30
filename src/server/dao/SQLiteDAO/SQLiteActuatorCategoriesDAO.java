@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import server.dao.abstractDAO.ActuatorCategoriesDAO;
 import server.dao.abstractDAO.DAOException;
 import server.models.categories.ActuatorCategory;
+import server.models.categories.SensorCategory;
 
 public class SQLiteActuatorCategoriesDAO extends ActuatorCategoriesDAO{
 
@@ -47,8 +48,20 @@ public class SQLiteActuatorCategoriesDAO extends ActuatorCategoriesDAO{
 
 	@Override
 	public ActuatorCategory getById(int id) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+    	String sql = "SELECT * "
+                + "FROM actuatorCategories "
+                + "WHERE id = ?";
+    	ActuatorCategory category = null;
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setInt(1, id);
+              ResultSet rs = prepStat.executeQuery();
+              category = new ActuatorCategory(rs.getInt("id"),rs.getString("name"), rs.getString("description"));
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : SensorCategories getById(" + id + ") :" + e.getMessage(), e); 
+          }
+        return category;
 	}
 
 	@Override

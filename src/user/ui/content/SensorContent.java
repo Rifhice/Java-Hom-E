@@ -18,9 +18,11 @@ import user.models.ContinuousValue;
 import user.models.DiscreteValue;
 import user.models.EnvironmentVariable;
 import user.models.Sensor;
+import user.models.SensorCategory;
 import user.models.Value;
 import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;
+import user.ui.componentJavaFX.MyComboBox;
 import user.ui.componentJavaFX.MyGridPane;
 import user.ui.componentJavaFX.MyLabel;
 import user.ui.componentJavaFX.MyPane;
@@ -32,6 +34,7 @@ public class SensorContent extends Content {
 	private static SensorContent content = null;
 	
 	ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+	ArrayList<SensorCategory> categories = new ArrayList<SensorCategory>();
 	
 	private MyRectangle sensorsListBounds = new MyRectangle(0f, 0f, 0.25f, 1.0f);
 	private MyRectangle selectedSensorBounds = new MyRectangle(0.25f, 0f, 0.375f, 1.0f);
@@ -143,11 +146,27 @@ public class SensorContent extends Content {
 	}
 	
     public void updateData() {
+    	updateSensorData();
+    	updateCategoryData();
+    }
+    
+    public void updateSensorData() {
         JSONObject getSensors = new JSONObject();
         getSensors.put("recipient", "sensor");
         getSensors.put("action", "getAll");
         try {
             ClientFX.client.sendToServer(getSensors.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateCategoryData() {
+        JSONObject getSensor = new JSONObject();
+        getSensor.put("recipient", "sensorCategories");
+        getSensor.put("action", "getAll");
+        try {
+            ClientFX.client.sendToServer(getSensor.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,6 +180,7 @@ public class SensorContent extends Content {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                 	sensorsListGrid.getChildren().clear();
+                	sensorsListGrid.add(new MyComboBox<SensorCategory>(categories,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED),0,0);
                     for (int i = 0; i < sensors.size(); i++) {
                     	sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED, new EventHandler<ActionEvent>() {
                             @Override
@@ -173,7 +193,7 @@ public class SensorContent extends Content {
                                 variableDescriptionVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getDescription());
                                 currentValueVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getValue().getCurrentValue().toString());
                             }
-                        }),0,i);
+                        }),0,i + 1);
                     }
                     nomLabel.setText(sensors.get(currentSensorIndex).getName());
                     variableDescriptionLabel.setText(sensors.get(currentSensorIndex).getDescription());
@@ -237,6 +257,21 @@ public class SensorContent extends Content {
 					}
 					break;
 					
+				default:
+					break;
+				}
+			}
+			else if(json.getString("recipient").equals("sensorCategories")){
+				switch (json.getString("action")) {
+				case "getAll":
+                    JSONArray arrArg = json.getJSONArray("categories");
+                    for (int j = 0; j < arrArg.length(); j++){
+                        JSONObject current = arrArg.getJSONObject(j);
+                        categories.add(new SensorCategory(current.getInt("id"), current.getString("name"), current.getString("description")));
+                        updateUI();
+                    }
+					break;
+
 				default:
 					break;
 				}

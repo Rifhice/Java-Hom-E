@@ -95,6 +95,7 @@ public class BehaviourManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Behaviour #" + behaviour.getId() + " created");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

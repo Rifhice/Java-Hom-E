@@ -52,6 +52,7 @@ public class SensorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Sensor category #" + obj.getId() + " created");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,6 +71,7 @@ public class SensorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Sensor category #" + id + " deleted");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,6 +91,7 @@ public class SensorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Sensor category #" + obj.getId() + " updated");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

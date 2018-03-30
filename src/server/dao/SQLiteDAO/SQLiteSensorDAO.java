@@ -233,7 +233,7 @@ public class SQLiteSensorDAO extends SensorDAO{
         }
         return sensor;
     }
-
+    
     @Override
     public int update(Sensor obj) throws DAOException {
         // TODO Auto-generated method stub
@@ -275,7 +275,6 @@ public class SQLiteSensorDAO extends SensorDAO{
         } catch (SQLException e) {
             throw new DAOException("DAOException : SensorDAO getAll() :" + e.getMessage(), e);
         }
-        System.out.println(sensors);
         return sensors;
     }
     

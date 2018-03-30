@@ -92,7 +92,6 @@ public class ActuatorManager extends Manager {
 				for (int j = 0; j < arrArg.length(); j++){
 					
 					JSONObject current = arrArg.getJSONObject(j);
-					System.out.println(current.toString());
 					if(current.getString("type").equals("continuous")) {
 						arguments.add(new ContinuousCommandValue(current.getString("name"), current.getDouble("valuemin"), current.getDouble("valuemax"), current.getDouble("precision")));
 					}
@@ -131,7 +130,6 @@ public class ActuatorManager extends Manager {
 		}
 		
 		JSONObject result = new JSONObject();
-		System.out.println(result);
 		if(create != null) {
 			create.setConnectionToClient(client);
 			actuators.add(actuator);
@@ -139,6 +137,7 @@ public class ActuatorManager extends Manager {
 			result.put("verb", "post");
 			result.put("id", create.getId());
 			SystemManager.sendToAllClient(result.toString());
+			System.out.println("Actuator #" + actuator.getId() + " registered");
 		}
 		else {
 			result.put("result", "failure");
@@ -149,7 +148,6 @@ public class ActuatorManager extends Manager {
 			}
 		}
 		System.out.println(actuator + "\nAdded to the system !");
-		System.out.println(actuators);
 	}
 	
 	/**
@@ -158,10 +156,10 @@ public class ActuatorManager extends Manager {
 	 * @param client Connection to the client
 	 */
 	public void execute(JSONObject json,ConnectionToClient client) {
-		System.out.println(json.getString("executable"));
 		for (int i = 0; i < actuators.size(); i++) {
 			if(actuators.get(i).getId() == json.getInt("id")) {
 				actuators.get(i).execute(json.getString("executable"));
+				System.out.println("Executing : '" + json.getString("executable") + "' on actuator #" + actuators.get(i).getId());
 			}
 		}
 	}

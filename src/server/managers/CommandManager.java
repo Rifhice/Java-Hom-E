@@ -93,11 +93,6 @@ public class CommandManager extends Manager{
 			result.append("complexAction", complexValue.get(i).toJson());
 		}
 		for (int j = 0; j < command.size(); j++) {
-			try {
-				System.out.println(command.get(j).toJson());				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			result.append("commands", command.get(j).toJson());
 		}
 		try {

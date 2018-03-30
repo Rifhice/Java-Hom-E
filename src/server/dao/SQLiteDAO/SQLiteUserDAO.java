@@ -56,7 +56,7 @@ public class SQLiteUserDAO extends UserDAO {
         } catch (SQLException e) {
             throw new DAOException("DAOException : UserDAO create(" + obj.getPseudo() + ") :" + e.getMessage(), e); 
         }
-        System.out.println("Nouveau membre créé.");
+        System.out.println("Nouveau membre cr�e.");
         return user;
     }
 

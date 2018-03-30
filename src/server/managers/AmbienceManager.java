@@ -104,6 +104,7 @@ public class AmbienceManager extends Manager{
 				result.put("ambience", ambience.toJSON());
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Ambience #" + ambience.getId() + " created");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

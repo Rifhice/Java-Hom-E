@@ -137,6 +137,7 @@ public class ActuatorManager extends Manager {
 			result.put("verb", "post");
 			result.put("id", create.getId());
 			SystemManager.sendToAllClient(result.toString());
+			System.out.println("Actuator #" + actuator.getId() + " registered");
 		}
 		else {
 			result.put("result", "failure");
@@ -158,6 +159,7 @@ public class ActuatorManager extends Manager {
 		for (int i = 0; i < actuators.size(); i++) {
 			if(actuators.get(i).getId() == json.getInt("id")) {
 				actuators.get(i).execute(json.getString("executable"));
+				System.out.println("Executing : '" + json.getString("executable") + "' on actuator #" + actuators.get(i).getId());
 			}
 		}
 	}

@@ -109,7 +109,7 @@ public class SensorManager extends Manager{
 		}
 		JSONObject result = new JSONObject();
 		if(sensorCreated != null) {
-			sensors.add(sensor);
+			sensors.add(sensorCreated);
 			result.put("result", "success");
 			result.put("verb", "post");
 			result.put("id", sensorCreated.getId());
@@ -117,6 +117,7 @@ public class SensorManager extends Manager{
 	        result.put("idValue",sensorCreated.getEnvironmentVariables().getValue().getId());
 	        try {
 				client.sendToClient(result.toString());
+				System.out.println("Sensor #" + sensorCreated.getId() + " registered");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -154,6 +155,7 @@ public class SensorManager extends Manager{
 			result.put("value", json.getString("value"));
 			try {
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Environment Variable #" + sensor.getEnvironmentVariables().getId() + " value changed");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

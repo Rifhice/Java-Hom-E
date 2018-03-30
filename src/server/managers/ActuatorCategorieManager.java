@@ -88,6 +88,7 @@ public class ActuatorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Actuator category #" + obj.getId() + " created");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,6 +112,7 @@ public class ActuatorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Actuator category #" + id + " deleted");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,6 +136,7 @@ public class ActuatorCategorieManager extends Manager{
 			else {
 				result.put("result", "success");
 				SystemManager.sendToAllClient(result.toString());
+				System.out.println("Actuator category #" + obj.getId() + " updated");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

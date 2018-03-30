@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
@@ -157,6 +158,7 @@ public class BehavioursContent extends Content {
 					valueSlider.setBlockIncrement(cv.getPrecision());
 					valueSlider.setValue((valueSlider.getMin() + valueSlider.getMax()) / 2);
 					operatorTopComboBox.setValues(ArithmeticOperator.getContinuousOperators());
+					operatorTopComboBox.getSelectionModel().selectFirst();
 					operatorTopComboBox.autosize();
 				} else if (arg2.getValue() instanceof DiscreteValue) {
 					DiscreteValue dv = (DiscreteValue) arg2.getValue();
@@ -166,7 +168,9 @@ public class BehavioursContent extends Content {
 					}
 					valueComboBox.getItems().clear();
 					valueComboBox.getItems().addAll(dv.getPossibleValues());
+					valueComboBox.getSelectionModel().selectFirst();
 					operatorTopComboBox.setValues(ArithmeticOperator.getDiscreteOperators());
+					operatorTopComboBox.getSelectionModel().selectFirst();
 					operatorTopComboBox.autosize();
 					type = false;
 				}
@@ -566,6 +570,27 @@ public class BehavioursContent extends Content {
 	                    }
 					break;
 					// end case "command"
+				case "behaviour":
+					switch(action) {
+					case "create":
+						Platform.runLater(new Runnable() {
+							
+							@Override
+							public void run() {
+								variablesComboBox.getSelectionModel().selectFirst();
+								operatorBottomComboBox.getSelectionModel().selectFirst();
+								evaluableLeftComboBox.getSelectionModel().selectFirst();
+								evaluableRightComboBox.getSelectionModel().selectFirst();
+								finalExpressionComboBox.getSelectionModel().selectFirst();
+								operatorBottomComboBox.getSelectionModel().selectFirst();	
+								commandKeyComboBox.getSelectionModel().selectFirst();
+								behaviourNameTextField.setText("");	
+								ContentScene.getInstance().changeContent(BehavioursCommandsContent.getInstance());
+							}
+						});
+						break;
+					}
+					break;
 				default:
 					break;
 				}

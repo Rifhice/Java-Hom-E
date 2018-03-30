@@ -9,6 +9,13 @@ public class SensorCategory extends Category{
 		this.id = id;
 	}
 	
+	
+	public SensorCategory(int id,String name) {
+		super(name);
+		this.id = id;
+	}
+	
+	
 	public int getId() {
 		return id;
 	}

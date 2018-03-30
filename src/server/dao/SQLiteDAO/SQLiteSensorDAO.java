@@ -233,7 +233,7 @@ public class SQLiteSensorDAO extends SensorDAO{
         }
         return sensor;
     }
-
+    
     @Override
     public int update(Sensor obj) throws DAOException {
         // TODO Auto-generated method stub

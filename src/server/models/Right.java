@@ -86,9 +86,11 @@ public class Right {
         result.put("id", id);
         result.put("denomination",denomination);
         result.put("description", description);
-        for (int i = 0; i < commands.size(); i++) {
-			result.append("commands", commands.get(i).toJson());
-		}
+        if (commands != null) {
+	        for (int i = 0; i < commands.size(); i++) {
+				result.append("commands", commands.get(i).toJson());
+			}
+        }
         return result;
     }
     

@@ -2,6 +2,8 @@ package server.models;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 public class User {
 
     // ==================== //
@@ -120,6 +122,24 @@ public class User {
             }
         }
         return user;
+    }
+    
+    public JSONObject toJson() {
+    	JSONObject result = new JSONObject();
+    	result.put("id", id);
+    	result.put("pseudo", pseudo);
+    	result.put("password", password);
+    	if(rights != null) {
+    		for (Right right : rights) {
+    			JSONObject rightToAdd = right.toJson();
+    			result.append("rights",rightToAdd);
+    		}
+			
+    	}
+        if(role != null) {
+        	result.put("role", this.role.toJson());
+        }
+        return result;
     }
     
     public static void main(String[] args) {

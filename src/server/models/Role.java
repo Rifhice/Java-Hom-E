@@ -74,9 +74,13 @@ public class Role {
         JSONObject result = new JSONObject();
         result.put("id", id);
         result.put("name", name);
-        for (int i = 0; i < rights.size(); i++) {
-			result.append("rights", rights.get(i).toJson());
-		}
+        if (rights != null) {
+        	for (int i = 0; i < rights.size(); i++) {
+    			result.append("rights", rights.get(i).toJson());
+    		}
+        	
+        }
+        
         return result;
     }
 

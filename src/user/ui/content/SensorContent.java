@@ -76,12 +76,12 @@ public class SensorContent extends Content {
         
         
 	    MyPane selectedSensorPane = new MyPane(selectedSensorBounds.computeBounds(width, height));
-	    sensorLabel = new MyLabel("Nom",sensorBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),1.5f);
+	    sensorLabel = new MyLabel("Name",sensorBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),1.5f);
 	    sensorLabel.centerX(selectedSensorPane.getPrefWidth());
 	    sensorLabel.setAlignment(Pos.CENTER);
 	    sensorLabel.setStyle("-fx-font-weight: bold;");
 	    
-	    nomLabel = new MyLabel("nom",nomBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));
+	    nomLabel = new MyLabel("Name",nomBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));
 	    nomLabel.centerX(selectedSensorPane.getPrefWidth());
 	    nomLabel.setAlignment(Pos.CENTER);
 	    nomLabel.setStyle("-fx-font-weight: bold;");

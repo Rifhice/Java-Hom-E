@@ -19,7 +19,7 @@ public interface MenuDelegate {
 		      case CONTROLS: return "Controls";
 		      case SENSORS: return "Sensors";
 		      case ACTUATORS: return "Actuators";
-		      case BEHAVIOURS_COMMANDS: return "Behaviours/Commands";
+		      case BEHAVIOURS_COMMANDS: return "Behaviours / Commands";
 		      case AMBIENCES: return "Ambiences";
 		      case CATEGORIES: return "Categories";
 		      case ACCOUNTS: return "Accounts";

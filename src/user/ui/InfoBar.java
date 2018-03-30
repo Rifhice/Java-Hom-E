@@ -38,7 +38,7 @@ public class InfoBar extends Pane {
 		MyLabel label = new MyLabel(date, dateBounds.computeBounds(width, height), true);
 		getChildren().add(label); 
 		
-		String owner = "Personne connectée: Owner";
+		String owner = "Connected: Owner";
 		MyLabel labelConnected = new MyLabel(owner, connectedBounds.computeBounds(width, height), true);
 		labelConnected.setAlignment(Pos.CENTER_RIGHT);
 		getChildren().add(labelConnected);

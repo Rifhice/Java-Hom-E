@@ -55,10 +55,10 @@ public class BehavioursContent extends Content {
 	MyRectangle rightEvaluableBounds = new MyRectangle(0.35f, 0.2f, 0.1f, 0.05f);
 	MyRectangle expressionBounds = new MyRectangle(0.5f, 0.2f, 0.1f, 0.05f);
 
-	MyRectangle finalExpressionLabelBounds = new MyRectangle(0.05f, 0.4f, 0.1f, 0.05f);
-	MyRectangle finalExpressionComboBounds = new MyRectangle(0.17f, 0.4f, 0.15f, 0.05f);
-	MyRectangle commandsLabelBounds = new MyRectangle(0.05f, 0.5f, 0.15f, 0.05f);
-	MyRectangle commandComboBounds = new MyRectangle(0.17f, 0.5f, 0.1f, 0.05f);
+	MyRectangle finalExpressionLabelBounds = new MyRectangle(0.02f, 0.4f, 0.20f, 0.05f);
+	MyRectangle finalExpressionComboBounds = new MyRectangle(0.22f, 0.4f, 0.45f, 0.05f);
+	MyRectangle commandsLabelBounds = new MyRectangle(0.02f, 0.5f, 0.20f, 0.05f);
+	MyRectangle commandComboBounds = new MyRectangle(0.22f, 0.5f, 0.12f, 0.05f);
 	MyRectangle argsLabelBounds = new MyRectangle(0.3f, 0.5f, 0.1f, 0.05f);
 	MyRectangle argsGridBounds = new MyRectangle(0.35f, 0.5f, 0.32f, 0.2f);
 	

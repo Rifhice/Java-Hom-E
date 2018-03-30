@@ -1,6 +1,7 @@
 package user.ui.componentJavaFX;
 
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Float;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -47,6 +48,22 @@ public class MyLabel extends Label{
 		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));
 	}
 	 
+	public MyLabel(String text, Rectangle2D.Float bounds, boolean centered, float fontMultiplier) {
+		setText(text);
+		this.setPrefWidth(bounds.getWidth());
+		this.setPrefHeight(bounds.getHeight());
+		this.setAlignment(Pos.CENTER);
+		if(centered) {
+			setLayoutX(bounds.getX() - this.getPrefWidth()/2);
+			setLayoutY(bounds.getY() - this.getPrefHeight()/2);
+		} else {
+			setLayoutX(bounds.getX());
+			setLayoutY(bounds.getY());
+		}
+		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE));
+		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));
+	}
+
 	/** 
 	 * Center-X the label in his father 
 	 * @param fatherWidth, the width of the father

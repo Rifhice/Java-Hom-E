@@ -12,12 +12,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import user.ClientFX;
 import user.models.ContinuousValue;
 import user.models.DiscreteValue;
 import user.models.EnvironmentVariable;
 import user.models.Sensor;
 import user.models.Value;
+import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;
 import user.ui.componentJavaFX.MyGridPane;
 import user.ui.componentJavaFX.MyLabel;
@@ -37,15 +39,18 @@ public class SensorContent extends Content {
     
     private MyRectangle sensorBounds = new MyRectangle(0f, 0.1f, 1f, 0.05f); 
 	private MyRectangle nomBounds = new MyRectangle(0f, 0.15f, 1f, 0.05f); 
-	private MyRectangle descriptionBounds = new MyRectangle(0.1f, 0.2f, 0.375f, 0.05f); 
-	private MyRectangle variableDescriptionBounds = new MyRectangle(0.1f, 0.25f, 0.5f, 0.2f); 
+	private MyRectangle descriptionBounds = new MyRectangle(0.1f, 0.24f, 0.375f, 0.05f); 
+	private MyRectangle variableDescriptionBounds = new MyRectangle(0.1f, 0.245f, 0.8f, 0.2f); 
 	
 	private MyRectangle variableBounds = new MyRectangle(0f, 0.1f, 1f, 0.05f);
 	private MyRectangle nomVariableBounds = new MyRectangle(0f, 0.15f, 1f, 0.05f); 
-	private MyRectangle descriptionVariableBounds = new MyRectangle(0.1f, 0.2f, 0.375f, 0.05f); 
-	private MyRectangle variableDescriptionVariableBounds = new MyRectangle(0.1f, 0.25f, 0.5f, 0.2f); 
-	private MyRectangle currentValueBounds = new MyRectangle(0.1f, 0.35f, 0.5f, 0.2f);
-	private MyRectangle currentValueVariableBounds = new MyRectangle(0.1f, 0.4f, 0.5f, 0.2f);
+	private MyRectangle descriptionVariableBounds = new MyRectangle(0.1f, 0.24f, 0.375f, 0.05f); 
+	private MyRectangle variableDescriptionVariableBounds = new MyRectangle(0.1f, 0.245f, 0.5f, 0.2f); 
+	private MyRectangle currentValueBounds = new MyRectangle(0.5f, 0.2f, 1f, 0.2f);
+	private MyRectangle currentValueVariableBounds = new MyRectangle(0.5f, 0.6f, 0.5f, 0.2f);
+	
+	private MyRectangle boxValueBounds = new MyRectangle(0.05f, 0.5f, 0.9f, 0.4f);
+	
 	
     private MyGridPane sensorsListGrid;
     
@@ -74,43 +79,61 @@ public class SensorContent extends Content {
 	    sensorLabel = new MyLabel("Nom",sensorBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),1.5f);
 	    sensorLabel.centerX(selectedSensorPane.getPrefWidth());
 	    sensorLabel.setAlignment(Pos.CENTER);
+	    sensorLabel.setStyle("-fx-font-weight: bold;");
 	    
 	    nomLabel = new MyLabel("nom",nomBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));
 	    nomLabel.centerX(selectedSensorPane.getPrefWidth());
 	    nomLabel.setAlignment(Pos.CENTER);
-	    description = new MyLabel("Description",descriptionBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));
+	    nomLabel.setStyle("-fx-font-weight: bold;");
+	    description = new MyLabel("Description",descriptionBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()), 1.3f);
 	    variableDescriptionLabel = new MyLabel("descr",variableDescriptionBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));	    
 	    selectedSensorPane.getChildren().add(sensorLabel);
+	    selectedSensorPane.setStyle(""	+ 
+    		"-fx-background-color: " + GraphicalCharter.LIGHT_GRAY + ";" +
+    		"-fx-border-color: " + GraphicalCharter.DARK_GRAY
+	    );
 	    selectedSensorPane.getChildren().add(nomLabel);
 	    selectedSensorPane.getChildren().add(description);
 	    selectedSensorPane.getChildren().add(variableDescriptionLabel);
 	    
 	    
 	    MyPane variableValuePane = new MyPane(latestActionsBounds.computeBounds(width, height));
+	    variableValuePane.setStyle(""	+ 
+    		"-fx-background-color: " + GraphicalCharter.LIGHT_GRAY + ";" +
+    		"-fx-border-color: " + GraphicalCharter.DARK_GRAY
+	    );
 	    variableLabel = new MyLabel("Variable",variableBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()),1.5f);
 	    variableLabel.centerX(selectedSensorPane.getPrefWidth());
 	    variableLabel.setAlignment(Pos.CENTER);
+	    variableLabel.setStyle("-fx-font-weight: bold;");
 	    
 	    nomVariableLabel = new MyLabel("nom",nomVariableBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()));
 	    nomVariableLabel.centerX(selectedSensorPane.getPrefWidth());
 	    nomVariableLabel.setAlignment(Pos.CENTER);
+	    nomVariableLabel.setStyle("-fx-font-weight: bold;");
 	    
-	    descriptionVariable = new MyLabel("Description",descriptionVariableBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()));
+	    descriptionVariable = new MyLabel("Description",descriptionVariableBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()), 1.3f);
 	    variableDescriptionVariableLabel = new MyLabel("descr",variableDescriptionVariableBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()));
 	    
-	    currentValueLabel = new MyLabel("Value",currentValueBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()),1.5f);
-	    currentValueLabel.centerX(selectedSensorPane.getPrefWidth());
+	    MyPane currentValuePane = new MyPane(boxValueBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()));
+	    currentValuePane.setStyle(""
+	    		+ "-fx-background-color: " + GraphicalCharter.WHITE + ";" 
+	    		+ "-fx-background-radius: 8 8 8 8;"
+	    );
+	    currentValueLabel = new MyLabel("Value",currentValueBounds.computeBounds(currentValuePane.getPrefWidth(), currentValuePane.getPrefHeight()),true, 1.5f);
+	    currentValueLabel.centerX(currentValuePane.getPrefWidth());
 	    currentValueLabel.setAlignment(Pos.CENTER);
+	    currentValueLabel.setStyle("-fx-font-weight: bold;");
 	    
-	    currentValueVariableLabel = new MyLabel("value",currentValueVariableBounds.computeBounds(variableValuePane.getPrefWidth(), variableValuePane.getPrefHeight()));
-	    currentValueVariableLabel.centerX(selectedSensorPane.getPrefWidth());
-	    currentValueVariableLabel.setAlignment(Pos.CENTER);
+	    currentValueVariableLabel = new MyLabel("value",currentValueVariableBounds.computeBounds(currentValuePane.getPrefWidth(), currentValuePane.getPrefHeight()), true, 1.3f);
 	    variableValuePane.getChildren().add(variableLabel);
 	    variableValuePane.getChildren().add(nomVariableLabel);
 	    variableValuePane.getChildren().add(descriptionVariable);
 	    variableValuePane.getChildren().add(variableDescriptionVariableLabel);
-	    variableValuePane.getChildren().add(currentValueLabel);
-	    variableValuePane.getChildren().add(currentValueVariableLabel);
+	    
+	    currentValuePane.getChildren().add(currentValueLabel);
+	    currentValuePane.getChildren().add(currentValueVariableLabel);
+	    variableValuePane.getChildren().add(currentValuePane);
 	    
 	    
         this.getChildren().add(sensorList);

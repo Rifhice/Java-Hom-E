@@ -48,11 +48,19 @@ public class UserTest {
 		
 	}
 	
+	/**
+	 * Test method for {@link server.models.User#setPseudo()} and {@link server.models.User#getPseudo()}.
+	 */
+	
 	@Test
 	void testSetPseudo() {
 		user.setPseudo("newPseudo");
 		assertTrue(user.getPseudo().equals("newPseudo"));
 	}
+	
+	/**
+	 * Test method for {@link server.models.User#setPassword()} and {@link server.models.User#getPassword()}.
+	 */
 	
 	@Test
 	void testSetPassword() {
@@ -60,11 +68,17 @@ public class UserTest {
 		assertTrue(user.getPassword().equals("newPassword"));
 	}
 	
+	/**
+	 * Test method for {@link server.models.User#getRole()}.
+	 */
 	@Test
 	void testGetRole() {
 		assertTrue(user.getRole().getId() == 2);
 	}
 	
+	/**
+	 * Test method for {@link server.models.User#toJson()}.
+	 */
 	@Test
 	void testToJson() {
 		JSONObject user = this.user.toJson();

@@ -17,12 +17,14 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import user.ClientFX;
-import user.models.ContinuousValue;
-import user.models.DiscreteValue;
-import user.models.EnvironmentVariable;
+
 import user.models.Sensor;
 import user.models.SensorCategory;
-import user.models.Value;
+import user.models.environmentVariable.Value;
+import user.models.environmentVariable.DiscreteValue;
+import user.models.environmentVariable.EnvironmentVariable;
+import user.models.environmentVariable.ContinuousValue;
+
 import user.tools.ArithmeticOperator;
 import user.tools.GraphicalCharter;
 import user.ui.componentJavaFX.MyButtonFX;

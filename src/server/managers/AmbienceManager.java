@@ -100,7 +100,6 @@ public class AmbienceManager extends Manager{
         	for(int i = 0; i < behavioursJSON.length(); i++) {
         		behaviours.add(behaviourDAO.getById(behavioursJSON.getInt(i)));
         	}
-        	ambience.setId(json.getInt("id"));
         	ambience.setName(json.getString("name"));
         	ambience.setBehaviours(behaviours);
         	

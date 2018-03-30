@@ -45,31 +45,31 @@ public class BehavioursContent extends Content {
     // =========== UI =========== //
 	private static BehavioursContent content = null;
 	
-	MyRectangle variableBounds = new MyRectangle(0.02f, 0.1f, 0.17f, 0.05f);
-	MyRectangle operatorBoundsTop = new MyRectangle(0.2f, 0.1f, 0.1f, 0.05f);
-	MyRectangle valueBounds = new MyRectangle(0.31f, 0.1f, 0.17f, 0.05f);
-	MyRectangle newBlockBounds = new MyRectangle(0.49f, 0.1f, 0.15f, 0.05f);
+	MyRectangle variableBounds = new MyRectangle(0.02f, 0.05f, 0.17f, 0.05f);
+	MyRectangle operatorBoundsTop = new MyRectangle(0.2f, 0.05f, 0.1f, 0.05f);
+	MyRectangle valueBounds = new MyRectangle(0.31f, 0.05f, 0.17f, 0.05f);
+	MyRectangle newBlockBounds = new MyRectangle(0.49f, 0.05f, 0.12f, 0.05f);
 	
 	MyRectangle leftEvaluableBounds = new MyRectangle(0.02f, 0.2f, 0.17f, 0.05f);
 	MyRectangle operatorBoundsBottom = new MyRectangle(0.2f, 0.2f, 0.1f, 0.05f);
 	MyRectangle rightEvaluableBounds = new MyRectangle(0.31f, 0.2f, 0.17f, 0.05f);
-	MyRectangle expressionBounds = new MyRectangle(0.49f, 0.2f, 0.15f, 0.05f);
+	MyRectangle expressionBounds = new MyRectangle(0.49f, 0.2f, 0.12f, 0.05f);
 
-	MyRectangle finalExpressionLabelBounds = new MyRectangle(0.02f, 0.4f, 0.20f, 0.05f);
-	MyRectangle finalExpressionComboBounds = new MyRectangle(0.22f, 0.4f, 0.45f, 0.05f);
-	MyRectangle commandsLabelBounds = new MyRectangle(0.02f, 0.5f, 0.20f, 0.05f);
-	MyRectangle commandComboBounds = new MyRectangle(0.22f, 0.5f, 0.12f, 0.05f);
-	MyRectangle argsLabelBounds = new MyRectangle(0.3f, 0.5f, 0.1f, 0.05f);
-	MyRectangle argsGridBounds = new MyRectangle(0.35f, 0.5f, 0.32f, 0.2f);
+	MyRectangle finalExpressionLabelBounds = new MyRectangle(0.02f, 0.3f, 0.20f, 0.05f);
+	MyRectangle finalExpressionComboBounds = new MyRectangle(0.02f, 0.35f, 0.59f, 0.05f);
+	MyRectangle commandsLabelBounds = new MyRectangle(0.02f, 0.43f, 0.20f, 0.05f);
+	MyRectangle commandComboBounds = new MyRectangle(0.22f, 0.43f, 0.12f, 0.05f);
+	MyRectangle argsLabelBounds = new MyRectangle(0.3f, 0.4f, 0.1f, 0.05f);
+	MyRectangle argsGridBounds = new MyRectangle(0.02f, 0.5f, 0.59f, 0.2f);
 	
 	MyRectangle validateButtonBounds = new MyRectangle(0.2f, 0.85f, 0.15f, 0.05f);
 	MyRectangle cancelButtonBounds = new MyRectangle(0.4f, 0.85f, 0.15f, 0.05f);
+
+	MyRectangle blocksBounds = new MyRectangle(0.64f, 0.05f, 0.34f, 0.35f);
+	MyRectangle expressionsBounds = new MyRectangle(0.64f, 0.5f, 0.34f, 0.41f);
 	
-	MyRectangle blocksBounds = new MyRectangle(0.7f, 0.1f, 0.28f, 0.35f);
-	MyRectangle expressionsBounds = new MyRectangle(0.7f, 0.55f, 0.28f, 0.35f);
-	
-	MyRectangle behaviourNameLabelBounds = new MyRectangle(0.25f, 0.75f, 0.3f, 0.05f);
-	MyRectangle behaviourNameTextFieldBounds = new MyRectangle(0.35f, 0.75f, 0.3f, 0.05f);
+	MyRectangle behaviourNameLabelBounds = new MyRectangle(0.02f, 0.73f, 0.3f, 0.05f);
+	MyRectangle behaviourNameTextFieldBounds = new MyRectangle(0.1f, 0.73f, 0.3f, 0.05f);
 	
 	MyComboBox<EnvironmentVariable> variablesComboBox;
 	MyComboBox<String> operatorTopComboBox;

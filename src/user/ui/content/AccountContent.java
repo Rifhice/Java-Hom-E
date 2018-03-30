@@ -27,7 +27,7 @@ import user.ui.componentJavaFX.UserCell;
 
 public class AccountContent extends Content {
 
-    private MyRectangle AccountBounds = new MyRectangle(0f, 0F, 0.6f, 0.15f);
+    private MyRectangle AccountBounds = new MyRectangle(0.02f, 0f, 0.6f, 0.15f);
     private MyRectangle notAllowedRightsBounds = new MyRectangle(0.5f, 0.15F, 0.25f, 0.85f);
     private MyRectangle allowedRightsBounds = new MyRectangle(0.75f, 0.15F, 0.25f, 0.85f);
     private MyRectangle familyMembersBounds = new MyRectangle(0f, 0.15F, 0.5f, 0.60f);
@@ -36,12 +36,13 @@ public class AccountContent extends Content {
     private List<RightCell> rightCells = new ArrayList<RightCell>();
 
     private MyRectangle newFamilyMemberBounds = new MyRectangle(0f, 0.75F, 0.5f, 0.25f);
-    private MyRectangle newFamilyMemberPseudoLabelBounds = new MyRectangle(0.1f, 0.25f, 0.20f, 0.25f);
-    private MyRectangle newFamilyMemberPseudoTextFieldBounds = new MyRectangle(0.35f, 0.30f, 0.25f, 0.2f);
-    private MyRectangle newFamilyMemberPasswordLabelBounds = new MyRectangle(0.1f, 0.50f, 0.20f, 0.25f);
-    private MyRectangle newFamilyMemberPasswordTextFieldBounds = new MyRectangle(0.35f, 0.55f, 0.25f, 0.2f);
-    private MyRectangle newFamilyMemberButtonBounds = new MyRectangle(0.80f, 0.4f,0.1f,0.1f);
-
+    
+    private MyRectangle newFamilyMemberPseudoLabelBounds = new MyRectangle(0.02f, 0.25f, 0.3f, 0.25f);
+    private MyRectangle newFamilyMemberPseudoTextFieldBounds = new MyRectangle(0.3f, 0.30f, 0.3f, 0.2f);
+   
+    private MyRectangle newFamilyMemberPasswordLabelBounds = new MyRectangle(0.02f, 0.50f, 0.3f, 0.25f);
+    private MyRectangle newFamilyMemberPasswordTextFieldBounds = new MyRectangle(0.3f, 0.55f, 0.3f, 0.2f);
+    private MyRectangle newFamilyMemberButtonBounds = new MyRectangle(0.88f, 0.4f,0.1f,0.1f);
 
     GridPane notAllowedRightsList = new GridPane();
     GridPane allowedRightsList = new GridPane();
@@ -61,14 +62,12 @@ public class AccountContent extends Content {
         MyPane accountPane = new MyPane(AccountBounds.computeBounds(width, height));
         MyPane newFamilyMemberPane = new MyPane(newFamilyMemberBounds.computeBounds(width,height));
 
-        MyLabel accountLabel = new MyLabel("Family members account : ", AccountBounds.computeBounds(width,height));
+        MyLabel accountLabel = new MyLabel("Family member accounts", AccountBounds.computeBounds(width,height));
 
         MyLabel newPseudoLabel = new MyLabel("Pseudo: ", newFamilyMemberPseudoLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
         MyTextFieldFX newPseudoText = new MyTextFieldFX("Pseudo", newFamilyMemberPseudoTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
-        MyLabel newPasswordLabel = new MyLabel("Mot de passe: ", newFamilyMemberPasswordLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
+        MyLabel newPasswordLabel = new MyLabel("Password: ", newFamilyMemberPasswordLabelBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()), 1f);
         MyTextFieldFX newPasswordText = new MyTextFieldFX("Password", newFamilyMemberPasswordTextFieldBounds.computeBounds(newFamilyMemberPane.getPrefWidth(), newFamilyMemberPane.getPrefHeight()));
-
-
 
         MyScrollPane notAllowedRightsScrollPane = new MyScrollPane(notAllowedRightsBounds.computeBounds(width, height));
         MyScrollPane allowedRightsScrollPane = new MyScrollPane(allowedRightsBounds.computeBounds(width, height));

@@ -1,7 +1,7 @@
 package user.ui.content;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.ArrayList;import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,11 +44,11 @@ public class ControlContent extends Content {
 	private MyGridPane topGridPane;
 	private MyGridPane bottomGridPane;
 	
-	private MyRectangle bottomPaneBounds = new MyRectangle(0f,0.3f,1f,0.7f);
 	private MyRectangle topPaneBounds = new MyRectangle(0f,0f,1f,0.3f);
+	private MyRectangle bottomPaneBounds = new MyRectangle(0f,0.3f,1f,0.7f);
 	
-	private MyRectangle composedLabelCommandBounds = new MyRectangle(0.1f,0.1f,1f,0.1f);
-	private MyRectangle atomicLabelCommandBounds = new MyRectangle(0.1f,0.1f,1f,0.1f);
+	private MyRectangle composedLabelCommandBounds = new MyRectangle(0.1f,0.1f,1f,0.2f);
+	private MyRectangle atomicLabelCommandBounds = new MyRectangle(0.1f,0.1f,1f,0.2f);
 
 	private ControlContent() {
 		topGridPane  = new MyGridPane(topPaneBounds.computeBounds(width, height));
@@ -62,8 +62,9 @@ public class ControlContent extends Content {
         
         
         bottomGridPane  = new MyGridPane(bottomPaneBounds.computeBounds(width, height));
-        MyLabel label2 = new MyLabel("Atomic Commands", atomicLabelCommandBounds.computeBounds(topGridPane.getPrefWidth(), topGridPane.getPrefHeight()),2f);
-		bottomGridPane.add(label2, 0, 0);
+        MyLabel label2 = new MyLabel("Atomic Commands", atomicLabelCommandBounds.computeBounds(bottomGridPane.getPrefWidth(), bottomGridPane.getPrefHeight()),2f);
+        
+        bottomGridPane.add(label2, 0, 0);
         MyScrollPane atomicList = new MyScrollPane(bottomPaneBounds.computeBounds(width,height));
         atomicList.setBackground(new Background(new BackgroundFill(Color.web(GraphicalCharter.LIGHT_GRAY), CornerRadii.EMPTY, Insets.EMPTY)));
 

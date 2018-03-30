@@ -15,11 +15,11 @@ public class ActuatorContent extends Content {
 
 	private ActuatorContent() {
 	    MyPane actuatorsListPane = new MyPane(actuatorsListBounds.computeBounds(width, height));
-	    actuatorsListPane.setStyle("-fx-background-color: rgb(255,0,0)");
+	    actuatorsListPane.setStyle("-fx-background-color: rgb(250, 250, 100)");
 	    MyPane selectedActuatorPane = new MyPane(selectedActuatorBounds.computeBounds(width, height));
-	    selectedActuatorPane.setStyle("-fx-background-color: rgb(0,0,255)");
+	    selectedActuatorPane.setStyle("-fx-background-color: rgb(100,100,250)");
 	    MyPane latestActionsPane = new MyPane(latestActionsBounds.computeBounds(width, height));
-	    latestActionsPane.setStyle("-fx-background-color: rgb(0,255,0)");
+	    latestActionsPane.setStyle("-fx-background-color: rgb(100,250,100)");
 
 	    this.getChildren().add(actuatorsListPane);
 	    this.getChildren().add(selectedActuatorPane);

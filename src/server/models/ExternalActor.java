@@ -10,6 +10,7 @@ public class ExternalActor {
 	protected int id;
 	protected String name;
 	protected String description;
+	protected boolean isActivated = true;
 	
     // ====================== //
     // ==== CONSTRUCTORS ==== //
@@ -61,15 +62,15 @@ public class ExternalActor {
 	// ==================================
 	
 	public void enable() {
-		
+		isActivated = true;
 	}
 	
 	public void disable() {
-		
+		isActivated = false;
 	}
 	
-	public boolean isEnabled() {
-		return true;
+	public boolean isActivated() {
+		return isActivated;
 	}
 	
 	public JSONObject toJson() {
@@ -77,6 +78,7 @@ public class ExternalActor {
 		result.put("id"	, id);
 		result.put("name", name);
 		result.put("description", description);
+		result.put("activated", isActivated);
 		return result;
 	}
 }

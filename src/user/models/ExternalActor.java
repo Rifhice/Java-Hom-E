@@ -9,7 +9,7 @@ public class ExternalActor {
 	protected int id;
 	protected String name;
 	protected String description;
-	
+	protected boolean isActivated = true;
     // ====================== //
     // ==== CONSTRUCTORS ==== //
     // ====================== //
@@ -56,14 +56,14 @@ public class ExternalActor {
 	// ==================================
 	
 	public void enable() {
-		
+		isActivated = true;
 	}
 	
 	public void disable() {
-		
+		isActivated = false;
 	}
 	
 	public boolean isEnabled() {
-		return true;
+		return isActivated;
 	}
 }

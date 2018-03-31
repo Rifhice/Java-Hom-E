@@ -228,6 +228,7 @@ public class SQLiteDatabaseManager {
                 + " name text NOT NULL, \n"
                 + " description text, \n"
                 + " fk_sensorCategory_id integer,\n"
+                + " isActivated integer,\n"
                 + " FOREIGN KEY (fk_sensorCategory_id) REFERENCES sensorCategories(id) \n"
                 + ");";
 
@@ -694,9 +695,9 @@ public class SQLiteDatabaseManager {
     }
 
     private static void insertSensors() {
-        String insertSensor1 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (1, 'Presensor3000','Sense the presence of something (10m range)',1);";
-        String insertSensor2 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (2, 'LightCaptor5000','Measure the light intensity', 2);";
-        String insertSensor3 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id') VALUES (3, 'Thermometer450','What is the temperature ?', 3);";
+        String insertSensor1 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id', 'isActivated') VALUES (1, 'Presensor3000','Sense the presence of something (10m range)',1, 1);";
+        String insertSensor2 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id', 'isActivated') VALUES (2, 'LightCaptor5000','Measure the light intensity', 2, 1);";
+        String insertSensor3 = "INSERT INTO sensors ('id', 'name', 'description', 'fk_sensorCategory_id', 'isActivated') VALUES (3, 'Thermometer450','What is the temperature ?', 3, 1);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertSensor1);
             stmt.execute(insertSensor2);

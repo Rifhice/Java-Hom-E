@@ -36,8 +36,8 @@ public class SQLiteSensorDAO extends SensorDAO{
         Sensor sensor = obj;
         
         String sql = "INSERT INTO Sensors "
-                + "(name, description, fk_sensorCategory_id) VALUES "
-                + "(?, ?, ?)";
+                + "(name, description, fk_sensorCategory_id, isActivated) VALUES "
+                + "(?, ?, ?, ?)";
         
         // Insert the object
         int created = 0;
@@ -47,6 +47,12 @@ public class SQLiteSensorDAO extends SensorDAO{
               prepStat.setString(2, obj.getDescription());
               if(obj.getSensorCategory() != null) {
             	  prepStat.setInt(3, obj.getSensorCategory().getId());
+              }
+              if(obj.isActivated()) {
+                  prepStat.setInt(4, 1);
+              }
+              else {
+            	  prepStat.setInt(4, 0);
               }
               created = prepStat.executeUpdate();
               
@@ -212,7 +218,7 @@ public class SQLiteSensorDAO extends SensorDAO{
     @Override
     public Sensor getById(int id) throws DAOException {
         Sensor sensor = null;
-        String sql = "SELECT S.id AS id, S.name AS name, S.description AS description "
+        String sql = "SELECT S.id AS id, S.name AS name, S.description AS description, S.isActivated AS isActivated "
                 + "FROM Sensors AS S "
                 + "WHERE S.id = ?";
 
@@ -226,6 +232,12 @@ public class SQLiteSensorDAO extends SensorDAO{
             	sensor.setId(rs.getInt("id"));
             	sensor.setName(rs.getString("name"));
             	sensor.setDescription(rs.getString("description"));
+            	if(rs.getInt("isActivated") == 1) {
+                	sensor.enable();
+            	}
+            	else {
+            		sensor.disable();
+            	}
                 // TODO list of commands
             }
         } catch (SQLException e) {
@@ -261,6 +273,12 @@ public class SQLiteSensorDAO extends SensorDAO{
             	sensor.setId(rs.getInt("id"));
             	sensor.setName(rs.getString("name"));
             	sensor.setDescription(rs.getString("description"));
+            	if(rs.getInt("isActivated") == 1) {
+                	sensor.enable();
+            	}
+            	else {
+            		sensor.disable();
+            	}
             	sensor.setEnvironmentVariable(getEnvironmentVariable(sensor.getId()));
             	if(rs.getInt("fk_sensorCategory_id") != 0) {
             		try {

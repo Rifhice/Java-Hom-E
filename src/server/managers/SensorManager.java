@@ -89,8 +89,8 @@ public class SensorManager extends Manager{
                 ((DiscreteValue) value).setPossibleValues(possibleValuesArray);        
                 ev.setValue(value);
             }
-            	
-			return new Sensor(name, description, ev);
+            Sensor sensor = new Sensor(name, description, ev);
+			return sensor;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -217,7 +217,7 @@ public class SensorManager extends Manager{
         result.put("action", "getAll");
 		for (int i = 0; i < sensors.size(); i++) {
 			try {
-			result.append("sensors", sensors.get(i).toJson());
+				result.append("sensors", sensors.get(i).toJson());
 			}
 			catch (Exception e) {
 				e.printStackTrace();

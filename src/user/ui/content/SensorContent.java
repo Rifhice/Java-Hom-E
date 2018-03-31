@@ -47,6 +47,7 @@ public class SensorContent extends Content {
 	private MyRectangle selectedSensorBounds = new MyRectangle(0.25f, 0f, 0.375f, 1.0f);
     private MyRectangle latestActionsBounds = new MyRectangle(0.625f, 0f, 0.375f, 1.0f);
     
+    private MyRectangle activateBounds = new MyRectangle(0.35f, 0.05f, 0.3f, 0.05f);
     private MyRectangle sensorBounds = new MyRectangle(0f, 0.1f, 1f, 0.05f); 
 	private MyRectangle nomBounds = new MyRectangle(0f, 0.15f, 1f, 0.05f); 
 	private MyRectangle descriptionBounds = new MyRectangle(0.1f, 0.24f, 0.375f, 0.05f); 
@@ -65,6 +66,7 @@ public class SensorContent extends Content {
     private MyGridPane sensorsListGrid;
     private MyComboBox<SensorCategory> categoriesComboBox;
     
+    private MyButtonFX activateButton;
     private MyLabel sensorLabel;
     private MyLabel nomLabel;
     private MyLabel description;
@@ -80,7 +82,17 @@ public class SensorContent extends Content {
     private int currentSensorIndex = -1;
     private final int NB_SENSOR_DISPLAYED = 7;
     
+    private EventHandler<ActionEvent> sensorButtonEvent;
+    
 	private SensorContent() {
+		sensorButtonEvent = new EventHandler<ActionEvent>() {
+	        @Override
+	        public void handle(ActionEvent event) {
+	            int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
+	            currentSensorIndex = pressedButton;
+	            updateTexts(currentSensorIndex);
+	        }
+	    };
 	    sensorsListGrid = new MyGridPane(sensorsListBounds.computeBounds(width, height));
         MyScrollPane sensorList = new MyScrollPane(sensorsListBounds.computeBounds(width,height));
         sensorList.setContent(sensorsListGrid);
@@ -109,53 +121,34 @@ public class SensorContent extends Content {
 		                	if(arg2.getId() == -2) { //NO CATEGORIES
 			                	for (int i = 0; i < sensors.size(); i++) {
 			                		if(sensors.get(i).getSensorCategory() == null) {
-										sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED, new EventHandler<ActionEvent>() {
-				                            @Override
-				                            public void handle(ActionEvent event) {
-				                                int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-				                                currentSensorIndex = pressedButton;
-				                                nomLabel.setText(sensors.get(currentSensorIndex).getName());
-				                                variableDescriptionLabel.setText(sensors.get(currentSensorIndex).getDescription());
-				                                nomVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getName());;
-				                                variableDescriptionVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getDescription());
-				                                currentValueVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getValue().getCurrentValue().toString());
-				                            }
-				                        }),0,i + 1);
+										sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED,sensorButtonEvent),0,i + 1);
 			                		}
 								}
 		                	}
 		                	else if(arg2.getId() == -1) { // ALL CATEGORIES
 			                	for (int i = 0; i < sensors.size(); i++) {
-									sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED, new EventHandler<ActionEvent>() {
-			                            @Override
-			                            public void handle(ActionEvent event) {
-			                                int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-			                                currentSensorIndex = pressedButton;
-			                                nomLabel.setText(sensors.get(currentSensorIndex).getName());
-			                                variableDescriptionLabel.setText(sensors.get(currentSensorIndex).getDescription());
-			                                nomVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getName());;
-			                                variableDescriptionVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getDescription());
-			                                currentValueVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getValue().getCurrentValue().toString());
-			                            }
-			                        }),0,i + 1);
+									sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED, sensorButtonEvent),0,i + 1);
+								}
+		                	}
+		                	else if(arg2.getId() == -3) { // Activated
+			                	for (int i = 0; i < sensors.size(); i++) {
+			                		if(sensors.get(i).isEnabled()) {
+										sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED,sensorButtonEvent),0,i + 1);
+			                		}
+								}
+		                	}
+		                	else if(arg2.getId() == -4) { // Deactivated
+			                	for (int i = 0; i < sensors.size(); i++) {
+			                		if(!sensors.get(i).isEnabled()) {
+										sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED,sensorButtonEvent),0,i + 1);
+			                		}
 								}
 		                	}
 		                	else{ // SELECTED CATEGORY
 		                		for (int i = 0; i < sensors.size(); i++) {
 		                			if(sensors.get(i).getSensorCategory() != null) {
 										if(sensors.get(i).getSensorCategory().getId() == arg2.getId()) {
-											sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED, new EventHandler<ActionEvent>() {
-					                            @Override
-					                            public void handle(ActionEvent event) {
-					                                int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-					                                currentSensorIndex = pressedButton;
-					                                nomLabel.setText(sensors.get(currentSensorIndex).getName());
-					                                variableDescriptionLabel.setText(sensors.get(currentSensorIndex).getDescription());
-					                                nomVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getName());;
-					                                variableDescriptionVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getDescription());
-					                                currentValueVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getValue().getCurrentValue().toString());
-						                            }
-						                        }),0,i + 1);
+											sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED,sensorButtonEvent),0,i + 1);
 										}
 		                			}
 								}
@@ -167,6 +160,18 @@ public class SensorContent extends Content {
 		});
     	
 	    MyPane selectedSensorPane = new MyPane(selectedSensorBounds.computeBounds(width, height));
+	    activateButton = new MyButtonFX("Activate",activateBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(sensors.get(currentSensorIndex).isEnabled()) {
+                	//TODO DEACTIVATE SENSOR
+                }
+                else {
+                	//TODO ACTIVATE SENSOR
+                }
+            }
+        });
+	    
 	    sensorLabel = new MyLabel("Name",sensorBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),1.5f);
 	    sensorLabel.centerX(selectedSensorPane.getPrefWidth());
 	    sensorLabel.setAlignment(Pos.CENTER);
@@ -178,6 +183,7 @@ public class SensorContent extends Content {
 	    nomLabel.setStyle("-fx-font-weight: bold;");
 	    description = new MyLabel("Description",descriptionBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()), 1.3f);
 	    variableDescriptionLabel = new MyLabel("descr",variableDescriptionBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()));	    
+	    selectedSensorPane.getChildren().add(activateButton);
 	    selectedSensorPane.getChildren().add(sensorLabel);
 	    selectedSensorPane.setStyle(""	+ 
     		"-fx-background-color: " + GraphicalCharter.LIGHT_GRAY + ";" +
@@ -272,24 +278,20 @@ public class SensorContent extends Content {
                 	sensorsListGrid.add(categoriesComboBox,0,0);
                 	categoriesComboBox.getSelectionModel().selectFirst();
                 	for (int i = 0; i < sensors.size(); i++) {
-                    	sensorsListGrid.add(new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED, new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent event) {
-                                int pressedButton = Integer.parseInt(((MyButtonFX)event.getSource()).getId());
-                                currentSensorIndex = pressedButton;
-                                nomLabel.setText(sensors.get(currentSensorIndex).getName());
-                                variableDescriptionLabel.setText(sensors.get(currentSensorIndex).getDescription());
-                                nomVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getName());;
-                                variableDescriptionVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getDescription());
-                                currentValueVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getValue().getCurrentValue().toString());
-                            }
-                        }),0,i + 1);
+                		MyButtonFX button = new MyButtonFX(sensors.get(i).getName(),i,sensorsListGrid.getPrefWidth(),sensorsListGrid.getPrefHeight() / NB_SENSOR_DISPLAYED,sensorButtonEvent);
+                    	sensorsListGrid.add(button,0,i + 1);
                     }
                     nomLabel.setText(sensors.get(currentSensorIndex).getName());
                     variableDescriptionLabel.setText(sensors.get(currentSensorIndex).getDescription());
                     nomVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getName());;
                     variableDescriptionVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getDescription());
                     currentValueVariableLabel.setText(sensors.get(currentSensorIndex).getEnvironmentVariables().getValue().getCurrentValue().toString());
+                    if(sensors.get(currentSensorIndex).isEnabled()) {
+                        activateButton.setText("Deactivate");
+                    }
+                    else {
+                    	activateButton.setText("Activated");
+                    }
                 }
             });
         }
@@ -317,6 +319,12 @@ public class SensorContent extends Content {
 						JSONObject current = array.getJSONObject(i);
 						System.out.println(current.toString());
 						Sensor sensor = new Sensor(current.getInt("id"),current.getString("name"),current.getString("description"),null);
+						if(current.getBoolean("activated")) {
+							sensor.enable();
+						}
+						else {
+							sensor.disable();
+						}
 						JSONObject variable = current.getJSONObject("environmentVariable");
 						EnvironmentVariable var = new EnvironmentVariable(variable.getInt("id"), variable.getString("name"), variable.getString("description"), variable.getString("unit"));
 						JSONObject value = variable.getJSONObject("value");
@@ -362,13 +370,15 @@ public class SensorContent extends Content {
 				switch (json.getString("action")) {
 				case "getAll":
 					categories.clear();
-					categories.add(new SensorCategory(-1,"All Categories"));
+					categories.add(new SensorCategory(-1,"All Sensors"));
                     JSONArray arrArg = json.getJSONArray("categories");
                     for (int j = 0; j < arrArg.length(); j++){
                         JSONObject current = arrArg.getJSONObject(j);
                         categories.add(new SensorCategory(current.getInt("id"), current.getString("name"), current.getString("description")));
                     }
 					categories.add(new SensorCategory(-2,"No category"));
+					categories.add(new SensorCategory(-3,"Activated"));
+					categories.add(new SensorCategory(-4,"Deactivated"));
                     updateUI();
 					break;
 
@@ -377,5 +387,19 @@ public class SensorContent extends Content {
 				}
 			}
 		}
+	}
+	
+	public void updateTexts(int index) {
+		nomLabel.setText(sensors.get(index).getName());
+        variableDescriptionLabel.setText(sensors.get(index).getDescription());
+        nomVariableLabel.setText(sensors.get(index).getEnvironmentVariables().getName());;
+        variableDescriptionVariableLabel.setText(sensors.get(index).getEnvironmentVariables().getDescription());
+        currentValueVariableLabel.setText(sensors.get(index).getEnvironmentVariables().getValue().getCurrentValue().toString());
+        if(sensors.get(index).isEnabled()) {
+            activateButton.setText("Deactivate");
+        }
+        else {
+        	activateButton.setText("Activated");
+        }
 	}
 }

@@ -27,7 +27,6 @@ public class MyButtonFX extends Button{
 				setStyle(
 						"-fx-background-color: " + GraphicalCharter.DEEP_BLUE +";"
 						+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
-						+ "-fx-text-fill: " + GraphicalCharter.DEEP_BLUE + ";"
 						+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
 						+ "-fx-font-size: " + 16
 				);
@@ -87,7 +86,6 @@ public class MyButtonFX extends Button{
 		setText(label);
 		setId(id +"");
 		setOnAction(event);
-		setOnAction(event);
 		setLayoutX((int)(bounds.getX()));
 		setLayoutY((int)(bounds.getY()));
 		setPrefWidth((int)bounds.getWidth());
@@ -106,6 +104,115 @@ public class MyButtonFX extends Button{
 	
 	public MyButtonFX setFontMultiplier(float fontMultiplier) {
 		setFont(Font.font(GraphicalCharter.FONT,GraphicalCharter.FONT_SIZE * fontMultiplier));
+		return this;
+	}
+	
+	public MyButtonFX activatedColor() {
+		this.getStyleClass().clear();
+		this.setStyle(
+				"-fx-background-color: " + GraphicalCharter.LIGHT_GREEN +";"
+				+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+				+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+				+ "-fx-font-size: " + 16
+		);
+		this.setOnMouseEntered(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				setStyle(
+						"-fx-background-color: " + GraphicalCharter.DARK_GREEN +";"
+						+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+						+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+						+ "-fx-font-size: " + 16
+				);
+			}
+		});
+		this.setOnMouseExited(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				setStyle(
+						"-fx-background-color: " + GraphicalCharter.LIGHT_GREEN +";"
+						+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+						+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+						+ "-fx-font-size: " + 16
+				);
+			}
+		});
+		return this;
+	}
+	
+	public MyButtonFX deactivatedColor() {
+		this.setStyle(
+				"-fx-background-color: " + GraphicalCharter.LIGHT_BLUE +";"
+				+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+				+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+				+ "-fx-font-size: " + 16
+		);
+		this.setOnMouseEntered(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				setStyle(
+						"-fx-background-color: " + GraphicalCharter.DEEP_BLUE +";"
+						+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+						+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+						+ "-fx-font-size: " + 16
+				);
+			}
+		});
+		this.setOnMouseExited(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				setStyle(
+						"-fx-background-color: " + GraphicalCharter.LIGHT_BLUE +";"
+						+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+						+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+						+ "-fx-font-size: " + 16
+				);
+			}
+		});
+		return this;
+	}
+	
+	public MyButtonFX disconnectedColor() {
+		this.setStyle(
+				"-fx-background-color: " + GraphicalCharter.LIGHT_GRAY +";"
+				+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+				+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+				+ "-fx-font-size: " + 16
+		);
+		this.setOnMouseEntered(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				setStyle(
+						"-fx-background-color: " + GraphicalCharter.DARK_GRAY +";"
+						+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+						+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+						+ "-fx-font-size: " + 16
+				);
+			}
+		});
+		this.setOnMouseExited(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				setStyle(
+						"-fx-background-color: " + GraphicalCharter.LIGHT_GRAY +";"
+						+ "-fx-border-color: " + GraphicalCharter.DARK_GRAY + ";"
+						+ "-fx-text-fill: " + GraphicalCharter.WHITE + ";"
+						+ "-fx-font-size: " + 16
+				);
+			}
+		});
 		return this;
 	}
 }

@@ -125,7 +125,7 @@ public class SensorCategorieManager extends Manager{
         switch(action) {
 	        case "getAll":
 	        	getAllSensorCategorie(client);
-	            break;
+	        	break;
 	        case "create":
 	        	createSensorCategorie(new SensorCategory(json.getString("name"),json.getString("description")),client);
 	            break;

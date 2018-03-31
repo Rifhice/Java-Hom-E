@@ -224,10 +224,55 @@ public class SensorManager extends Manager{
 			}
 		}
         try {
+        	System.out.println(result.toString());
             client.sendToClient(result.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	public void activate(JSONObject json,ConnectionToClient client) {
+		int updated = sensorDAO.changeIsActivated(json.getInt("id"), true);
+		JSONObject result = new JSONObject();
+		if(updated >= 1) {
+	        result.put("result", "success");
+	        result.put("recipient", "sensor");
+	        result.put("action", "activate");
+	        result.put("id", json.getInt("id"));
+	        SystemManager.sendToAllClient(result.toString());
+		}
+		else {
+	        result.put("result", "failure");
+	        result.put("recipient", "sensor");
+	        result.put("action", "activate");
+	        try {
+	            client.sendToClient(result.toString());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
+	}
+	
+	public void deactivate(JSONObject json,ConnectionToClient client) {
+		int updated = sensorDAO.changeIsActivated(json.getInt("id"), false);
+		JSONObject result = new JSONObject();
+		if(updated >= 1) {
+	        result.put("result", "success");
+	        result.put("recipient", "sensor");
+	        result.put("action", "deactivate");
+	        result.put("id", json.getInt("id"));
+	        SystemManager.sendToAllClient(result.toString());
+		}
+		else {
+	        result.put("result", "failure");
+	        result.put("recipient", "sensor");
+	        result.put("action", "deactivate");
+	        try {
+	            client.sendToClient(result.toString());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
 	}
 	
     /**
@@ -254,6 +299,13 @@ public class SensorManager extends Manager{
 		    break;
 		case "getAll":
 			getAll(json,client);
+			break;
+		case "activate":
+			activate(json,client);
+			break;
+		case "deactivate":
+			deactivate(json,client);
+			break;
 		default:
 			break;
 		}

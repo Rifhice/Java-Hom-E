@@ -163,11 +163,27 @@ public class SensorContent extends Content {
 	    activateButton = new MyButtonFX("Activate",activateBounds.computeBounds(selectedSensorPane.getPrefWidth(), selectedSensorPane.getPrefHeight()),new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	
+            	JSONObject json = new JSONObject();
                 if(sensors.get(currentSensorIndex).isEnabled()) {
-                	//TODO DEACTIVATE SENSOR
+        	        json.put("recipient", "sensor");
+        	        json.put("action", "deactivate");
+        	        json.put("id", sensors.get(currentSensorIndex).getId());
+        	        try {
+        	            ClientFX.client.sendToServer(json.toString());
+        	        } catch (IOException e) {
+        	            e.printStackTrace();
+        	        }
                 }
                 else {
-                	//TODO ACTIVATE SENSOR
+        	        json.put("recipient", "sensor");
+        	        json.put("action", "activate");
+        	        json.put("id", sensors.get(currentSensorIndex).getId());
+        	        try {
+        	            ClientFX.client.sendToServer(json.toString());
+        	        } catch (IOException e) {
+        	            e.printStackTrace();
+        	        }
                 }
             }
         });
@@ -361,6 +377,26 @@ public class SensorContent extends Content {
 						}
 						updateUI();
 					}
+					break;
+				case "activate":
+					if(json.getString("result").equals("success")) {
+						for (int i = 0; i < sensors.size(); i++) {
+							if(sensors.get(i).getId() == json.getInt("id")) {
+								sensors.get(i).enable();
+							}
+						}
+					}
+					updateUI();
+					break;
+				case "deactivate":
+					if(json.getString("result").equals("success")) {
+						for (int i = 0; i < sensors.size(); i++) {
+							if(sensors.get(i).getId() == json.getInt("id")) {
+								sensors.get(i).disable();
+							}
+						}
+					}
+					updateUI();
 					break;
 				default:
 					break;

@@ -13,6 +13,8 @@ public abstract class SensorDAO extends DAO<Sensor>{
         super(connectionDriver);
     }
     
+    public abstract int changeIsActivated(int id,boolean bool);
+    
     // ======================== //
     // ==== CUSTOM METHODS ==== //
     // ======================== //

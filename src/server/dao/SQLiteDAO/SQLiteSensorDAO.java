@@ -14,6 +14,7 @@ import server.dao.abstractDAO.SensorDAO;
 import server.factories.AbstractDAOFactory;
 import server.managers.SystemManager;
 import server.models.Sensor;
+import server.models.categories.SensorCategory;
 import server.models.environmentVariable.ContinuousValue;
 import server.models.environmentVariable.DiscreteValue;
 import server.models.environmentVariable.EnvironmentVariable;
@@ -377,6 +378,27 @@ public class SQLiteSensorDAO extends SensorDAO{
         return value;
     }
     
+	public int changeIsActivated(int id,boolean bool) throws DAOException {
+    	String sql = "UPDATE sensors "
+                + "SET isactivated = ? "
+                + "WHERE id = ?";
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              if(bool) {
+            	  prepStat.setInt(1, 1);
+              }
+              else {
+            	  prepStat.setInt(1, 0);
+              }
+              prepStat.setInt(2, id);
+              updated= prepStat.executeUpdate();
+
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : Sensor activate(" + id + ") :" + e.getMessage(), e); 
+          }
+        return updated;
+	}
     
     // ======================== //
     // ==== Custom methods ==== //

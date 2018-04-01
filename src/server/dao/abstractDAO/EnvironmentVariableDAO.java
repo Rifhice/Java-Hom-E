@@ -11,4 +11,6 @@ public abstract class EnvironmentVariableDAO extends DAO<EnvironmentVariable>{
     public EnvironmentVariableDAO(Connection connect) {
         super(connect);
     }
+    
+    public abstract int update(int id, String name,String description, String unit);
 }

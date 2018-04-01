@@ -161,6 +161,25 @@ public class SQLiteEnvironmentVariableDAO extends EnvironmentVariableDAO {
     }
 
 
+	@Override
+	public int update(int id, String name, String description, String unit) {
+    	String sql = "UPDATE environmentVariables "
+                + "SET name = ?, description = ?, unit = ? "
+                + "WHERE id = ?";
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, name);
+              prepStat.setString(2, description);
+              prepStat.setString(3, unit);
+              prepStat.setInt(4, id);
+              updated= prepStat.executeUpdate();
+
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : EnvironmentVariable update(" + id + ") :" + e.getMessage(), e); 
+          }
+        return updated;
+	}
 
     // ============== //
     // ==== MAIN ==== //
@@ -169,7 +188,6 @@ public class SQLiteEnvironmentVariableDAO extends EnvironmentVariableDAO {
         EnvironmentVariableDAO test = AbstractDAOFactory.getFactory(AbstractDAOFactory.SQLITE_DAO_FACTORY).getEnvironmentVariableDAO();
         System.out.println(test.getById(1));
     }
-
 
 
 }

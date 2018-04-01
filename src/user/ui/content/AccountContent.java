@@ -109,7 +109,6 @@ public class AccountContent extends Content {
         familyMembersList.setPrefWidth(familyMembersScrollPane.getPrefWidth());
         familyMembersList.setPrefHeight(familyMembersScrollPane.getPrefHeight());
         familyMembersScrollPane.setContent(familyMembersList);
-
         this.updateView("user");
         this.updateView("right");
 
@@ -279,7 +278,7 @@ public class AccountContent extends Content {
                 @Override public void run() {
                     familyMembersList.getChildren().clear();
                     for (int i = 0; i < familyMembers.size(); i++) {
-                        familyMembersList.add(new UserCell(familyMembers.get(i) ,familyMembersList.getPrefWidth(),familyMembersList.getPrefHeight() / NB_OF_FAMILYMEMBERS_DISPLAYED, 
+                    	familyMembersList.add(new UserCell(familyMembers.get(i) ,familyMembersList.getPrefWidth(),familyMembersList.getPrefHeight() / NB_OF_FAMILYMEMBERS_DISPLAYED, 
                                 new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent event) {

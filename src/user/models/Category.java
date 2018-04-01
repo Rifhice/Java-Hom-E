@@ -4,7 +4,7 @@ public abstract class Category {
 
 	protected String name;
 	protected String description;
-	
+	protected int id;
 	public Category(String name) {
 		this.name = name;
 	}
@@ -28,6 +28,14 @@ public abstract class Category {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 	
 }

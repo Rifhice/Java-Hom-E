@@ -399,6 +399,26 @@ public class SQLiteSensorDAO extends SensorDAO{
           }
         return updated;
 	}
+	
+	@Override
+	public int update(int idSensor, String name, String description, int idCategory) {
+    	String sql = "UPDATE sensors "
+                + "SET name = ?, description = ?, fk_sensorcategory_id = ? "
+                + "WHERE id = ?";
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, name);
+              prepStat.setString(2, description);
+              prepStat.setInt(3, idCategory);
+              prepStat.setInt(4, idSensor);
+              updated= prepStat.executeUpdate();
+
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : Sensor update(" + idSensor + ") :" + e.getMessage(), e); 
+          }
+        return updated;
+	}
     
     // ======================== //
     // ==== Custom methods ==== //
@@ -419,4 +439,5 @@ public class SQLiteSensorDAO extends SensorDAO{
         System.out.println(test.create(sensor));
         System.out.println(test.getAll());*/
     }
+
 }

@@ -122,23 +122,21 @@ public class Command {
     }
     
     public JSONObject toJson() {
-    	try {
-        	JSONObject curentCommand = new JSONObject();
-    		curentCommand.put("id", getId());
-    		curentCommand.put("name", getName());
-    		curentCommand.put("description", getDescription());
-    		curentCommand.put("key", getKey());
-    		curentCommand.put("actuator",actuator.getId());
-    		ArrayList<CommandValue> commandValue = getCommandValues();
-    		for (int j = 0; j < commandValue.size(); j++) {
-    			curentCommand.append("commandValue", commandValue.get(j).toJson());
-    		}
-    		return curentCommand;
-		} catch (Exception e) {
-			e.printStackTrace();
+    	JSONObject curentCommand = new JSONObject();
+		curentCommand.put("id", getId());
+		curentCommand.put("name", getName());
+		curentCommand.put("description", getDescription());
+		curentCommand.put("key", getKey());
+		if(actuator != null) {
+			curentCommand.put("actuator",actuator.getId());
 		}
-    	return null;
-
+		ArrayList<CommandValue> commandValue = getCommandValues();
+		if(commandValue != null) {
+			for (int j = 0; j < commandValue.size(); j++) {
+				curentCommand.append("commandValue", commandValue.get(j).toJson());
+			}
+		}
+    	return curentCommand;
     }
 	
 }

@@ -111,7 +111,7 @@ public class Actuator extends ExternalActor{
     
     public void execute(String executable) {
     	JSONObject json = new JSONObject();
-    	json.put("verb","command");
+    	json.put("action","command");
     	json.put("command", executable);
     	try {
 			this.client.sendToClient(json.toString());
@@ -136,7 +136,11 @@ public class Actuator extends ExternalActor{
     
     public JSONObject toJson() {
         JSONObject result = super.toJson();
-        result.put("actuatorCategory", actuatorCategory.toJson());
+        System.out.println(result.toString());
+        if(actuatorCategory != null) {
+        	result.put("actuatorCategory", actuatorCategory.toJson());
+        }
+        System.out.println(result.toString() + commands);
         for (int i = 0; i < commands.size(); i++) {
 			result.append("commands", commands.get(i).toJson());
 		}

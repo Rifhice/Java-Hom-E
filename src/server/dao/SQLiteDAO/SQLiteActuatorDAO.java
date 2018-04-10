@@ -5,12 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import server.dao.abstractDAO.ActuatorDAO;
 import server.dao.abstractDAO.DAOException;
 import server.factories.AbstractDAOFactory;
+import server.managers.SystemManager;
 import server.models.Actuator;
 import server.models.AtomicAction;
 import server.models.Command;
@@ -230,17 +233,9 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
                 ActuatorCategory ActCat = new ActuatorCategory(rs.getInt("ACid"), rs.getString("ACname"), rs.getString("ACdescription"));
                 actuator.setActuatorCategory(ActCat);
                 
-                // Get commands
-                ArrayList<Command> commands = new ArrayList<Command>();
-                do {
-                    int commandId = rs.getInt("Cid");
-                    String commandName = rs.getString("Cname");
-                    Command command = new Command(commandId, commandName);
-                    commands.add(command);
-                } while(rs.next());
-                actuator.setCommands(commands);
+                actuator.setCommands(AbstractDAOFactory.getFactory(SystemManager.db).getCommandDAO().getByActuatorId(rs.getInt("id")));
             }
-        } catch (SQLException e) {
+        } catch (SQLException e) { 
             throw new DAOException("DAOException : ActuatorDAO getById(" + id + ") :" + e.getMessage(), e);
         }
             
@@ -271,7 +266,43 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         }
         return actuator;
     }
-
+/*
+    public DiscreteCommandValue getDiscreteCommandValue(int idCommand) {
+        String sqlAllId = "SELECT * FROM discreteCommandValues WHERE fk_commandValue_id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sqlAllId);
+            prepStat.setInt(1, idCommand);
+            ResultSet rs = prepStat.executeQuery();
+            while(rs.next()) {
+            	ArrayList<String> possibleValues = new ArrayList<String>();
+            	JSONObject json = new JSONObject(rs.getString("possible_values"));
+            	JSONArray array = json.getJSONArray("possibleValues");
+            	for (int i = 0; i < array.length(); i++) {
+					possibleValues.add(array.getString(i));
+				}
+            	return new DiscreteCommandValue(possibleValues);
+            }
+        } catch(SQLException e) {
+            throw new DAOException("DAOException : ActuatorDAO getAll() :" + e.getMessage(), e);
+        }
+        return null;
+    }
+    
+    public DiscreteCommandValue getContinuousCommandValue(int idCommand) {
+        String sqlAllId = "SELECT * FROM continuousCommandValues WHERE fk_commandValue_id = ?";
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sqlAllId);
+            prepStat.setInt(1, idCommand);
+            ResultSet rs = prepStat.executeQuery();
+            while(rs.next()) {
+            	return new DiscreteCommandValue(rs.getFloat("min"),rs.getFloat("max"),rs.getFloat("precision"));
+            }
+        } catch(SQLException e) {
+            throw new DAOException("DAOException : ActuatorDAO getAll() :" + e.getMessage(), e);
+        }
+        return null;
+    }*/
+    
     @Override
     public int update(Actuator obj) throws DAOException {
         // TODO Auto-generated method stub
@@ -328,10 +359,10 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         } catch(SQLException e) {
             throw new DAOException("DAOException : ActuatorDAO getAll() :" + e.getMessage(), e);
         }
-        
         // Get all Actuators using getBydId()
         ArrayList<Actuator> actuators = new ArrayList<Actuator>();
         for (int id : ids) {
+        	
            actuators.add(this.getById(id));
         }
         return actuators;

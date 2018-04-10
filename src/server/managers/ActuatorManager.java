@@ -11,6 +11,7 @@ import server.dao.abstractDAO.ActuatorDAO;
 import server.factories.AbstractDAOFactory;
 import server.models.Actuator;
 import server.models.Command;
+import server.models.Sensor;
 import server.models.commandValue.CommandValue;
 import server.models.commandValue.ContinuousCommandValue;
 import server.models.commandValue.DiscreteCommandValue;
@@ -134,7 +135,7 @@ public class ActuatorManager extends Manager {
 			create.setConnectionToClient(client);
 			actuators.add(actuator);
 			result.put("result", "success");
-			result.put("verb", "post");
+			result.put("action", "post");
 			result.put("id", create.getId());
 			SystemManager.sendToAllClient(result.toString());
 			System.out.println("Actuator #" + actuator.getId() + " registered");
@@ -164,6 +165,34 @@ public class ActuatorManager extends Manager {
 		}
 	}
 	
+	public void getAll(JSONObject json,ConnectionToClient client) {
+		ArrayList<Actuator> actuators = new ArrayList<Actuator>();
+		try {
+			 actuators = actuatorDAO.getAll();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+        result.put("result", "success");
+        result.put("recipient", "actuator");
+        result.put("action", "getAll");
+		for (int i = 0; i < actuators.size(); i++) {
+			try {
+				result.append("actuators", actuators.get(i).toJson());
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+        try {
+        	System.out.println(result.toString());
+            client.sendToClient(result.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
 	/**
      * Possible values for key "action":
      * <ul>
@@ -173,14 +202,16 @@ public class ActuatorManager extends Manager {
      */
 	@Override
 	public void handleMessage(JSONObject json, ConnectionToClient client) {
-		String verb = json.getString("verb");
-		switch (verb) {
+		String action = json.getString("action");
+		switch (action) {
 		case "post":
 			registerActuatorToTheSystem(json,client);
 			break;
 		case "execute":
 			execute(json,client);
 			break;
+		case "getAll":
+			getAll(json,client);
 		default:
 			break;
 		}

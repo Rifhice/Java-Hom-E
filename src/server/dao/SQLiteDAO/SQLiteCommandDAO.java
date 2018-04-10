@@ -32,10 +32,55 @@ public class SQLiteCommandDAO extends CommandDAO {
 	
     @Override
     public Command getById(int id) throws DAOException {
-        // TODO Auto-generated method stub
-        return null;
+    	Command commands = null;
+        String sql = "SELECT * FROM Commands WHERE id = ?";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            Command command = null;
+            while (rs.next()) {
+            	command = new Command();
+            	command.setName(rs.getString("name"));
+            	command.setId(rs.getInt("id"));
+            	command.setKey(rs.getString("key"));
+            	command.setDescription(rs.getString("description"));
+            	command.setCommandValues(getAllCommandValues(command.getId()));
+            	command.setActuator(new Actuator(rs.getInt("fk_actuator_id")));
+            	return commands;
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : CommandDAO getAll() :" + e.getMessage(), e);
+        }
+        return commands;
     }
 
+    public ArrayList<Command> getByActuatorId(int id) throws DAOException {
+    	ArrayList<Command> commands = new ArrayList<Command>();
+        String sql = "SELECT * FROM Commands WHERE fk_actuator_id = ?";
+
+        try {
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, id);
+            ResultSet rs = prepStat.executeQuery();
+            Command command = null;
+            while (rs.next()) {
+            	command = new Command();
+            	command.setName(rs.getString("name"));
+            	command.setId(rs.getInt("id"));
+            	command.setKey(rs.getString("key"));
+            	command.setDescription(rs.getString("description"));
+            	command.setCommandValues(getAllCommandValues(command.getId()));
+            	command.setActuator(new Actuator(rs.getInt("fk_actuator_id")));
+            	commands.add(command);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : CommandDAO getAll() :" + e.getMessage(), e);
+        }
+        return commands;
+    }
+    
 	@Override
 	public int update(Command obj) throws DAOException {
 		return 0;

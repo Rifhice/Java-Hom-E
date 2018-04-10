@@ -52,9 +52,11 @@ public class ActuatorCategory extends Category{
 
     public JSONObject toJson() {
     	JSONObject result = super.toJson();
-    	for (int i = 0; i < actuators.size(); i++) {
-			result.append("actuators", actuators.get(i).toJson());
-		}
+    	if(actuators != null) {
+	    	for (int i = 0; i < actuators.size(); i++) {
+				result.append("actuators", actuators.get(i).toJson());
+			}
+    	}
     	return result;
     }
     

@@ -22,6 +22,11 @@ public class DiscreteCommandValue extends CommandValue {
     
     public DiscreteCommandValue() {}
     
+    public DiscreteCommandValue(ArrayList<String> values) {
+        super();
+        this.possibleValues = values;   
+    }
+    
     public DiscreteCommandValue(String name, ArrayList<String> values) {
         super(name);
         this.possibleValues = values;   

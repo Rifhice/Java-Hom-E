@@ -24,7 +24,7 @@ public class Actuator {
 	public static void registerToSystem() {
 		JSONObject registration = new JSONObject();
 		registration.put("recipient", "actuator");
-		registration.put("verb", "post");
+		registration.put("action", "post");
 		registration.put("id", "null");
 		registration.put("name", name);
 		registration.put("description", description);

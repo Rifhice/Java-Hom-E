@@ -384,6 +384,7 @@ public class SensorContent extends Content {
 				switch (json.getString("action")) {
 				
 				case "getAll":
+					sensors.clear();
 					JSONArray array = json.getJSONArray("sensors");
 					for (int i = 0; i < array.length(); i++) {
 						JSONObject current = array.getJSONObject(i);
@@ -517,7 +518,7 @@ public class SensorContent extends Content {
             activateButton.setText("Deactivate");
         }
         else {
-        	activateButton.setText("Activated");
+        	activateButton.setText("Activate");
         }
 	}
 }

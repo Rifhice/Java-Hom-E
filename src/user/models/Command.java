@@ -52,6 +52,13 @@ public class Command {
         this.actuator = actuator;
     }
     
+    public Command(int id, String name, String description, String key) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.key = key;
+    }
+    
     public Command(int id, String name, Actuator actuator,ArrayList<CommandValue> commandValues) {
         this.id = id;
         this.name = name;

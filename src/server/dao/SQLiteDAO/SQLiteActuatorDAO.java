@@ -168,8 +168,8 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         Actuator actuator = obj;
         
         String sql = "INSERT INTO Actuators "
-                + "(name, description, fk_actuatorCategory_id) VALUES "
-                + "(?, ?, ?)";
+                + "(name, description, fk_actuatorCategory_id, isActivated) VALUES "
+                + "(?, ?, ?, ?)";
         
         
         // Insert the object
@@ -181,6 +181,12 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
             prepStat.setString(2, obj.getDescription());
             if(obj.getActuatorCategory() != null) {
                 prepStat.setInt(3, obj.getActuatorCategory().getId());
+            }
+            if(obj.isActivated()) {
+            	prepStat.setInt(4, 1);
+            }
+            else {
+            	prepStat.setInt(4, 0);
             }
             created = prepStat.executeUpdate();
             // Get the id generated for this object
@@ -208,34 +214,35 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         return actuator;
     }
 
-    @Override
     public Actuator getById(int id) throws DAOException {
         Actuator actuator = null;
-        String sql = "SELECT A.id AS id, A.name AS name, A.description AS description, "
-                + "AC.id AS ACid, AC.name AS ACname, AC.description AS ACdescription, "
-                + "C.id AS Cid, C.name AS Cname "
+        String sql = "SELECT * "
                 + "FROM Actuators AS A "
-                + "JOIN ActuatorCategories AS AC ON AC.id = A.fk_actuatorCategory_id "
-                + "JOIN Commands AS C ON C.fk_actuator_id = A.id "
                 + "WHERE A.id = ?";
 
         try {
             PreparedStatement prepStat = this.connect.prepareStatement(sql);
             prepStat.setInt(1, id);
             ResultSet rs = prepStat.executeQuery();
-
-            if (rs.next()) {
+            boolean res = rs.next();
+            System.out.println(res);
+            if (res) {
                 actuator = new Actuator();
                 actuator.setId(rs.getInt("id"));
                 actuator.setName(rs.getString("name"));
                 actuator.setDescription(rs.getString("description"));
-    
-                ActuatorCategory ActCat = new ActuatorCategory(rs.getInt("ACid"), rs.getString("ACname"), rs.getString("ACdescription"));
-                actuator.setActuatorCategory(ActCat);
-                
+                if(rs.getObject("fk_actuatorCategory_id") != null) {
+                    actuator.setActuatorCategory(getCategory(rs.getInt("fk_actuatorCategory_id")));
+                }
                 actuator.setCommands(AbstractDAOFactory.getFactory(SystemManager.db).getCommandDAO().getByActuatorId(rs.getInt("id")));
+                if(rs.getInt("isactivated") == 1) {
+                	actuator.enable();
+                }
+                else {
+                	actuator.disable();
+                }
             }
-        } catch (SQLException e) { 
+        } catch (SQLException e) {
             throw new DAOException("DAOException : ActuatorDAO getById(" + id + ") :" + e.getMessage(), e);
         }
             
@@ -266,42 +273,31 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         }
         return actuator;
     }
-/*
-    public DiscreteCommandValue getDiscreteCommandValue(int idCommand) {
-        String sqlAllId = "SELECT * FROM discreteCommandValues WHERE fk_commandValue_id = ?";
-        try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sqlAllId);
-            prepStat.setInt(1, idCommand);
-            ResultSet rs = prepStat.executeQuery();
-            while(rs.next()) {
-            	ArrayList<String> possibleValues = new ArrayList<String>();
-            	JSONObject json = new JSONObject(rs.getString("possible_values"));
-            	JSONArray array = json.getJSONArray("possibleValues");
-            	for (int i = 0; i < array.length(); i++) {
-					possibleValues.add(array.getString(i));
-				}
-            	return new DiscreteCommandValue(possibleValues);
-            }
-        } catch(SQLException e) {
-            throw new DAOException("DAOException : ActuatorDAO getAll() :" + e.getMessage(), e);
-        }
-        return null;
-    }
     
-    public DiscreteCommandValue getContinuousCommandValue(int idCommand) {
-        String sqlAllId = "SELECT * FROM continuousCommandValues WHERE fk_commandValue_id = ?";
+    public ActuatorCategory getCategory(int idCategory) {
+    	ActuatorCategory category = null;
+        String sql = "SELECT * "
+                + "FROM ActuatorCategories AS A "
+                + "WHERE A.id = ?";
+
         try {
-            PreparedStatement prepStat = this.connect.prepareStatement(sqlAllId);
-            prepStat.setInt(1, idCommand);
+            PreparedStatement prepStat = this.connect.prepareStatement(sql);
+            prepStat.setInt(1, idCategory);
             ResultSet rs = prepStat.executeQuery();
-            while(rs.next()) {
-            	return new DiscreteCommandValue(rs.getFloat("min"),rs.getFloat("max"),rs.getFloat("precision"));
+            boolean res = rs.next();
+            System.out.println(res);
+            if (res) {
+            	category = new ActuatorCategory();
+            	category.setId(rs.getInt("id"));
+            	category.setName(rs.getString("name"));
+            	category.setDescription(rs.getString("description"));
             }
-        } catch(SQLException e) {
-            throw new DAOException("DAOException : ActuatorDAO getAll() :" + e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new DAOException("DAOException : ActuatorDAO getById(" + idCategory + ") :" + e.getMessage(), e);
         }
-        return null;
-    }*/
+        return category;
+    }
+
     
     @Override
     public int update(Actuator obj) throws DAOException {
@@ -344,6 +340,28 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         return deletedActuator + deletedAtomic + deletedCommands;
     }
 
+    public int changeIsActivated(int id,boolean bool) throws DAOException {
+    	String sql = "UPDATE actuators "
+                + "SET isactivated = ? "
+                + "WHERE id = ?";
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              if(bool) {
+            	  prepStat.setInt(1, 1);
+              }
+              else {
+            	  prepStat.setInt(1, 0);
+              }
+              prepStat.setInt(2, id);
+              updated= prepStat.executeUpdate();
+
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : Actuator activate(" + id + ") :" + e.getMessage(), e); 
+          }
+        return updated;
+	}
+    
     @Override
     public ArrayList<Actuator> getAll() throws DAOException {  
         
@@ -362,12 +380,37 @@ public class SQLiteActuatorDAO extends ActuatorDAO  {
         // Get all Actuators using getBydId()
         ArrayList<Actuator> actuators = new ArrayList<Actuator>();
         for (int id : ids) {
-        	
-           actuators.add(this.getById(id));
+        	try {
+        		System.out.println(id);
+        		actuators.add(this.getById(id));
+        	}
+        	catch(Exception e) {
+        		e.printStackTrace();
+        	}
         }
         return actuators;
     }
 
+	@Override
+	public int update(int idActuator, String name, String description, int idCategory) {
+    	String sql = "UPDATE actuators "
+                + "SET name = ?, description = ?, fk_actuatorcategory_id = ? "
+                + "WHERE id = ?";
+    	int updated = 0;
+    	  try {
+              PreparedStatement prepStat = this.connect.prepareStatement(sql);
+              prepStat.setString(1, name);
+              prepStat.setString(2, description);
+              prepStat.setInt(3, idCategory);
+              prepStat.setInt(4, idActuator);
+              updated= prepStat.executeUpdate();
+
+          } catch (SQLException e) {
+        	  throw new DAOException("DAOException : Actuator update(" + idActuator + ") :" + e.getMessage(), e); 
+          }
+        return updated;
+	}
+    
     // ======================== //
     // ==== Custom methods ==== //
     // ======================== //

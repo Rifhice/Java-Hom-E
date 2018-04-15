@@ -193,6 +193,11 @@ public class AmbiencesContent extends Content {
         return content;
     }
 
+    public void updateData() {
+    	this.updateAmbiences();
+        this.updateBehaviours();
+    }
+    
     public void updateBehaviours() {
         JSONObject getActuator = new JSONObject();
         getActuator.put("recipient", "behaviour");

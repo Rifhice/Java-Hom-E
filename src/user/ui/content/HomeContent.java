@@ -17,6 +17,10 @@ public class HomeContent extends Content {
 		return content;
 	}
 	
+    public void updateData() {
+
+    }
+	
 	@Override
 	public void handleMessage(Object message) {
 		

@@ -23,6 +23,10 @@ import javafx.scene.control.Label;
 import user.models.Actuator;
 import user.models.ActuatorCategory;
 import user.models.Category;
+import user.models.Command;
+import user.models.CommandValue;
+import user.models.ContinuousCommandValue;
+import user.models.DiscreteCommandValue;
 import user.models.Sensor;
 import user.models.SensorCategory;
 import user.models.environmentVariable.ContinuousValue;
@@ -67,7 +71,7 @@ public class ActuatorContent extends Content {
     private MyButtonFX updateButton;
     
     private int currentActuatorIndex = -1;
-    private final int NB_ACTUATOR_DISPLAYED = 3;
+    private final int NB_ACTUATOR_DISPLAYED = 8;
     
     private EventHandler<ActionEvent> actuatorButtonEvent;
     
@@ -88,13 +92,11 @@ public class ActuatorContent extends Content {
 
 			@Override
 			public Category fromString(String arg0) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public String toString(Category arg0) {
-				// TODO Auto-generated method stub
 				return arg0 == null ? "" : arg0.getName();
 			}
         });
@@ -103,7 +105,44 @@ public class ActuatorContent extends Content {
 			public void changed(ObservableValue<? extends Category> arg0, Category arg1, Category arg2) {
 	            Platform.runLater(new Runnable() {
 	                @Override public void run() {
-	                	
+	                	actuatorsListGrid.getChildren().remove(1, actuatorsListGrid.getChildren().size());
+	                	if(arg2 != null) {
+		                	if(arg2.getId() == -2) { //NO CATEGORIES
+			                	for (int i = 0; i < actuators.size(); i++) {
+			                		if(actuators.get(i).getActuatorCategory() == null) {
+			                			actuatorsListGrid.add(new MyButtonFX(actuators.get(i).getName(),i,actuatorsListGrid.getPrefWidth(),actuatorsListGrid.getPrefHeight() / NB_ACTUATOR_DISPLAYED,actuatorButtonEvent),0,i + 1);
+			                		}
+								}
+		                	}
+		                	else if(arg2.getId() == -1) { // ALL CATEGORIES
+			                	for (int i = 0; i < actuators.size(); i++) {
+			                		actuatorsListGrid.add(new MyButtonFX(actuators.get(i).getName(),i,actuatorsListGrid.getPrefWidth(),actuatorsListGrid.getPrefHeight() / NB_ACTUATOR_DISPLAYED, actuatorButtonEvent),0,i + 1);
+								}
+		                	}
+		                	else if(arg2.getId() == -3) { // Activated
+			                	for (int i = 0; i < actuators.size(); i++) {
+			                		if(actuators.get(i).isEnabled()) {
+			                			actuatorsListGrid.add(new MyButtonFX(actuators.get(i).getName(),i,actuatorsListGrid.getPrefWidth(),actuatorsListGrid.getPrefHeight() / NB_ACTUATOR_DISPLAYED,actuatorButtonEvent),0,i + 1);
+			                		}
+								}
+		                	}
+		                	else if(arg2.getId() == -4) { // Deactivated
+			                	for (int i = 0; i < actuators.size(); i++) {
+			                		if(!actuators.get(i).isEnabled()) {
+			                			actuatorsListGrid.add(new MyButtonFX(actuators.get(i).getName(),i,actuatorsListGrid.getPrefWidth(),actuatorsListGrid.getPrefHeight() / NB_ACTUATOR_DISPLAYED,actuatorButtonEvent),0,i + 1);
+			                		}
+								}
+		                	}
+		                	else{ // SELECTED CATEGORY
+		                		for (int i = 0; i < actuators.size(); i++) {
+		                			if(actuators.get(i).getActuatorCategory() != null) {
+										if(actuators.get(i).getActuatorCategory().getId() == arg2.getId()) {
+											actuatorsListGrid.add(new MyButtonFX(actuators.get(i).getName(),i,actuatorsListGrid.getPrefWidth(),actuatorsListGrid.getPrefHeight() / NB_ACTUATOR_DISPLAYED,actuatorButtonEvent),0,i + 1);
+										}
+		                			}
+								}
+		                	}
+	                	}
 	                }
 	            });
 			}
@@ -114,13 +153,12 @@ public class ActuatorContent extends Content {
 	    updateButton = new MyButtonFX("Update",changeDescriptionBounds.computeBounds(selectedActuatorPane.getPrefWidth(), selectedActuatorPane.getPrefHeight()) ,new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				/*Triplet<String,String,Category> result = new MyCategoryDialog("Modify a sensor", "Modify a sensor", sensors.get(currentSensorIndex).getName(), sensors.get(currentSensorIndex).getDescription(), (Category)sensors.get(currentSensorIndex).getSensorCategory(), new ArrayList<Category>(categories)).showAndReturn();
+				Triplet<String,String,Category> result = new MyCategoryDialog("Modify an actuator", "Modify an actuator", actuators.get(currentActuatorIndex).getName(), actuators.get(currentActuatorIndex).getDescription(), (Category)actuators.get(currentActuatorIndex).getActuatorCategory(), new ArrayList<Category>(categories)).showAndReturn();
                 if(result != null){
                     JSONObject json = new JSONObject();
-                    json.put("recipient", "sensor");
+                    json.put("recipient", "actuator");
                     json.put("action", "update");
-                    json.put("idSensor", sensors.get(currentSensorIndex).getId());
+                    json.put("idActuator", actuators.get(currentActuatorIndex).getId());
                     json.put("name", result.getFirst());
                     json.put("description", result.getSecond());
                     json.put("idCategory", result.getThird().getId());
@@ -129,18 +167,17 @@ public class ActuatorContent extends Content {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }*/
+                }
 			}
 		});
 	    activateButton = new MyButtonFX("Activate",activateBounds.computeBounds(selectedActuatorPane.getPrefWidth(), selectedActuatorPane.getPrefHeight()),new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	/*
             	JSONObject json = new JSONObject();
-                if(sensors.get(currentSensorIndex).isEnabled()) {
-        	        json.put("recipient", "sensor");
+                if(actuators.get(currentActuatorIndex).isEnabled()) {
+        	        json.put("recipient", "actuator");
         	        json.put("action", "deactivate");
-        	        json.put("idSensor", sensors.get(currentSensorIndex).getId());
+        	        json.put("idActuator", actuators.get(currentActuatorIndex).getId());
         	        try {
         	            ClientFX.client.sendToServer(json.toString());
         	        } catch (IOException e) {
@@ -148,16 +185,15 @@ public class ActuatorContent extends Content {
         	        }
                 }
                 else {
-        	        json.put("recipient", "sensor");
+        	        json.put("recipient", "actuator");
         	        json.put("action", "activate");
-        	        json.put("idSensor", sensors.get(currentSensorIndex).getId());
+        	        json.put("idActuator", actuators.get(currentActuatorIndex).getId());
         	        try {
         	            ClientFX.client.sendToServer(json.toString());
         	        } catch (IOException e) {
         	            e.printStackTrace();
         	        }
                 }
-                */
             }
         });
 	    
@@ -242,12 +278,13 @@ public class ActuatorContent extends Content {
                     /*nomVariableLabel.setText(actuators.get(currentActuatorIndex).getEnvironmentVariables().getName());;
                     variableDescriptionVariableLabel.setText(actuators.get(currentActuatorIndex).getEnvironmentVariables().getDescription());
                     currentValueVariableLabel.setText(actuators.get(currentActuatorIndex).getEnvironmentVariables().getValue().getCurrentValue().toString());
+                    */
                     if(actuators.get(currentActuatorIndex).isEnabled()) {
                         activateButton.setText("Deactivate");
                     }
                     else {
-                    	activateButton.setText("Activated");
-                    }*/
+                    	activateButton.setText("Activate");
+                    }
                 }
             });
         }
@@ -267,12 +304,13 @@ public class ActuatorContent extends Content {
         /*nomVariableLabel.setText(sensors.get(index).getEnvironmentVariables().getName());;
         variableDescriptionVariableLabel.setText(sensors.get(index).getEnvironmentVariables().getDescription());
         currentValueVariableLabel.setText(sensors.get(index).getEnvironmentVariables().getValue().getCurrentValue().toString());
-        if(sensors.get(index).isEnabled()) {
+        */
+        if(actuators.get(index).isEnabled()) {
             activateButton.setText("Deactivate");
         }
         else {
-        	activateButton.setText("Activated");
-        }*/
+        	activateButton.setText("Activate");
+        }
 	}
 	
 	@Override
@@ -285,6 +323,7 @@ public class ActuatorContent extends Content {
 				switch (json.getString("action")) {
 				
 				case "getAll":
+					actuators.clear();
 					JSONArray array = json.getJSONArray("actuators");
 					for (int i = 0; i < array.length(); i++) {
 						JSONObject current = array.getJSONObject(i);
@@ -296,15 +335,78 @@ public class ActuatorContent extends Content {
 						else {
 							actuator.disable();
 						}
-						//TODO define actuator better
+						JSONArray commands = current.getJSONArray("commands");
+						ArrayList<Command> actuatorCommands = new ArrayList<Command>();
+						for (int j = 0; j < commands.length(); j++) {
+							JSONObject currentCommand = commands.getJSONObject(j);
+							Command command = new Command(currentCommand.getInt("id"),currentCommand.getString("name"),currentCommand.getString("description"),currentCommand.getString("key"));
+							try {
+								JSONArray commandValues = currentCommand.getJSONArray("commandValue");
+								ArrayList<CommandValue> commandValuesList = new ArrayList<CommandValue>();
+								for (int z = 0; z < commandValues.length(); z++) {
+									JSONObject currentCommandValue = commandValues.getJSONObject(z);
+									if(currentCommandValue.getString("type").equals("discrete")) {
+										JSONArray possibleValues = currentCommandValue.getJSONArray("possibleValues");
+										ArrayList<String> possibleValue = new ArrayList<String>();
+										for (int h = 0; h < possibleValues.length(); h++) {
+											possibleValue.add(possibleValues.getString(h));
+										}
+										commandValuesList.add(new DiscreteCommandValue(possibleValue));
+									}
+									else {
+										commandValuesList.add(new ContinuousCommandValue(currentCommandValue.getDouble("valueMin"),currentCommandValue.getDouble("valueMax"),currentCommandValue.getDouble("precision")));
+									}
+								}
+								command.setCommandValues(commandValuesList);
+							}
+							catch(Exception e) {
+								System.out.println("No command value for this command !");
+							}
+						}
 						try {
-							JSONObject currentCategory = current.getJSONObject("category");
+							JSONObject currentCategory = current.getJSONObject("actuatorCategory");
 							actuator.setActuatorCategory(new ActuatorCategory(currentCategory.getInt("id"), currentCategory.getString("name"), currentCategory.getString("description")));
 						}
 						catch (Exception e) {
 							actuator.setActuatorCategory(null);
 						}
 						actuators.add(actuator);
+					}
+					updateUI();
+					break;
+				case "activate":
+					if(json.getString("result").equals("success")) {
+						for (int i = 0; i < actuators.size(); i++) {
+							if(actuators.get(i).getId() == json.getInt("idActuator")) {
+								actuators.get(i).enable();
+							}
+						}
+					}
+					updateUI();
+					break;
+				case "deactivate":
+					if(json.getString("result").equals("success")) {
+						for (int i = 0; i < actuators.size(); i++) {
+							if(actuators.get(i).getId() == json.getInt("idActuator")) {
+								actuators.get(i).disable();
+							}
+						}
+					}
+					updateUI();
+					break;
+				case "update":
+					if(json.getString("result").equals("success")) {
+						for (int i = 0; i < actuators.size(); i++) {
+							if(actuators.get(i).getId() == json.getInt("idActuator")) {
+								for (int j = 0; j < categories.size(); j++) {
+									if(categories.get(j).getId() == json.getInt("idCategory")) {
+										actuators.get(i).setActuatorCategory((ActuatorCategory)categories.get(j));
+									}
+								}
+								actuators.get(i).setName(json.getString("name"));
+								actuators.get(i).setDescription(json.getString("description"));
+							}
+						}
 					}
 					updateUI();
 					break;
@@ -316,15 +418,15 @@ public class ActuatorContent extends Content {
 				switch (json.getString("action")) {
 				case "getAll":
 					categories.clear();
-					categories.add(new SensorCategory(-1,"All Sensors"));
+					categories.add(new ActuatorCategory(-1,"All Actuator"));
                     JSONArray arrArg = json.getJSONArray("categories");
                     for (int j = 0; j < arrArg.length(); j++){
                         JSONObject current = arrArg.getJSONObject(j);
-                        categories.add(new SensorCategory(current.getInt("id"), current.getString("name"), current.getString("description")));
+                        categories.add(new ActuatorCategory(current.getInt("id"), current.getString("name"), current.getString("description")));
                     }
-					categories.add(new SensorCategory(-2,"No category"));
-					categories.add(new SensorCategory(-3,"Activated"));
-					categories.add(new SensorCategory(-4,"Deactivated"));
+					categories.add(new ActuatorCategory(-2,"No category"));
+					categories.add(new ActuatorCategory(-3,"Activated"));
+					categories.add(new ActuatorCategory(-4,"Deactivated"));
                     updateUI();
 					break;
 

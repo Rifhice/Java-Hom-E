@@ -17,5 +17,6 @@ public abstract class Content extends Pane {
 	}
 	
 	public abstract void handleMessage(Object message);
-
+	public abstract void updateData();
+	
 }

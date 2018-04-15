@@ -6,6 +6,11 @@ public class ActuatorCategory extends Category{
 		super(name, description);
 		this.id = id;
 	}
+	
+	public ActuatorCategory(int id, String name) {
+		super(name);
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;

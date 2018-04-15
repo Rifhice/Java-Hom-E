@@ -185,6 +185,10 @@ public class BehavioursCommandsContent extends Content {
     // ==== METHODS ==== //
     // ================= //
     
+    public void updateData() {
+    	updateBehavioursData();
+    }
+    
     /**
      * Ask the server to get all the behaviours.
      */

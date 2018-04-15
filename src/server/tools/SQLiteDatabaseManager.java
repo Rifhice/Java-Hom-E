@@ -94,6 +94,7 @@ public class SQLiteDatabaseManager {
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL, \n"
                 + " description text, \n"
+                + " isActivated integer,\n"
                 + " fk_actuatorCategory_id integer,\n"
                 + " FOREIGN KEY (fk_actuatorCategory_id) REFERENCES actuatorCategories(id) \n"
                 + ");";
@@ -371,11 +372,11 @@ public class SQLiteDatabaseManager {
     // ================= //
 
     private static void insertActuators() {
-        String insertActuator1 = "INSERT INTO actuators ('id', 'name', 'description','fk_actuatorCategory_id') VALUES (1, 'Philips 70W Bulb','Powerfull yellow bulb.',1);";
-        String insertActuator2 = "INSERT INTO actuators ('id', 'name', 'description','fk_actuatorCategory_id') VALUES (2, 'Samsaoule 500W heater','So hot!',2);";
-        String insertActuator3 = "INSERT INTO actuators ('id', 'name', 'description','fk_actuatorCategory_id') VALUES (3, 'Samsaoule 700W heater','So hot!',2);";
-        String insertActuator4 = "INSERT INTO actuators ('id', 'name', 'description','fk_actuatorCategory_id') VALUES (4, 'Teasla 200','The sun-made tea.',3);";
-        String insertActuator5 = "INSERT INTO actuators ('id', 'name', 'description','fk_actuatorCategory_id') VALUES (5, 'Soli 100W Bulb','The sun is yours.',1);";
+        String insertActuator1 = "INSERT INTO actuators ('id', 'name', 'description','isActivated', 'fk_actuatorCategory_id') VALUES (1, 'Philips 70W Bulb','Powerfull yellow bulb.',0 ,1);";
+        String insertActuator2 = "INSERT INTO actuators ('id', 'name', 'description','isActivated', 'fk_actuatorCategory_id') VALUES (2, 'Samsaoule 500W heater','So hot!',1 ,2);";
+        String insertActuator3 = "INSERT INTO actuators ('id', 'name', 'description','isActivated', 'fk_actuatorCategory_id') VALUES (3, 'Samsaoule 700W heater','So hot!',0 ,2);";
+        String insertActuator4 = "INSERT INTO actuators ('id', 'name', 'description','isActivated', 'fk_actuatorCategory_id') VALUES (4, 'Teasla 200','The sun-made tea.',1 ,3);";
+        String insertActuator5 = "INSERT INTO actuators ('id', 'name', 'description','isActivated', 'fk_actuatorCategory_id') VALUES (5, 'Soli 100W Bulb','The sun is yours.',0 ,1);";
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(insertActuator1);
             stmt.execute(insertActuator2);

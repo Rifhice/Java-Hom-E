@@ -98,6 +98,8 @@ public class ControlContent extends Content {
         Platform.runLater(new Runnable() {
             @Override public void run() {
             	//Create commmands UI
+                bottomGridPane.getChildren().remove(1, bottomGridPane.getChildren().size());
+                bottomGridPane.getColumnConstraints().clear();
                 for (int i = 0; i < commands.size(); i++) {
                 	Command currentCommand = commands.get(i);
                 	int currentLine = i + 1;
@@ -136,7 +138,7 @@ public class ControlContent extends Content {
 						    executable = executable.substring(0,executable.length()-1);
 						    JSONObject json = new JSONObject();
 						    json.put("recipient", "actuator");
-						    json.put("verb", "execute");
+						    json.put("action", "execute");
 						    json.put("id", currentCommand.getActuator().getId());
 						    json.put("executable", executable);
 					        try {
@@ -150,6 +152,8 @@ public class ControlContent extends Content {
                 //Create complex action UI
                 int x = 1;
                 int y = 0;
+                topGridPane.getChildren().remove(1, topGridPane.getChildren().size());
+                topGridPane.getColumnConstraints().clear();
                 for (int i = 0; i < complexAction.size(); i++) {
                     ColumnConstraints col1 = new ColumnConstraints();
                     col1.setPercentWidth(0.1f * topGridPane.getPrefWidth());
@@ -182,6 +186,8 @@ public class ControlContent extends Content {
                     
                     case "getAll":
                     	//Parses the commands
+                    	commands.clear();
+                    	complexAction.clear();
                     	JSONArray commands = json.getJSONArray("commands");
                     	for (int i = 0; i < commands.length(); i++) {
                     		JSONObject currentCommand = commands.getJSONObject(i);

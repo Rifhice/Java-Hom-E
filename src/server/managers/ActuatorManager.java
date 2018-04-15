@@ -186,11 +186,91 @@ public class ActuatorManager extends Manager {
 			}
 		}
         try {
-        	System.out.println(result.toString());
             client.sendToClient(result.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	public void activate(JSONObject json,ConnectionToClient client) {
+		int updated = actuatorDAO.changeIsActivated(json.getInt("idActuator"), true);
+		JSONObject result = new JSONObject();
+		if(updated >= 1) {
+	        result.put("result", "success");
+	        result.put("recipient", "actuator");
+	        result.put("action", "activate");
+	        result.put("idActuator", json.getInt("idActuator"));
+	        SystemManager.sendToAllClient(result.toString());
+		}
+		else {
+	        result.put("result", "failure");
+	        result.put("recipient", "actuator");
+	        result.put("action", "activate");
+	        try {
+	            client.sendToClient(result.toString());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
+	}
+	
+	public void deactivate(JSONObject json,ConnectionToClient client) {
+		int updated = 0;
+		try {
+			updated = actuatorDAO.changeIsActivated(json.getInt("idActuator"), false);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		if(updated >= 1) {
+	        result.put("result", "success");
+	        result.put("recipient", "actuator");
+	        result.put("action", "deactivate");
+	        result.put("idActuator", json.getInt("idActuator"));
+	        SystemManager.sendToAllClient(result.toString());
+		}
+		else {
+	        result.put("result", "failure");
+	        result.put("recipient", "actuator");
+	        result.put("action", "deactivate");
+	        try {
+	            client.sendToClient(result.toString());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
+	}
+	
+	public void update(JSONObject json,ConnectionToClient client) {
+		int updated = -1;
+		try {
+			updated = actuatorDAO.update(json.getInt("idActuator"), json.getString("name"),json.getString("description"),json.getInt("idCategory") );
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		JSONObject result = new JSONObject();
+		if(updated >= 1) {
+	        result.put("result", "success");
+	        result.put("recipient", "actuator");
+	        result.put("action", "update");
+	        result.put("idActuator", json.getInt("idActuator"));
+	        result.put("name", json.getString("name"));
+	        result.put("description", json.getString("description"));
+	        result.put("idCategory", json.getInt("idCategory"));
+	        SystemManager.sendToAllClient(result.toString());
+		}
+		else {
+	        result.put("result", "failure");
+	        result.put("recipient", "actuator");
+	        result.put("action", "update");
+	        try {
+	            client.sendToClient(result.toString());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
 	}
 	
 	/**
@@ -212,6 +292,16 @@ public class ActuatorManager extends Manager {
 			break;
 		case "getAll":
 			getAll(json,client);
+			break;
+		case "activate":
+			activate(json,client);
+			break;
+		case "deactivate":
+			deactivate(json,client);
+			break;
+		case "update":
+			update(json,client);
+			break;
 		default:
 			break;
 		}

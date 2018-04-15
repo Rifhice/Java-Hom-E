@@ -24,7 +24,7 @@ public class SensorConsole implements ChatIF
   /**
    * The default port to connect on.
    */
-  final public static String DEFAULT_HOST = "192.168.43.205";
+  final public static String DEFAULT_HOST = "localhost";
   final public static int DEFAULT_PORT = 1112;
   
   //Instance variables **********************************************

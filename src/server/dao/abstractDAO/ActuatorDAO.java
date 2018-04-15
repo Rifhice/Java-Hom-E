@@ -13,6 +13,8 @@ public abstract class ActuatorDAO extends DAO<Actuator>{
         super(connectionDriver);
     }
     
+    public abstract int changeIsActivated(int id,boolean bool);
+    public abstract int update(int idActuator,String name,String description, int idCategory);
     // ======================== //
     // ==== CUSTOM METHODS ==== //
     // ======================== //

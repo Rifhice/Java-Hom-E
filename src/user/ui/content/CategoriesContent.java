@@ -211,6 +211,11 @@ public class CategoriesContent extends Content {
     } 
     // ===== END Constructor ===== //
 
+    public void updateData() {
+    	updateActuatorData();
+        updateSensorData();
+    }
+    
     public void updateActuatorData() {
         JSONObject getActuator = new JSONObject();
         getActuator.put("recipient", "actuatorCategories");

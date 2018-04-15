@@ -136,11 +136,9 @@ public class Actuator extends ExternalActor{
     
     public JSONObject toJson() {
         JSONObject result = super.toJson();
-        System.out.println(result.toString());
         if(actuatorCategory != null) {
         	result.put("actuatorCategory", actuatorCategory.toJson());
         }
-        System.out.println(result.toString() + commands);
         for (int i = 0; i < commands.size(); i++) {
 			result.append("commands", commands.get(i).toJson());
 		}

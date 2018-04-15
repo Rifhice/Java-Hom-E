@@ -113,6 +113,11 @@ public class AccountContent extends Content {
         this.updateView("right");
 
     }
+    
+    public void updateData() {
+    	this.updateView("user");
+        this.updateView("right");
+    }
 
     public void updateView(String recipient) {
         JSONObject getObject = new JSONObject();
